@@ -6,6 +6,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -79,8 +82,7 @@ fun CompactScreen() {
             val currentDestination = navBackStackEntry?.destination
 
             screens.forEach { screen ->
-                NavigationBarItem(
-                    selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                NavigationBarItem(selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                     onClick = {
                         navController.navigate(screen.route) {
                             // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
@@ -101,13 +103,23 @@ fun CompactScreen() {
                     })
             }
         }
+    }, floatingActionButton = {
+        FloatingActionButton(onClick = { TODO("Jump to the input interface") }) {
+            Icon(
+                imageVector = Icons.Rounded.Add,
+                contentDescription = stringResource(R.string.add),
+            )
+        }
     }) {
-        NavHost(navController = navController, startDestination = Screens.Home.route) {
+        NavHost(
+            navController = navController,
+            startDestination = Screens.Home.route,
+            modifier = Modifier.fillMaxSize()
+        ) {
             composable(Screens.Home.route) { Home(navController) }
             composable(Screens.History.route) { History(navController) }
             composable(Screens.Account.route) { Account(navController) }
         }
-
     }
 }
 
@@ -126,8 +138,7 @@ fun MediumScreen() {
                 val currentDestination = navBackStackEntry?.destination
 
                 screens.forEach { screen ->
-                    NavigationRailItem(
-                        selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                    NavigationRailItem(selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                         onClick = {
                             navController.navigate(screen.route) {
                                 // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
@@ -170,8 +181,7 @@ fun ExpandedScreen() {
         val currentDestination = navBackStackEntry?.destination
 
         screens.forEach { screen ->
-            NavigationDrawerItem(
-                label = { Text(text = stringResource(screen.resourceId)) },
+            NavigationDrawerItem(label = { Text(text = stringResource(screen.resourceId)) },
                 selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                 onClick = {
                     navController.navigate(screen.route) {
@@ -184,7 +194,8 @@ fun ExpandedScreen() {
                         restoreState =
                             false // Restore state when reelecting a previously selected item
                     }
-                }, icon = {
+                },
+                icon = {
                     Icon(
                         imageVector = screen.icon,
                         contentDescription = stringResource(screen.resourceId)
