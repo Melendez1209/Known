@@ -4,4 +4,7 @@
     <string name="account">Account</string>
     <string name="history">History</string>
     <string name="add">Add new</string>
+    <string name="exam_name">Exam Name</string>
+    <string name="time">Time</string>
+    <string name="Classification">Classification</string>
 </resources>

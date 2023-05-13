@@ -1,4 +1,4 @@
-package com.melendez.known.main.screens
+package com.melendez.known.main.inners
 
 import androidx.annotation.StringRes
 import androidx.compose.material.icons.Icons

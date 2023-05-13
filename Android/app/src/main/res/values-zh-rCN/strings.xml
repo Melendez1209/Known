@@ -5,4 +5,7 @@
     <string name="account">我</string>
     <string name="history">历史</string>
     <string name="add">添加</string>
+    <string name="exam_name">考试名称</string>
+    <string name="time">时间</string>
+    <string name="Classification">分类</string>
 </resources>
