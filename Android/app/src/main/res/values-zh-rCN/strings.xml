@@ -7,7 +7,7 @@
     <string name="add">添加</string>
     <string name="exam_name">考试名称</string>
     <string name="time">时间</string>
-    <string name="Classification">分类</string>
-    <string name="close_the_date_range_picker">关闭日期选择器</string>
+    <string name="classification">分类</string>
+    <string name="cancel">取消</string>
     <string name="save">保存</string>
 </resources>

@@ -32,7 +32,7 @@ fun History(navController: NavHostController) {
             ) {
                 Text(text = stringResource(R.string.exam_name))
                 Text(text = stringResource(R.string.time))
-                Text(text = stringResource(R.string.Classification))
+                Text(text = stringResource(R.string.classification))
             }
         })
 

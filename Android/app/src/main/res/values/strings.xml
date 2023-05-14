@@ -6,7 +6,7 @@
     <string name="add">Add new</string>
     <string name="exam_name">Exam Name</string>
     <string name="time">Time</string>
-    <string name="Classification">Classification</string>
-    <string name="close_the_date_range_picker">Close the date range picker</string>
+    <string name="classification">Classification</string>
+    <string name="cancel">Cancel</string>
     <string name="save">Save</string>
 </resources>
