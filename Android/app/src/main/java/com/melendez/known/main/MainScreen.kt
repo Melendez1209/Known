@@ -24,6 +24,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -35,10 +36,10 @@ import com.melendez.known.main.inners.Home
 import com.melendez.known.main.inners.Screens
 
 @Composable
-fun MainScreen(widthSizeClass: WindowWidthSizeClass) {
+fun MainScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
     when (widthSizeClass) {
         WindowWidthSizeClass.Compact -> {
-            CompactScreen()
+            CompactScreen(navTotalController)
         }
 
         WindowWidthSizeClass.Medium -> {
@@ -52,9 +53,8 @@ fun MainScreen(widthSizeClass: WindowWidthSizeClass) {
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@Preview(device = "id:pixel_7_pro", group = "Main")
 @Composable
-fun CompactScreen() {
+fun CompactScreen(navTotalController: NavHostController) {
 
     val screens = listOf(Screens.Home, Screens.History, Screens.Account)
     val navMainController = rememberNavController()
@@ -88,7 +88,7 @@ fun CompactScreen() {
             }
         }
     }, floatingActionButton = {
-        FloatingActionButton(onClick = { TODO("Jump to the input interface") }) {
+        FloatingActionButton(onClick = { navTotalController.navigate("DateRangePicker") }) {
             Icon(
                 imageVector = Icons.Rounded.Add,
                 contentDescription = stringResource(R.string.add),
@@ -105,6 +105,12 @@ fun CompactScreen() {
             composable(Screens.Account.route) { Account(navMainController) }
         }
     }
+}
+
+@Preview(device = "id:pixel_7_pro", group = "Main")
+@Composable
+fun CompactScreen_Preview() {
+    CompactScreen(navTotalController = rememberNavController())
 }
 
 @Preview(group = "Main", device = "spec:parent=pixel_7_pro,orientation=landscape")
@@ -152,7 +158,7 @@ fun MediumScreen() {
     }
 }
 
-@Preview(group = "Main", device = "spec:width=673dp,height=841dp")
+@Preview(group = "Main", device = "id:pixel_7_pro")
 @Composable
 fun ExpandedScreen() {
 

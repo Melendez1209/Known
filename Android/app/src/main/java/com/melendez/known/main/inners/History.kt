@@ -38,7 +38,9 @@ fun History(navController: NavHostController) {
 
         LazyColumn {
             items(100) { count ->
-                Card(modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp)) {
+                Card(
+                    modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+                    onClick = { TODO("Jump to the details page") }) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,
                         verticalAlignment = Alignment.CenterVertically,
@@ -48,10 +50,10 @@ fun History(navController: NavHostController) {
                     ) {
                         Text(
                             text = stringResource(R.string.exam_name) + count.toString(),
-                            Modifier.padding(start = 14.dp)
+                            modifier = Modifier.padding(start = 14.dp)
                         )
                         Text(text = stringResource(R.string.time) + count.toString())
-                        Text(text = count.toString(), Modifier.padding(end = 18.dp))
+                        Text(text = count.toString(), modifier = Modifier.padding(end = 18.dp))
                     }
                 }
             }
