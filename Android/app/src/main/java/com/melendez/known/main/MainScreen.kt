@@ -102,7 +102,7 @@ fun CompactScreen(navTotalController: NavHostController) {
             modifier = Modifier.fillMaxSize()
         ) {
             composable(Screens.Home.route) { Home(navMainController) }
-            composable(Screens.History.route) { History(navMainController) }
+            composable(Screens.History.route) { History() }
             composable(Screens.Account.route) { Account(navMainController) }
         }
     }
@@ -152,14 +152,14 @@ fun MediumScreen() {
             }
             NavHost(navController = navMainController, startDestination = Screens.Home.route) {
                 composable(Screens.Home.route) { Home(navMainController) }
-                composable(Screens.History.route) { History(navMainController) }
+                composable(Screens.History.route) { History() }
                 composable(Screens.Account.route) { Account(navMainController) }
             }
         }
     }
 }
 
-@Preview(group = "Main", device = "id:pixel_7_pro")
+@Preview(group = "Main", device = "spec:width=673dp,height=841dp")
 @Composable
 fun ExpandedScreen() {
 
@@ -170,6 +170,7 @@ fun ExpandedScreen() {
 
         val navBackStackEntry by navMainController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
+
         ModalDrawerSheet {
             screens.forEach { screen ->
                 NavigationDrawerItem(
@@ -198,7 +199,7 @@ fun ExpandedScreen() {
     }, content = {
         NavHost(navController = navMainController, startDestination = Screens.Home.route) {
             composable(Screens.Home.route) { Home(navMainController) }
-            composable(Screens.History.route) { History(navMainController) }
+            composable(Screens.History.route) { History() }
             composable(Screens.Account.route) { Account(navMainController) }
         }
     })
