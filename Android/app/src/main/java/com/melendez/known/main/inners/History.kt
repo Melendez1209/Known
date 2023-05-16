@@ -39,7 +39,7 @@ fun History(navController: NavHostController) {
         LazyColumn {
             items(100) { count ->
                 Card(
-                    modifier = Modifier.padding(vertical = 4.dp, horizontal = 8.dp),
+                    modifier = Modifier.padding(vertical = 6.dp, horizontal = 12.dp),
                     onClick = { TODO("Jump to the details page") }) {
                     Row(
                         horizontalArrangement = Arrangement.SpaceBetween,

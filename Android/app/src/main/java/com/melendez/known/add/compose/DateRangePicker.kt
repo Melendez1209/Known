@@ -42,8 +42,8 @@ fun DRP(navTotalController: NavHostController) {
 
     val state = rememberDateRangePickerState()
 
-    Surface {
-        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top) {
+    Surface(modifier = Modifier.fillMaxSize()) {
+        Column(verticalArrangement = Arrangement.Top) {
             Row(
                 modifier = Modifier
                     .fillMaxWidth()

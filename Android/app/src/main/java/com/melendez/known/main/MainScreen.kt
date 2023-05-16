@@ -7,6 +7,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationDrawerItem
@@ -169,34 +170,36 @@ fun ExpandedScreen() {
 
         val navBackStackEntry by navMainController.currentBackStackEntryAsState()
         val currentDestination = navBackStackEntry?.destination
-
-        screens.forEach { screen ->
-            NavigationDrawerItem(label = { Text(text = stringResource(screen.resourceId)) },
-                selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
-                onClick = {
-                    navMainController.navigate(screen.route) {
-                        // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
-                        popUpTo(navMainController.graph.findStartDestination().id) {
-                            saveState = false
+        ModalDrawerSheet {
+            screens.forEach { screen ->
+                NavigationDrawerItem(
+                    label = { Text(text = stringResource(screen.resourceId)) },
+                    selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                    onClick = {
+                        navMainController.navigate(screen.route) {
+                            // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
+                            popUpTo(navMainController.graph.findStartDestination().id) {
+                                saveState = false
+                            }
+                            launchSingleTop =
+                                true//Avoid multiple copies of the same destination when reelecting the same item
+                            restoreState =
+                                false // Restore state when reelecting a previously selected item
                         }
-                        launchSingleTop =
-                            true//Avoid multiple copies of the same destination when reelecting the same item
-                        restoreState =
-                            false // Restore state when reelecting a previously selected item
-                    }
-                },
-                icon = {
-                    Icon(
-                        imageVector = screen.icon,
-                        contentDescription = stringResource(screen.resourceId)
-                    )
-                })
+                    },
+                    icon = {
+                        Icon(
+                            imageVector = screen.icon,
+                            contentDescription = stringResource(screen.resourceId)
+                        )
+                    })
+            }
         }
-    }) {
+    }, content = {
         NavHost(navController = navMainController, startDestination = Screens.Home.route) {
             composable(Screens.Home.route) { Home(navMainController) }
             composable(Screens.History.route) { History(navMainController) }
             composable(Screens.Account.route) { Account(navMainController) }
         }
-    }
+    })
 }
