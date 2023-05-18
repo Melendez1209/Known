@@ -33,33 +33,35 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
-import com.melendez.known.main.inners.Account
 import com.melendez.known.main.inners.History
 import com.melendez.known.main.inners.Home
+import com.melendez.known.main.inners.Me
 
 @Composable
 fun MainScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
+
+    val navMainController = rememberNavController()
+
     when (widthSizeClass) {
         WindowWidthSizeClass.Compact -> {
-            Main_Compact(navTotalController)
+            Main_Compact(navTotalController, navMainController)
         }
 
         WindowWidthSizeClass.Medium -> {
-            Main_Medium(navTotalController)
+            Main_Medium(navTotalController, navMainController)
         }
 
         WindowWidthSizeClass.Expanded -> {
-            Main_Expanded(navTotalController)
+            Main_Expanded(navTotalController, navMainController)
         }
     }
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun Main_Compact(navTotalController: NavHostController) {
+fun Main_Compact(navTotalController: NavHostController, navMainController: NavHostController) {
 
-    val screens = listOf(Screens.Home, Screens.History, Screens.Account)
-    val navMainController = rememberNavController()
+    val screens = listOf(Screens.Home, Screens.History, Screens.Me)
 
     Scaffold(bottomBar = {
         NavigationBar {
@@ -104,7 +106,7 @@ fun Main_Compact(navTotalController: NavHostController) {
         ) {
             composable(Screens.Home.route) { Home() }
             composable(Screens.History.route) { History() }
-            composable(Screens.Account.route) { Account(navTotalController = navTotalController) }
+            composable(Screens.Me.route) { Me(navTotalController = navTotalController) }
         }
     }
 }
@@ -112,16 +114,15 @@ fun Main_Compact(navTotalController: NavHostController) {
 @Preview(group = "Main", device = "id:pixel_7_pro")
 @Composable
 fun Main_Compact_Preview() {
-    Main_Compact(navTotalController = rememberNavController())
+    Main_Compact(rememberNavController(), rememberNavController())
 }
 
 @Composable
-fun Main_Medium(navTotalController: NavHostController) {
+fun Main_Medium(navTotalController: NavHostController, navMainController: NavHostController) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Row {
 
-            val screens = listOf(Screens.Home, Screens.History, Screens.Account)
-            val navMainController = rememberNavController()
+            val screens = listOf(Screens.Home, Screens.History, Screens.Me)
 
             NavigationRail {
 
@@ -161,7 +162,7 @@ fun Main_Medium(navTotalController: NavHostController) {
                 NavHost(navController = navMainController, startDestination = Screens.Home.route) {
                     composable(Screens.Home.route) { Home() }
                     composable(Screens.History.route) { History() }
-                    composable(Screens.Account.route) { Account(navMainController) }
+                    composable(Screens.Me.route) { Me(navMainController) }
                 }
             }
         }
@@ -172,14 +173,13 @@ fun Main_Medium(navTotalController: NavHostController) {
 @Preview(group = "Main", device = "spec:parent=pixel_7_pro,orientation=landscape")
 @Composable
 fun Main_Medium_Preview() {
-    Main_Medium(navTotalController = rememberNavController())
+    Main_Medium(rememberNavController(), rememberNavController())
 }
 
 @Composable
-fun Main_Expanded(navTotalController: NavHostController) {
+fun Main_Expanded(navTotalController: NavHostController, navMainController: NavHostController) {
 
-    val screens = listOf(Screens.Home, Screens.History, Screens.Account)
-    val navMainController = rememberNavController()
+    val screens = listOf(Screens.Home, Screens.History, Screens.Me)
 
     PermanentNavigationDrawer(drawerContent = {
 
@@ -226,7 +226,7 @@ fun Main_Expanded(navTotalController: NavHostController) {
             NavHost(navController = navMainController, startDestination = Screens.Home.route) {
                 composable(Screens.Home.route) { Home() }
                 composable(Screens.History.route) { History() }
-                composable(Screens.Account.route) { Account(navMainController) }
+                composable(Screens.Me.route) { Me(navMainController) }
             }
         }
 
@@ -236,5 +236,5 @@ fun Main_Expanded(navTotalController: NavHostController) {
 @Preview(group = "Main", device = "spec:width=673dp,height=841dp")
 @Composable
 fun Main_Expanded_Preview() {
-    Main_Expanded(navTotalController = rememberNavController())
+    Main_Expanded(rememberNavController(), rememberNavController())
 }

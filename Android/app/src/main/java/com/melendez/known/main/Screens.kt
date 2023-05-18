@@ -12,5 +12,5 @@ import com.melendez.known.R
 sealed class Screens(val route: String, @StringRes val resourceId: Int, val icon: ImageVector) {
     object Home : Screens("home", R.string.home, Icons.Rounded.Home)
     object History : Screens("history", R.string.history, Icons.Rounded.History)
-    object Account : Screens("account", R.string.account, Icons.Rounded.AccountCircle)
+    object Me : Screens("account", R.string.me, Icons.Rounded.AccountCircle)
 }

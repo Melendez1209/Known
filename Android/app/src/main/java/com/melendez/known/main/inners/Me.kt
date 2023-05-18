@@ -24,7 +24,7 @@ import com.melendez.known.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Account(navTotalController: NavHostController) {
+fun Me(navTotalController: NavHostController) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -57,6 +57,6 @@ fun Account(navTotalController: NavHostController) {
 
 @Preview(device = "id:pixel_7_pro")
 @Composable
-fun AccountPreview() {
-    Account(navTotalController = rememberNavController())
+fun Me_Preview() {
+    Me(navTotalController = rememberNavController())
 }

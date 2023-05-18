@@ -125,10 +125,10 @@ fun History() {
                     ) {
                         Text(
                             text = stringResource(R.string.exam_name) + count.toString(),
-                            modifier = Modifier.padding(start = 14.dp)
+                            modifier = Modifier.padding(start = 12.dp)
                         )
                         Text(text = stringResource(R.string.time) + count.toString())
-                        Text(text = count.toString(), modifier = Modifier.padding(end = 18.dp))
+                        Text(text = count.toString(), modifier = Modifier.padding(end = 12.dp))
                     }
                 }
             }
