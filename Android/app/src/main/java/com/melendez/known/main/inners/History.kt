@@ -16,6 +16,7 @@ import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
@@ -58,17 +59,18 @@ fun History() {
             },
             trailingIcon = {
                 if (active) {
-                    Icon(
-                        modifier = Modifier.clickable {
-                            if (text.isNotBlank()) {
-                                text = ""
-                            } else {
-                                active = false
-                            }
-                        },
-                        imageVector = Icons.Rounded.Close,
-                        contentDescription = stringResource(R.string.clear)
-                    )
+                    IconButton(onClick = {
+                        if (text.isNotBlank()) {
+                            text = ""
+                        } else {
+                            active = false
+                        }
+                    }) {
+                        Icon(
+                            imageVector = Icons.Rounded.Close,
+                            contentDescription = stringResource(R.string.clear)
+                        )
+                    }
                 }
             },
             enabled = true //TODO:Changes based on the presence or absence of a history

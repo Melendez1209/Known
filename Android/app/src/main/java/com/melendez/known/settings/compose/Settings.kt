@@ -2,7 +2,7 @@ package com.melendez.known.settings.compose
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
-import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -26,7 +26,7 @@ fun Settings_Compact(navTotalController: NavHostController) {
         }, navigationIcon = {
             IconButton(onClick = { navTotalController.popBackStack() }) {
                 Icon(
-                    imageVector = Icons.Rounded.Close,
+                    imageVector = Icons.Rounded.NavigateBefore,
                     contentDescription = stringResource(R.string.back)
                 )
             }
