@@ -12,4 +12,7 @@
     <string name="save">保存</string>
     <string name="search">检索</string>
     <string name="clear">清除</string>
+    <string name="settings">设置</string>
+    <string name="back">"返回上一级 "</string>
+    <string name="login">登录</string>
 </resources>

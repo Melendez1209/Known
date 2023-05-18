@@ -19,7 +19,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -33,20 +32,10 @@ import androidx.compose.ui.unit.dp
 import com.melendez.known.R
 
 @OptIn(ExperimentalMaterial3Api::class)
-@Preview(device = "id:pixel_7_pro")
+@Preview(device = "id:pixel_7_pro", showBackground = true)
 @Composable
 fun History() {
     Column {
-        TopAppBar(title = {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Text(text = stringResource(R.string.exam_name))
-                Text(text = stringResource(R.string.time))
-                Text(text = stringResource(R.string.classification))
-            }
-        })
 
         var text by remember { mutableStateOf("") }
         var active by remember { mutableStateOf(false) }
@@ -108,6 +97,17 @@ fun History() {
                     )
                 }
             }
+        }
+
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp)
+        ) {
+            Text(text = stringResource(R.string.exam_name))
+            Text(text = stringResource(R.string.time))
+            Text(text = stringResource(R.string.classification))
         }
 
         LazyColumn {

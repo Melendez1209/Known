@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.add.compose.DRP
 import com.melendez.known.main.MainScreen
+import com.melendez.known.settings.compose.Settings_Compact
 import com.melendez.known.ui.theme.KnownTheme
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -32,6 +33,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable("DateRangePicker") { DRP(navTotalController = navTotalController) }
+                    composable("Settings") { Settings_Compact(navTotalController = navTotalController) }
                 }
             }
         }

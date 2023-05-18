@@ -5,8 +5,10 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -34,28 +36,27 @@ import com.melendez.known.R
 import com.melendez.known.main.inners.Account
 import com.melendez.known.main.inners.History
 import com.melendez.known.main.inners.Home
-import com.melendez.known.main.inners.Screens
 
 @Composable
 fun MainScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
     when (widthSizeClass) {
         WindowWidthSizeClass.Compact -> {
-            CompactScreen(navTotalController)
+            Main_Compact(navTotalController)
         }
 
         WindowWidthSizeClass.Medium -> {
-            MediumScreen()
+            Main_Medium(navTotalController)
         }
 
         WindowWidthSizeClass.Expanded -> {
-            ExpandedScreen()
+            Main_Expanded(navTotalController)
         }
     }
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun CompactScreen(navTotalController: NavHostController) {
+fun Main_Compact(navTotalController: NavHostController) {
 
     val screens = listOf(Screens.Home, Screens.History, Screens.Account)
     val navMainController = rememberNavController()
@@ -72,12 +73,12 @@ fun CompactScreen(navTotalController: NavHostController) {
                         navMainController.navigate(screen.route) {
                             // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
                             popUpTo(navMainController.graph.findStartDestination().id) {
-                                saveState = false
+                                saveState = true
                             }
                             launchSingleTop =
                                 true//Avoid multiple copies of the same destination when reelecting the same item
                             restoreState =
-                                false // Restore state when reelecting a previously selected item
+                                true // Restore state when reelecting a previously selected item
                         }
                     },
                     icon = {
@@ -92,7 +93,7 @@ fun CompactScreen(navTotalController: NavHostController) {
         FloatingActionButton(onClick = { navTotalController.navigate("DateRangePicker") }) {
             Icon(
                 imageVector = Icons.Rounded.Add,
-                contentDescription = stringResource(R.string.add),
+                contentDescription = stringResource(R.string.add)
             )
         }
     }) {
@@ -101,22 +102,21 @@ fun CompactScreen(navTotalController: NavHostController) {
             startDestination = Screens.Home.route,
             modifier = Modifier.fillMaxSize()
         ) {
-            composable(Screens.Home.route) { Home(navMainController) }
+            composable(Screens.Home.route) { Home() }
             composable(Screens.History.route) { History() }
-            composable(Screens.Account.route) { Account(navMainController) }
+            composable(Screens.Account.route) { Account(navTotalController = navTotalController) }
         }
     }
 }
 
-@Preview(device = "id:pixel_7_pro", group = "Main")
+@Preview(group = "Main", device = "id:pixel_7_pro")
 @Composable
-fun CompactScreen_Preview() {
-    CompactScreen(navTotalController = rememberNavController())
+fun Main_Compact_Preview() {
+    Main_Compact(navTotalController = rememberNavController())
 }
 
-@Preview(group = "Main", device = "spec:parent=pixel_7_pro,orientation=landscape")
 @Composable
-fun MediumScreen() {
+fun Main_Medium(navTotalController: NavHostController) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Row {
 
@@ -134,12 +134,12 @@ fun MediumScreen() {
                             navMainController.navigate(screen.route) {
                                 // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
                                 popUpTo(navMainController.graph.findStartDestination().id) {
-                                    saveState = false
+                                    saveState = true
                                 }
                                 launchSingleTop =
                                     true//Avoid multiple copies of the same destination when reelecting the same item
                                 restoreState =
-                                    false // Restore state when reelecting a previously selected item
+                                    true// Restore state when reelecting a previously selected item
                             }
                         },
                         icon = {
@@ -150,18 +150,33 @@ fun MediumScreen() {
                         })
                 }
             }
-            NavHost(navController = navMainController, startDestination = Screens.Home.route) {
-                composable(Screens.Home.route) { Home(navMainController) }
-                composable(Screens.History.route) { History() }
-                composable(Screens.Account.route) { Account(navMainController) }
+            Scaffold(floatingActionButton = {
+                LargeFloatingActionButton(onClick = { navTotalController.navigate("DateRangePicker") }) {
+                    Icon(
+                        imageVector = Icons.Rounded.Add,
+                        contentDescription = stringResource(R.string.add)
+                    )
+                }
+            }) {
+                NavHost(navController = navMainController, startDestination = Screens.Home.route) {
+                    composable(Screens.Home.route) { Home() }
+                    composable(Screens.History.route) { History() }
+                    composable(Screens.Account.route) { Account(navMainController) }
+                }
             }
         }
     }
 }
 
-@Preview(group = "Main", device = "spec:width=673dp,height=841dp")
+
+@Preview(group = "Main", device = "spec:parent=pixel_7_pro,orientation=landscape")
 @Composable
-fun ExpandedScreen() {
+fun Main_Medium_Preview() {
+    Main_Medium(navTotalController = rememberNavController())
+}
+
+@Composable
+fun Main_Expanded(navTotalController: NavHostController) {
 
     val screens = listOf(Screens.Home, Screens.History, Screens.Account)
     val navMainController = rememberNavController()
@@ -180,12 +195,12 @@ fun ExpandedScreen() {
                         navMainController.navigate(screen.route) {
                             // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
                             popUpTo(navMainController.graph.findStartDestination().id) {
-                                saveState = false
+                                saveState = true
                             }
                             launchSingleTop =
                                 true//Avoid multiple copies of the same destination when reelecting the same item
                             restoreState =
-                                false // Restore state when reelecting a previously selected item
+                                true // Restore state when reelecting a previously selected item
                         }
                     },
                     icon = {
@@ -196,11 +211,30 @@ fun ExpandedScreen() {
                     })
             }
         }
-    }, content = {
-        NavHost(navController = navMainController, startDestination = Screens.Home.route) {
-            composable(Screens.Home.route) { Home(navMainController) }
-            composable(Screens.History.route) { History() }
-            composable(Screens.Account.route) { Account(navMainController) }
+    }) {
+        Scaffold(floatingActionButton = {
+            ExtendedFloatingActionButton(
+                onClick = { navTotalController.navigate("DateRangePicker") },
+                icon = {
+                    Icon(
+                        imageVector = Icons.Rounded.Add,
+                        contentDescription = stringResource(id = R.string.add)
+                    )
+                }, text = { Text(text = stringResource(id = R.string.add)) }
+            )
+        }) {
+            NavHost(navController = navMainController, startDestination = Screens.Home.route) {
+                composable(Screens.Home.route) { Home() }
+                composable(Screens.History.route) { History() }
+                composable(Screens.Account.route) { Account(navMainController) }
+            }
         }
-    })
+
+    }
+}
+
+@Preview(group = "Main", device = "spec:width=673dp,height=841dp")
+@Composable
+fun Main_Expanded_Preview() {
+    Main_Expanded(navTotalController = rememberNavController())
 }

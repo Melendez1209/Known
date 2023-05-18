@@ -11,4 +11,7 @@
     <string name="save">Save</string>
     <string name="search">Search</string>
     <string name="clear">Clear</string>
+    <string name="settings">Settings</string>
+    <string name="back">Back to previous level</string>
+    <string name="login">Login</string>
 </resources>
