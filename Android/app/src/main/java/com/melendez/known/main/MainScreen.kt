@@ -94,8 +94,7 @@ fun Main_Compact(navTotalController: NavHostController, navMainController: NavHo
     }, floatingActionButton = {
         FloatingActionButton(onClick = { navTotalController.navigate("DateRangePicker") }) {
             Icon(
-                imageVector = Icons.Rounded.Add,
-                contentDescription = stringResource(R.string.add)
+                imageVector = Icons.Rounded.Add, contentDescription = stringResource(R.string.add)
             )
         }
     }) {
@@ -111,7 +110,7 @@ fun Main_Compact(navTotalController: NavHostController, navMainController: NavHo
     }
 }
 
-@Preview(group = "Main", device = "id:pixel_7_pro")
+@Preview(name = "Main_Compact", device = "id:pixel_7_pro")
 @Composable
 fun Main_Compact_Preview() {
     Main_Compact(rememberNavController(), rememberNavController())
@@ -170,7 +169,7 @@ fun Main_Medium(navTotalController: NavHostController, navMainController: NavHos
 }
 
 
-@Preview(group = "Main", device = "spec:parent=pixel_7_pro,orientation=landscape")
+@Preview(name = "Main_Medium", device = "spec:parent=pixel_7_pro,orientation=landscape")
 @Composable
 fun Main_Medium_Preview() {
     Main_Medium(rememberNavController(), rememberNavController())
@@ -188,8 +187,7 @@ fun Main_Expanded(navTotalController: NavHostController, navMainController: NavH
 
         ModalDrawerSheet {
             screens.forEach { screen ->
-                NavigationDrawerItem(
-                    label = { Text(text = stringResource(screen.resourceId)) },
+                NavigationDrawerItem(label = { Text(text = stringResource(screen.resourceId)) },
                     selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
                     onClick = {
                         navMainController.navigate(screen.route) {
@@ -213,15 +211,14 @@ fun Main_Expanded(navTotalController: NavHostController, navMainController: NavH
         }
     }) {
         Scaffold(floatingActionButton = {
-            ExtendedFloatingActionButton(
-                onClick = { navTotalController.navigate("DateRangePicker") },
+            ExtendedFloatingActionButton(onClick = { navTotalController.navigate("DateRangePicker") },
                 icon = {
                     Icon(
                         imageVector = Icons.Rounded.Add,
                         contentDescription = stringResource(id = R.string.add)
                     )
-                }, text = { Text(text = stringResource(id = R.string.add)) }
-            )
+                },
+                text = { Text(text = stringResource(id = R.string.add)) })
         }) {
             NavHost(navController = navMainController, startDestination = Screens.Home.route) {
                 composable(Screens.Home.route) { Home() }
@@ -233,7 +230,7 @@ fun Main_Expanded(navTotalController: NavHostController, navMainController: NavH
     }
 }
 
-@Preview(group = "Main", device = "spec:width=673dp,height=841dp")
+@Preview(name = "Main_Expanded", device = "spec:width=673dp,height=841dp")
 @Composable
 fun Main_Expanded_Preview() {
     Main_Expanded(rememberNavController(), rememberNavController())

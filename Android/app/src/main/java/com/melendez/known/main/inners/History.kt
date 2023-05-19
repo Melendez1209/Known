@@ -1,5 +1,6 @@
 package com.melendez.known.main.inners
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -11,6 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.KeyboardVoice
 import androidx.compose.material.icons.rounded.LocalLibrary
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Card
@@ -58,18 +60,30 @@ fun History() {
                 )
             },
             trailingIcon = {
-                if (active) {
-                    IconButton(onClick = {
-                        if (text.isNotBlank()) {
-                            text = ""
-                        } else {
-                            active = false
-                        }
-                    }) {
+                Row {
+                    IconButton(onClick = { TODO("Voice input") }) {
                         Icon(
-                            imageVector = Icons.Rounded.Close,
-                            contentDescription = stringResource(R.string.clear)
+                            imageVector = Icons.Rounded.KeyboardVoice,
+                            contentDescription = stringResource(
+                                R.string.voice_input
+                            )
                         )
+                    }
+                    AnimatedVisibility(visible = active) {
+                        IconButton(onClick = {
+                            if (text.isNotBlank()) {
+                                text = ""
+                            } else {
+                                active = false
+                            }
+                        }) {
+                            Icon(
+                                imageVector = Icons.Rounded.Close,
+                                contentDescription = if (text.isNotBlank()) stringResource(R.string.clear) else stringResource(
+                                    R.string.close_bar
+                                )
+                            )
+                        }
                     }
                 }
             },

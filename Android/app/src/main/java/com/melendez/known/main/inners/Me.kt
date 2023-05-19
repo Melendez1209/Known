@@ -29,7 +29,9 @@ fun Me(navTotalController: NavHostController) {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 12.dp),
-        onClick = { navTotalController.navigate("Settings") }) {
+        onClick = {
+            navTotalController.navigate("Settings")
+        }) {
         Row(
             modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
@@ -45,7 +47,9 @@ fun Me(navTotalController: NavHostController) {
             }
             IconButton(
                 modifier = Modifier.padding(end = 6.dp),
-                onClick = { navTotalController.navigate("Settings") }) {
+                onClick = {
+                    navTotalController.navigate("Settings")
+                }) {
                 Icon(
                     imageVector = Icons.Rounded.NavigateNext,
                     contentDescription = stringResource(id = R.string.settings)
