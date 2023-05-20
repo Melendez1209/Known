@@ -109,7 +109,7 @@ fun Main_Compact(navTotalController: NavHostController, navMainController: NavHo
         ) {
             composable(Screens.Home.route) { Home() }
             composable(Screens.History.route) { History() }
-            composable(Screens.Me.route) { Me(navTotalController = navTotalController) }
+            composable(Screens.Me.route) { Me(navTotalController) }
         }
     }
 }
@@ -169,7 +169,7 @@ fun Main_Medium(navTotalController: NavHostController, navMainController: NavHos
                 ) {
                     composable(Screens.Home.route) { Home() }
                     composable(Screens.History.route) { History() }
-                    composable(Screens.Me.route) { Me(navMainController) }
+                    composable(Screens.Me.route) { Me(navTotalController) }
                 }
             }
         }
@@ -235,7 +235,7 @@ fun Main_Expanded(navTotalController: NavHostController, navMainController: NavH
             ) {
                 composable(Screens.Home.route) { Home() }
                 composable(Screens.History.route) { History() }
-                composable(Screens.Me.route) { Me(navMainController) }
+                composable(Screens.Me.route) { Me(navTotalController) }
             }
         }
 

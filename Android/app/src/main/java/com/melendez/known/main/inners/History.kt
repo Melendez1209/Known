@@ -21,9 +21,11 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.SearchBar
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -32,34 +34,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.MutableLiveData
+import com.google.accompanist.swiperefresh.SwipeRefresh
+import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.melendez.known.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(device = "id:pixel_7_pro", showBackground = true)
 @Composable
 fun History() {
-    Column {
+    Surface {
+        Column {
 
-        var text by remember { mutableStateOf("") }
-        var active by remember { mutableStateOf(false) }
+            var text by remember { mutableStateOf("") }
+            var active by remember { mutableStateOf(false) }
 
-        SearchBar(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp),
-            query = text,
-            onQueryChange = { text = it },
-            onSearch = { active = false },
-            active = active,
-            onActiveChange = { active = it },
-            placeholder = { Text(text = stringResource(R.string.search)) },
-            leadingIcon = {
-                Icon(
-                    imageVector = Icons.Rounded.Search,
-                    contentDescription = stringResource(R.string.search)
-                )
-            },
-            trailingIcon = {
+            SearchBar(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp),
+                query = text,
+                onQueryChange = { text = it },
+                onSearch = { active = false },
+                active = active,
+                onActiveChange = { active = it },
+                placeholder = { Text(text = stringResource(R.string.search)) },
+                leadingIcon = {
+                    Icon(
+                        imageVector = Icons.Rounded.Search,
+                        contentDescription = stringResource(R.string.search)
+                    )
+                },
+                trailingIcon = {
                 Row {
                     IconButton(onClick = { TODO("Voice input") }) {
                         Icon(
@@ -89,6 +95,7 @@ fun History() {
             },
             enabled = true //TODO:Changes based on the presence or absence of a history
         ) {
+
             LazyColumn(
                 modifier = Modifier.fillMaxWidth(),
                 contentPadding = PaddingValues(12.dp),
@@ -126,25 +133,36 @@ fun History() {
             Text(text = stringResource(R.string.classification))
         }
 
-        LazyColumn {
+            val _isRefreshing: MutableLiveData<Boolean> = MutableLiveData(false)
+            val isRefreshing by _isRefreshing.observeAsState(false) //TODO:Replace the LiveData with the Room
 
-            items(100) { count ->
-                Card(
-                    modifier = Modifier.padding(vertical = 6.dp, horizontal = 12.dp),
-                    onClick = { TODO("Jump to the details page") }) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(50.dp),
-                    ) {
-                        Text(
-                            text = stringResource(R.string.exam_name) + count.toString(),
-                            modifier = Modifier.padding(start = 12.dp)
-                        )
-                        Text(text = stringResource(R.string.time) + count.toString())
-                        Text(text = count.toString(), modifier = Modifier.padding(end = 12.dp))
+            SwipeRefresh(
+                state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+                onRefresh = { TODO("Refresh") }) {
+                LazyColumn {
+
+                    items(100) { count ->
+                        Card(
+                            modifier = Modifier.padding(vertical = 6.dp, horizontal = 12.dp),
+                            onClick = { TODO("Jump to the details page") }) {
+                            Row(
+                                horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically,
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .height(50.dp),
+                            ) {
+                                Text(
+                                    text = stringResource(R.string.exam_name) + count.toString(),
+                                    modifier = Modifier.padding(start = 12.dp)
+                                )
+                                Text(text = stringResource(R.string.time) + count.toString())
+                                Text(
+                                    text = count.toString(),
+                                    modifier = Modifier.padding(end = 12.dp)
+                                )
+                            }
+                        }
                     }
                 }
             }
