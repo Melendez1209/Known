@@ -62,7 +62,6 @@ dependencies {
     implementation("androidx.compose.material3:material3:1.1.0-beta02")
     implementation("androidx.compose.material:material-icons-extended:1.5.0-alpha01")
     implementation("androidx.compose.material3:material3-window-size-class:1.1.0-beta02")
-    implementation("androidx.navigation:navigation-compose:2.6.0-alpha08")
     implementation("com.google.accompanist:accompanist-navigation-animation:0.31.2-alpha")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.0-alpha01")

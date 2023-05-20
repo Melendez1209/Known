@@ -1,6 +1,7 @@
 package com.melendez.known.main
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
@@ -28,19 +29,21 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.navigation.animation.AnimatedNavHost
+import com.google.accompanist.navigation.animation.composable
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.melendez.known.R
 import com.melendez.known.main.inners.History
 import com.melendez.known.main.inners.Home
 import com.melendez.known.main.inners.Me
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
 
-    val navMainController = rememberNavController()
+    val navMainController = rememberAnimatedNavController()
 
     when (widthSizeClass) {
         WindowWidthSizeClass.Compact -> {
@@ -57,6 +60,7 @@ fun MainScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHost
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Main_Compact(navTotalController: NavHostController, navMainController: NavHostController) {
@@ -98,7 +102,7 @@ fun Main_Compact(navTotalController: NavHostController, navMainController: NavHo
             )
         }
     }) {
-        NavHost(
+        AnimatedNavHost(
             navController = navMainController,
             startDestination = Screens.Home.route,
             modifier = Modifier.fillMaxSize()
@@ -116,6 +120,7 @@ fun Main_Compact_Preview() {
     Main_Compact(rememberNavController(), rememberNavController())
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Main_Medium(navTotalController: NavHostController, navMainController: NavHostController) {
     Surface(modifier = Modifier.fillMaxSize()) {
@@ -158,7 +163,10 @@ fun Main_Medium(navTotalController: NavHostController, navMainController: NavHos
                     )
                 }
             }) {
-                NavHost(navController = navMainController, startDestination = Screens.Home.route) {
+                AnimatedNavHost(
+                    navController = navMainController,
+                    startDestination = Screens.Home.route
+                ) {
                     composable(Screens.Home.route) { Home() }
                     composable(Screens.History.route) { History() }
                     composable(Screens.Me.route) { Me(navMainController) }
@@ -175,6 +183,7 @@ fun Main_Medium_Preview() {
     Main_Medium(rememberNavController(), rememberNavController())
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Main_Expanded(navTotalController: NavHostController, navMainController: NavHostController) {
 
@@ -220,7 +229,10 @@ fun Main_Expanded(navTotalController: NavHostController, navMainController: NavH
                 },
                 text = { Text(text = stringResource(id = R.string.add)) })
         }) {
-            NavHost(navController = navMainController, startDestination = Screens.Home.route) {
+            AnimatedNavHost(
+                navController = navMainController,
+                startDestination = Screens.Home.route
+            ) {
                 composable(Screens.Home.route) { Home() }
                 composable(Screens.History.route) { History() }
                 composable(Screens.Me.route) { Me(navMainController) }
