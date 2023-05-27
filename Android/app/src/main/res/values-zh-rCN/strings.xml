@@ -17,6 +17,10 @@
     <string name="login">登录</string>
     <string name="close_bar">关闭搜索栏</string>
     <string name="voice_input">语音输入</string>
-    <string name="navigation_bar_hint">导航栏文字</string>
+    <string name="navigation_bar_hint">导航栏标签显示模式</string>
     <string name="about">关于我们</string>
+    <string name="always">始终显示</string>
+    <string name="never">从不显示</string>
+    <string name="selected">仅显示已选中项</string>
+    <string name="unselected">仅显示未选中项</string>
 </resources>

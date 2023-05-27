@@ -16,6 +16,10 @@
     <string name="login">Login</string>
     <string name="close_bar">Close the Search Bar</string>
     <string name="voice_input">Voice input</string>
-    <string name="navigation_bar_hint">Navigation bar hint</string>
+    <string name="navigation_bar_hint">The navigation bar will hint at</string>
     <string name="about">About Us</string>
+    <string name="always">Always</string>
+    <string name="never">"Never "</string>
+    <string name="selected">Selected Item</string>
+    <string name="unselected">Unselected Items</string>
 </resources>
