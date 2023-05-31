@@ -23,7 +23,7 @@
     <string name="never">从不显示</string>
     <string name="selected">仅显示已选中项</string>
     <string name="unselected">仅显示未选中项</string>
-    <string name="mark">得分:</string>
+    <string name="mark">得分</string>
     <string name="close_input">取消输入</string>
     <string name="full_mark">满分</string>
 </resources>

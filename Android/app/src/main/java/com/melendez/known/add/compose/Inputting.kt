@@ -25,6 +25,7 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.melendez.known.R
@@ -43,7 +44,9 @@ fun Inputting() {
 fun Subject_Card(subject: String) {
 
     val focusManager = LocalFocusManager.current
+
     var mark by rememberSaveable { mutableStateOf("") }
+    var full by rememberSaveable { mutableStateOf("") }
 
     Card(modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)) {
         Text(
@@ -52,13 +55,19 @@ fun Subject_Card(subject: String) {
                 .padding(top = 6.dp),
             text = subject
         )
-        OutlinedTextField(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 6.dp, vertical = 3.dp),
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 6.dp, vertical = 3.dp),
             label = { Text(stringResource(R.string.mark)) },
             value = mark,
             singleLine = true,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+            placeholder = { Text(text = "150") },
+            isError = if (mark.isEmpty() || full.isEmpty()) false else mark.toFloat() > full.toFloat(),
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Next,
+                keyboardType = KeyboardType.Number
+            ),
             keyboardActions = KeyboardActions(onNext = {
                 focusManager.moveFocus(
                     FocusDirection.Down
@@ -76,15 +85,18 @@ fun Subject_Card(subject: String) {
             },
             onValueChange = { mark = it })
 
-        var full by rememberSaveable { mutableStateOf("") }
-
-        OutlinedTextField(modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 6.dp, vertical = 3.dp),
+        OutlinedTextField(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 6.dp, vertical = 3.dp),
             label = { Text(stringResource(R.string.full_mark)) },
             value = full,
             singleLine = true,
-            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
+            placeholder = { Text(text = "150") },
+            keyboardOptions = KeyboardOptions(
+                imeAction = ImeAction.Done,
+                keyboardType = KeyboardType.Number
+            ),
             keyboardActions = KeyboardActions(onDone = null),
             trailingIcon = {
                 IconButton(onClick = { full = "" }) {
