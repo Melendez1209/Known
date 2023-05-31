@@ -13,6 +13,7 @@ import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.melendez.known.add.compose.DRP
+import com.melendez.known.add.compose.Inputting
 import com.melendez.known.main.MainScreen
 import com.melendez.known.settings.compose.Settings
 import com.melendez.known.ui.theme.KnownTheme
@@ -69,6 +70,7 @@ class MainActivity : ComponentActivity() {
                             navTotalController = navTotalController
                         )
                     }
+                    composable("Inputting") { Inputting() }
                 }
             }
         }

@@ -22,4 +22,7 @@
     <string name="never">"Never "</string>
     <string name="selected">Selected Item</string>
     <string name="unselected">Unselected Items</string>
+    <string name="mark">Mark:</string>
+    <string name="close_input">Close the Input Bar</string>
+    <string name="full_mark">Full mark</string>
 </resources>

@@ -65,6 +65,7 @@ fun DRP(navTotalController: NavHostController) {
                                         "${state.selectedStartDateMillis!!..state.selectedEndDateMillis!!}"
                             )
                         }
+                        navTotalController.navigate("Inputting")
                     },
                     enabled = state.selectedEndDateMillis != null
                 ) {
