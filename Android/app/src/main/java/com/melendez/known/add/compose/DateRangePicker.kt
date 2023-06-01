@@ -69,7 +69,7 @@ fun DRP(navTotalController: NavHostController) {
                     },
                     enabled = state.selectedEndDateMillis != null
                 ) {
-                    Text(text = stringResource(R.string.save))
+                    Text(stringResource(R.string.next))
                 }
             }
             DateRangePicker(state = state, modifier = Modifier.weight(1f))

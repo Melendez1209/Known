@@ -8,7 +8,6 @@
     <string name="time">Time</string>
     <string name="classification">Classification</string>
     <string name="cancel">Cancel</string>
-    <string name="save">Save</string>
     <string name="search">Search</string>
     <string name="clear">Clear</string>
     <string name="settings">Settings</string>
@@ -25,4 +24,5 @@
     <string name="mark">Mark</string>
     <string name="close_input">Close the Input Bar</string>
     <string name="full_mark">Full mark</string>
+    <string name="next">Next</string>
 </resources>

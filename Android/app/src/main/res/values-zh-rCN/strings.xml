@@ -9,7 +9,6 @@
     <string name="time">时间</string>
     <string name="classification">分类</string>
     <string name="cancel">取消</string>
-    <string name="save">保存</string>
     <string name="search">搜索</string>
     <string name="clear">清除</string>
     <string name="settings">设置</string>
@@ -26,4 +25,5 @@
     <string name="mark">得分</string>
     <string name="close_input">取消输入</string>
     <string name="full_mark">满分</string>
+    <string name="next">继续</string>
 </resources>

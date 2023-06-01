@@ -1,8 +1,8 @@
 package com.melendez.known.add.compose
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
@@ -55,60 +55,60 @@ fun Subject_Card(subject: String) {
                 .padding(top = 6.dp),
             text = subject
         )
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 6.dp, vertical = 3.dp),
-            label = { Text(stringResource(R.string.mark)) },
-            value = mark,
-            singleLine = true,
-            placeholder = { Text(text = "150") },
-            isError = if (mark.isEmpty() || full.isEmpty()) false else mark.toFloat() > full.toFloat(),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Next,
-                keyboardType = KeyboardType.Number
-            ),
-            keyboardActions = KeyboardActions(onNext = {
-                focusManager.moveFocus(
-                    FocusDirection.Down
-                )
-            }),
-            trailingIcon = {
-                IconButton(onClick = { mark = "" }) {
-                    Icon(
-                        imageVector = Icons.Rounded.Close,
-                        contentDescription = if (mark.isNotBlank()) stringResource(R.string.clear) else stringResource(
-                            R.string.close_input
-                        )
+        Row {
+            OutlinedTextField(
+                modifier = Modifier
+                    .padding(horizontal = 3.dp, vertical = 6.dp)
+                    .weight(1f),
+                label = { Text(stringResource(R.string.full_mark)) },
+                value = full,
+                singleLine = true,
+                placeholder = { Text(text = "150") },
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next,
+                    keyboardType = KeyboardType.Number
+                ),
+                keyboardActions = KeyboardActions(onNext = {
+                    focusManager.moveFocus(
+                        FocusDirection.Right
                     )
-                }
-            },
-            onValueChange = { mark = it })
-
-        OutlinedTextField(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 6.dp, vertical = 3.dp),
-            label = { Text(stringResource(R.string.full_mark)) },
-            value = full,
-            singleLine = true,
-            placeholder = { Text(text = "150") },
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Done,
-                keyboardType = KeyboardType.Number
-            ),
-            keyboardActions = KeyboardActions(onDone = null),
-            trailingIcon = {
-                IconButton(onClick = { full = "" }) {
-                    Icon(
-                        imageVector = Icons.Rounded.Close,
-                        contentDescription = if (mark.isNotBlank()) stringResource(R.string.clear) else stringResource(
-                            R.string.close_input
+                }),
+                trailingIcon = {
+                    IconButton(onClick = { full = "" }) {
+                        Icon(
+                            imageVector = Icons.Rounded.Close,
+                            contentDescription = if (mark.isNotBlank()) stringResource(R.string.clear) else stringResource(
+                                R.string.close_input
+                            )
                         )
-                    )
-                }
-            },
-            onValueChange = { full = it })
+                    }
+                },
+                onValueChange = { full = it })
+            OutlinedTextField(
+                modifier = Modifier
+                    .padding(horizontal = 3.dp, vertical = 6.dp)
+                    .weight(1f),
+                label = { Text(stringResource(R.string.mark)) },
+                value = mark,
+                singleLine = true,
+                placeholder = { Text(text = "150") },
+                isError = if (mark.isEmpty() || full.isEmpty()) false else mark.toFloat() > full.toFloat(),
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Done,
+                    keyboardType = KeyboardType.Number
+                ),
+                trailingIcon = {
+                    IconButton(onClick = { mark = "" }) {
+                        Icon(
+                            imageVector = Icons.Rounded.Close,
+                            contentDescription = if (mark.isNotBlank()) stringResource(R.string.clear) else stringResource(
+                                R.string.close_input
+                            )
+                        )
+                    }
+                },
+                onValueChange = { mark = it })
+        }
     }
 }
 
