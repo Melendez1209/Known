@@ -11,6 +11,7 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -53,16 +54,17 @@ fun Subject_Card(subject: String) {
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 6.dp),
-            text = subject
+            text = subject,
+            style = MaterialTheme.typography.titleLarge
         )
         Row {
             OutlinedTextField(
                 modifier = Modifier
                     .padding(horizontal = 3.dp, vertical = 6.dp)
                     .weight(1f),
-                label = { Text(stringResource(R.string.full_mark)) },
                 value = full,
                 singleLine = true,
+                label = { Text(stringResource(R.string.full_mark)) },
                 placeholder = { Text(text = "150") },
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
@@ -77,9 +79,7 @@ fun Subject_Card(subject: String) {
                     IconButton(onClick = { full = "" }) {
                         Icon(
                             imageVector = Icons.Rounded.Close,
-                            contentDescription = if (mark.isNotBlank()) stringResource(R.string.clear) else stringResource(
-                                R.string.close_input
-                            )
+                            contentDescription = stringResource(R.string.clear)
                         )
                     }
                 },
@@ -88,9 +88,9 @@ fun Subject_Card(subject: String) {
                 modifier = Modifier
                     .padding(horizontal = 3.dp, vertical = 6.dp)
                     .weight(1f),
-                label = { Text(stringResource(R.string.mark)) },
                 value = mark,
                 singleLine = true,
+                label = { Text(stringResource(R.string.mark)) },
                 placeholder = { Text(text = "150") },
                 isError = if (mark.isEmpty() || full.isEmpty()) false else mark.toFloat() > full.toFloat(),
                 keyboardOptions = KeyboardOptions(
@@ -101,9 +101,7 @@ fun Subject_Card(subject: String) {
                     IconButton(onClick = { mark = "" }) {
                         Icon(
                             imageVector = Icons.Rounded.Close,
-                            contentDescription = if (mark.isNotBlank()) stringResource(R.string.clear) else stringResource(
-                                R.string.close_input
-                            )
+                            contentDescription = stringResource(R.string.clear)
                         )
                     }
                 },

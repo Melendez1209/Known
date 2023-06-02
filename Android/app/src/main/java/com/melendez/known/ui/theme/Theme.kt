@@ -110,6 +110,6 @@ fun KnownTheme(
     MaterialTheme(
         colorScheme = colorScheme,
         content = content,
-        typography = Typography
+        typography = MaterialTheme.typography
     )
 }

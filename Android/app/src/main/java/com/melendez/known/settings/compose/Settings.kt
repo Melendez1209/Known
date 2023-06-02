@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
@@ -18,6 +19,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,6 +34,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -75,11 +78,14 @@ fun Settings_Compact(navTotalController: NavHostController) {
             IconButton(onClick = { TODO("Login") }) {
                 Icon(
                     imageVector = Icons.Rounded.AccountCircle,
-                    contentDescription = stringResource(R.string.login)
+                    contentDescription = stringResource(R.string.sign_to)
                 )
             }
         })
-        Settings_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
+        Settings_Content(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            MaterialTheme.typography.titleSmall
+        )
     }
 }
 
@@ -111,13 +117,16 @@ fun Settings_Medium(navTotalController: NavHostController) {
                 IconButton(onClick = { TODO("Login") }) {
                     Icon(
                         imageVector = Icons.Rounded.AccountCircle,
-                        contentDescription = stringResource(R.string.login)
+                        contentDescription = stringResource(R.string.sign_to)
                     )
                 }
             },
             scrollBehavior = scrollBehavior
         )
-        Settings_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
+        Settings_Content(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            MaterialTheme.typography.titleMedium
+        )
     }
 }
 
@@ -149,13 +158,16 @@ fun Settings_Expanded(navTotalController: NavHostController) {
                 IconButton(onClick = { TODO("Login") }) {
                     Icon(
                         imageVector = Icons.Rounded.AccountCircle,
-                        contentDescription = stringResource(R.string.login)
+                        contentDescription = stringResource(R.string.sign_to)
                     )
                 }
             },
             scrollBehavior = scrollBehavior
         )
-        Settings_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
+        Settings_Content(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            MaterialTheme.typography.titleLarge
+        )
     }
 }
 
@@ -167,7 +179,7 @@ fun Settings_Expanded_Preview() {
 }
 
 @Composable
-fun Settings_Content(modifier: Modifier) {
+fun Settings_Content(modifier: Modifier, style: TextStyle) {
 
     val never = stringResource(id = R.string.never)
     val selected = stringResource(id = R.string.selected)
@@ -181,6 +193,15 @@ fun Settings_Content(modifier: Modifier) {
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyColumn(modifier = modifier) {
             item {
+                Column(Modifier.fillMaxWidth()) {
+                    Button(
+                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        onClick = { TODO("Login") }) {
+                        Text(text = stringResource(R.string.sign_to))
+                    }
+                }
+            }
+            item {
                 Row(
                     modifier = Modifier
                         .fillMaxSize()
@@ -188,7 +209,10 @@ fun Settings_Content(modifier: Modifier) {
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(text = stringResource(id = R.string.navigation_bar_hint))
+                    Text(
+                        text = stringResource(id = R.string.navigation_bar_hint),
+                        style = style
+                    )
                     Column {
                         Button(onClick = { expanded = true }) {
                             Text(text = labelDisplayMode)
@@ -221,5 +245,8 @@ fun Settings_Content(modifier: Modifier) {
 @Composable
 fun Settings_Content_Preview() {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    Settings_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
+    Settings_Content(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        MaterialTheme.typography.titleMedium
+    )
 }

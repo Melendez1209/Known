@@ -13,6 +13,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -68,13 +69,13 @@ fun NavigationCard(
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Row {
+            Row(verticalAlignment = Alignment.CenterVertically) {
                 Icon(
                     modifier = Modifier.padding(start = 12.dp, end = 6.dp),
                     imageVector = icon,
                     contentDescription = stringResource(id = R.string.settings)
                 )
-                Text(text = title)
+                Text(text = title, style = MaterialTheme.typography.titleMedium)
             }
             IconButton(
                 modifier = Modifier.padding(end = 6.dp),

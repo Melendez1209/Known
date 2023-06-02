@@ -1,6 +1,5 @@
 package com.melendez.known.main.inners
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -12,7 +11,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.KeyboardVoice
 import androidx.compose.material.icons.rounded.LocalLibrary
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Card
@@ -20,6 +18,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -39,6 +38,7 @@ import com.google.accompanist.swiperefresh.SwipeRefresh
 import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.melendez.known.R
 
+@Suppress("DEPRECATION")
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(device = "id:pixel_7_pro", showBackground = true)
 @Composable
@@ -66,82 +66,73 @@ fun History() {
                     )
                 },
                 trailingIcon = {
-                Row {
-                    IconButton(onClick = { TODO("Voice input") }) {
+                    IconButton(enabled = active, onClick = {
+                        if (text.isNotBlank()) {
+                            text = ""
+                        } else {
+                            active = false
+                        }
+                    }) {
                         Icon(
-                            imageVector = Icons.Rounded.KeyboardVoice,
-                            contentDescription = stringResource(
-                                R.string.voice_input
+                            imageVector = Icons.Rounded.Close,
+                            contentDescription = if (text.isNotBlank()) stringResource(R.string.clear) else stringResource(
+                                R.string.close_bar
                             )
                         )
                     }
-                    AnimatedVisibility(visible = active) {
-                        IconButton(onClick = {
-                            if (text.isNotBlank()) {
-                                text = ""
-                            } else {
-                                active = false
-                            }
-                        }) {
-                            Icon(
-                                imageVector = Icons.Rounded.Close,
-                                contentDescription = if (text.isNotBlank()) stringResource(R.string.clear) else stringResource(
-                                    R.string.close_bar
+                },
+                enabled = true //TODO:Changes based on the presence or absence of a history
+            ) {
+                LazyColumn(
+                    modifier = Modifier.fillMaxWidth(),
+                    contentPadding = PaddingValues(12.dp),
+                    verticalArrangement = Arrangement.spacedBy(4.dp)
+                ) {
+                    items(4) { index ->
+
+                        val resultText = stringResource(R.string.exam) + index
+
+                        ListItem(modifier = Modifier.clickable {
+                            text = resultText
+                            active = false
+                        },
+                            headlineContent = { Text(resultText) },
+                            supportingContent = { Text(text = stringResource(R.string.classification) + index) },
+                            leadingContent = {
+                                Icon(
+                                    Icons.Rounded.LocalLibrary, contentDescription = null
                                 )
-                            )
-                        }
+                            })
                     }
                 }
-            },
-            enabled = true //TODO:Changes based on the presence or absence of a history
-        ) {
-
-            LazyColumn(
-                modifier = Modifier.fillMaxWidth(),
-                contentPadding = PaddingValues(12.dp),
-                verticalArrangement = Arrangement.spacedBy(4.dp)
-            ) {
-                items(4) { index ->
-
-                    val resultText = stringResource(R.string.exam_name) + index
-
-                    ListItem(modifier = Modifier.clickable {
-                        text = resultText
-                        active = false
-                    },
-                        headlineContent = { Text(resultText) },
-                        supportingContent = { Text(text = stringResource(R.string.classification) + index) },
-                        leadingContent = {
-                            Icon(
-                                Icons.Rounded.LocalLibrary,
-                                contentDescription = null
-                            )
-                        }
-                    )
-                }
             }
-        }
-
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 12.dp)
-        ) {
-            Text(text = stringResource(R.string.exam_name))
-            Text(text = stringResource(R.string.time))
-            Text(text = stringResource(R.string.classification))
-        }
+            Row(
+                horizontalArrangement = Arrangement.SpaceBetween,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 12.dp)
+            ) {
+                Text(
+                    text = stringResource(R.string.exam),
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = stringResource(R.string.time),
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Text(
+                    text = stringResource(R.string.classification),
+                    style = MaterialTheme.typography.titleMedium
+                )
+            }
 
             val _isRefreshing: MutableLiveData<Boolean> = MutableLiveData(false)
             val isRefreshing by _isRefreshing.observeAsState(false) //TODO:Replace the LiveData with the Room
 
-            SwipeRefresh(
-                state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+            SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
                 onRefresh = { TODO("Refresh") }) {
                 LazyColumn {
-
-                    items(100) { count ->
+                    items(30) { count ->
                         Card(
                             modifier = Modifier.padding(vertical = 6.dp, horizontal = 12.dp),
                             onClick = { TODO("Jump to the details page") }) {
@@ -153,13 +144,18 @@ fun History() {
                                     .height(50.dp),
                             ) {
                                 Text(
-                                    text = stringResource(R.string.exam_name) + count.toString(),
-                                    modifier = Modifier.padding(start = 12.dp)
+                                    modifier = Modifier.padding(start = 12.dp),
+                                    text = stringResource(R.string.exam) + count.toString(),
+                                    style = MaterialTheme.typography.bodyLarge
                                 )
-                                Text(text = stringResource(R.string.time) + count.toString())
                                 Text(
+                                    text = stringResource(R.string.time) + count.toString(),
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                                Text(
+                                    modifier = Modifier.padding(end = 12.dp),
                                     text = count.toString(),
-                                    modifier = Modifier.padding(end = 12.dp)
+                                    style = MaterialTheme.typography.bodyLarge
                                 )
                             }
                         }

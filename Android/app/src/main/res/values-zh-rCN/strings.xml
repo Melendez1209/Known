@@ -5,7 +5,7 @@
     <string name="me">我</string>
     <string name="history">历史记录</string>
     <string name="add">添加</string>
-    <string name="exam_name">考试</string>
+    <string name="exam">考试</string>
     <string name="time">时间</string>
     <string name="classification">分类</string>
     <string name="cancel">取消</string>
@@ -13,11 +13,9 @@
     <string name="clear">清除</string>
     <string name="settings">设置</string>
     <string name="back">"返回上一级 "</string>
-    <string name="login">登录</string>
     <string name="close_bar">关闭搜索栏</string>
-    <string name="voice_input">语音输入</string>
     <string name="navigation_bar_hint">导航栏标签显示模式</string>
-    <string name="about">关于我们</string>
+    <string name="about">关于</string>
     <string name="always">始终显示</string>
     <string name="never">从不显示</string>
     <string name="selected">仅显示已选中项</string>
@@ -26,4 +24,5 @@
     <string name="close_input">取消输入</string>
     <string name="full_mark">满分</string>
     <string name="next">继续</string>
+    <string name="sign_to">登录您的 知学情 账号</string>
 </resources>
