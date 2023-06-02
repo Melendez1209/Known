@@ -1,14 +1,19 @@
 package com.melendez.known
 
+import android.os.Build
 import android.os.Bundle
+import android.view.WindowInsetsController
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.ViewCompat
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -20,10 +25,37 @@ import com.melendez.known.ui.theme.KnownTheme
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalAnimationApi::class)
 class MainActivity : ComponentActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         setContent {
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                if (isSystemInDarkTheme()) {
+                    window.insetsController?.setSystemBarsAppearance(
+                        0,
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                    )
+                } else {
+                    window.insetsController?.setSystemBarsAppearance(
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS,
+                        WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
+                    )
+                }
+            } else {
+                if (isSystemInDarkTheme()) {
+                    val controller = ViewCompat.getWindowInsetsController(LocalView.current)
+                    if (controller != null) {
+                        controller.isAppearanceLightStatusBars = false
+                    }
+                } else {
+                    val controller = ViewCompat.getWindowInsetsController(LocalView.current)
+                    if (controller != null) {
+                        controller.isAppearanceLightStatusBars = true
+                    }
+                }
+            }
 
             val navTotalController = rememberAnimatedNavController()
             val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
