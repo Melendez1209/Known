@@ -1,6 +1,6 @@
 @file:Suppress("DEPRECATION")
 
-package com.melendez.known.ui.theme
+package com.melendez.known.theme
 
 import android.app.Activity
 import android.os.Build
@@ -86,7 +86,7 @@ private val DarkColors = darkColorScheme(
 fun KnownTheme(
     useDarkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = true,
-    content: @Composable() () -> Unit,
+    content: @Composable () -> Unit,
 ) {
 
     val colorScheme = when {

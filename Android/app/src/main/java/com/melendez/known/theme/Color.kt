@@ -1,4 +1,4 @@
-package com.melendez.known.ui.theme
+package com.melendez.known.theme
 import androidx.compose.ui.graphics.Color
 
 val md_theme_light_primary = Color(0xFF8C31B7)

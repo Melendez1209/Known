@@ -21,7 +21,7 @@ import com.melendez.known.add.compose.DRP
 import com.melendez.known.add.compose.Inputting
 import com.melendez.known.main.MainScreen
 import com.melendez.known.settings.compose.Settings
-import com.melendez.known.ui.theme.KnownTheme
+import com.melendez.known.theme.KnownTheme
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalAnimationApi::class)
 class MainActivity : ComponentActivity() {
