@@ -32,6 +32,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
 
+            // Set the content colour of the status bar
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
                 if (isSystemInDarkTheme()) {
                     window.insetsController?.setSystemBarsAppearance(
@@ -90,20 +91,20 @@ class MainActivity : ComponentActivity() {
                     navController = navTotalController,
                     startDestination = "MainScreen"
                 ) {
-                    composable("MainScreen") {
+                    composable(Screens.Main.router) {
                         MainScreen(
                             widthSizeClass = widthSizeClass,
                             navTotalController = navTotalController
                         )
                     }
-                    composable("DateRangePicker") { DRP(navTotalController = navTotalController) }
-                    composable("Settings") {
+                    composable(Screens.Settings.router) {
                         Settings(
                             widthSizeClass = widthSizeClass,
                             navTotalController = navTotalController
                         )
                     }
-                    composable("Inputting") { Inputting() }
+                    composable(Screens.DRP.router) { DRP(navTotalController = navTotalController) }
+                    composable(Screens.Inputting.router) { Inputting() }
                 }
             }
         }

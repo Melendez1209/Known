@@ -30,6 +30,7 @@ import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
+import com.melendez.known.Screens
 import kotlinx.coroutines.launch
 
 
@@ -65,7 +66,7 @@ fun DRP(navTotalController: NavHostController) {
                                         "${state.selectedStartDateMillis!!..state.selectedEndDateMillis!!}"
                             )
                         }
-                        navTotalController.navigate("Inputting")
+                        navTotalController.navigate(Screens.Inputting.router)
                     },
                     enabled = state.selectedEndDateMillis != null
                 ) {

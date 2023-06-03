@@ -5,7 +5,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material3.Card
@@ -33,27 +32,16 @@ fun Home() {
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             items(20) {
-                Exam_Card()
+                Card(modifier = Modifier.height(Random.nextInt(140, 320).dp)) {
+                    Text(
+                        text = stringResource(id = R.string.exam),
+                        style = MaterialTheme.typography.titleMedium,
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .padding(vertical = 3.dp, horizontal = 3.dp)
+                    )
+                }
             }
         }
-    }
-}
-
-@Preview
-@Composable
-fun Exam_Card() {
-    Card(
-        modifier = Modifier
-            .height(Random.nextInt(140, 320).dp)
-            .width(160.dp)
-    ) {
-        Text(
-            text = stringResource(id = R.string.exam),
-            style = MaterialTheme.typography.titleMedium,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(vertical = 3.dp)
-        )
-
     }
 }

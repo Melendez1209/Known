@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
+import com.melendez.known.Screens
 
 @Composable
 fun Me(navTotalController: NavHostController) {
@@ -33,7 +34,7 @@ fun Me(navTotalController: NavHostController) {
         Column {
             NavigationCard(
                 navTotalController = navTotalController,
-                router = "Settings",
+                router = Screens.Settings.router,
                 icon = Icons.Rounded.Settings,
                 title = stringResource(
                     id = R.string.settings

@@ -74,13 +74,12 @@ fun Main_Compact(navTotalController: NavHostController, navMainController: NavHo
             val currentDestination = navBackStackEntry?.destination
 
             screens.forEach { screen ->
-                NavigationBarItem(selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                NavigationBarItem(selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
                     onClick = {
-                        navMainController.navigate(screen.route) {
-                            // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
+                        navMainController.navigate(screen.router) {
                             popUpTo(navMainController.graph.findStartDestination().id) {
                                 saveState = true
-                            }
+                            }// Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
                             launchSingleTop =
                                 true//Avoid multiple copies of the same destination when reelecting the same item
                             restoreState =
@@ -96,7 +95,7 @@ fun Main_Compact(navTotalController: NavHostController, navMainController: NavHo
             }
         }
     }, floatingActionButton = {
-        FloatingActionButton(onClick = { navTotalController.navigate("DateRangePicker") }) {
+        FloatingActionButton(onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) }) {
             Icon(
                 imageVector = Icons.Rounded.Add, contentDescription = stringResource(R.string.add)
             )
@@ -104,12 +103,12 @@ fun Main_Compact(navTotalController: NavHostController, navMainController: NavHo
     }) {
         AnimatedNavHost(
             navController = navMainController,
-            startDestination = Screens.Home.route,
+            startDestination = Screens.Home.router,
             modifier = Modifier.fillMaxSize()
         ) {
-            composable(Screens.Home.route) { Home() }
-            composable(Screens.History.route) { History() }
-            composable(Screens.Me.route) { Me(navTotalController) }
+            composable(Screens.Home.router) { Home() }
+            composable(Screens.History.router) { History() }
+            composable(Screens.Me.router) { Me(navTotalController) }
         }
     }
 }
@@ -134,9 +133,9 @@ fun Main_Medium(navTotalController: NavHostController, navMainController: NavHos
                 val currentDestination = navBackStackEntry?.destination
 
                 screens.forEach { screen ->
-                    NavigationRailItem(selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                    NavigationRailItem(selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
                         onClick = {
-                            navMainController.navigate(screen.route) {
+                            navMainController.navigate(screen.router) {
                                 // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
                                 popUpTo(navMainController.graph.findStartDestination().id) {
                                     saveState = true
@@ -156,7 +155,7 @@ fun Main_Medium(navTotalController: NavHostController, navMainController: NavHos
                 }
             }
             Scaffold(floatingActionButton = {
-                LargeFloatingActionButton(onClick = { navTotalController.navigate("DateRangePicker") }) {
+                LargeFloatingActionButton(onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) }) {
                     Icon(
                         imageVector = Icons.Rounded.Add,
                         contentDescription = stringResource(R.string.add)
@@ -165,11 +164,11 @@ fun Main_Medium(navTotalController: NavHostController, navMainController: NavHos
             }) {
                 AnimatedNavHost(
                     navController = navMainController,
-                    startDestination = Screens.Home.route
+                    startDestination = Screens.Home.router
                 ) {
-                    composable(Screens.Home.route) { Home() }
-                    composable(Screens.History.route) { History() }
-                    composable(Screens.Me.route) { Me(navTotalController) }
+                    composable(Screens.Home.router) { Home() }
+                    composable(Screens.History.router) { History() }
+                    composable(Screens.Me.router) { Me(navTotalController) }
                 }
             }
         }
@@ -197,9 +196,9 @@ fun Main_Expanded(navTotalController: NavHostController, navMainController: NavH
         ModalDrawerSheet {
             screens.forEach { screen ->
                 NavigationDrawerItem(label = { Text(text = stringResource(screen.resourceId)) },
-                    selected = currentDestination?.hierarchy?.any { it.route == screen.route } == true,
+                    selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
                     onClick = {
-                        navMainController.navigate(screen.route) {
+                        navMainController.navigate(screen.router) {
                             // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
                             popUpTo(navMainController.graph.findStartDestination().id) {
                                 saveState = true
@@ -220,7 +219,7 @@ fun Main_Expanded(navTotalController: NavHostController, navMainController: NavH
         }
     }) {
         Scaffold(floatingActionButton = {
-            ExtendedFloatingActionButton(onClick = { navTotalController.navigate("DateRangePicker") },
+            ExtendedFloatingActionButton(onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) },
                 icon = {
                     Icon(
                         imageVector = Icons.Rounded.Add,
@@ -231,11 +230,11 @@ fun Main_Expanded(navTotalController: NavHostController, navMainController: NavH
         }) {
             AnimatedNavHost(
                 navController = navMainController,
-                startDestination = Screens.Home.route
+                startDestination = Screens.Home.router
             ) {
-                composable(Screens.Home.route) { Home() }
-                composable(Screens.History.route) { History() }
-                composable(Screens.Me.route) { Me(navTotalController) }
+                composable(Screens.Home.router) { Home() }
+                composable(Screens.History.router) { History() }
+                composable(Screens.Me.router) { Me(navTotalController) }
             }
         }
 
