@@ -1,5 +1,8 @@
 package com.melendez.known.settings.compose
 
+import android.os.Build
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -9,12 +12,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AccountCircle
-import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material3.Button
+import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.DropdownMenu
-import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -22,6 +24,7 @@ import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Surface
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
@@ -29,12 +32,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
@@ -82,10 +85,7 @@ fun Settings_Compact(navTotalController: NavHostController) {
                 )
             }
         })
-        Settings_Content(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            MaterialTheme.typography.titleSmall
-        )
+        Settings_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
     }
 }
 
@@ -123,10 +123,7 @@ fun Settings_Medium(navTotalController: NavHostController) {
             },
             scrollBehavior = scrollBehavior
         )
-        Settings_Content(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            MaterialTheme.typography.titleMedium
-        )
+        Settings_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
     }
 }
 
@@ -164,10 +161,7 @@ fun Settings_Expanded(navTotalController: NavHostController) {
             },
             scrollBehavior = scrollBehavior
         )
-        Settings_Content(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            MaterialTheme.typography.titleLarge
-        )
+        Settings_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
     }
 }
 
@@ -179,16 +173,12 @@ fun Settings_Expanded_Preview() {
 }
 
 @Composable
-fun Settings_Content(modifier: Modifier, style: TextStyle) {
+fun Settings_Content(modifier: Modifier) {
 
-    val never = stringResource(id = R.string.never)
-    val selected = stringResource(id = R.string.selected)
-    val unselected = stringResource(id = R.string.unselected)
-    val always = stringResource(id = R.string.always)
+    var labelMode by rememberSaveable { mutableStateOf(false) }
+    var colorMode by rememberSaveable { mutableStateOf(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) }
 
-    var labelDisplayMode by remember { mutableStateOf(never) }
-    val labelDisplayOptions = listOf(never, selected, unselected, always)
-    var expanded by remember { mutableStateOf(false) }
+    var visibleAppearance by remember { mutableStateOf(true) }
 
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyColumn(modifier = modifier) {
@@ -202,36 +192,39 @@ fun Settings_Content(modifier: Modifier, style: TextStyle) {
                 }
             }
             item {
-                Row(
+                Card(
                     modifier = Modifier
-                        .fillMaxSize()
-                        .padding(16.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
                 ) {
-                    Text(
-                        text = stringResource(id = R.string.navigation_bar_hint),
-                        style = style
-                    )
-                    Column {
-                        Button(onClick = { expanded = true }) {
-                            Text(text = labelDisplayMode)
-                            Icon(
-                                imageVector = Icons.Rounded.ArrowDropDown,
-                                contentDescription = stringResource(id = R.string.navigation_bar_hint)
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { visibleAppearance = !visibleAppearance }) {
+                        Text(
+                            modifier = Modifier.padding(start = 12.dp, top = 6.dp, bottom = 6.dp),
+                            text = stringResource(R.string.appearance),
+                            style = MaterialTheme.typography.headlineMedium
+                        )
+                    }
+                    AnimatedVisibility(visible = visibleAppearance) {
+                        Column {
+                            SettingRow(
+                                title = stringResource(id = R.string.hint_title),
+                                subOn = stringResource(id = R.string.hint_on),
+                                subOff = stringResource(id = R.string.hint_off),
+                                value = labelMode,
+                                onCheckedChange = { labelMode = it }
                             )
-                        }
-                        DropdownMenu(
-                            expanded = expanded,
-                            onDismissRequest = { expanded = false }
-                        ) {
-                            labelDisplayOptions.forEach { option ->
-                                DropdownMenuItem(text = { Text(text = option) },
-                                    onClick = {
-                                        labelDisplayMode = option
-                                        expanded = false
-                                    })
-                            }
+                            Divider()
+                            SettingRow(
+                                title = stringResource(R.string.dynamic_color),
+                                subOn = stringResource(R.string.apply_wallpaper),
+                                subUnenable = stringResource(R.string.low_version),
+                                value = colorMode,
+                                enable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
+                                onCheckedChange = { colorMode = it }
+                            )
+                            Divider()
                         }
                     }
                 }
@@ -247,6 +240,42 @@ fun Settings_Content_Preview() {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Settings_Content(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-        MaterialTheme.typography.titleMedium
     )
+}
+
+@Composable
+fun SettingRow(
+    title: String,
+    subOn: String,
+    subOff: String = subOn,
+    subUnenable: String = "",
+    value: Boolean,
+    enable: Boolean = true,
+    onCheckedChange: ((Boolean) -> Unit)?,
+) {
+    Row(
+        modifier = Modifier
+            .fillMaxSize()
+            .padding(6.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Column(
+            modifier = Modifier.padding(6.dp),
+            verticalArrangement = Arrangement.spacedBy(3.dp)
+        ) {
+            Text(
+                text = title,
+                style = MaterialTheme.typography.titleLarge
+            )
+            Text(
+                text = if (!enable) subUnenable else if (value) subOn else subOff,
+                style = MaterialTheme.typography.titleSmall
+            )
+        }
+        Switch(
+            enabled = enable,
+            checked = value,
+            onCheckedChange = { onCheckedChange?.invoke(it) })
+    }
 }

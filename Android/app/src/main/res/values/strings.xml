@@ -13,16 +13,22 @@
     <string name="settings">Settings</string>
     <string name="back">Back to previous page</string>
     <string name="close_bar">Close the Search Bar</string>
-    <string name="navigation_bar_hint">The navigation bar will hint at</string>
+    <string name="hint_title">Navigation bar label</string>
     <string name="about">About</string>
-    <string name="always">Always</string>
-    <string name="never">"Never "</string>
-    <string name="selected">Selected Item</string>
-    <string name="unselected">Unselected Items</string>
     <string name="mark">Mark</string>
     <string name="close_input">Close the Input Bar</string>
     <string name="full_mark">Full mark</string>
     <string name="next">Next</string>
     <string name="sign_to">Sign in to your Known Account</string>
     <string name="avatar">Avatar</string>
+    <string name="privacy">Privacy</string>
+    <string name="policy">Privacy Policy</string>
+    <string name="members">Development members</string>
+    <string name="all_contributors">All contributors to Know</string>
+    <string name="hint_on">Close to hide the navigation bar label</string>
+    <string name="hint_off">Enabled to show navigation bar label</string>
+    <string name="appearance">Appearance</string>
+    <string name="dynamic_color">Dynamic Color</string>
+    <string name="apply_wallpaper">Apply wallpaper tones to theme colours</string>
+    <string name="low_version">The system version is too low to use it</string>
 </resources>

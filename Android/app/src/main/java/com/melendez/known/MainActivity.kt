@@ -17,6 +17,7 @@ import androidx.core.view.ViewCompat
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.melendez.known.about.AboutScreen
 import com.melendez.known.add.compose.DRP
 import com.melendez.known.add.compose.Inputting
 import com.melendez.known.main.MainScreen
@@ -105,6 +106,7 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Screens.DRP.router) { DRP(navTotalController = navTotalController) }
                     composable(Screens.Inputting.router) { Inputting() }
+                    composable(Screens.About.router) { AboutScreen(navTotalController) }
                 }
             }
         }

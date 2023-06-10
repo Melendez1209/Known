@@ -14,16 +14,22 @@
     <string name="settings">设置</string>
     <string name="back">"返回上一级 "</string>
     <string name="close_bar">关闭搜索栏</string>
-    <string name="navigation_bar_hint">导航栏标签显示模式</string>
     <string name="about">关于</string>
-    <string name="always">始终显示</string>
-    <string name="never">从不显示</string>
-    <string name="selected">仅显示已选中项</string>
-    <string name="unselected">仅显示未选中项</string>
     <string name="mark">得分</string>
     <string name="close_input">取消输入</string>
     <string name="full_mark">满分</string>
     <string name="next">继续</string>
     <string name="sign_to">登录您的 知学情 账号</string>
     <string name="avatar">头像</string>
+    <string name="privacy">隐私</string>
+    <string name="policy">隐私协议</string>
+    <string name="members">开发者</string>
+    <string name="all_contributors">Known 的所有贡献者</string>
+    <string name="hint_title">导航栏标签</string>
+    <string name="hint_on">关闭以隐藏导航栏标签</string>
+    <string name="hint_off">开启以显示导航栏标签</string>
+    <string name="appearance">外观</string>
+    <string name="dynamic_color">动态颜色</string>
+    <string name="apply_wallpaper">根据设备壁纸更改主题色</string>
+    <string name="low_version">您的系统版本过低</string>
 </resources>

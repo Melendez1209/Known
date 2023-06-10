@@ -85,7 +85,7 @@ fun Me(navTotalController: NavHostController) {
             )
             NavigationCard(
                 navTotalController = navTotalController,
-                router = "About",
+                router = Screens.About.router,
                 icon = Icons.Rounded.Info,
                 title = stringResource(R.string.about)
             )

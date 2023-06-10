@@ -5,4 +5,5 @@ sealed class Screens(val router: String) {
     object Settings : Screens("Settings")
     object DRP : Screens("DateRangePicker")
     object Inputting : Screens("Inputting")
+    object About : Screens("About")
 }
