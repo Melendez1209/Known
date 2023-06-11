@@ -1,9 +1,10 @@
 package com.melendez.known.add.compose
 
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
+import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
@@ -34,9 +35,17 @@ import com.melendez.known.R
 @Preview(device = "id:pixel_7_pro")
 @Composable
 fun Inputting() {
+
+    val count: Int = 6
+
     Surface(modifier = Modifier.fillMaxSize()) {
-        Column {
-            Subject_Card("Chinese")
+        LazyVerticalStaggeredGrid(
+            modifier = Modifier.fillMaxSize(),
+            columns = StaggeredGridCells.Adaptive(320.dp),
+        ) {
+            items(count) {
+                Subject_Card("Chinese")
+            }
         }
     }
 }
@@ -70,11 +79,7 @@ fun Subject_Card(subject: String) {
                     imeAction = ImeAction.Next,
                     keyboardType = KeyboardType.Number
                 ),
-                keyboardActions = KeyboardActions(onNext = {
-                    focusManager.moveFocus(
-                        FocusDirection.Right
-                    )
-                }),
+                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Right) }),
                 trailingIcon = {
                     IconButton(onClick = { full = "" }) {
                         Icon(
@@ -94,8 +99,12 @@ fun Subject_Card(subject: String) {
                 placeholder = { Text(text = "150") },
                 isError = if (mark.isEmpty() || full.isEmpty()) false else mark.toFloat() > full.toFloat(),
                 keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Done,
+                    imeAction = ImeAction.Next,
                     keyboardType = KeyboardType.Number
+                ),
+                keyboardActions = KeyboardActions(
+                    onNext = { focusManager.moveFocus(FocusDirection.Next) },
+                    onDone = null
                 ),
                 trailingIcon = {
                     IconButton(onClick = { mark = "" }) {
