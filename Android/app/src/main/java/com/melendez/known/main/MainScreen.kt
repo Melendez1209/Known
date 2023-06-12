@@ -100,14 +100,14 @@ fun Main_Compact(navTotalController: NavHostController, navMainController: NavHo
                 imageVector = Icons.Rounded.Add, contentDescription = stringResource(R.string.add)
             )
         }
-    }) {
+    }) { paddings ->
         AnimatedNavHost(
             navController = navMainController,
             startDestination = Screens.Home.router,
             modifier = Modifier.fillMaxSize()
         ) {
-            composable(Screens.Home.router) { Home() }
-            composable(Screens.History.router) { History() }
+            composable(Screens.Home.router) { Home(paddings) }
+            composable(Screens.History.router) { History(paddings) }
             composable(Screens.Me.router) { Me(navTotalController) }
         }
     }
@@ -166,8 +166,8 @@ fun Main_Medium(navTotalController: NavHostController, navMainController: NavHos
                     navController = navMainController,
                     startDestination = Screens.Home.router
                 ) {
-                    composable(Screens.Home.router) { Home() }
-                    composable(Screens.History.router) { History() }
+                    composable(Screens.Home.router) { Home(null) }
+                    composable(Screens.History.router) { History(null) }
                     composable(Screens.Me.router) { Me(navTotalController) }
                 }
             }
@@ -227,13 +227,13 @@ fun Main_Expanded(navTotalController: NavHostController, navMainController: NavH
                     )
                 },
                 text = { Text(text = stringResource(id = R.string.add)) })
-        }) {
+        }) { it ->
             AnimatedNavHost(
                 navController = navMainController,
                 startDestination = Screens.Home.router
             ) {
-                composable(Screens.Home.router) { Home() }
-                composable(Screens.History.router) { History() }
+                composable(Screens.Home.router) { Home(null) }
+                composable(Screens.History.router) { History(null) }
                 composable(Screens.Me.router) { Me(navTotalController) }
             }
         }

@@ -32,4 +32,12 @@
     <string name="dynamic_color">动态颜色</string>
     <string name="apply_wallpaper">根据设备壁纸更改主题色</string>
     <string name="low_version">您的系统版本过低</string>
+    <string name="analysis">分析</string>
+    <string name="grade">年级</string>
+    <string name="g7">初一</string>
+    <string name="g8">初二</string>
+    <string name="g9">初三</string>
+    <string name="g10">高一</string>
+    <string name="g11">高二</string>
+    <string name="g12">高三</string>
 </resources>

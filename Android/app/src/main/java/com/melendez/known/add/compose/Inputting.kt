@@ -35,15 +35,12 @@ import com.melendez.known.R
 @Preview(device = "id:pixel_7_pro")
 @Composable
 fun Inputting() {
-
-    val count: Int = 6
-
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyVerticalStaggeredGrid(
             modifier = Modifier.fillMaxSize(),
-            columns = StaggeredGridCells.Adaptive(320.dp),
+            columns = StaggeredGridCells.Adaptive(320.dp)
         ) {
-            items(count) {
+            items(6) {
                 Subject_Card("Chinese")
             }
         }

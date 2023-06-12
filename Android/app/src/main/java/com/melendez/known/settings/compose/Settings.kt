@@ -11,11 +11,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.AccountCircle
+import androidx.compose.material.icons.rounded.Help
 import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -68,7 +67,7 @@ fun Settings_Compact(navTotalController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Column {
-        CenterAlignedTopAppBar(title = {
+        LargeTopAppBar(title = {
             Text(text = stringResource(R.string.settings))
         }, navigationIcon = {
             IconButton(onClick = { navTotalController.popBackStack() }) {
@@ -78,21 +77,15 @@ fun Settings_Compact(navTotalController: NavHostController) {
                 )
             }
         }, actions = {
-            IconButton(onClick = { TODO("Login") }) {
+            IconButton(onClick = { TODO("Jump to help") }) {
                 Icon(
-                    imageVector = Icons.Rounded.AccountCircle,
+                    imageVector = Icons.Rounded.Help,
                     contentDescription = stringResource(R.string.sign_to)
                 )
             }
-        })
+        }, scrollBehavior = scrollBehavior)
         Settings_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
     }
-}
-
-@Preview(name = "Settings_Compact", device = "id:pixel_7_pro")
-@Composable
-fun Settings_Compact_Preview() {
-    Settings_Compact(navTotalController = rememberNavController())
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -114,9 +107,9 @@ fun Settings_Medium(navTotalController: NavHostController) {
                 }
             },
             actions = {
-                IconButton(onClick = { TODO("Login") }) {
+                IconButton(onClick = { TODO("Jump to help") }) {
                     Icon(
-                        imageVector = Icons.Rounded.AccountCircle,
+                        imageVector = Icons.Rounded.Help,
                         contentDescription = stringResource(R.string.sign_to)
                     )
                 }
@@ -125,12 +118,6 @@ fun Settings_Medium(navTotalController: NavHostController) {
         )
         Settings_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
     }
-}
-
-@Preview(name = "Settings_Medium", device = "spec:parent=pixel_7_pro,orientation=landscape")
-@Composable
-fun Settings_Medium_Preview() {
-    Settings_Medium(rememberNavController())
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -152,9 +139,9 @@ fun Settings_Expanded(navTotalController: NavHostController) {
                 }
             },
             actions = {
-                IconButton(onClick = { TODO("Login") }) {
+                IconButton(onClick = { TODO("Jump to help") }) {
                     Icon(
-                        imageVector = Icons.Rounded.AccountCircle,
+                        imageVector = Icons.Rounded.Help,
                         contentDescription = stringResource(R.string.sign_to)
                     )
                 }
@@ -165,13 +152,6 @@ fun Settings_Expanded(navTotalController: NavHostController) {
     }
 }
 
-
-@Preview(name = "Settings_Expanded", device = "spec:width=673dp,height=841dp")
-@Composable
-fun Settings_Expanded_Preview() {
-    Settings_Expanded(rememberNavController())
-}
-
 @Composable
 fun Settings_Content(modifier: Modifier) {
 
@@ -179,6 +159,16 @@ fun Settings_Content(modifier: Modifier) {
     var colorMode by rememberSaveable { mutableStateOf(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) }
 
     var visibleAppearance by remember { mutableStateOf(true) }
+    var visibleAnalysis by remember { mutableStateOf(true) }
+    var selected by remember { mutableStateOf(false) }
+    val gradeList = listOf<String>(
+        stringResource(id = R.string.g7),
+        stringResource(id = R.string.g8),
+        stringResource(id = R.string.g9),
+        stringResource(id = R.string.g10),
+        stringResource(id = R.string.g11),
+        stringResource(id = R.string.g12)
+    )
 
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyColumn(modifier = modifier) {
@@ -224,23 +214,46 @@ fun Settings_Content(modifier: Modifier) {
                                 enable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
                                 onCheckedChange = { colorMode = it }
                             )
-                            Divider()
+                        }
+                    }
+                }
+            }
+            item {
+                Card(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 6.dp)
+                ) {
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable { visibleAnalysis = !visibleAnalysis }) {
+                        Text(
+                            modifier = Modifier.padding(start = 12.dp, top = 6.dp, bottom = 6.dp),
+                            text = stringResource(R.string.analysis),
+                            style = MaterialTheme.typography.headlineMedium
+                        )
+                    }
+                    AnimatedVisibility(visible = visibleAnalysis) {
+                        Column {
+                            Text(
+                                modifier = Modifier.padding(start = 12.dp, top = 6.dp),
+                                text = stringResource(id = R.string.grade),
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                            Row(
+                                modifier = Modifier
+                                    .align(Alignment.CenterHorizontally)
+                                    .fillMaxWidth(),
+                                horizontalArrangement = Arrangement.SpaceBetween
+                            ) {
+
+                            }
                         }
                     }
                 }
             }
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Preview(device = "id:pixel_7_pro")
-@Composable
-fun Settings_Content_Preview() {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    Settings_Content(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-    )
 }
 
 @Composable
@@ -278,4 +291,32 @@ fun SettingRow(
             checked = value,
             onCheckedChange = { onCheckedChange?.invoke(it) })
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(device = "id:pixel_7_pro")
+@Composable
+fun Settings_Content_Preview() {
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    Settings_Content(
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+    )
+}
+
+@Preview(name = "Settings_Expanded", device = "spec:width=673dp,height=841dp")
+@Composable
+fun Settings_Expanded_Preview() {
+    Settings_Expanded(rememberNavController())
+}
+
+@Preview(name = "Settings_Medium", device = "spec:parent=pixel_7_pro,orientation=landscape")
+@Composable
+fun Settings_Medium_Preview() {
+    Settings_Medium(rememberNavController())
+}
+
+@Preview(name = "Settings_Compact", device = "id:pixel_7_pro")
+@Composable
+fun Settings_Compact_Preview() {
+    Settings_Compact(navTotalController = rememberNavController())
 }

@@ -52,7 +52,6 @@ android {
 
 dependencies {
 
-    implementation("io.coil-kt:coil-compose:2.4.0")
     val composeBom = "2023.03.00"
     val ui = "1.5.0-beta01"
     val material = "1.1.0-beta02"
@@ -61,6 +60,7 @@ dependencies {
     implementation("androidx.core:core-ktx:1.11.0-beta01")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.activity:activity-compose:1.7.0")
+    implementation("io.coil-kt:coil-compose:2.4.0")
     implementation("androidx.compose.ui:ui:$ui")
     implementation("androidx.compose.ui:ui-graphics:$ui")
     implementation("androidx.compose.ui:ui-tooling-preview:$ui")

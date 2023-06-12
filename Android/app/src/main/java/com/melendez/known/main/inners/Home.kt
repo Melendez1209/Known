@@ -2,6 +2,7 @@ package com.melendez.known.main.inners
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -23,10 +24,14 @@ import kotlin.random.Random
 @OptIn(ExperimentalFoundationApi::class)
 @Preview(device = "id:pixel_7_pro")
 @Composable
-fun Home() {
+fun Home(paddingValues: PaddingValues?) {
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyVerticalStaggeredGrid(
-            modifier = Modifier.fillMaxSize(),
+            modifier = if (paddingValues != null)
+                Modifier
+                    .fillMaxSize()
+                    .padding(bottom = paddingValues.calculateBottomPadding())
+            else Modifier.fillMaxSize(),
             columns = StaggeredGridCells.Adaptive(160.dp),
             verticalItemSpacing = 6.dp,
             horizontalArrangement = Arrangement.spacedBy(6.dp)

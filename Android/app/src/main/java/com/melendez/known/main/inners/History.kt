@@ -42,7 +42,7 @@ import com.melendez.known.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(device = "id:pixel_7_pro", showBackground = true)
 @Composable
-fun History() {
+fun History(paddingValues: PaddingValues?) {
     Surface {
         Column {
 
@@ -66,13 +66,14 @@ fun History() {
                     )
                 },
                 trailingIcon = {
-                    IconButton(enabled = active, onClick = {
-                        if (text.isNotBlank()) {
-                            text = ""
-                        } else {
-                            active = false
-                        }
-                    }) {
+                    IconButton(enabled = if (text.isNotBlank()) true else active,
+                        onClick = {
+                            if (text.isNotBlank()) {
+                                text = ""
+                            } else {
+                                active = false
+                            }
+                        }) {
                         Icon(
                             imageVector = Icons.Rounded.Close,
                             contentDescription = if (text.isNotBlank()) stringResource(R.string.clear) else stringResource(
@@ -131,7 +132,7 @@ fun History() {
 
             SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
                 onRefresh = { TODO("Refresh") }) {
-                LazyColumn {
+                LazyColumn(modifier = if (paddingValues != null) Modifier.padding(bottom = paddingValues.calculateBottomPadding()) else Modifier) {
                     items(30) { count ->
                         Card(
                             modifier = Modifier.padding(vertical = 6.dp, horizontal = 12.dp),

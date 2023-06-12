@@ -31,4 +31,12 @@
     <string name="dynamic_color">Dynamic Color</string>
     <string name="apply_wallpaper">Apply wallpaper tones to theme colours</string>
     <string name="low_version">The system version is too low to use it</string>
+    <string name="analysis">Analysis</string>
+    <string name="grade">Grade</string>
+    <string name="g7">Grade7</string>
+    <string name="g8">Grade8</string>
+    <string name="g9">Grade9</string>
+    <string name="g10">Grade10</string>
+    <string name="g11">Grade11</string>
+    <string name="g12">Grade12</string>
 </resources>
