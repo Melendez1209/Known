@@ -42,7 +42,7 @@ import com.melendez.known.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(device = "id:pixel_7_pro", showBackground = true)
 @Composable
-fun History(paddingValues: PaddingValues?) {
+fun History(paddingValues: PaddingValues? = null) {
     Surface {
         Column {
 

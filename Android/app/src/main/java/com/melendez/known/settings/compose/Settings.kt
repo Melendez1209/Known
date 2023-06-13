@@ -209,7 +209,7 @@ fun Settings_Content(modifier: Modifier) {
                             SettingRow(
                                 title = stringResource(R.string.dynamic_color),
                                 subOn = stringResource(R.string.apply_wallpaper),
-                                subUnenable = stringResource(R.string.low_version),
+                                subUnable = stringResource(R.string.low_version),
                                 value = colorMode,
                                 enable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
                                 onCheckedChange = { colorMode = it }
@@ -261,7 +261,7 @@ fun SettingRow(
     title: String,
     subOn: String,
     subOff: String = subOn,
-    subUnenable: String = "",
+    subUnable: String = "",
     value: Boolean,
     enable: Boolean = true,
     onCheckedChange: ((Boolean) -> Unit)?,
@@ -282,7 +282,7 @@ fun SettingRow(
                 style = MaterialTheme.typography.titleLarge
             )
             Text(
-                text = if (!enable) subUnenable else if (value) subOn else subOff,
+                text = if (!enable) subUnable else if (value) subOn else subOff,
                 style = MaterialTheme.typography.titleSmall
             )
         }

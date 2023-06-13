@@ -50,12 +50,12 @@ fun Me(navTotalController: NavHostController) {
     Surface {
         Column {
 
-            var image_Url: Any? by rememberSaveable { mutableStateOf(R.drawable.baseline_account_circle_24) } // TODO:Make it savable
+            var imageUrl: Any? by rememberSaveable { mutableStateOf(R.drawable.baseline_account_circle_24) } // TODO:Make it savable
             val photoPicker =
                 rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) {
                     if (it != null) {
                         Log.d("Melendez", "Me: Url = $it")
-                        image_Url = it
+                        imageUrl = it
                     } else {
                         Log.d("Melendez", "Me: No media selected")
                     }
@@ -69,7 +69,7 @@ fun Me(navTotalController: NavHostController) {
                     .padding(top = 6.dp)
                     .clip(CircleShape)
                     .clickable { photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
-                model = ImageRequest.Builder(LocalContext.current).data(image_Url)
+                model = ImageRequest.Builder(LocalContext.current).data(imageUrl)
                     .crossfade(enable = false).build(),
                 contentDescription = stringResource(R.string.avatar),
                 contentScale = ContentScale.Crop

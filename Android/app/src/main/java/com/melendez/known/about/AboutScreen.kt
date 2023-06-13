@@ -29,12 +29,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
 
+@Preview(device = "id:pixel_7_pro")
 @Composable
-fun AboutScreen(navTotalController: NavController) {
+fun AboutScreen() {
 
     val context = LocalContext.current
 
@@ -75,12 +74,6 @@ fun AboutScreen(navTotalController: NavController) {
             )
         }
     }
-}
-
-@Preview(device = "id:pixel_7_pro")
-@Composable
-fun AboutScreen_Preview() {
-    AboutScreen(navTotalController = rememberNavController())
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
