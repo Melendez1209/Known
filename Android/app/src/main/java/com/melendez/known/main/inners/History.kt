@@ -1,5 +1,6 @@
 package com.melendez.known.main.inners
 
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -48,11 +49,15 @@ fun History(paddingValues: PaddingValues? = null) {
 
             var text by remember { mutableStateOf("") }
             var active by remember { mutableStateOf(false) }
+            val searchbarPadding by animateDpAsState(
+                targetValue = if (active) 0.dp else 12.dp,
+                label = "SearchBar spacing to expand or not"
+            )
 
             SearchBar(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 12.dp),
+                    .padding(horizontal = searchbarPadding),
                 query = text,
                 onQueryChange = { text = it },
                 onSearch = { active = false },
