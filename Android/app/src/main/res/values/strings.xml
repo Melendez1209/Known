@@ -39,4 +39,7 @@
     <string name="g10">Grade10</string>
     <string name="g11">Grade11</string>
     <string name="g12">Grade12</string>
+    <string name="exam_dates">Exam Dates</string>
+    <string name="select_exam_dates">Select Exam Dates</string>
+    <string name="inputting">Inputting</string>
 </resources>

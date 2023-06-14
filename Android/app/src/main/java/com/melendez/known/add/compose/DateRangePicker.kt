@@ -1,31 +1,27 @@
 package com.melendez.known.add.compose
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.NavigateNext
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DateRangePicker
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDateRangePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
@@ -41,23 +37,18 @@ fun DRP(navTotalController: NavHostController) {
     SnackbarHost(hostState = snackState, Modifier.zIndex(1f))
 
     val state = rememberDateRangePickerState()
-
-    Surface(modifier = Modifier.fillMaxSize()) {
-        Column(verticalArrangement = Arrangement.Top) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(start = 12.dp, end = 12.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween
-            ) {
+    Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
+        CenterAlignedTopAppBar(
+            title = { Text(text = stringResource(R.string.exam_dates)) },
+            navigationIcon = {
                 IconButton(onClick = { navTotalController.popBackStack() }) {
                     Icon(
                         Icons.Rounded.Close,
                         contentDescription = stringResource(R.string.cancel)
                     )
                 }
-                TextButton(
+            }, actions = {
+                IconButton(
                     onClick = {
                         snackScope.launch {
                             snackState.showSnackbar(
@@ -69,10 +60,19 @@ fun DRP(navTotalController: NavHostController) {
                     },
                     enabled = state.selectedEndDateMillis != null
                 ) {
-                    Text(stringResource(R.string.next))
+                    Icon(
+                        imageVector = Icons.Rounded.NavigateNext,
+                        contentDescription = stringResource(R.string.next)
+                    )
                 }
-            }
-            DateRangePicker(state = state, modifier = Modifier.weight(1f))
+            })
+    }) { padding ->
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(top = padding.calculateTopPadding())
+        ) {
+            DateRangePicker(modifier = Modifier.fillMaxSize(), state = state)
         }
     }
 }

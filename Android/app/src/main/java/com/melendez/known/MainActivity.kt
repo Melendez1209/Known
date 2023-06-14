@@ -105,7 +105,12 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Screens.DRP.router) { DRP(navTotalController = navTotalController) }
-                    composable(Screens.Inputting.router) { Inputting() }
+                    composable(Screens.Inputting.router) {
+                        Inputting(
+                            widthSizeClass = widthSizeClass,
+                            navTotalController = navTotalController
+                        )
+                    }
                     composable(Screens.About.router) { AboutScreen() }
                 }
             }

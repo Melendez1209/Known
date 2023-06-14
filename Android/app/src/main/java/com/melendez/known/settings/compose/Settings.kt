@@ -55,36 +55,8 @@ fun Settings(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostCo
         }
 
         WindowWidthSizeClass.Expanded -> {
-            Settings_Expanded(navTotalController = navTotalController)
+            Settings_Compact(navTotalController = navTotalController)
         }
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Settings_Compact(navTotalController: NavHostController) {
-
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
-    Column {
-        LargeTopAppBar(title = {
-            Text(text = stringResource(R.string.settings))
-        }, navigationIcon = {
-            IconButton(onClick = { navTotalController.popBackStack() }) {
-                Icon(
-                    imageVector = Icons.Rounded.NavigateBefore,
-                    contentDescription = stringResource(R.string.back)
-                )
-            }
-        }, actions = {
-            IconButton(onClick = { TODO("Jump to help") }) {
-                Icon(
-                    imageVector = Icons.Rounded.Help,
-                    contentDescription = stringResource(R.string.sign_to)
-                )
-            }
-        }, scrollBehavior = scrollBehavior)
-        Settings_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
     }
 }
 
@@ -122,7 +94,7 @@ fun Settings_Medium(navTotalController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Settings_Expanded(navTotalController: NavHostController) {
+fun Settings_Compact(navTotalController: NavHostController) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
@@ -299,24 +271,18 @@ fun SettingRow(
 fun Settings_Content_Preview() {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Settings_Content(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
     )
 }
 
-@Preview(name = "Settings_Expanded", device = "spec:width=673dp,height=841dp")
+@Preview(name = "Settings_Compact", device = "spec:width=673dp,height=841dp")
 @Composable
 fun Settings_Expanded_Preview() {
-    Settings_Expanded(rememberNavController())
+    Settings_Compact(rememberNavController())
 }
 
 @Preview(name = "Settings_Medium", device = "spec:parent=pixel_7_pro,orientation=landscape")
 @Composable
 fun Settings_Medium_Preview() {
     Settings_Medium(rememberNavController())
-}
-
-@Preview(name = "Settings_Compact", device = "id:pixel_7_pro")
-@Composable
-fun Settings_Compact_Preview() {
-    Settings_Compact(navTotalController = rememberNavController())
 }

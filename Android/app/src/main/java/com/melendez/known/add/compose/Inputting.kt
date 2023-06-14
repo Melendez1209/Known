@@ -1,5 +1,6 @@
 package com.melendez.known.add.compose
 
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -9,13 +10,19 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -24,20 +31,92 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusDirection
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.melendez.known.R
 
-@Preview(device = "id:pixel_7_pro")
 @Composable
-fun Inputting() {
+fun Inputting(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
+    when (widthSizeClass) {
+        WindowWidthSizeClass.Compact -> {
+            Inputting_Compact(navTotalController = navTotalController)
+        }
+
+        WindowWidthSizeClass.Medium -> {
+            Inputting_Medium(navTotalController = navTotalController)
+        }
+
+        WindowWidthSizeClass.Expanded -> {
+            Inputting_Compact(navTotalController = navTotalController)
+        }
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Inputting_Medium(navTotalController: NavHostController) {
+
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
+    Column {
+        MediumTopAppBar(
+            title = { Text(text = stringResource(R.string.inputting)) },
+            navigationIcon = {
+                IconButton(onClick = { navTotalController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.Rounded.NavigateBefore,
+                        contentDescription = stringResource(R.string.back)
+                    )
+                }
+            },
+            scrollBehavior = scrollBehavior
+        )
+        Inputting_Content(
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .fillMaxSize()
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Inputting_Compact(navTotalController: NavHostController) {
+
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
+    Column {
+        LargeTopAppBar(
+            title = { Text(text = stringResource(R.string.inputting)) },
+            navigationIcon = {
+                IconButton(onClick = { navTotalController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.Rounded.NavigateBefore,
+                        contentDescription = stringResource(R.string.back)
+                    )
+                }
+            },
+            scrollBehavior = scrollBehavior
+        )
+        Inputting_Content(
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .fillMaxSize()
+        )
+    }
+}
+
+@Composable
+fun Inputting_Content(modifier: Modifier) {
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyVerticalStaggeredGrid(
-            modifier = Modifier.fillMaxSize(),
+            modifier = modifier,
             columns = StaggeredGridCells.Adaptive(320.dp)
         ) {
             items(6) {
@@ -120,4 +199,12 @@ fun Subject_Card(subject: String) {
 @Composable
 fun Subject_Card_Preview() {
     Subject_Card(subject = "Subject")
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Preview(device = "id:pixel_7_pro")
+@Composable
+fun InputtingContent_Preview() {
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    Inputting_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
 }
