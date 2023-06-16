@@ -12,6 +12,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material3.Card
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -19,6 +20,7 @@ import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -53,9 +55,37 @@ fun Inputting(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostC
         }
 
         WindowWidthSizeClass.Expanded -> {
-            Inputting_Compact(navTotalController = navTotalController)
+            Inputting_Expanded(navTotalController = navTotalController)
         }
     }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Inputting_Compact(navTotalController: NavHostController) {
+
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    Scaffold(topBar = {
+        CenterAlignedTopAppBar(
+            title = { Text(text = stringResource(R.string.inputting)) },
+            navigationIcon = {
+                IconButton(onClick = { navTotalController.popBackStack() }) {
+                    Icon(
+                        imageVector = Icons.Rounded.NavigateBefore,
+                        contentDescription = stringResource(R.string.back)
+                    )
+                }
+            },
+        )
+    }) { padding ->
+        Inputting_Content(
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .fillMaxSize()
+                .padding(top = padding.calculateTopPadding())
+        )
+    }
+
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -87,7 +117,7 @@ fun Inputting_Medium(navTotalController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Inputting_Compact(navTotalController: NavHostController) {
+fun Inputting_Expanded(navTotalController: NavHostController) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 

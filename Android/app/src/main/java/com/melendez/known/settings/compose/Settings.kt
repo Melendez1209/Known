@@ -79,7 +79,9 @@ fun Settings_Medium(navTotalController: NavHostController) {
                 }
             },
             actions = {
-                IconButton(onClick = { TODO("Jump to help") }) {
+                IconButton(onClick = {
+                    //TODO:Jump to help
+                }) {
                     Icon(
                         imageVector = Icons.Rounded.Help,
                         contentDescription = stringResource(R.string.sign_to)
@@ -111,7 +113,9 @@ fun Settings_Compact(navTotalController: NavHostController) {
                 }
             },
             actions = {
-                IconButton(onClick = { TODO("Jump to help") }) {
+                IconButton(onClick = {
+                    //TODO:Jump to help
+                }) {
                     Icon(
                         imageVector = Icons.Rounded.Help,
                         contentDescription = stringResource(R.string.sign_to)
@@ -148,7 +152,9 @@ fun Settings_Content(modifier: Modifier) {
                 Column(Modifier.fillMaxWidth()) {
                     Button(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
-                        onClick = { TODO("Login") }) {
+                        onClick = {
+                            //TODO:Login
+                        }) {
                         Text(text = stringResource(R.string.sign_to))
                     }
                 }

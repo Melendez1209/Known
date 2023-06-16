@@ -42,4 +42,7 @@
     <string name="exam_dates">Exam Dates</string>
     <string name="select_exam_dates">Select Exam Dates</string>
     <string name="inputting">Inputting</string>
+    <string name="discard">Do you want to discard the content you have entered?</string>
+    <string name="reserve">Reserve</string>
+    <string name="abandon">Abandon</string>
 </resources>

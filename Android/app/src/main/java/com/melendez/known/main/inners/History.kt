@@ -136,12 +136,16 @@ fun History(paddingValues: PaddingValues? = null) {
             val isRefreshing by _isRefreshing.observeAsState(false) //TODO:Replace the LiveData with the Room
 
             SwipeRefresh(state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
-                onRefresh = { TODO("Refresh") }) {
+                onRefresh = {
+                    //TODO:Refresh
+                }) {
                 LazyColumn(modifier = if (paddingValues != null) Modifier.padding(bottom = paddingValues.calculateBottomPadding()) else Modifier) {
                     items(30) { count ->
                         Card(
                             modifier = Modifier.padding(vertical = 6.dp, horizontal = 12.dp),
-                            onClick = { TODO("Jump to the details page") }) {
+                            onClick = {
+                                //TODO:Jump to the details page
+                            }) {
                             Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                                 verticalAlignment = Alignment.CenterVertically,
