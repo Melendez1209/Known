@@ -1,4 +1,5 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
     <string name="app_name">Known</string>
     <string name="home">Home</string>
     <string name="me">Me</string>
@@ -12,7 +13,7 @@
     <string name="clear">Clear</string>
     <string name="settings">Settings</string>
     <string name="back">Back to previous page</string>
-    <string name="close_bar">Close the Search Bar</string>
+    <string name="close_bar">Close the search bar</string>
     <string name="hint_title">Navigation bar labels</string>
     <string name="about">About</string>
     <string name="mark">Mark</string>
@@ -23,12 +24,12 @@
     <string name="privacy">Privacy</string>
     <string name="policy">Privacy Policy</string>
     <string name="members">Developers</string>
-    <string name="all_contributors">All contributors to Know</string>
-    <string name="hint_on">Disable to hide navigation bar labels</string>
+    <string name="all_contributors">All contributors of Known</string>
+    <string name="hint_on">Disable to hide the navigation bar labels</string>
     <string name="hint_off">Enabled to show navigation bar labels</string>
     <string name="appearance">Appearance</string>
     <string name="dynamic_color">Dynamic Color</string>
-    <string name="apply_wallpaper">Apply wallpaper tones to theme colours</string>
+    <string name="apply_wallpaper">Apply wallpaper tones to theme colors</string>
     <string name="low_version">The system version is too low to use it</string>
     <string name="analysis">Analysis</string>
     <string name="grade">Grade</string>
@@ -36,11 +37,11 @@
     <string name="g8">Grade8</string>
     <string name="g9">Grade9</string>
     <string name="g10">Grade10</string>
-    <string name="g11" tools:ignore="Typos">Grade11</string>
+    <string name="g11">Grade11</string>
     <string name="g12">Grade12</string>
     <string name="exam_dates">Exam Dates</string>
     <string name="inputting">Inputting</string>
-    <string name="discard">Do you want to discard the content you have entered?</string>
+    <string name="discard">Do you want to discard the entered content?</string>
     <string name="reserve">Reserve</string>
     <string name="abandon">Abandon</string>
 </resources>

@@ -16,7 +16,6 @@
     <string name="close_bar">关闭搜索栏</string>
     <string name="about">关于</string>
     <string name="mark">得分</string>
-    <string name="close_input">取消输入</string>
     <string name="full_mark">满分</string>
     <string name="next">继续</string>
     <string name="sign_to">登录您的 知学情 账号</string>
@@ -41,7 +40,6 @@
     <string name="g11">高二</string>
     <string name="g12">高三</string>
     <string name="exam_dates">考试期</string>
-    <string name="select_exam_dates">选择考试期</string>
     <string name="inputting">录入</string>
     <string name="discard">您是否要放弃已录入内容？</string>
     <string name="reserve">保留</string>

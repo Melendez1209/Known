@@ -60,7 +60,6 @@ dependencies {
     val ui = "1.5.0-beta02"
     val material = "1.2.0-alpha02"
     val accompanist = "0.31.3-beta"
-    val junit = "5.10.0-M1"
 
     implementation("androidx.core:core-ktx:1.11.0-beta01")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
@@ -77,7 +76,7 @@ dependencies {
     implementation("com.google.accompanist:accompanist-swiperefresh:$accompanist")
     implementation(platform("androidx.compose:compose-bom:$composeBom"))
 
-    androidTestImplementation("androidx.test.ext:junit:$junit")
+    androidTestImplementation("androidx.test.ext:junit:1.2.0-alpha01")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha01")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$ui")
     androidTestImplementation(platform("androidx.compose:compose-bom:$composeBom"))
@@ -85,5 +84,5 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling:$ui")
     debugImplementation("androidx.compose.ui:ui-test-manifest:$ui")
 
-    testImplementation("junit:junit:$junit")
+    testImplementation("junit:junit:4.13.2")
 }

@@ -175,7 +175,7 @@ fun Subject_Card(subject: String) {
         Row {
             OutlinedTextField(
                 modifier = Modifier
-                    .padding(horizontal = 3.dp, vertical = 6.dp)
+                    .padding(horizontal = 4.dp, vertical = 6.dp)
                     .weight(1f),
                 value = full,
                 singleLine = true,
