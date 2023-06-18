@@ -178,16 +178,16 @@ fun Settings_Content(modifier: Modifier) {
                         Column {
                             SettingRow(
                                 title = stringResource(id = R.string.hint_title),
-                                sumOn = stringResource(id = R.string.hint_on),
-                                sumOff = stringResource(id = R.string.hint_off),
+                                subOn = stringResource(id = R.string.hint_on),
+                                subOff = stringResource(id = R.string.hint_off),
                                 value = labelMode,
                                 onCheckedChange = { labelMode = it }
                             )
                             Divider()
                             SettingRow(
                                 title = stringResource(R.string.dynamic_color),
-                                sumOn = stringResource(R.string.apply_wallpaper),
-                                sumUnable = stringResource(R.string.low_version),
+                                subOn = stringResource(R.string.apply_wallpaper),
+                                subUnable = stringResource(R.string.low_version),
                                 value = colorMode,
                                 enable = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
                                 onCheckedChange = { colorMode = it }
@@ -237,9 +237,9 @@ fun Settings_Content(modifier: Modifier) {
 @Composable
 fun SettingRow(
     title: String,
-    sumOn: String,
-    sumOff: String = sumOn,
-    sumUnable: String = "",
+    subOn: String,
+    subOff: String = subOn,
+    subUnable: String = "",
     value: Boolean,
     enable: Boolean = true,
     onCheckedChange: ((Boolean) -> Unit)?,
@@ -260,7 +260,7 @@ fun SettingRow(
                 style = MaterialTheme.typography.titleLarge
             )
             Text(
-                text = if (!enable) sumUnable else if (value) sumOn else sumOff,
+                text = if (!enable) subUnable else if (value) subOn else subOff,
                 style = MaterialTheme.typography.titleSmall
             )
         }
