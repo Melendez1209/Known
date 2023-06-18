@@ -63,8 +63,6 @@ fun Inputting(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostC
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Inputting_Compact(navTotalController: NavHostController) {
-
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
             title = { Text(text = stringResource(R.string.inputting)) },
@@ -80,7 +78,6 @@ fun Inputting_Compact(navTotalController: NavHostController) {
     }) { padding ->
         Inputting_Content(
             modifier = Modifier
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .fillMaxSize()
                 .padding(top = padding.calculateTopPadding())
         )
