@@ -40,7 +40,7 @@
     <string name="g12">Grade12</string>
     <string name="exam_dates">Exam Dates</string>
     <string name="inputting">Inputting</string>
-    <string name="discard">Do you want to discard the content you have entered?</string>
+    <string name="discard_sum">Do you want to discard the content you have entered?</string>
     <string name="reserve">Reserve</string>
-    <string name="abandon">Abandon</string>
+    <string name="discard">Discard</string>
 </resources>

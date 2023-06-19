@@ -59,7 +59,7 @@ fun DRP(navTotalController: NavHostController) {
                 Text(text = stringResource(id = R.string.back))
             },
             text = {
-                Text(text = stringResource(R.string.discard))
+                Text(text = stringResource(R.string.discard_sum))
             },
 
             confirmButton = {
@@ -81,7 +81,7 @@ fun DRP(navTotalController: NavHostController) {
                     },
                     modifier = Modifier.padding(4.dp)
                 ) {
-                    Text(stringResource(R.string.abandon))
+                    Text(stringResource(R.string.discard))
                 }
             }
         )

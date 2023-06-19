@@ -119,6 +119,7 @@ fun Main_Compact_Preview() {
     Main_Compact(rememberNavController(), rememberNavController())
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Main_Medium(navTotalController: NavHostController, navMainController: NavHostController) {
@@ -182,62 +183,64 @@ fun Main_Medium_Preview() {
     Main_Medium(rememberNavController(), rememberNavController())
 }
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Main_Expanded(navTotalController: NavHostController, navMainController: NavHostController) {
 
     val screens = listOf(Screens.Home, Screens.History, Screens.Me)
 
-    PermanentNavigationDrawer(drawerContent = {
+    Surface(modifier = Modifier.fillMaxSize()) {
+        PermanentNavigationDrawer(drawerContent = {
 
-        val navBackStackEntry by navMainController.currentBackStackEntryAsState()
-        val currentDestination = navBackStackEntry?.destination
+            val navBackStackEntry by navMainController.currentBackStackEntryAsState()
+            val currentDestination = navBackStackEntry?.destination
 
-        ModalDrawerSheet {
-            screens.forEach { screen ->
-                NavigationDrawerItem(label = { Text(text = stringResource(screen.resourceId)) },
-                    selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
-                    onClick = {
-                        navMainController.navigate(screen.router) {
-                            // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
-                            popUpTo(navMainController.graph.findStartDestination().id) {
-                                saveState = true
+            ModalDrawerSheet {
+                screens.forEach { screen ->
+                    NavigationDrawerItem(label = { Text(text = stringResource(screen.resourceId)) },
+                        selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
+                        onClick = {
+                            navMainController.navigate(screen.router) {
+                                // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
+                                popUpTo(navMainController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                launchSingleTop =
+                                    true//Avoid multiple copies of the same destination when reelecting the same item
+                                restoreState =
+                                    true // Restore state when reelecting a previously selected item
                             }
-                            launchSingleTop =
-                                true//Avoid multiple copies of the same destination when reelecting the same item
-                            restoreState =
-                                true // Restore state when reelecting a previously selected item
-                        }
-                    },
+                        },
+                        icon = {
+                            Icon(
+                                imageVector = screen.icon,
+                                contentDescription = stringResource(screen.resourceId)
+                            )
+                        })
+                }
+            }
+        }) {
+            Scaffold(floatingActionButton = {
+                ExtendedFloatingActionButton(onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) },
                     icon = {
                         Icon(
-                            imageVector = screen.icon,
-                            contentDescription = stringResource(screen.resourceId)
+                            imageVector = Icons.Rounded.Add,
+                            contentDescription = stringResource(id = R.string.add)
                         )
-                    })
+                    },
+                    text = { Text(text = stringResource(id = R.string.add)) })
+            }) {
+                AnimatedNavHost(
+                    navController = navMainController,
+                    startDestination = Screens.Home.router
+                ) {
+                    composable(Screens.Home.router) { Home() }
+                    composable(Screens.History.router) { History() }
+                    composable(Screens.Me.router) { Me(navTotalController) }
+                }
             }
         }
-    }) {
-        Scaffold(floatingActionButton = {
-            ExtendedFloatingActionButton(onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) },
-                icon = {
-                    Icon(
-                        imageVector = Icons.Rounded.Add,
-                        contentDescription = stringResource(id = R.string.add)
-                    )
-                },
-                text = { Text(text = stringResource(id = R.string.add)) })
-        }) {
-            AnimatedNavHost(
-                navController = navMainController,
-                startDestination = Screens.Home.router
-            ) {
-                composable(Screens.Home.router) { Home() }
-                composable(Screens.History.router) { History() }
-                composable(Screens.Me.router) { Me(navTotalController) }
-            }
-        }
-
     }
 }
 

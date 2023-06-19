@@ -184,7 +184,7 @@ fun Subject_Card(subject: String) {
                 ),
                 keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Right) }),
                 trailingIcon = {
-                    IconButton(onClick = { full = "" }) {
+                    IconButton(onClick = { full = "" }, enabled = full.isNotEmpty()) {
                         Icon(
                             imageVector = Icons.Rounded.Close,
                             contentDescription = stringResource(R.string.clear)
@@ -210,7 +210,7 @@ fun Subject_Card(subject: String) {
                     onDone = null
                 ),
                 trailingIcon = {
-                    IconButton(onClick = { mark = "" }) {
+                    IconButton(onClick = { mark = "" }, enabled = mark.isNotEmpty()) {
                         Icon(
                             imageVector = Icons.Rounded.Close,
                             contentDescription = stringResource(R.string.clear)
