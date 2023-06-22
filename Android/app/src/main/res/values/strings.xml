@@ -25,7 +25,7 @@
     <string name="members">Developers</string>
     <string name="all_contributors">All contributors to Know</string>
     <string name="hint_on">Disable to hide navigation bar labels</string>
-    <string name="hint_off">Enabled to show navigation bar labels</string>
+    <string name="hint_off">Enable to show navigation bar labels</string>
     <string name="appearance">Appearance</string>
     <string name="dynamic_color">Dynamic Color</string>
     <string name="apply_wallpaper">Apply wallpaper tones to theme colours</string>
@@ -39,8 +39,9 @@
     <string name="g11" tools:ignore="Typos">Grade11</string>
     <string name="g12">Grade12</string>
     <string name="exam_dates">Exam Dates</string>
-    <string name="inputting">Inputting</string>
     <string name="discard_sum">Do you want to discard the content you have entered?</string>
     <string name="reserve">Reserve</string>
     <string name="discard">Discard</string>
+    <string name="exam_name">Exam Name</string>
+    <string name="name_this">Name this exam</string>
 </resources>

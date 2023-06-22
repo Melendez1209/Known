@@ -11,6 +11,8 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.NavigateBefore
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -23,11 +25,13 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -63,9 +67,59 @@ fun Inputting(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostC
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Inputting_Compact(navTotalController: NavHostController) {
+
+    var showingDialog by remember { mutableStateOf(false) }
+    var examName by rememberSaveable { mutableStateOf("") }
+
+    if (showingDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showingDialog = false
+            },
+            title = {
+                Text(text = stringResource(id = R.string.name_this))
+            },
+            text = {
+                OutlinedTextField(
+                    value = examName,
+                    onValueChange = { examName = it },
+                    singleLine = true,
+                    label = { Text(text = stringResource(R.string.exam_name)) }
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showingDialog = false
+                    },
+                    modifier = Modifier.padding(4.dp)
+                ) {
+                    Text(stringResource(R.string.reserve))
+                }
+            }, dismissButton = {
+                TextButton(
+                    onClick = {
+                        showingDialog = false
+                        examName = ""
+                    },
+                    modifier = Modifier.padding(4.dp)
+                ) {
+                    Text(stringResource(R.string.discard))
+                }
+            }
+        )
+    }
+
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
-            title = { Text(text = stringResource(R.string.inputting)) },
+            title = {
+                TextButton(onClick = { showingDialog = true }) {
+                    Text(
+                        text = if (examName.isEmpty()) stringResource(R.string.exam) + 0 else examName,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                }
+            },
             navigationIcon = {
                 IconButton(onClick = { navTotalController.popBackStack() }) {
                     Icon(
@@ -91,9 +145,58 @@ fun Inputting_Medium(navTotalController: NavHostController) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
+    var showingDialog by remember { mutableStateOf(false) }
+    var examName by rememberSaveable { mutableStateOf("") }
+
+    if (showingDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showingDialog = false
+            },
+            title = {
+                Text(text = stringResource(id = R.string.name_this))
+            },
+            text = {
+                OutlinedTextField(
+                    value = examName,
+                    onValueChange = { examName = it },
+                    singleLine = true,
+                    label = { Text(text = stringResource(R.string.exam_name)) }
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showingDialog = false
+                    },
+                    modifier = Modifier.padding(4.dp)
+                ) {
+                    Text(stringResource(R.string.reserve))
+                }
+            }, dismissButton = {
+                TextButton(
+                    onClick = {
+                        showingDialog = false
+                        examName = ""
+                    },
+                    modifier = Modifier.padding(4.dp)
+                ) {
+                    Text(stringResource(R.string.discard))
+                }
+            }
+        )
+    }
+
     Column {
         MediumTopAppBar(
-            title = { Text(text = stringResource(R.string.inputting)) },
+            title = {
+                TextButton(onClick = { showingDialog = true }) {
+                    Text(
+                        text = if (examName.isEmpty()) stringResource(R.string.exam) + 0 else examName,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                }
+            },
             navigationIcon = {
                 IconButton(onClick = { navTotalController.popBackStack() }) {
                     Icon(
@@ -118,9 +221,58 @@ fun Inputting_Expanded(navTotalController: NavHostController) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
+    var showingDialog by remember { mutableStateOf(false) }
+    var examName by rememberSaveable { mutableStateOf("") }
+
+    if (showingDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showingDialog = false
+            },
+            title = {
+                Text(text = stringResource(id = R.string.name_this))
+            },
+            text = {
+                OutlinedTextField(
+                    value = examName,
+                    onValueChange = { examName = it },
+                    singleLine = true,
+                    label = { Text(text = stringResource(R.string.exam_name)) }
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showingDialog = false
+                    },
+                    modifier = Modifier.padding(4.dp)
+                ) {
+                    Text(stringResource(R.string.reserve))
+                }
+            }, dismissButton = {
+                TextButton(
+                    onClick = {
+                        examName = ""
+                        showingDialog = false
+                    },
+                    modifier = Modifier.padding(4.dp)
+                ) {
+                    Text(stringResource(R.string.discard))
+                }
+            }
+        )
+    }
+
     Column {
         LargeTopAppBar(
-            title = { Text(text = stringResource(R.string.inputting)) },
+            title = {
+                TextButton(onClick = { showingDialog = true }) {
+                    Text(
+                        text = if (examName.isEmpty()) stringResource(R.string.exam) + 0 else examName,
+                        style = MaterialTheme.typography.headlineSmall
+                    )
+                }
+            },
             navigationIcon = {
                 IconButton(onClick = { navTotalController.popBackStack() }) {
                     Icon(

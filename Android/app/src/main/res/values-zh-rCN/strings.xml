@@ -40,8 +40,9 @@
     <string name="g11">高二</string>
     <string name="g12">高三</string>
     <string name="exam_dates">考试期</string>
-    <string name="inputting">录入</string>
     <string name="discard_sum">您是否要放弃已录入内容？</string>
     <string name="reserve">保留</string>
     <string name="discard">放弃</string>
+    <string name="exam_name">考试名称</string>
+    <string name="name_this">命名这次考试</string>
 </resources>
