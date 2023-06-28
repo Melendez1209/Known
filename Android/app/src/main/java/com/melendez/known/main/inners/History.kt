@@ -98,10 +98,11 @@ fun History(paddingValues: PaddingValues? = null) {
 
                         val resultText = stringResource(R.string.exam) + index
 
-                        ListItem(modifier = Modifier.clickable {
-                            text = resultText
-                            active = false
-                        },
+                        ListItem(
+                            modifier = Modifier.clickable {
+                                text = resultText
+                                active = false
+                            },
                             headlineContent = { Text(resultText) },
                             supportingContent = { Text(text = stringResource(R.string.classification) + index) },
                             leadingContent = {

@@ -23,7 +23,7 @@
     <string name="avatar">頭像</string>
     <string name="privacy">隱私</string>
     <string name="policy">隱私協定</string>
-    <string name="members">開發者</string>
+    <string name="developers">開發者</string>
     <string name="all_contributors">知學情 的所有貢獻者</string>
     <string name="hint_on">關閉以隱藏導航欄標籤</string>
     <string name="hint_off">開啟以顯示導航欄標籤</string>

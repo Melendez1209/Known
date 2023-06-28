@@ -111,7 +111,7 @@ class MainActivity : ComponentActivity() {
                             navTotalController = navTotalController
                         )
                     }
-                    composable(Screens.About.router) { AboutScreen() }
+                    composable(Screens.About.router) { AboutScreen(widthSizeClass = widthSizeClass) }
                 }
             }
         }

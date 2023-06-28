@@ -22,7 +22,7 @@
     <string name="avatar">头像</string>
     <string name="privacy">隐私</string>
     <string name="policy">隐私协议</string>
-    <string name="members">开发者</string>
+    <string name="developers">开发者</string>
     <string name="all_contributors">知学情 的所有贡献者</string>
     <string name="hint_title">导航栏标签</string>
     <string name="hint_on">关闭以隐藏导航栏标签</string>
