@@ -45,4 +45,5 @@
     <string name="discard">放弃</string>
     <string name="exam_name">考试名称</string>
     <string name="name_this">为这次考试命名</string>
+    <string name="select_grade">选取您所在的年级</string>
 </resources>
