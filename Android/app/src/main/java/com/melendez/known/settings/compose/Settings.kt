@@ -139,7 +139,7 @@ fun Settings_Medium(navTotalController: NavHostController) {
 fun Settings_Content(modifier: Modifier) {
 
     // Variables related to settings
-    var labelMode by rememberSaveable { mutableStateOf(false) }
+    var labelMode by rememberSaveable { mutableStateOf(false) } // Whether to display the home navigation bar labels
     var colorMode by rememberSaveable { mutableStateOf(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) }
     var grade by rememberSaveable { mutableIntStateOf(10) }
 
