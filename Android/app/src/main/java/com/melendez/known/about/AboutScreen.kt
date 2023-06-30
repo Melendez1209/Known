@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.AttachMoney
 import androidx.compose.material.icons.rounded.PeopleAlt
 import androidx.compose.material.icons.rounded.PrivacyTip
 import androidx.compose.material3.Divider
@@ -117,9 +118,28 @@ fun About_Content() {
             leadingContent = {
                 Icon(
                     imageVector = Icons.Rounded.PrivacyTip,
-                    contentDescription = stringResource(id = R.string.developers)
+                    contentDescription = stringResource(id = R.string.privacy)
                 )
             }
         )
+        Divider()
+        ListItem(
+            modifier = Modifier.clickable {
+                val intent = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://bmc.link/markmelendez")
+                )
+                context.startActivity(intent)
+            },
+            headlineContent = { Text(text = stringResource(R.string.sponsorships)) },
+            supportingContent = { Text(text = stringResource(R.string.better_experience)) },
+            leadingContent = {
+                Icon(
+                    imageVector = Icons.Rounded.AttachMoney,
+                    contentDescription = stringResource(id = R.string.sponsorships)
+                )
+            }
+        )
+
     }
 }

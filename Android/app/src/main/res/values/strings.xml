@@ -45,4 +45,6 @@
     <string name="exam_name">Exam Name</string>
     <string name="name_this">Name this exam</string>
     <string name="select_grade">Select your grade</string>
+    <string name="sponsorships">Sponsorships</string>
+    <string name="better_experience">Sponsorship will enable our team to bring you a better experience</string>
 </resources>

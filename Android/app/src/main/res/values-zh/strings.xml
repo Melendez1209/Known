@@ -46,4 +46,6 @@
     <string name="exam_name">考试名称</string>
     <string name="name_this">为这次考试命名</string>
     <string name="select_grade">选取您所在的年级</string>
+    <string name="sponsorships">赞助</string>
+    <string name="better_experience">您的赞助会使我们团队为您带来更好的体验</string>
 </resources>
