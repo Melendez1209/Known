@@ -12,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDropDown
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Help
 import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material3.Button
@@ -170,7 +172,7 @@ fun Settings_Content(modifier: Modifier) {
                         Text(
                             modifier = Modifier.padding(start = 12.dp, top = 6.dp, bottom = 6.dp),
                             text = stringResource(R.string.appearance),
-                            style = MaterialTheme.typography.headlineMedium
+                            style = MaterialTheme.typography.titleLarge
                         )
                     }
                     AnimatedVisibility(visible = visibleAppearance) {
@@ -186,7 +188,13 @@ fun Settings_Content(modifier: Modifier) {
                                 trailingContent = {
                                     Switch(
                                         checked = labelMode,
-                                        onCheckedChange = { labelMode = it }
+                                        onCheckedChange = { labelMode = it },
+                                        thumbContent = {
+                                            Icon(
+                                                imageVector = if (labelMode) Icons.Rounded.Check else Icons.Rounded.Clear,
+                                                contentDescription = ""
+                                            )
+                                        }
                                     )
                                 }
                             )
@@ -203,7 +211,14 @@ fun Settings_Content(modifier: Modifier) {
                                     Switch(
                                         enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
                                         checked = colorMode,
-                                        onCheckedChange = { colorMode = it })
+                                        onCheckedChange = { colorMode = it },
+                                        thumbContent = {
+                                            Icon(
+                                                imageVector = if (colorMode) Icons.Rounded.Check else Icons.Rounded.Clear,
+                                                contentDescription = ""
+                                            )
+                                        }
+                                    )
                                 }
                             )
                         }
@@ -220,7 +235,7 @@ fun Settings_Content(modifier: Modifier) {
                         Text(
                             modifier = Modifier.padding(start = 12.dp, top = 6.dp, bottom = 6.dp),
                             text = stringResource(R.string.analysis),
-                            style = MaterialTheme.typography.headlineMedium
+                            style = MaterialTheme.typography.titleLarge
                         )
                     }
                     AnimatedVisibility(visible = visibleAnalysis) {

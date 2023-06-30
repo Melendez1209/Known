@@ -29,12 +29,12 @@ fun Home(paddingValues: PaddingValues? = null) {
                 .fillMaxSize()
                 .padding(bottom = paddingValues.calculateBottomPadding())
             else Modifier.fillMaxSize(),
-            columns = StaggeredGridCells.Adaptive(160.dp),
+            columns = StaggeredGridCells.Adaptive(180.dp),
             verticalItemSpacing = 6.dp,
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             items(20) {
-                Card(modifier = Modifier.height(Random.nextInt(140, 320).dp)) {
+                Card(modifier = Modifier.height(Random.nextInt(130, 290).dp)) {
                     Text(
                         text = stringResource(id = R.string.exam),
                         style = MaterialTheme.typography.titleMedium,

@@ -12,7 +12,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.LocalLibrary
+import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -107,7 +107,8 @@ fun History(paddingValues: PaddingValues? = null) {
                             supportingContent = { Text(text = stringResource(R.string.classification) + index) },
                             leadingContent = {
                                 Icon(
-                                    Icons.Rounded.LocalLibrary, contentDescription = null
+                                    Icons.Rounded.School,
+                                    contentDescription = stringResource(R.string.exam) + index
                                 )
                             })
                     }
