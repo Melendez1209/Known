@@ -48,4 +48,10 @@
     <string name="select_grade">选取您所在的年级</string>
     <string name="sponsorships">赞助</string>
     <string name="better_experience">您的赞助会使我们团队为您带来更好的体验</string>
+    <string name="feedback">反馈</string>
+    <string name="feedback_to">反馈以帮助我们进一步完善应用</string>
+    <string name="bug">Bug</string>
+    <string name="bug_report">反馈一个 Bug</string>
+    <string name="feature">特性请求</string>
+    <string name="feature_request">告诉我们您想要的特性</string>
 </resources>

@@ -14,7 +14,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Clear
-import androidx.compose.material.icons.rounded.Help
+import androidx.compose.material.icons.rounded.Feedback
 import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
+import com.melendez.known.Screens
 
 @Composable
 fun Settings(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
@@ -86,12 +87,12 @@ fun Settings_CompactExpanded(navTotalController: NavHostController) {
             actions = {
                 IconButton(
                     onClick = {
-                        //TODO:Jump to help
+                        navTotalController.navigate(Screens.Feedback.router)
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Rounded.Help,
-                        contentDescription = stringResource(R.string.sign_to)
+                        imageVector = Icons.Rounded.Feedback,
+                        contentDescription = stringResource(R.string.feedback)
                     )
                 }
             },
@@ -121,12 +122,12 @@ fun Settings_Medium(navTotalController: NavHostController) {
             actions = {
                 IconButton(
                     onClick = {
-                        //TODO:Jump to help
+                        navTotalController.navigate(Screens.Feedback.router)
                     }
                 ) {
                     Icon(
-                        imageVector = Icons.Rounded.Help,
-                        contentDescription = stringResource(R.string.sign_to)
+                        imageVector = Icons.Rounded.Feedback,
+                        contentDescription = stringResource(R.string.feedback)
                     )
                 }
             },
@@ -242,7 +243,7 @@ fun Settings_Content(modifier: Modifier) {
                         Column {
 
                             var expanded by remember { mutableStateOf(false) }
-                            val gradeList = mutableListOf<String>(
+                            val gradeList = mutableListOf(
                                 stringResource(id = R.string.g7),
                                 stringResource(id = R.string.g8),
                                 stringResource(id = R.string.g9),
@@ -264,7 +265,7 @@ fun Settings_Content(modifier: Modifier) {
                                     DropdownMenu(
                                         expanded = expanded,
                                         onDismissRequest = { expanded = false }) {
-                                        gradeList.forEach { it ->
+                                        gradeList.forEach {
                                             DropdownMenuItem(
                                                 text = { Text(text = it) },
                                                 onClick = {

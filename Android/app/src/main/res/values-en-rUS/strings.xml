@@ -48,4 +48,10 @@
     <string name="select_grade">Select your grade level</string>
     <string name="sponsorships">Sponsorships</string>
     <string name="better_experience">Sponsorship will enable our team to bring you a better experience</string>
+    <string name="feedback">Feedback</string>
+    <string name="feedback_to">Feedback to help us further improve the app</string>
+    <string name="bug">Bug</string>
+    <string name="bug_report">Feedback on a bug</string>
+    <string name="feature">Feature Request</string>
+    <string name="feature_request">Tell us the features you want</string>
 </resources>

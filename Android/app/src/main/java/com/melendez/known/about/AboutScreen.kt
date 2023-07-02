@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AttachMoney
+import androidx.compose.material.icons.rounded.Feedback
 import androidx.compose.material.icons.rounded.PeopleAlt
 import androidx.compose.material.icons.rounded.PrivacyTip
 import androidx.compose.material3.Divider
@@ -30,20 +32,26 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
+import com.melendez.known.Screens
 
 
 @Composable
-fun AboutScreen(widthSizeClass: WindowWidthSizeClass) {
+fun AboutScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
     when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> AboutScreen_Compat()
-        WindowWidthSizeClass.Medium, WindowWidthSizeClass.Expanded -> AboutScreen_MediumExpanded()
+        WindowWidthSizeClass.Compact -> AboutScreen_Compat(navTotalController = navTotalController)
+        WindowWidthSizeClass.Medium, WindowWidthSizeClass.Expanded -> AboutScreen_MediumExpanded(
+            navTotalController = navTotalController
+        )
+
+        else -> AboutScreen_Compat(navTotalController = navTotalController)
     }
 }
 
-@Preview(device = "id:pixel_7_pro")
 @Composable
-fun AboutScreen_Compat() {
+fun AboutScreen_Compat(navTotalController: NavHostController) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Column {
             Image(
@@ -54,14 +62,13 @@ fun AboutScreen_Compat() {
                     .height(180.dp)
                     .padding(vertical = 12.dp)
             )
-            About_Content()
+            About_Content(navTotalController = navTotalController)
         }
     }
 }
 
-@Preview(device = "spec:parent=pixel_7_pro,orientation=landscape")
 @Composable
-fun AboutScreen_MediumExpanded() {
+fun AboutScreen_MediumExpanded(navTotalController: NavHostController) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Row(
             modifier = Modifier.fillMaxSize(),
@@ -75,71 +82,101 @@ fun AboutScreen_MediumExpanded() {
                     .width(240.dp)
                     .padding(vertical = 12.dp)
             )
-            About_Content()
+            About_Content(navTotalController = navTotalController)
+        }
+    }
+}
+
+@Composable
+fun About_Content(navTotalController: NavHostController) {
+
+    val context = LocalContext.current
+
+    LazyColumn {
+        item {
+            ListItem(
+                modifier = Modifier.clickable {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://github.com/Melendez1209/known/graphs/contributors")
+                    )
+                    context.startActivity(intent)
+                },
+                headlineContent = { Text(text = stringResource(id = R.string.developers)) },
+                supportingContent = { Text(text = stringResource(id = R.string.all_contributors)) },
+                leadingContent = {
+                    Icon(
+                        imageVector = Icons.Rounded.PeopleAlt,
+                        contentDescription = stringResource(id = R.string.developers)
+                    )
+                }
+            )
+            Divider()
+        }
+        item {
+            ListItem(
+                modifier = Modifier.clickable {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://github.com/Melendez1209/Known/blob/main/LICENSE")
+                    )
+                    context.startActivity(intent)
+                },
+                headlineContent = { Text(text = stringResource(id = R.string.privacy)) },
+                supportingContent = { Text(text = stringResource(id = R.string.policy)) },
+                leadingContent = {
+                    Icon(
+                        imageVector = Icons.Rounded.PrivacyTip,
+                        contentDescription = stringResource(id = R.string.privacy)
+                    )
+                }
+            )
+            Divider()
+        }
+        item {
+            ListItem(
+                modifier = Modifier.clickable {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://bmc.link/markmelendez")
+                    )
+                    context.startActivity(intent)
+                },
+                headlineContent = { Text(text = stringResource(R.string.sponsorships)) },
+                supportingContent = { Text(text = stringResource(R.string.better_experience)) },
+                leadingContent = {
+                    Icon(
+                        imageVector = Icons.Rounded.AttachMoney,
+                        contentDescription = stringResource(id = R.string.sponsorships)
+                    )
+                }
+            )
+            Divider()
+        }
+        item {
+            ListItem(
+                modifier = Modifier.clickable { navTotalController.navigate(Screens.Feedback.router) },
+                headlineContent = { Text(text = stringResource(R.string.feedback)) },
+                supportingContent = { Text(text = stringResource(R.string.feedback_to)) },
+                leadingContent = {
+                    Icon(
+                        imageVector = Icons.Rounded.Feedback,
+                        contentDescription = stringResource(R.string.feedback)
+                    )
+                }
+            )
         }
     }
 }
 
 @Preview(device = "id:pixel_7_pro")
 @Composable
-fun About_Content() {
+fun About_Content_Preview() {
+    About_Content(navTotalController = rememberNavController())
+}
 
-    val context = LocalContext.current
-
-    Column {
-        ListItem(
-            modifier = Modifier.clickable {
-                val intent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://github.com/Melendez1209/known/graphs/contributors")
-                )
-                context.startActivity(intent)
-            },
-            headlineContent = { Text(text = stringResource(id = R.string.developers)) },
-            supportingContent = { Text(text = stringResource(id = R.string.all_contributors)) },
-            leadingContent = {
-                Icon(
-                    imageVector = Icons.Rounded.PeopleAlt,
-                    contentDescription = stringResource(id = R.string.developers)
-                )
-            }
-        )
-        Divider()
-        ListItem(
-            modifier = Modifier.clickable {
-                val intent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://github.com/Melendez1209/Known/blob/main/LICENSE")
-                )
-                context.startActivity(intent)
-            },
-            headlineContent = { Text(text = stringResource(id = R.string.privacy)) },
-            supportingContent = { Text(text = stringResource(id = R.string.policy)) },
-            leadingContent = {
-                Icon(
-                    imageVector = Icons.Rounded.PrivacyTip,
-                    contentDescription = stringResource(id = R.string.privacy)
-                )
-            }
-        )
-        Divider()
-        ListItem(
-            modifier = Modifier.clickable {
-                val intent = Intent(
-                    Intent.ACTION_VIEW,
-                    Uri.parse("https://bmc.link/markmelendez")
-                )
-                context.startActivity(intent)
-            },
-            headlineContent = { Text(text = stringResource(R.string.sponsorships)) },
-            supportingContent = { Text(text = stringResource(R.string.better_experience)) },
-            leadingContent = {
-                Icon(
-                    imageVector = Icons.Rounded.AttachMoney,
-                    contentDescription = stringResource(id = R.string.sponsorships)
-                )
-            }
-        )
-
-    }
+@Preview(device = "spec:parent=pixel_7_pro,orientation=landscape")
+@Composable
+fun AboutScreen_MediumExpanded_Preview() {
+    AboutScreen_MediumExpanded(navTotalController = rememberNavController())
 }

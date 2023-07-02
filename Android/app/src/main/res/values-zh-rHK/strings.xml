@@ -48,4 +48,10 @@
     <string name="select_grade">選取您所在的年級</string>
     <string name="sponsorships">贊助</string>
     <string name="better_experience">您的贊助會使我們團隊為您帶來更好的體驗</string>
+    <string name="feedback">反饋</string>
+    <string name="feedback_to">反饋以幫助我們進一步完善應用</string>
+    <string name="bug">Bug</string>
+    <string name="bug_report">反饋一個 Bug</string>
+    <string name="feature">特性請求</string>
+    <string name="feature_request">告訴我們您想要的特性</string>
 </resources>
