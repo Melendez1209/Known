@@ -50,8 +50,17 @@
     <string name="better_experience">您的赞助会使我们团队为您带来更好的体验</string>
     <string name="feedback">反馈</string>
     <string name="feedback_to">反馈以帮助我们进一步完善应用</string>
-    <string name="bug">Bug</string>
+    <string name="bug">Bug 反馈</string>
     <string name="bug_report">反馈一个 Bug</string>
     <string name="feature">特性请求</string>
     <string name="feature_request">告诉我们您想要的特性</string>
+    <string name="title">标题</string>
+    <string name="summary">内容</string>
+    <string name="reproduce_bug">复现步骤</string>
+    <string name="expected">期望结果</string>
+    <string name="upload">上传截图或视频</string>
+    <string name="actual">实际结果</string>
+    <string name="preview">在 Github 上预览</string>
+    <string name="failure">反馈失败</string>
+    <string name="input_title">请填写标题</string>
 </resources>

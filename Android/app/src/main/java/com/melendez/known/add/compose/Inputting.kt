@@ -21,6 +21,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
@@ -89,6 +90,7 @@ fun Inputting_Compact(navTotalController: NavHostController) {
             },
             confirmButton = {
                 Button(
+                    enabled = examName.isNotEmpty(),
                     onClick = {
                         showingDialog = false
                     },
@@ -97,7 +99,7 @@ fun Inputting_Compact(navTotalController: NavHostController) {
                     Text(stringResource(R.string.reserve))
                 }
             }, dismissButton = {
-                TextButton(
+                OutlinedButton(
                     onClick = {
                         showingDialog = false
                         examName = ""
@@ -166,6 +168,7 @@ fun Inputting_Medium(navTotalController: NavHostController) {
             },
             confirmButton = {
                 Button(
+                    enabled = examName.isNotEmpty(),
                     onClick = {
                         showingDialog = false
                     },
@@ -174,7 +177,7 @@ fun Inputting_Medium(navTotalController: NavHostController) {
                     Text(stringResource(R.string.reserve))
                 }
             }, dismissButton = {
-                TextButton(
+                OutlinedButton(
                     onClick = {
                         showingDialog = false
                         examName = ""
@@ -242,6 +245,7 @@ fun Inputting_Expanded(navTotalController: NavHostController) {
             },
             confirmButton = {
                 Button(
+                    enabled = examName.isNotEmpty(),
                     onClick = {
                         showingDialog = false
                     },
@@ -250,7 +254,7 @@ fun Inputting_Expanded(navTotalController: NavHostController) {
                     Text(stringResource(R.string.reserve))
                 }
             }, dismissButton = {
-                TextButton(
+                OutlinedButton(
                     onClick = {
                         examName = ""
                         showingDialog = false

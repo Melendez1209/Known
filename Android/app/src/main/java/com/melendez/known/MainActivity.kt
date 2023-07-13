@@ -20,6 +20,8 @@ import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.melendez.known.about.AboutScreen
 import com.melendez.known.add.compose.DRP
 import com.melendez.known.add.compose.Inputting
+import com.melendez.known.feedback.Bug
+import com.melendez.known.feedback.Feature
 import com.melendez.known.feedback.Feedback
 import com.melendez.known.main.MainScreen
 import com.melendez.known.settings.compose.Settings
@@ -91,7 +93,7 @@ class MainActivity : ComponentActivity() {
                         )
                     },
                     navController = navTotalController,
-                    startDestination = "MainScreen"
+                    startDestination = Screens.Main.router
                 ) {
                     composable(Screens.Main.router) {
                         MainScreen(
@@ -120,6 +122,18 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Screens.Feedback.router) {
                         Feedback(
+                            widthSizeClass = widthSizeClass,
+                            navTotalController = navTotalController
+                        )
+                    }
+                    composable(Screens.Bug.router) {
+                        Bug(
+                            widthSizeClass = widthSizeClass,
+                            navTotalController = navTotalController
+                        )
+                    }
+                    composable(Screens.Feature.router) {
+                        Feature(
                             widthSizeClass = widthSizeClass,
                             navTotalController = navTotalController
                         )

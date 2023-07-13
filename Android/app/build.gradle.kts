@@ -65,6 +65,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.6.1")
     implementation("androidx.activity:activity-compose:1.8.0-alpha05")
     implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("com.android.volley:volley:1.2.1")
     implementation("androidx.compose.ui:ui:$ui")
     implementation("androidx.compose.ui:ui-graphics:$ui")
     implementation("androidx.compose.ui:ui-tooling-preview:$ui")

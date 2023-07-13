@@ -5,9 +5,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -17,11 +15,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.NavigateNext
 import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Divider
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ListItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +28,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
@@ -50,7 +45,7 @@ fun Me(navTotalController: NavHostController) {
     Surface {
         Column {
 
-            var imageUrl: Any? by rememberSaveable { mutableStateOf(R.drawable.baseline_account_circle_24) } // TODO:Make it savable
+            var imageUrl: Any? by rememberSaveable { mutableStateOf(R.drawable.baseline_account_circle_24) }
             val photoPicker =
                 rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) {
                     if (it != null) {
@@ -63,8 +58,8 @@ fun Me(navTotalController: NavHostController) {
 
             AsyncImage(
                 modifier = Modifier
-                    .height(60.dp)
-                    .width(60.dp)
+                    .height(80.dp)
+                    .width(80.dp)
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 6.dp)
                     .clip(CircleShape)
@@ -74,76 +69,45 @@ fun Me(navTotalController: NavHostController) {
                 contentDescription = stringResource(R.string.avatar),
                 contentScale = ContentScale.Crop
             )
-
-            NavigationCard(
-                navTotalController = navTotalController,
-                router = Screens.Settings.router,
-                icon = Icons.Rounded.Settings,
-                title = stringResource(
-                    id = R.string.settings
-                )
+            ListItem(
+                modifier = Modifier
+                    .clickable { navTotalController.navigate(Screens.Settings.router) }
+                    .fillMaxWidth(),
+                headlineContent = { Text(text = stringResource(id = R.string.settings)) },
+                leadingContent = {
+                    Icon(
+                        imageVector = Icons.Rounded.Settings,
+                        contentDescription = stringResource(id = R.string.settings)
+                    )
+                },
+                trailingContent = {
+                    Icon(
+                        imageVector = Icons.Rounded.NavigateNext,
+                        contentDescription = stringResource(id = R.string.settings)
+                    )
+                }
             )
-            NavigationCard(
-                navTotalController = navTotalController,
-                router = Screens.About.router,
-                icon = Icons.Rounded.Info,
-                title = stringResource(R.string.about)
+            Divider()
+            ListItem(
+                modifier = Modifier
+                    .clickable { navTotalController.navigate(Screens.About.router) }
+                    .fillMaxWidth(),
+                headlineContent = { Text(text = stringResource(R.string.about)) },
+                leadingContent = {
+                    Icon(
+                        imageVector = Icons.Rounded.Info,
+                        contentDescription = stringResource(R.string.about)
+                    )
+                },
+                trailingContent = {
+                    Icon(
+                        imageVector = Icons.Rounded.NavigateNext,
+                        contentDescription = stringResource(R.string.about)
+                    )
+                }
             )
         }
     }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun NavigationCard(
-    navTotalController: NavHostController,
-    router: String,
-    icon: ImageVector,
-    title: String,
-) {
-    Card(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(horizontal = 12.dp, vertical = 6.dp),
-        onClick = {
-            navTotalController.navigate(router)
-        }) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Icon(
-                    modifier = Modifier.padding(start = 12.dp, end = 6.dp),
-                    imageVector = icon,
-                    contentDescription = stringResource(id = R.string.settings)
-                )
-                Text(text = title, style = MaterialTheme.typography.titleMedium)
-            }
-            IconButton(
-                modifier = Modifier.padding(end = 6.dp),
-                onClick = {
-                    navTotalController.navigate(router)
-                }) {
-                Icon(
-                    imageVector = Icons.Rounded.NavigateNext,
-                    contentDescription = stringResource(id = R.string.settings)
-                )
-            }
-        }
-    }
-}
-
-@Preview
-@Composable
-fun NavigationCard_Preview() {
-    NavigationCard(
-        navTotalController = rememberNavController(),
-        "",
-        Icons.Rounded.Settings,
-        "Title"
-    )
 }
 
 @Preview(device = "id:pixel_7_pro", showBackground = true)

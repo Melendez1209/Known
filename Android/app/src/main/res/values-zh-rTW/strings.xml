@@ -50,8 +50,17 @@
     <string name="better_experience">您的贊助會使我們團隊為您帶來更好的體驗</string>
     <string name="feedback">反饋</string>
     <string name="feedback_to">反饋以幫助我們進一步完善應用</string>
-    <string name="bug">Bug</string>
+    <string name="bug">Bug 反饋</string>
     <string name="bug_report">反饋一個 Bug</string>
     <string name="feature">功能請求</string>
     <string name="feature_request">告诉我们您想要的特性</string>
+    <string name="title">标题</string>
+    <string name="summary">內容</string>
+    <string name="reproduce_bug">復現步驟</string>
+    <string name="expected">期望結果</string>
+    <string name="upload">上傳截圖或視頻</string>
+    <string name="actual">實際結果</string>
+    <string name="preview">在 Github 上預覽</string>
+    <string name="failure">反饋失敗</string>
+    <string name="input_title">請填寫標題</string>
 </resources>

@@ -27,14 +27,23 @@ fun Home(paddingValues: PaddingValues? = null) {
         LazyVerticalStaggeredGrid(
             modifier = if (paddingValues != null) Modifier
                 .fillMaxSize()
-                .padding(bottom = paddingValues.calculateBottomPadding())
+                .padding(
+                    top = 9.dp,
+                    bottom = paddingValues.calculateBottomPadding(),
+                    start = 12.dp,
+                    end = 12.dp
+                )
             else Modifier.fillMaxSize(),
             columns = StaggeredGridCells.Adaptive(180.dp),
             verticalItemSpacing = 6.dp,
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             items(20) {
-                Card(modifier = Modifier.height(Random.nextInt(130, 290).dp)) {
+                Card(
+                    modifier = Modifier
+                        .height(Random.nextInt(130, 290).dp)
+                        .padding(vertical = 3.dp)
+                ) {
                     Text(
                         text = stringResource(id = R.string.exam),
                         style = MaterialTheme.typography.titleMedium,

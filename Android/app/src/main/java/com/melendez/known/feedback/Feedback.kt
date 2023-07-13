@@ -1,5 +1,6 @@
 package com.melendez.known.feedback
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
@@ -26,6 +27,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
+import com.melendez.known.Screens
 
 @Composable
 fun Feedback(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
@@ -55,7 +57,10 @@ fun Feedback_CompatExpanded(navTotalController: NavHostController) {
                 }
             }, scrollBehavior = scrollBehavior
         )
-        Feedback_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
+        Feedback_Content(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            navTotalController = navTotalController
+        )
     }
 }
 
@@ -77,16 +82,20 @@ fun Feedback_Medium(navTotalController: NavHostController) {
                 }
             }, scrollBehavior = scrollBehavior
         )
-        Feedback_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
+        Feedback_Content(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            navTotalController = navTotalController
+        )
     }
 }
 
 @Composable
-fun Feedback_Content(modifier: Modifier) {
+fun Feedback_Content(modifier: Modifier, navTotalController: NavHostController) {
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyColumn(modifier = modifier) {
             item {
                 ListItem(
+                    modifier = Modifier.clickable { navTotalController.navigate(Screens.Bug.router) },
                     headlineContent = { Text(text = stringResource(R.string.bug)) },
                     supportingContent = { Text(text = stringResource(R.string.bug_report)) },
                     leadingContent = {
@@ -100,6 +109,7 @@ fun Feedback_Content(modifier: Modifier) {
             }
             item {
                 ListItem(
+                    modifier = Modifier.clickable { navTotalController.navigate(Screens.Feature.router) },
                     headlineContent = { Text(text = stringResource(R.string.feature)) },
                     supportingContent = { Text(text = stringResource(R.string.feature_request)) },
                     leadingContent = {
