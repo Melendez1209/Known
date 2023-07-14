@@ -4,7 +4,9 @@ import android.util.Log
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -40,6 +42,7 @@ import coil.request.ImageRequest
 import com.melendez.known.R
 import com.melendez.known.Screens
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Me(navTotalController: NavHostController) {
     Surface {
@@ -63,7 +66,7 @@ fun Me(navTotalController: NavHostController) {
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 6.dp)
                     .clip(CircleShape)
-                    .clickable { photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) },
+                    .combinedClickable(onClick = {},onLongClick =  { photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }),
                 model = ImageRequest.Builder(LocalContext.current).data(imageUrl)
                     .crossfade(enable = false).build(),
                 contentDescription = stringResource(R.string.avatar),

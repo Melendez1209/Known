@@ -63,4 +63,6 @@
     <string name="preview">在 Github 上预览</string>
     <string name="failure">反馈失败</string>
     <string name="input_title">请填写标题</string>
+    <string name="location">位置</string>
+    <string name="locate">定位</string>
 </resources>

@@ -1,5 +1,12 @@
 package com.melendez.known.settings.compose
 
+import android.Manifest
+import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
+import android.content.pm.PackageManager
+import android.location.Geocoder
+import android.location.LocationManager
 import android.os.Build
 import android.util.Log
 import androidx.compose.animation.AnimatedVisibility
@@ -30,6 +37,7 @@ import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -42,9 +50,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
@@ -53,17 +65,10 @@ import com.melendez.known.Screens
 @Composable
 fun Settings(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
     when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> {
-            Settings_CompactExpanded(navTotalController = navTotalController)
-        }
-
-        WindowWidthSizeClass.Medium -> {
-            Settings_Medium(navTotalController = navTotalController)
-        }
-
-        WindowWidthSizeClass.Expanded -> {
-            Settings_CompactExpanded(navTotalController = navTotalController)
-        }
+        WindowWidthSizeClass.Compact -> Settings_CompactExpanded(navTotalController = navTotalController)
+        WindowWidthSizeClass.Medium -> Settings_Medium(navTotalController = navTotalController)
+        WindowWidthSizeClass.Expanded -> Settings_CompactExpanded(navTotalController = navTotalController)
+        else -> Settings_CompactExpanded(navTotalController = navTotalController)
     }
 }
 
@@ -137,13 +142,17 @@ fun Settings_Medium(navTotalController: NavHostController) {
     }
 }
 
+@SuppressLint("MissingPermission")
 @Suppress("UNUSED_EXPRESSION")
 @Composable
 fun Settings_Content(modifier: Modifier) {
 
+    val context = LocalContext.current
+
     // Variables related to settings
     var labelMode by rememberSaveable { mutableStateOf(false) } // Whether to display the home navigation bar labels
     var colorMode by rememberSaveable { mutableStateOf(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) }
+    var cityName by rememberSaveable { mutableStateOf("") }
     var grade by rememberSaveable { mutableIntStateOf(10) }
 
     // Variables related to components
@@ -253,6 +262,19 @@ fun Settings_Content(modifier: Modifier) {
                             )
 
                             ListItem(
+                                headlineContent = { Text(text = (stringResource(R.string.location))) },
+                                trailingContent = {
+                                    TextButton(
+                                        onClick = {
+                                            cityName = getCityName(context)
+                                        }
+                                    ) {
+                                        Text(text = cityName.ifEmpty { stringResource(R.string.locate) })
+                                    }
+                                }
+                            )
+                            Divider()
+                            ListItem(
                                 headlineContent = { Text(text = stringResource(id = R.string.grade)) },
                                 trailingContent = {
                                     Button(onClick = { expanded = true }) {
@@ -286,25 +308,42 @@ fun Settings_Content(modifier: Modifier) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+fun getCityName(context: Context): String {
+    // Check if the permission has been granted
+    if (ContextCompat.checkSelfPermission(
+            context,
+            Manifest.permission.ACCESS_COARSE_LOCATION
+        ) != PackageManager.PERMISSION_GRANTED
+    ) {
+        // If the permission has not been granted, request it
+        ActivityCompat.requestPermissions(
+            context as Activity,
+            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
+            1
+        )
+        return ""
+    } else {
+        // If the permission has been granted, get the city name
+        // Get an instance of LocationManager
+        val locationManager = getSystemService(context, LocationManager::class.java)
+        // Get the device's last known location
+        val location = locationManager?.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
+        // Create an instance of Geocoder
+        val geocoder = Geocoder(context)
+        // Get the city address information
+        val addresses = location?.let { geocoder.getFromLocation(it.latitude, it.longitude, 1) }
+        // Return the city name
+        val city = addresses?.get(0)?.locality ?: ""
+        Log.d("Melendez", "getCityName: city:$city")
+        return city
+    }
+}
+
 @Preview(device = "id:pixel_7_pro")
 @Composable
-fun Settings_Content_Preview() {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    Settings_Content(
-        modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
+fun Settings_Preview() {
+    Settings(
+        widthSizeClass = WindowWidthSizeClass.Compact,
+        navTotalController = rememberNavController()
     )
 }
-
-@Preview(name = "Settings_Medium", device = "spec:parent=pixel_7_pro,orientation=landscape")
-@Composable
-fun Settings_Medium_Preview() {
-    Settings_Medium(rememberNavController())
-}
-
-@Preview(name = "Settings_CompactExpanded", device = "spec:width=673dp,height=841dp")
-@Composable
-fun Settings_Expanded_Preview() {
-    Settings_CompactExpanded(rememberNavController())
-}
-

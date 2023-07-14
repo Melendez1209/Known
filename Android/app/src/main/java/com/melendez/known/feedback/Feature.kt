@@ -37,8 +37,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.android.volley.AuthFailureError
 import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
@@ -49,17 +51,10 @@ import org.json.JSONObject
 @Composable
 fun Feature(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
     when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> {
-            Feature_CompactExpanded(navTotalController = navTotalController)
-        }
-
-        WindowWidthSizeClass.Medium -> {
-            Feature_Medium(navTotalController = navTotalController)
-        }
-
-        WindowWidthSizeClass.Expanded -> {
-            Feature_CompactExpanded(navTotalController = navTotalController)
-        }
+        WindowWidthSizeClass.Compact -> Feature_CompactExpanded(navTotalController = navTotalController)
+        WindowWidthSizeClass.Medium -> Feature_Medium(navTotalController = navTotalController)
+        WindowWidthSizeClass.Expanded -> Feature_CompactExpanded(navTotalController = navTotalController)
+        else -> Feature_CompactExpanded(navTotalController = navTotalController)
     }
 }
 
@@ -213,4 +208,13 @@ fun feedbackFeature(title: String, feature: String, context: Context, failure: S
         }
     }
     queue.add(jsonObjectRequest)
+}
+
+@Preview(device = "id:pixel_7_pro")
+@Composable
+fun Feature_Preview() {
+    Feature(
+        widthSizeClass = WindowWidthSizeClass.Compact,
+        navTotalController = rememberNavController()
+    )
 }

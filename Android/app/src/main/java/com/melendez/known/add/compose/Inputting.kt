@@ -1,5 +1,6 @@
 package com.melendez.known.add.compose
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -51,17 +52,10 @@ import com.melendez.known.R
 @Composable
 fun Inputting(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
     when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> {
-            Inputting_Compact(navTotalController = navTotalController)
-        }
-
-        WindowWidthSizeClass.Medium -> {
-            Inputting_Medium(navTotalController = navTotalController)
-        }
-
-        WindowWidthSizeClass.Expanded -> {
-            Inputting_Expanded(navTotalController = navTotalController)
-        }
+        WindowWidthSizeClass.Compact -> Inputting_Compact(navTotalController = navTotalController)
+        WindowWidthSizeClass.Medium -> Inputting_Medium(navTotalController = navTotalController)
+        WindowWidthSizeClass.Expanded -> Inputting_Expanded(navTotalController = navTotalController)
+        else -> Inputting_Compact(navTotalController = navTotalController)
     }
 }
 
@@ -299,8 +293,10 @@ fun Inputting_Expanded(navTotalController: NavHostController) {
 fun Inputting_Content(modifier: Modifier) {
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyVerticalStaggeredGrid(
-            modifier = modifier,
-            columns = StaggeredGridCells.Adaptive(320.dp)
+            modifier = modifier.padding(horizontal = 12.dp),
+            columns = StaggeredGridCells.Adaptive(320.dp),
+            verticalItemSpacing = 6.dp,
+            horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             items(6) {
                 Subject_Card("Chinese")
@@ -317,7 +313,7 @@ fun Subject_Card(subject: String) {
     var mark by rememberSaveable { mutableStateOf("") }
     var full by rememberSaveable { mutableStateOf("") }
 
-    Card(modifier = Modifier.padding(horizontal = 12.dp, vertical = 6.dp)) {
+    Card {
         Text(
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)

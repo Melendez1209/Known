@@ -62,4 +62,6 @@
     <string name="preview">Preview on Github</string>
     <string name="failure">Feedback Failure</string>
     <string name="input_title">Please input the title</string>
+    <string name="location">"Location "</string>
+    <string name="locate">Locate</string>
 </resources>

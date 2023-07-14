@@ -27,14 +27,9 @@ fun Home(paddingValues: PaddingValues? = null) {
         LazyVerticalStaggeredGrid(
             modifier = if (paddingValues != null) Modifier
                 .fillMaxSize()
-                .padding(
-                    top = 9.dp,
-                    bottom = paddingValues.calculateBottomPadding(),
-                    start = 12.dp,
-                    end = 12.dp
-                )
+                .padding(bottom = paddingValues.calculateBottomPadding())
             else Modifier.fillMaxSize(),
-            columns = StaggeredGridCells.Adaptive(180.dp),
+            columns = StaggeredGridCells.Adaptive(160.dp),
             verticalItemSpacing = 6.dp,
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {

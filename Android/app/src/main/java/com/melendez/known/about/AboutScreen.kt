@@ -45,7 +45,6 @@ fun AboutScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHos
         WindowWidthSizeClass.Medium, WindowWidthSizeClass.Expanded -> AboutScreen_MediumExpanded(
             navTotalController = navTotalController
         )
-
         else -> AboutScreen_Compat(navTotalController = navTotalController)
     }
 }
@@ -177,6 +176,9 @@ fun About_Content_Preview() {
 
 @Preview(device = "spec:parent=pixel_7_pro,orientation=landscape")
 @Composable
-fun AboutScreen_MediumExpanded_Preview() {
-    AboutScreen_MediumExpanded(navTotalController = rememberNavController())
+fun AboutScreen_Preview() {
+    AboutScreen(
+        widthSizeClass = WindowWidthSizeClass.Medium,
+        navTotalController = rememberNavController()
+    )
 }

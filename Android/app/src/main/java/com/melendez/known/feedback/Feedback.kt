@@ -32,16 +32,16 @@ import com.melendez.known.Screens
 @Composable
 fun Feedback(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
     when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> Feedback_CompatExpanded(navTotalController = navTotalController)
+        WindowWidthSizeClass.Compact -> Feedback_CompactExpanded(navTotalController = navTotalController)
         WindowWidthSizeClass.Medium -> Feedback_Medium(navTotalController = navTotalController)
-        WindowWidthSizeClass.Expanded -> Feedback_CompatExpanded(navTotalController = navTotalController)
-        else -> Feedback_CompatExpanded(navTotalController = navTotalController)
+        WindowWidthSizeClass.Expanded -> Feedback_CompactExpanded(navTotalController = navTotalController)
+        else -> Feedback_CompactExpanded(navTotalController = navTotalController)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Feedback_CompatExpanded(navTotalController: NavHostController) {
+fun Feedback_CompactExpanded(navTotalController: NavHostController) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
@@ -126,12 +126,9 @@ fun Feedback_Content(modifier: Modifier, navTotalController: NavHostController) 
 
 @Preview(device = "id:pixel_7_pro")
 @Composable
-fun Feedback_Medium_Preview() {
-    Feedback_Medium(navTotalController = rememberNavController())
-}
-
-@Preview(device = "id:pixel_7_pro")
-@Composable
-fun Feedback_CompatExpanded_Preview() {
-    Feedback_CompatExpanded(navTotalController = rememberNavController())
+fun Feedback_Preview() {
+    Feedback(
+        widthSizeClass = WindowWidthSizeClass.Compact,
+        navTotalController = rememberNavController()
+    )
 }

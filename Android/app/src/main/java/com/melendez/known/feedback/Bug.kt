@@ -62,17 +62,10 @@ import org.json.JSONObject
 @Composable
 fun Bug(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
     when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> {
-            Bug_CompactExpanded(navTotalController = navTotalController)
-        }
-
-        WindowWidthSizeClass.Medium -> {
-            Bug_Medium(navTotalController = navTotalController)
-        }
-
-        WindowWidthSizeClass.Expanded -> {
-            Bug_CompactExpanded(navTotalController = navTotalController)
-        }
+        WindowWidthSizeClass.Compact -> Bug_CompactExpanded(navTotalController = navTotalController)
+        WindowWidthSizeClass.Medium -> Bug_Medium(navTotalController = navTotalController)
+        WindowWidthSizeClass.Expanded -> Bug_CompactExpanded(navTotalController = navTotalController)
+        else -> Bug_CompactExpanded(navTotalController = navTotalController)
     }
 }
 
@@ -327,14 +320,8 @@ fun feedbackBug(title: String, steps: MutableList<String>, context: Context, fai
     queue.add(jsonObjectRequest)
 }
 
-@Preview
+@Preview(device = "id:pixel_7_pro")
 @Composable
-fun Bug_CompactExpanded_Preview() {
-    Bug_CompactExpanded(navTotalController = rememberNavController())
-}
-
-@Preview
-@Composable
-fun Bug_Medium_Preview() {
-    Bug_Medium(navTotalController = rememberNavController())
+fun Bug_Preview() {
+    Bug(widthSizeClass = WindowWidthSizeClass.Compact, navTotalController = rememberNavController())
 }
