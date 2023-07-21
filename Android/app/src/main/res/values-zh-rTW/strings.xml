@@ -3,7 +3,7 @@
     <string name="app_name">知學情</string>
     <string name="home">首頁</string>
     <string name="me">我</string>
-    <string name="history">歷史記錄</string>
+    <string name="history">歷史</string>
     <string name="add">添加</string>
     <string name="exam">考試</string>
     <string name="time">時間</string>
@@ -63,6 +63,17 @@
     <string name="preview">在 Github 上預覽</string>
     <string name="failure">反饋失敗</string>
     <string name="input_title">請填寫標題</string>
-    <string name="location">位置</string>
+    <string name="district">地區</string>
     <string name="locate">定位</string>
+    <string name="optional">課程選擇</string>
+    <string name="take_course">選科</string>
+    <string name="physiotherapy">物理</string>
+    <string name="biology">生物</string>
+    <string name="chemotherapy">化學</string>
+    <string name="political">政治</string>
+    <string name="geography">地理</string>
+    <string name="wrong_courses">您的選科數量有誤</string>
+    <string name="chinese">語文</string>
+    <string name="maths">數學</string>
+    <string name="foreign_language">外語</string>
 </resources>

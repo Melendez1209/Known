@@ -291,6 +291,16 @@ fun Inputting_Expanded(navTotalController: NavHostController) {
 
 @Composable
 fun Inputting_Content(modifier: Modifier) {
+
+
+    val chinese = stringResource(R.string.chinese)
+    val maths = stringResource(R.string.maths)
+    val language = stringResource(R.string.foreign_language)
+    val physiotherapy = stringResource(R.string.physiotherapy)
+    val chemotherapy = stringResource(R.string.chemotherapy)
+    val biology = stringResource(R.string.biology)
+    val courseList = listOf(chinese, maths, language, physiotherapy, chemotherapy, biology)
+
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyVerticalStaggeredGrid(
             modifier = modifier.padding(horizontal = 12.dp),
@@ -298,9 +308,7 @@ fun Inputting_Content(modifier: Modifier) {
             verticalItemSpacing = 6.dp,
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
-            items(6) {
-                Subject_Card("Chinese")
-            }
+            courseList.forEachIndexed { _, s -> item { Subject_Card(subject = s) } }
         }
     }
 }

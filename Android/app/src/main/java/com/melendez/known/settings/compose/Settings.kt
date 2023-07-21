@@ -9,6 +9,7 @@ import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Build
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
@@ -23,17 +24,20 @@ import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Feedback
 import androidx.compose.material.icons.rounded.NavigateBefore
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -53,6 +57,7 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -142,8 +147,8 @@ fun Settings_Medium(navTotalController: NavHostController) {
     }
 }
 
-@SuppressLint("MissingPermission")
-@Suppress("UNUSED_EXPRESSION")
+@OptIn(ExperimentalMaterial3Api::class)
+@SuppressLint("MissingPermission", "MutableCollectionMutableState")
 @Composable
 fun Settings_Content(modifier: Modifier) {
 
@@ -154,10 +159,85 @@ fun Settings_Content(modifier: Modifier) {
     var colorMode by rememberSaveable { mutableStateOf(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) }
     var cityName by rememberSaveable { mutableStateOf("") }
     var grade by rememberSaveable { mutableIntStateOf(10) }
+    var courses by remember { mutableStateOf(mutableListOf<String>()) }
+
 
     // Variables related to components
     var visibleAppearance by remember { mutableStateOf(true) }
     var visibleAnalysis by remember { mutableStateOf(true) }
+    var expanded by remember { mutableStateOf(false) }
+    var showingDialog by remember { mutableStateOf(false) }
+
+    if (showingDialog) {
+
+        val physiotherapy = stringResource(R.string.physiotherapy)
+        val chemotherapy = stringResource(R.string.chemotherapy)
+        val biology = stringResource(R.string.biology)
+        val political = stringResource(R.string.political)
+        val history = stringResource(R.string.history)
+        val geography = stringResource(R.string.geography)
+        val courseList = listOf(physiotherapy, chemotherapy, biology, political, history, geography)
+
+        val message = stringResource(id = R.string.wrong_courses)
+
+        AlertDialog(
+            onDismissRequest = {
+                if (courses.size != 3) {
+                    Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+                } else {
+                    showingDialog = false
+                }
+            },
+            title = {
+                Text(text = stringResource(id = R.string.take_course))
+            },
+            text = {
+                LazyColumn {
+                    courseList.forEachIndexed { _, s ->
+                        item {
+                            FilterChip(
+                                selected = s in courses,
+                                onClick = {
+                                    courses.apply {
+                                        if (s in this) {
+                                            remove(s)
+                                        } else {
+                                            add(s)
+                                        }
+                                    }
+                                },
+                                label = { Text(text = s) }
+                            )
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        if (courses.size != 3) {
+                            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
+                        } else {
+                            showingDialog = false
+                        }
+                    },
+                    modifier = Modifier.padding(4.dp)
+                ) {
+                    Text(stringResource(R.string.reserve))
+                }
+            }, dismissButton = {
+                OutlinedButton(
+                    onClick = {
+                        courses = mutableListOf()
+                        showingDialog = false
+                    },
+                    modifier = Modifier.padding(4.dp)
+                ) {
+                    Text(stringResource(R.string.discard))
+                }
+            }
+        )
+    }
 
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyColumn(modifier = modifier) {
@@ -215,7 +295,7 @@ fun Settings_Content(modifier: Modifier) {
                                 overlineContent = {
                                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) Text(
                                         text = stringResource(R.string.low_version)
-                                    ) else null
+                                    )
                                 },
                                 trailingContent = {
                                     Switch(
@@ -251,7 +331,6 @@ fun Settings_Content(modifier: Modifier) {
                     AnimatedVisibility(visible = visibleAnalysis) {
                         Column {
 
-                            var expanded by remember { mutableStateOf(false) }
                             val gradeList = mutableListOf(
                                 stringResource(id = R.string.g7),
                                 stringResource(id = R.string.g8),
@@ -262,7 +341,7 @@ fun Settings_Content(modifier: Modifier) {
                             )
 
                             ListItem(
-                                headlineContent = { Text(text = (stringResource(R.string.location))) },
+                                headlineContent = { Text(text = (stringResource(R.string.district))) },
                                 trailingContent = {
                                     TextButton(
                                         onClick = {
@@ -293,10 +372,26 @@ fun Settings_Content(modifier: Modifier) {
                                                 onClick = {
                                                     grade = gradeList.indexOf(it) + 7
                                                     expanded = false
-                                                    Log.d("TAG", "Settings_Content: grade:$grade")
+                                                    Log.d(
+                                                        "Melendez",
+                                                        "Settings_Content: grade:$grade"
+                                                    )
                                                 }
                                             )
                                         }
+                                    }
+                                }
+                            )
+                            Divider()
+                            ListItem(
+                                headlineContent = { Text(text = stringResource(R.string.optional)) },
+                                trailingContent = {
+                                    TextButton(onClick = { showingDialog = true }) {
+                                        Text(
+                                            text = if (courses.isNotEmpty()) courses.toString() else stringResource(
+                                                id = R.string.take_course
+                                            )
+                                        )
                                     }
                                 }
                             )
@@ -308,6 +403,7 @@ fun Settings_Content(modifier: Modifier) {
     }
 }
 
+@Suppress("DEPRECATION")
 fun getCityName(context: Context): String {
     // Check if the permission has been granted
     if (ContextCompat.checkSelfPermission(

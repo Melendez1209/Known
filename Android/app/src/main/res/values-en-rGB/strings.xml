@@ -63,6 +63,17 @@
     <string name="preview">Preview on Github</string>
     <string name="failure">Feedback Failure</string>
     <string name="input_title">Please input the title</string>
-    <string name="location">"Location "</string>
+    <string name="district">District</string>
     <string name="locate">Locate</string>
+    <string name="optional">Optional course</string>
+    <string name="take_course">Take a course</string>
+    <string name="physiotherapy">Physiotherapy</string>
+    <string name="biology">Biology</string>
+    <string name="chemotherapy">Chemotherapy</string>
+    <string name="political">Political</string>
+    <string name="geography">Geography</string>
+    <string name="wrong_courses">You have selected the wrong number of courses</string>
+    <string name="chinese">Chinese</string>
+    <string name="maths">Maths</string>
+    <string name="foreign_language">Foreign language</string>
 </resources>

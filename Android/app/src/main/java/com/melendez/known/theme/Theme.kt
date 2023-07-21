@@ -103,6 +103,7 @@ fun KnownTheme(
     if (!view.isInEditMode) {
         SideEffect {
             (view.context as Activity).window.statusBarColor = colorScheme.surface.hashCode()
+            (view.context as Activity).window.navigationBarColor = colorScheme.surface.hashCode()
             ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars
         }
     }

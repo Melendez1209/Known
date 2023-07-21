@@ -37,7 +37,6 @@ fun Home(paddingValues: PaddingValues? = null) {
                 Card(
                     modifier = Modifier
                         .height(Random.nextInt(130, 290).dp)
-                        .padding(vertical = 3.dp)
                 ) {
                     Text(
                         text = stringResource(id = R.string.exam),
