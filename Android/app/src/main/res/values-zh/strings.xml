@@ -76,4 +76,7 @@
     <string name="chinese">语文</string>
     <string name="maths">数学</string>
     <string name="foreign_language">外语</string>
+    <string name="method">方式</string>
+    <string name="screenshots">截图</string>
+    <string name="screen_record">录屏</string>
 </resources>

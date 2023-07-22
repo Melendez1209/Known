@@ -58,7 +58,7 @@
     <string name="summary">Summary</string>
     <string name="reproduce_bug">Steps to reproduce the bug</string>
     <string name="expected">Expected result</string>
-    <string name="upload">Upload screenshots or a video</string>
+    <string name="upload">Upload screenshots or a screen record</string>
     <string name="actual">Actual result</string>
     <string name="preview">Preview on Github</string>
     <string name="failure">Feedback Failure</string>
@@ -76,4 +76,7 @@
     <string name="chinese">Chinese</string>
     <string name="maths">Maths</string>
     <string name="foreign_language">Foreign language</string>
+    <string name="method">Method</string>
+    <string name="screenshots">Screenshots</string>
+    <string name="screen_record">Screen record</string>
 </resources>

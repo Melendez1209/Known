@@ -21,6 +21,7 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.Upload
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,6 +29,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -119,6 +121,7 @@ fun Bug_Medium(navTotalController: NavHostController) {
 fun Bug_Content(modifier: Modifier) {
 
     val focusManager = LocalFocusManager.current
+    var showingDialog by remember { mutableStateOf(false) }
 
     var title by remember { mutableStateOf("") }
     var expected by remember { mutableStateOf("") }
@@ -128,13 +131,56 @@ fun Bug_Content(modifier: Modifier) {
     val context = LocalContext.current
 
     val pickMultipleMedia = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.PickMultipleVisualMedia(8)
+        contract = ActivityResultContracts.PickMultipleVisualMedia(steps.size + 1)
     ) {
         Log.d("Melendez", "Me: Url = $it")
+        // TODO: Save it
     }
+    val videoPicker =
+        rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) {
+            if (it != null) {
+                Log.d("Melendez", "Me: Url = $it")
+                // TODO: Save it
+            } else {
+                Log.d("Melendez", "Me: No media selected")
+            }
+        }
 
     val failure = stringResource(R.string.failure)
     val toastTitle = stringResource(R.string.input_title)
+
+    if (showingDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                showingDialog = false
+            },
+            title = {
+                Text(text = stringResource(R.string.method))
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        showingDialog = false
+                        videoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly))
+                    },
+                    modifier = Modifier.padding(4.dp)
+                ) {
+                    Text(stringResource(R.string.screen_record))
+                }
+            },
+            dismissButton = {
+                OutlinedButton(
+                    onClick = {
+                        showingDialog = false
+                        pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    },
+                    modifier = Modifier.padding(4.dp)
+                ) {
+                    Text(text = stringResource(R.string.screenshots))
+                }
+            }
+        )
+    }
 
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyColumn(modifier = modifier) {
@@ -189,7 +235,14 @@ fun Bug_Content(modifier: Modifier) {
                                     contentDescription = stringResource(R.string.clear)
                                 )
                             }
-                        }
+                        },
+                        keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                        keyboardActions = KeyboardActions(onNext = {
+                            if (steps.all { it.isNotEmpty() } && steps.size < 10) {
+                                steps.add("")
+                            }
+                            focusManager.moveFocus(FocusDirection.Next)
+                        })
                     )
                 }
             }
@@ -213,7 +266,7 @@ fun Bug_Content(modifier: Modifier) {
                     }
                     Button(
                         onClick = {
-                            pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageAndVideo))
+                            showingDialog = true
                         }
                     ) {
                         Icon(
