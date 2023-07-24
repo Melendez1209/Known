@@ -30,7 +30,6 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -44,35 +43,43 @@ import com.melendez.known.main.inners.Me
 fun MainScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
 
     val navMainController = rememberAnimatedNavController()
+    val screens = listOf(Screens.Home, Screens.History, Screens.Me)
 
     when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> {
-            Main_Compact(navTotalController, navMainController)
-        }
+        WindowWidthSizeClass.Compact -> Main_Compact(
+            navTotalController = navTotalController,
+            navMainController = navMainController,
+            screens = screens
+        )
 
-        WindowWidthSizeClass.Medium -> {
-            Main_Medium(navTotalController, navMainController)
-        }
+        WindowWidthSizeClass.Medium -> Main_Medium(
+            navTotalController = navTotalController,
+            navMainController = navMainController,
+            screens = screens
+        )
 
-        WindowWidthSizeClass.Expanded -> {
-            Main_Expanded(navTotalController, navMainController)
-        }
+        WindowWidthSizeClass.Expanded -> Main_Expanded(
+            navTotalController = navTotalController,
+            navMainController = navMainController,
+            screens = screens
+        )
     }
 }
 
 @OptIn(ExperimentalAnimationApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun Main_Compact(navTotalController: NavHostController, navMainController: NavHostController) {
+fun Main_Compact(
+    navTotalController: NavHostController,
+    navMainController: NavHostController,
+    screens: List<Screens>,
+) {
 
-    val screens = listOf(Screens.Home, Screens.History, Screens.Me)
+    val navBackStackEntry by navMainController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
 
     Scaffold(bottomBar = {
         NavigationBar {
-
-            val navBackStackEntry by navMainController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination
-
             screens.forEach { screen ->
                 NavigationBarItem(selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
                     onClick = {
@@ -91,7 +98,8 @@ fun Main_Compact(navTotalController: NavHostController, navMainController: NavHo
                             imageVector = screen.icon,
                             contentDescription = stringResource(screen.resourceId)
                         )
-                    })
+                    }
+                )
             }
         }
     }, floatingActionButton = {
@@ -113,26 +121,21 @@ fun Main_Compact(navTotalController: NavHostController, navMainController: NavHo
     }
 }
 
-@Preview(name = "Main_Compact", device = "id:pixel_7_pro")
-@Composable
-fun Main_Compact_Preview() {
-    Main_Compact(rememberNavController(), rememberNavController())
-}
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun Main_Medium(navTotalController: NavHostController, navMainController: NavHostController) {
+fun Main_Medium(
+    navTotalController: NavHostController,
+    navMainController: NavHostController,
+    screens: List<Screens>,
+) {
+
+    val navBackStackEntry by navMainController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
+
     Surface(modifier = Modifier.fillMaxSize()) {
         Row {
-
-            val screens = listOf(Screens.Home, Screens.History, Screens.Me)
-
             NavigationRail {
-
-                val navBackStackEntry by navMainController.currentBackStackEntryAsState()
-                val currentDestination = navBackStackEntry?.destination
-
                 screens.forEach { screen ->
                     NavigationRailItem(selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
                         onClick = {
@@ -152,7 +155,8 @@ fun Main_Medium(navTotalController: NavHostController, navMainController: NavHos
                                 imageVector = screen.icon,
                                 contentDescription = stringResource(screen.resourceId)
                             )
-                        })
+                        }
+                    )
                 }
             }
             Scaffold(floatingActionButton = {
@@ -176,26 +180,20 @@ fun Main_Medium(navTotalController: NavHostController, navMainController: NavHos
     }
 }
 
-
-@Preview(name = "Main_Medium", device = "spec:parent=pixel_7_pro,orientation=landscape")
-@Composable
-fun Main_Medium_Preview() {
-    Main_Medium(rememberNavController(), rememberNavController())
-}
-
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalAnimationApi::class)
 @Composable
-fun Main_Expanded(navTotalController: NavHostController, navMainController: NavHostController) {
+fun Main_Expanded(
+    navTotalController: NavHostController,
+    navMainController: NavHostController,
+    screens: List<Screens>,
+) {
 
-    val screens = listOf(Screens.Home, Screens.History, Screens.Me)
+    val navBackStackEntry by navMainController.currentBackStackEntryAsState()
+    val currentDestination = navBackStackEntry?.destination
 
     Surface(modifier = Modifier.fillMaxSize()) {
         PermanentNavigationDrawer(drawerContent = {
-
-            val navBackStackEntry by navMainController.currentBackStackEntryAsState()
-            val currentDestination = navBackStackEntry?.destination
-
             ModalDrawerSheet {
                 screens.forEach { screen ->
                     NavigationDrawerItem(label = { Text(text = stringResource(screen.resourceId)) },
@@ -217,7 +215,8 @@ fun Main_Expanded(navTotalController: NavHostController, navMainController: NavH
                                 imageVector = screen.icon,
                                 contentDescription = stringResource(screen.resourceId)
                             )
-                        })
+                        }
+                    )
                 }
             }
         }) {
@@ -244,8 +243,12 @@ fun Main_Expanded(navTotalController: NavHostController, navMainController: NavH
     }
 }
 
-@Preview(name = "Main_Expanded", device = "spec:width=673dp,height=841dp")
+@OptIn(ExperimentalAnimationApi::class)
+@Preview(device = "id:pixel_7_pro")
 @Composable
-fun Main_Expanded_Preview() {
-    Main_Expanded(rememberNavController(), rememberNavController())
+fun MainScreen_Preview() {
+    MainScreen(
+        widthSizeClass = WindowWidthSizeClass.Compact,
+        navTotalController = rememberAnimatedNavController()
+    )
 }

@@ -51,17 +51,6 @@ import com.melendez.known.R
 
 @Composable
 fun Inputting(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
-    when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> Inputting_Compact(navTotalController = navTotalController)
-        WindowWidthSizeClass.Medium -> Inputting_Medium(navTotalController = navTotalController)
-        WindowWidthSizeClass.Expanded -> Inputting_Expanded(navTotalController = navTotalController)
-        else -> Inputting_Compact(navTotalController = navTotalController)
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Inputting_Compact(navTotalController: NavHostController) {
 
     var showingDialog by remember { mutableStateOf(false) }
     var examName by rememberSaveable { mutableStateOf("") }
@@ -106,12 +95,47 @@ fun Inputting_Compact(navTotalController: NavHostController) {
         )
     }
 
+    when (widthSizeClass) {
+        WindowWidthSizeClass.Compact -> Inputting_Compact(
+            navTotalController = navTotalController,
+            onShowingChange = { showingDialog = it },
+            examName = examName
+        )
+
+        WindowWidthSizeClass.Medium -> Inputting_Medium(
+            navTotalController = navTotalController,
+            onShowingChange = { showingDialog = it },
+            examName = examName
+        )
+
+        WindowWidthSizeClass.Expanded -> Inputting_Expanded(
+            navTotalController = navTotalController,
+            onShowingChange = { showingDialog = it },
+            examName = examName
+        )
+
+        else -> Inputting_Compact(
+            navTotalController = navTotalController,
+            onShowingChange = { showingDialog = it },
+            examName = examName
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Inputting_Compact(
+    navTotalController: NavHostController,
+    onShowingChange: (Boolean) -> Unit,
+    examName: String,
+) {
+
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
             title = {
-                TextButton(onClick = { showingDialog = true }) {
+                TextButton(onClick = { onShowingChange(true) }) {
                     Text(
-                        text = if (examName.isEmpty()) stringResource(R.string.exam) + 0 else examName,
+                        text = examName.ifEmpty { stringResource(R.string.exam) + 0 },
                         style = MaterialTheme.typography.headlineSmall
                     )
                 }
@@ -137,59 +161,20 @@ fun Inputting_Compact(navTotalController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Inputting_Medium(navTotalController: NavHostController) {
+fun Inputting_Medium(
+    navTotalController: NavHostController,
+    onShowingChange: (Boolean) -> Unit,
+    examName: String
+) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
-    var showingDialog by remember { mutableStateOf(false) }
-    var examName by rememberSaveable { mutableStateOf("") }
-
-    if (showingDialog) {
-        AlertDialog(
-            onDismissRequest = {
-                showingDialog = false
-            },
-            title = {
-                Text(text = stringResource(id = R.string.name_this))
-            },
-            text = {
-                OutlinedTextField(
-                    value = examName,
-                    onValueChange = { examName = it },
-                    singleLine = true,
-                    label = { Text(text = stringResource(R.string.exam_name)) }
-                )
-            },
-            confirmButton = {
-                Button(
-                    enabled = examName.isNotEmpty(),
-                    onClick = {
-                        showingDialog = false
-                    },
-                    modifier = Modifier.padding(4.dp)
-                ) {
-                    Text(stringResource(R.string.reserve))
-                }
-            }, dismissButton = {
-                OutlinedButton(
-                    onClick = {
-                        showingDialog = false
-                        examName = ""
-                    },
-                    modifier = Modifier.padding(4.dp)
-                ) {
-                    Text(stringResource(R.string.discard))
-                }
-            }
-        )
-    }
 
     Column {
         MediumTopAppBar(
             title = {
-                TextButton(onClick = { showingDialog = true }) {
+                TextButton(onClick = { onShowingChange(true) }) {
                     Text(
-                        text = if (examName.isEmpty()) stringResource(R.string.exam) + 0 else examName,
+                        text = examName.ifEmpty { stringResource(R.string.exam) + 0 },
                         style = MaterialTheme.typography.headlineSmall
                     )
                 }
@@ -214,59 +199,20 @@ fun Inputting_Medium(navTotalController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Inputting_Expanded(navTotalController: NavHostController) {
+fun Inputting_Expanded(
+    navTotalController: NavHostController,
+    onShowingChange: (Boolean) -> Unit,
+    examName: String
+) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
-    var showingDialog by remember { mutableStateOf(false) }
-    var examName by rememberSaveable { mutableStateOf("") }
-
-    if (showingDialog) {
-        AlertDialog(
-            onDismissRequest = {
-                showingDialog = false
-            },
-            title = {
-                Text(text = stringResource(id = R.string.name_this))
-            },
-            text = {
-                OutlinedTextField(
-                    value = examName,
-                    onValueChange = { examName = it },
-                    singleLine = true,
-                    label = { Text(text = stringResource(R.string.exam_name)) }
-                )
-            },
-            confirmButton = {
-                Button(
-                    enabled = examName.isNotEmpty(),
-                    onClick = {
-                        showingDialog = false
-                    },
-                    modifier = Modifier.padding(4.dp)
-                ) {
-                    Text(stringResource(R.string.reserve))
-                }
-            }, dismissButton = {
-                OutlinedButton(
-                    onClick = {
-                        examName = ""
-                        showingDialog = false
-                    },
-                    modifier = Modifier.padding(4.dp)
-                ) {
-                    Text(stringResource(R.string.discard))
-                }
-            }
-        )
-    }
 
     Column {
         LargeTopAppBar(
             title = {
-                TextButton(onClick = { showingDialog = true }) {
+                TextButton(onClick = { onShowingChange(true) }) {
                     Text(
-                        text = if (examName.isEmpty()) stringResource(R.string.exam) + 0 else examName,
+                        text = examName.ifEmpty { stringResource(R.string.exam) + 0 },
                         style = MaterialTheme.typography.headlineSmall
                     )
                 }
