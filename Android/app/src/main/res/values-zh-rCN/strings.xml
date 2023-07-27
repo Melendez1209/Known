@@ -58,7 +58,7 @@
     <string name="summary">内容</string>
     <string name="reproduce_bug">复现步骤</string>
     <string name="expected">期望结果</string>
-    <string name="upload">上传截图或视频</string>
+    <string name="upload">上传截图或录屏</string>
     <string name="actual">实际结果</string>
     <string name="preview">在 Github 上预览</string>
     <string name="failure">反馈失败</string>
@@ -79,4 +79,5 @@
     <string name="method">方式</string>
     <string name="screenshots">截图</string>
     <string name="screen_record">录屏</string>
+    <string name="selected">已选中</string>
 </resources>
