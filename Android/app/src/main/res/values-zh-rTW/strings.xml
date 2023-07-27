@@ -58,7 +58,7 @@
     <string name="summary">內容</string>
     <string name="reproduce_bug">復現步驟</string>
     <string name="expected">期望結果</string>
-    <string name="upload">上傳截圖或視頻</string>
+    <string name="upload">上傳截圖或錄屏</string>
     <string name="actual">實際結果</string>
     <string name="preview">在 Github 上預覽</string>
     <string name="failure">反饋失敗</string>
@@ -79,4 +79,5 @@
     <string name="method">方式</string>
     <string name="screenshots">截圖</string>
     <string name="screen_record">錄屏</string>
+    <string name="selected">已選中</string>
 </resources>

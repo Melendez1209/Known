@@ -12,7 +12,10 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -22,6 +25,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Clear
+import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material.icons.rounded.Feedback
 import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material3.AlertDialog
@@ -57,7 +61,6 @@ import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.Wallpapers
 import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -147,7 +150,7 @@ fun Settings_Medium(navTotalController: NavHostController) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @SuppressLint("MissingPermission", "MutableCollectionMutableState")
 @Composable
 fun Settings_Content(modifier: Modifier) {
@@ -159,7 +162,7 @@ fun Settings_Content(modifier: Modifier) {
     var colorMode by rememberSaveable { mutableStateOf(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) }
     var cityName by rememberSaveable { mutableStateOf("") }
     var grade by rememberSaveable { mutableIntStateOf(10) }
-    var courses by remember { mutableStateOf(mutableListOf<String>()) }
+    val courses = rememberSaveable { mutableListOf<String>() }
 
 
     // Variables related to components
@@ -182,33 +185,43 @@ fun Settings_Content(modifier: Modifier) {
 
         AlertDialog(
             onDismissRequest = {
-                if (courses.size != 3) {
-                    Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-                } else {
-                    showingDialog = false
-                }
+                courses.clear()
+                showingDialog = false
             },
             title = {
                 Text(text = stringResource(id = R.string.take_course))
             },
             text = {
-                LazyColumn {
-                    courseList.forEachIndexed { _, s ->
-                        item {
-                            FilterChip(
-                                selected = s in courses,
-                                onClick = {
-                                    courses.apply {
-                                        if (s in this) {
-                                            remove(s)
-                                        } else {
-                                            add(s)
-                                        }
+                FlowColumn(horizontalArrangement = Arrangement.Center) {
+                    courseList.forEach() { s ->
+
+                        var selected by rememberSaveable { mutableStateOf(s in courses) }
+
+                        FilterChip(
+                            modifier = Modifier.padding(horizontal = 3.dp),
+                                    selected = selected,
+                            leadingIcon = {
+                                Row {
+                                    AnimatedVisibility(visible = s in courses) {
+                                        Icon(
+                                            imageVector = Icons.Rounded.Done,
+                                            contentDescription = stringResource(R.string.selected)
+                                        )
                                     }
-                                },
-                                label = { Text(text = s) }
-                            )
-                        }
+                                }
+                            },
+                            onClick = {
+                                courses.apply {
+                                    if (s in this) {
+                                        remove(s)
+                                    } else {
+                                        add(s)
+                                    }
+                                }
+                                selected = !selected
+                            },
+                            label = { Text(text = s) }
+                        )
                     }
                 }
             },
@@ -228,7 +241,7 @@ fun Settings_Content(modifier: Modifier) {
             }, dismissButton = {
                 OutlinedButton(
                     onClick = {
-                        courses = mutableListOf()
+                        courses.clear()
                         showingDialog = false
                     },
                     modifier = Modifier.padding(4.dp)
@@ -246,7 +259,7 @@ fun Settings_Content(modifier: Modifier) {
                     Button(
                         modifier = Modifier.align(Alignment.CenterHorizontally),
                         onClick = {
-                            //TODO:Login
+                            // TODO: Login
                         }
                     ) {
                         Text(text = stringResource(R.string.sign_to))

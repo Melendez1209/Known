@@ -66,7 +66,7 @@
     <string name="district">District</string>
     <string name="locate">Locate</string>
     <string name="optional">Optional course</string>
-    <string name="take_course">Take a course</string>
+    <string name="take_course">Take courses</string>
     <string name="physiotherapy">Physiotherapy</string>
     <string name="biology">Biology</string>
     <string name="chemotherapy">Chemotherapy</string>
@@ -79,4 +79,5 @@
     <string name="method">Method</string>
     <string name="screenshots">Screenshots</string>
     <string name="screen_record">Screen record</string>
+    <string name="selected">Selected</string>
 </resources>
