@@ -17,13 +17,18 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.AttachMoney
 import androidx.compose.material.icons.rounded.Feedback
+import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.PeopleAlt
 import androidx.compose.material.icons.rounded.PrivacyTip
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.Divider
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -49,10 +54,22 @@ fun AboutScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHos
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen_Compat(navTotalController: NavHostController) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Column {
+            CenterAlignedTopAppBar(
+                title = { Text(text = stringResource(id = R.string.about)) },
+                navigationIcon = {
+                    IconButton(onClick = { navTotalController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Rounded.NavigateBefore,
+                            contentDescription = stringResource(id = R.string.back)
+                        )
+                    }
+                }
+            )
             Image(
                 painter = painterResource(id = R.mipmap.ic_launcher_foreground),
                 contentDescription = stringResource(id = R.string.app_name),
@@ -66,22 +83,36 @@ fun AboutScreen_Compat(navTotalController: NavHostController) {
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen_MediumExpanded(navTotalController: NavHostController) {
     Surface(modifier = Modifier.fillMaxSize()) {
-        Row(
-            modifier = Modifier.fillMaxSize(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            Image(
-                painter = painterResource(id = R.mipmap.ic_launcher_foreground),
-                contentDescription = stringResource(id = R.string.app_name),
-                modifier = Modifier
-                    .fillMaxHeight()
-                    .width(240.dp)
-                    .padding(vertical = 12.dp)
+        Column {
+            TopAppBar(
+                title = { Text(text = stringResource(id = R.string.about)) },
+                navigationIcon = {
+                    IconButton(onClick = { navTotalController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Rounded.NavigateBefore,
+                            contentDescription = stringResource(id = R.string.back)
+                        )
+                    }
+                }
             )
-            About_Content(navTotalController = navTotalController)
+            Row(
+                modifier = Modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.SpaceBetween
+            ) {
+                Image(
+                    painter = painterResource(id = R.mipmap.ic_launcher_foreground),
+                    contentDescription = stringResource(id = R.string.app_name),
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .width(280.dp)
+                        .padding(vertical = 12.dp)
+                )
+                About_Content(navTotalController = navTotalController)
+            }
         }
     }
 }
@@ -94,6 +125,7 @@ fun About_Content(navTotalController: NavHostController) {
     LazyColumn {
         item {
             ListItem(
+                headlineContent = { Text(text = stringResource(id = R.string.developers)) },
                 modifier = Modifier.clickable {
                     val intent = Intent(
                         Intent.ACTION_VIEW,
@@ -101,7 +133,6 @@ fun About_Content(navTotalController: NavHostController) {
                     )
                     context.startActivity(intent)
                 },
-                headlineContent = { Text(text = stringResource(id = R.string.developers)) },
                 supportingContent = { Text(text = stringResource(id = R.string.all_contributors)) },
                 leadingContent = {
                     Icon(
@@ -114,6 +145,7 @@ fun About_Content(navTotalController: NavHostController) {
         }
         item {
             ListItem(
+                headlineContent = { Text(text = stringResource(id = R.string.privacy)) },
                 modifier = Modifier.clickable {
                     val intent = Intent(
                         Intent.ACTION_VIEW,
@@ -121,7 +153,6 @@ fun About_Content(navTotalController: NavHostController) {
                     )
                     context.startActivity(intent)
                 },
-                headlineContent = { Text(text = stringResource(id = R.string.privacy)) },
                 supportingContent = { Text(text = stringResource(id = R.string.policy)) },
                 leadingContent = {
                     Icon(
@@ -134,6 +165,7 @@ fun About_Content(navTotalController: NavHostController) {
         }
         item {
             ListItem(
+                headlineContent = { Text(text = stringResource(R.string.sponsorships)) },
                 modifier = Modifier.clickable {
                     val intent = Intent(
                         Intent.ACTION_VIEW,
@@ -141,7 +173,6 @@ fun About_Content(navTotalController: NavHostController) {
                     )
                     context.startActivity(intent)
                 },
-                headlineContent = { Text(text = stringResource(R.string.sponsorships)) },
                 supportingContent = { Text(text = stringResource(R.string.better_experience)) },
                 leadingContent = {
                     Icon(
@@ -154,8 +185,8 @@ fun About_Content(navTotalController: NavHostController) {
         }
         item {
             ListItem(
-                modifier = Modifier.clickable { navTotalController.navigate(Screens.Feedback.router) },
                 headlineContent = { Text(text = stringResource(R.string.feedback)) },
+                modifier = Modifier.clickable { navTotalController.navigate(Screens.Feedback.router) },
                 supportingContent = { Text(text = stringResource(R.string.feedback_to)) },
                 leadingContent = {
                     Icon(

@@ -5,6 +5,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.Adjust
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.NavigateNext
 import androidx.compose.material3.AlertDialog
@@ -46,14 +47,6 @@ fun DRP(navTotalController: NavHostController) {
             onDismissRequest = {
                 showingDialog = false
             },
-
-            title = {
-                Text(text = stringResource(id = R.string.back))
-            },
-            text = {
-                Text(text = stringResource(R.string.discard_sum))
-            },
-
             confirmButton = {
                 Button(
                     onClick = {
@@ -65,7 +58,8 @@ fun DRP(navTotalController: NavHostController) {
                 ) {
                     Text(stringResource(R.string.reserve))
                 }
-            }, dismissButton = {
+            },
+            dismissButton = {
                 OutlinedButton(
                     onClick = {
                         showingDialog = false
@@ -75,48 +69,63 @@ fun DRP(navTotalController: NavHostController) {
                 ) {
                     Text(stringResource(R.string.discard))
                 }
+            },
+            icon = {
+                Icon(
+                    imageVector = Icons.Rounded.Adjust,
+                    contentDescription = stringResource(id = R.string.back)
+                )
+            },
+            title = {
+                Text(text = stringResource(id = R.string.back))
+            },
+            text = {
+                Text(text = stringResource(R.string.discard_sum))
             }
         )
     }
 
-    Scaffold(modifier = Modifier.fillMaxSize(), topBar = {
-        CenterAlignedTopAppBar(
-            title = { Text(text = stringResource(R.string.exam_dates)) },
-            navigationIcon = {
-                IconButton(onClick = {
-                    if (state.selectedStartDateMillis != null) showingDialog = true
-                    else navTotalController.popBackStack()
-                }) {
-                    Icon(
-                        Icons.Rounded.Close,
-                        contentDescription = stringResource(R.string.cancel)
-                    )
-                }
-            },
-            actions = {
-                IconButton(
-                    onClick = {
-                        Log.d(
-                            "Melendez",
-                            "DRP: ${state.selectedStartDateMillis!!..state.selectedEndDateMillis!!}"
+    Scaffold(
+        modifier = Modifier.fillMaxSize(),
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = { Text(text = stringResource(R.string.exam_dates)) },
+                navigationIcon = {
+                    IconButton(onClick = {
+                        if (state.selectedStartDateMillis != null) showingDialog = true
+                        else navTotalController.popBackStack()
+                    }) {
+                        Icon(
+                            Icons.Rounded.Close,
+                            contentDescription = stringResource(R.string.cancel)
                         )
-                        navTotalController.navigate(Screens.Inputting.router)
-                    },
-                    enabled = state.selectedEndDateMillis != null
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.NavigateNext,
-                        contentDescription = stringResource(R.string.next)
-                    )
+                    }
+                },
+                actions = {
+                    IconButton(
+                        onClick = {
+                            Log.d(
+                                "Melendez",
+                                "DRP: ${state.selectedStartDateMillis!!..state.selectedEndDateMillis!!}"
+                            )
+                            navTotalController.navigate(Screens.Inputting.router)
+                        },
+                        enabled = state.selectedEndDateMillis != null
+                    ) {
+                        Icon(
+                            imageVector = Icons.Rounded.NavigateNext,
+                            contentDescription = stringResource(R.string.next)
+                        )
+                    }
                 }
-            })
-    }) { padding ->
+            )
+        }) { padding ->
         Surface(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(top = padding.calculateTopPadding())
         ) {
-            DateRangePicker(modifier = Modifier.fillMaxSize(), state = state)
+            DateRangePicker(state = state, modifier = Modifier.fillMaxSize())
         }
     }
     BackHandler {

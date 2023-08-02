@@ -3,7 +3,6 @@ package com.melendez.known.feedback
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,6 +20,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -65,20 +65,27 @@ fun Feature_CompactExpanded(navTotalController: NavHostController) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    Column {
-        LargeTopAppBar(
-            title = { Text(text = stringResource(R.string.feature)) },
-            navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
-                    Icon(
-                        imageVector = Icons.Rounded.NavigateBefore,
-                        contentDescription = stringResource(R.string.back)
-                    )
-                }
-            },
-            scrollBehavior = scrollBehavior
+    Scaffold(
+        topBar = {
+            LargeTopAppBar(
+                title = { Text(text = stringResource(R.string.feature)) },
+                navigationIcon = {
+                    IconButton(onClick = { navTotalController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Rounded.NavigateBefore,
+                            contentDescription = stringResource(R.string.back)
+                        )
+                    }
+                },
+                scrollBehavior = scrollBehavior
+            )
+        }
+    ) { padding ->
+        Feature_Content(
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .padding(top = padding.calculateTopPadding())
         )
-        Feature_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
     }
 }
 
@@ -89,20 +96,27 @@ fun Feature_Medium(navTotalController: NavHostController) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    Column {
-        MediumTopAppBar(
-            title = { Text(text = stringResource(R.string.feature)) },
-            navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
-                    Icon(
-                        imageVector = Icons.Rounded.NavigateBefore,
-                        contentDescription = stringResource(R.string.back)
-                    )
-                }
-            },
-            scrollBehavior = scrollBehavior
+    Scaffold(
+        topBar = {
+            MediumTopAppBar(
+                title = { Text(text = stringResource(R.string.feature)) },
+                navigationIcon = {
+                    IconButton(onClick = { navTotalController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Rounded.NavigateBefore,
+                            contentDescription = stringResource(R.string.back)
+                        )
+                    }
+                },
+                scrollBehavior = scrollBehavior
+            )
+        }
+    ) { padding ->
+        Feature_Content(
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .padding(top = padding.calculateTopPadding())
         )
-        Feature_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
     }
 }
 
@@ -122,19 +136,14 @@ fun Feature_Content(modifier: Modifier) {
         LazyColumn(modifier = modifier) {
             item {
                 OutlinedTextField(
+                    value = title,
+                    onValueChange = { title = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 12.dp, start = 12.dp, end = 12.dp, bottom = 6.dp),
-                    value = title,
-                    onValueChange = { title = it },
-                    singleLine = true,
+
                     label = { Text(text = stringResource(R.string.title)) },
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                    keyboardActions = KeyboardActions(onNext = {
-                        focusManager.moveFocus(
-                            FocusDirection.Next
-                        )
-                    }),
+                    placeholder = { Text(text = stringResource(R.string.want_functionality)) },
                     trailingIcon = {
                         IconButton(onClick = { title = "" }, enabled = title.isNotEmpty()) {
                             Icon(
@@ -142,26 +151,30 @@ fun Feature_Content(modifier: Modifier) {
                                 contentDescription = stringResource(R.string.clear)
                             )
                         }
-                    }
+                    },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    keyboardActions = KeyboardActions(
+                        onNext = {
+                            focusManager.moveFocus(FocusDirection.Next)
+                        }
+                    ),
+                    singleLine = true
                 )
             }
             item {
                 OutlinedTextField(
+                    value = expected,
+                    onValueChange = { expected = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .height(360.dp)
                         .padding(vertical = 3.dp, horizontal = 12.dp),
-                    value = expected,
-                    onValueChange = { expected = it },
-                    label = { Text(text = stringResource(id = R.string.expected)) }
+                    label = { Text(text = stringResource(id = R.string.expected)) },
+                    placeholder = { Text(text = stringResource(id = R.string.forward)) }
                 )
             }
             item {
                 Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 6.dp),
-                    enabled = title.isNotEmpty() && expected.isNotEmpty(),
                     onClick = {
                         feedbackFeature(
                             title = title,
@@ -169,7 +182,11 @@ fun Feature_Content(modifier: Modifier) {
                             context = context,
                             failure = failure
                         )
-                    }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                    enabled = title.isNotEmpty() && expected.isNotEmpty(),
                 ) {
                     Text(text = stringResource(R.string.preview))
                 }

@@ -7,7 +7,6 @@
     <string name="add">Add new</string>
     <string name="exam">Exam</string>
     <string name="time">Time</string>
-    <string name="classification">Classify</string>
     <string name="cancel">Cancel</string>
     <string name="search">Search</string>
     <string name="clear">Clear</string>
@@ -65,7 +64,7 @@
     <string name="input_title">Please input the title</string>
     <string name="district">District</string>
     <string name="locate">Locate</string>
-    <string name="optional">Optional course</string>
+    <string name="optional">Optional courses</string>
     <string name="take_course">Take courses</string>
     <string name="physiotherapy">Physiotherapy</string>
     <string name="biology">Biology</string>
@@ -80,4 +79,12 @@
     <string name="screenshots">Screenshots</string>
     <string name="screen_record">Screen record</string>
     <string name="selected">Selected</string>
+    <string name="no_history">No history</string>
+    <string name="bug_about">A bug about …</string>
+    <string name="want_functionality">I want … Functionality.</string>
+    <string name="forward">I look forward to …</string>
+    <string name="user_name">User Name</string>
+    <string name="sign_in">Sign in</string>
+    <string name="sign_up">Sign up</string>
+    <string name="password">Password</string>
 </resources>

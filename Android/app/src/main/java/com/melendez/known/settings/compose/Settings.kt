@@ -23,6 +23,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.ArrowDropDown
+import androidx.compose.material.icons.rounded.Book
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Done
@@ -111,7 +112,10 @@ fun Settings_CompactExpanded(navTotalController: NavHostController) {
             },
             scrollBehavior = scrollBehavior
         )
-        Settings_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
+        Settings_Content(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            navTotalController = navTotalController
+        )
     }
 }
 
@@ -146,14 +150,17 @@ fun Settings_Medium(navTotalController: NavHostController) {
             },
             scrollBehavior = scrollBehavior
         )
-        Settings_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
+        Settings_Content(
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            navTotalController = navTotalController
+        )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @SuppressLint("MissingPermission", "MutableCollectionMutableState")
 @Composable
-fun Settings_Content(modifier: Modifier) {
+fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) {
 
     val context = LocalContext.current
 
@@ -188,43 +195,6 @@ fun Settings_Content(modifier: Modifier) {
                 courses.clear()
                 showingDialog = false
             },
-            title = {
-                Text(text = stringResource(id = R.string.take_course))
-            },
-            text = {
-                FlowColumn(horizontalArrangement = Arrangement.Center) {
-                    courseList.forEach() { s ->
-
-                        var selected by rememberSaveable { mutableStateOf(s in courses) }
-
-                        FilterChip(
-                            modifier = Modifier.padding(horizontal = 3.dp),
-                                    selected = selected,
-                            leadingIcon = {
-                                Row {
-                                    AnimatedVisibility(visible = s in courses) {
-                                        Icon(
-                                            imageVector = Icons.Rounded.Done,
-                                            contentDescription = stringResource(R.string.selected)
-                                        )
-                                    }
-                                }
-                            },
-                            onClick = {
-                                courses.apply {
-                                    if (s in this) {
-                                        remove(s)
-                                    } else {
-                                        add(s)
-                                    }
-                                }
-                                selected = !selected
-                            },
-                            label = { Text(text = s) }
-                        )
-                    }
-                }
-            },
             confirmButton = {
                 Button(
                     onClick = {
@@ -238,7 +208,8 @@ fun Settings_Content(modifier: Modifier) {
                 ) {
                     Text(stringResource(R.string.reserve))
                 }
-            }, dismissButton = {
+            },
+            dismissButton = {
                 OutlinedButton(
                     onClick = {
                         courses.clear()
@@ -247,6 +218,49 @@ fun Settings_Content(modifier: Modifier) {
                     modifier = Modifier.padding(4.dp)
                 ) {
                     Text(stringResource(R.string.discard))
+                }
+            },
+            icon = {
+                Icon(
+                    imageVector = Icons.Rounded.Book,
+                    contentDescription = stringResource(id = R.string.optional)
+                )
+            },
+            title = {
+                Text(text = stringResource(id = R.string.take_course))
+            },
+            text = {
+                FlowColumn(horizontalArrangement = Arrangement.Center) {
+                    courseList.forEach { s ->
+
+                        var selected by rememberSaveable { mutableStateOf(s in courses) }
+
+                        FilterChip(
+                            selected = selected,
+                            onClick = {
+                                courses.apply {
+                                    if (s in this) {
+                                        remove(s)
+                                    } else {
+                                        add(s)
+                                    }
+                                }
+                                selected = !selected
+                            },
+                            label = { Text(text = s) },
+                            modifier = Modifier.padding(horizontal = 3.dp),
+                            leadingIcon = {
+                                Row {
+                                    AnimatedVisibility(visible = s in courses) {
+                                        Icon(
+                                            imageVector = Icons.Rounded.Done,
+                                            contentDescription = stringResource(R.string.selected)
+                                        )
+                                    }
+                                }
+                            }
+                        )
+                    }
                 }
             }
         )
@@ -257,10 +271,8 @@ fun Settings_Content(modifier: Modifier) {
             item {
                 Column(Modifier.fillMaxWidth()) {
                     Button(
+                        onClick = { navTotalController.navigate(Screens.Signin.router) },
                         modifier = Modifier.align(Alignment.CenterHorizontally),
-                        onClick = {
-                            // TODO: Login
-                        }
                     ) {
                         Text(text = stringResource(R.string.sign_to))
                     }
@@ -271,10 +283,11 @@ fun Settings_Content(modifier: Modifier) {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .clickable { visibleAppearance = !visibleAppearance }) {
+                            .clickable { visibleAppearance = !visibleAppearance }
+                    ) {
                         Text(
-                            modifier = Modifier.padding(start = 12.dp, top = 6.dp, bottom = 6.dp),
                             text = stringResource(R.string.appearance),
+                            modifier = Modifier.padding(start = 12.dp, top = 6.dp, bottom = 6.dp),
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
@@ -304,12 +317,12 @@ fun Settings_Content(modifier: Modifier) {
                             Divider()
                             ListItem(
                                 headlineContent = { Text(text = stringResource(R.string.dynamic_color)) },
-                                supportingContent = { Text(text = stringResource(R.string.apply_wallpaper)) },
                                 overlineContent = {
                                     if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) Text(
                                         text = stringResource(R.string.low_version)
                                     )
                                 },
+                                supportingContent = { Text(text = stringResource(R.string.apply_wallpaper)) },
                                 trailingContent = {
                                     Switch(
                                         enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
@@ -336,8 +349,8 @@ fun Settings_Content(modifier: Modifier) {
                             .clickable { visibleAnalysis = !visibleAnalysis }
                     ) {
                         Text(
-                            modifier = Modifier.padding(start = 12.dp, top = 6.dp, bottom = 6.dp),
                             text = stringResource(R.string.analysis),
+                            modifier = Modifier.padding(start = 12.dp, top = 6.dp, bottom = 6.dp),
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
@@ -356,11 +369,7 @@ fun Settings_Content(modifier: Modifier) {
                             ListItem(
                                 headlineContent = { Text(text = (stringResource(R.string.district))) },
                                 trailingContent = {
-                                    TextButton(
-                                        onClick = {
-                                            cityName = getCityName(context)
-                                        }
-                                    ) {
+                                    TextButton(onClick = { cityName = getCityName(context) }) {
                                         Text(text = cityName.ifEmpty { stringResource(R.string.locate) })
                                     }
                                 }

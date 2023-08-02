@@ -1,12 +1,14 @@
 package com.melendez.known
 
 sealed class Screens(val router: String) {
-    object Main : Screens("MainScreen")
-    object Settings : Screens("Settings")
-    object DRP : Screens("DateRangePicker")
-    object Inputting : Screens("Inputting")
-    object About : Screens("About")
-    object Feedback : Screens("Feedback")
-    object Bug : Screens("Bug")
-    object Feature : Screens("Feature_Content")
+    data object Main : Screens("MainScreen")
+    data object Settings : Screens("Settings")
+    data object DRP : Screens("DateRangePicker")
+    data object Inputting : Screens("Inputting")
+    data object About : Screens("About")
+    data object Feedback : Screens("Feedback")
+    data object Bug : Screens("Bug")
+    data object Feature : Screens("Feature")
+    data object Signin : Screens("Signin")
+    data object Signup : Screens("Signup")
 }

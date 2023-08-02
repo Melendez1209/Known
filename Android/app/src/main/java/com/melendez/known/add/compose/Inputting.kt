@@ -11,6 +11,7 @@ import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -47,6 +48,7 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
 
 @Composable
@@ -60,17 +62,6 @@ fun Inputting(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostC
             onDismissRequest = {
                 showingDialog = false
             },
-            title = {
-                Text(text = stringResource(id = R.string.name_this))
-            },
-            text = {
-                OutlinedTextField(
-                    value = examName,
-                    onValueChange = { examName = it },
-                    singleLine = true,
-                    label = { Text(text = stringResource(R.string.exam_name)) }
-                )
-            },
             confirmButton = {
                 Button(
                     enabled = examName.isNotEmpty(),
@@ -81,7 +72,8 @@ fun Inputting(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostC
                 ) {
                     Text(stringResource(R.string.reserve))
                 }
-            }, dismissButton = {
+            },
+            dismissButton = {
                 OutlinedButton(
                     onClick = {
                         showingDialog = false
@@ -91,6 +83,23 @@ fun Inputting(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostC
                 ) {
                     Text(stringResource(R.string.discard))
                 }
+            },
+            icon = {
+                Icon(
+                    imageVector = Icons.Rounded.Edit,
+                    contentDescription = stringResource(id = R.string.name_this)
+                )
+            },
+            title = {
+                Text(text = stringResource(id = R.string.name_this))
+            },
+            text = {
+                OutlinedTextField(
+                    value = examName,
+                    onValueChange = { examName = it },
+                    singleLine = true,
+                    label = { Text(text = stringResource(R.string.exam_name)) }
+                )
             }
         )
     }
@@ -129,7 +138,6 @@ fun Inputting_Compact(
     onShowingChange: (Boolean) -> Unit,
     examName: String,
 ) {
-
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
             title = {
@@ -147,7 +155,7 @@ fun Inputting_Compact(
                         contentDescription = stringResource(R.string.back)
                     )
                 }
-            },
+            }
         )
     }) { padding ->
         Inputting_Content(
@@ -249,13 +257,11 @@ fun Inputting_Content(modifier: Modifier) {
 
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyVerticalStaggeredGrid(
-            modifier = modifier.padding(horizontal = 12.dp),
             columns = StaggeredGridCells.Adaptive(320.dp),
+            modifier = modifier.padding(horizontal = 12.dp),
             verticalItemSpacing = 6.dp,
             horizontalArrangement = Arrangement.spacedBy(6.dp)
-        ) {
-            courseList.forEachIndexed { _, s -> item { Subject_Card(subject = s) } }
-        }
+        ) { courseList.forEach { s -> item { Subject_Card(subject = s) } } }
     }
 }
 
@@ -269,26 +275,21 @@ fun Subject_Card(subject: String) {
 
     Card {
         Text(
+            text = subject,
             modifier = Modifier
                 .align(Alignment.CenterHorizontally)
                 .padding(top = 6.dp),
-            text = subject,
             style = MaterialTheme.typography.titleLarge
         )
         Row {
             OutlinedTextField(
+                value = full,
+                onValueChange = { full = it },
                 modifier = Modifier
                     .padding(horizontal = 4.dp, vertical = 6.dp)
                     .weight(1f),
-                value = full,
-                singleLine = true,
                 label = { Text(stringResource(R.string.full_mark)) },
                 placeholder = { Text(text = "150") },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.Number
-                ),
-                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Right) }),
                 trailingIcon = {
                     IconButton(onClick = { full = "" }, enabled = full.isNotEmpty()) {
                         Icon(
@@ -297,15 +298,29 @@ fun Subject_Card(subject: String) {
                         )
                     }
                 },
-                onValueChange = { full = it })
+                keyboardOptions = KeyboardOptions(
+                    imeAction = ImeAction.Next,
+                    keyboardType = KeyboardType.Number
+                ),
+                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Right) }),
+                singleLine = true,
+            )
             OutlinedTextField(
+                value = mark,
+                onValueChange = { mark = it },
                 modifier = Modifier
                     .padding(horizontal = 3.dp, vertical = 6.dp)
                     .weight(1f),
-                value = mark,
-                singleLine = true,
                 label = { Text(stringResource(R.string.mark)) },
                 placeholder = { Text(text = "150") },
+                trailingIcon = {
+                    IconButton(onClick = { mark = "" }, enabled = mark.isNotEmpty()) {
+                        Icon(
+                            imageVector = Icons.Rounded.Close,
+                            contentDescription = stringResource(R.string.clear)
+                        )
+                    }
+                },
                 isError = if (mark.isEmpty() || full.isEmpty()) false else mark.toFloat() > full.toFloat(),
                 keyboardOptions = KeyboardOptions(
                     imeAction = ImeAction.Next,
@@ -315,15 +330,8 @@ fun Subject_Card(subject: String) {
                     onNext = { focusManager.moveFocus(FocusDirection.Next) },
                     onDone = null
                 ),
-                trailingIcon = {
-                    IconButton(onClick = { mark = "" }, enabled = mark.isNotEmpty()) {
-                        Icon(
-                            imageVector = Icons.Rounded.Close,
-                            contentDescription = stringResource(R.string.clear)
-                        )
-                    }
-                },
-                onValueChange = { mark = it })
+                singleLine = true
+            )
         }
     }
 }
@@ -337,7 +345,9 @@ fun Subject_Card_Preview() {
 @OptIn(ExperimentalMaterial3Api::class)
 @Preview(device = "id:pixel_7_pro")
 @Composable
-fun InputtingContent_Preview() {
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-    Inputting_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
+fun Inputting_Preview() {
+    Inputting(
+        widthSizeClass = WindowWidthSizeClass.Compact,
+        navTotalController = rememberNavController()
+    )
 }

@@ -25,25 +25,22 @@ import kotlin.random.Random
 fun Home(paddingValues: PaddingValues? = null) {
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyVerticalStaggeredGrid(
+            columns = StaggeredGridCells.Adaptive(160.dp),
             modifier = if (paddingValues != null) Modifier
                 .fillMaxSize()
                 .padding(bottom = paddingValues.calculateBottomPadding())
             else Modifier.fillMaxSize(),
-            columns = StaggeredGridCells.Adaptive(160.dp),
             verticalItemSpacing = 6.dp,
             horizontalArrangement = Arrangement.spacedBy(6.dp)
         ) {
             items(20) {
-                Card(
-                    modifier = Modifier
-                        .height(Random.nextInt(130, 290).dp)
-                ) {
+                Card(modifier = Modifier.height(Random.nextInt(130, 290).dp)) {
                     Text(
                         text = stringResource(id = R.string.exam),
-                        style = MaterialTheme.typography.titleMedium,
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
-                            .padding(vertical = 3.dp, horizontal = 3.dp)
+                            .padding(vertical = 3.dp, horizontal = 3.dp),
+                        style = MaterialTheme.typography.titleMedium
                     )
                 }
             }

@@ -1,8 +1,8 @@
 package com.melendez.known.feedback
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.BugReport
@@ -15,6 +15,7 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MediumTopAppBar
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -45,20 +46,25 @@ fun Feedback_CompactExpanded(navTotalController: NavHostController) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    Column {
-        LargeTopAppBar(
-            title = { Text(text = stringResource(id = R.string.feedback)) },
-            navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
-                    Icon(
-                        imageVector = Icons.Rounded.NavigateBefore,
-                        contentDescription = stringResource(id = R.string.back)
-                    )
-                }
-            }, scrollBehavior = scrollBehavior
-        )
+    Scaffold(
+        topBar = {
+            LargeTopAppBar(
+                title = { Text(text = stringResource(id = R.string.feedback)) },
+                navigationIcon = {
+                    IconButton(onClick = { navTotalController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Rounded.NavigateBefore,
+                            contentDescription = stringResource(id = R.string.back)
+                        )
+                    }
+                }, scrollBehavior = scrollBehavior
+            )
+        }
+    ) { padding ->
         Feedback_Content(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .padding(top = padding.calculateTopPadding()),
             navTotalController = navTotalController
         )
     }
@@ -70,20 +76,25 @@ fun Feedback_Medium(navTotalController: NavHostController) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    Column {
-        MediumTopAppBar(
-            title = { Text(text = stringResource(id = R.string.feedback)) },
-            navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
-                    Icon(
-                        imageVector = Icons.Rounded.NavigateBefore,
-                        contentDescription = stringResource(id = R.string.back)
-                    )
-                }
-            }, scrollBehavior = scrollBehavior
-        )
+    Scaffold(
+        topBar = {
+            MediumTopAppBar(
+                title = { Text(text = stringResource(id = R.string.feedback)) },
+                navigationIcon = {
+                    IconButton(onClick = { navTotalController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Rounded.NavigateBefore,
+                            contentDescription = stringResource(id = R.string.back)
+                        )
+                    }
+                }, scrollBehavior = scrollBehavior
+            )
+        }
+    ) { padding ->
         Feedback_Content(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .padding(top = padding.calculateTopPadding()),
             navTotalController = navTotalController
         )
     }
@@ -95,8 +106,8 @@ fun Feedback_Content(modifier: Modifier, navTotalController: NavHostController) 
         LazyColumn(modifier = modifier) {
             item {
                 ListItem(
-                    modifier = Modifier.clickable { navTotalController.navigate(Screens.Bug.router) },
                     headlineContent = { Text(text = stringResource(R.string.bug)) },
+                    modifier = Modifier.clickable { navTotalController.navigate(Screens.Bug.router) },
                     supportingContent = { Text(text = stringResource(R.string.bug_report)) },
                     leadingContent = {
                         Icon(
@@ -109,8 +120,8 @@ fun Feedback_Content(modifier: Modifier, navTotalController: NavHostController) 
             }
             item {
                 ListItem(
-                    modifier = Modifier.clickable { navTotalController.navigate(Screens.Feature.router) },
                     headlineContent = { Text(text = stringResource(R.string.feature)) },
+                    modifier = Modifier.clickable { navTotalController.navigate(Screens.Feature.router) },
                     supportingContent = { Text(text = stringResource(R.string.feature_request)) },
                     leadingContent = {
                         Icon(

@@ -78,44 +78,48 @@ fun Main_Compact(
     val navBackStackEntry by navMainController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
-    Scaffold(bottomBar = {
-        NavigationBar {
-            screens.forEach { screen ->
-                NavigationBarItem(selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
-                    onClick = {
-                        navMainController.navigate(screen.router) {
-                            popUpTo(navMainController.graph.findStartDestination().id) {
-                                saveState = true
-                            }// Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
-                            launchSingleTop =
-                                true//Avoid multiple copies of the same destination when reelecting the same item
-                            restoreState =
-                                true // Restore state when reelecting a previously selected item
+    Scaffold(
+        bottomBar = {
+            NavigationBar {
+                screens.forEach { screen ->
+                    NavigationBarItem(selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
+                        onClick = {
+                            navMainController.navigate(screen.router) {
+                                popUpTo(navMainController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }// Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
+                                launchSingleTop =
+                                    true//Avoid multiple copies of the same destination when reelecting the same item
+                                restoreState =
+                                    true // Restore state when reelecting a previously selected item
+                            }
+                        },
+                        icon = {
+                            Icon(
+                                imageVector = screen.icon,
+                                contentDescription = stringResource(screen.resourceId)
+                            )
                         }
-                    },
-                    icon = {
-                        Icon(
-                            imageVector = screen.icon,
-                            contentDescription = stringResource(screen.resourceId)
-                        )
-                    }
+                    )
+                }
+            }
+        }, floatingActionButton = {
+            FloatingActionButton(onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) }) {
+                Icon(
+                    imageVector = Icons.Rounded.Add,
+                    contentDescription = stringResource(R.string.add)
                 )
             }
         }
-    }, floatingActionButton = {
-        FloatingActionButton(onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) }) {
-            Icon(
-                imageVector = Icons.Rounded.Add, contentDescription = stringResource(R.string.add)
-            )
-        }
-    }) { paddings ->
+    ) { paddings ->
         AnimatedNavHost(
             navController = navMainController,
-            startDestination = Screens.Home.router,
-            modifier = Modifier.fillMaxSize()
+            startDestination = Screens.Home.router
         ) {
             composable(Screens.Home.router) { Home(paddings) }
-            composable(Screens.History.router) { History(paddings) }
+            composable(Screens.History.router) {
+                History(paddings, navTotalController = navTotalController)
+            }
             composable(Screens.Me.router) { Me(navTotalController) }
         }
     }
@@ -137,7 +141,8 @@ fun Main_Medium(
         Row {
             NavigationRail {
                 screens.forEach { screen ->
-                    NavigationRailItem(selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
+                    NavigationRailItem(
+                        selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
                         onClick = {
                             navMainController.navigate(screen.router) {
                                 // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
@@ -159,20 +164,22 @@ fun Main_Medium(
                     )
                 }
             }
-            Scaffold(floatingActionButton = {
-                LargeFloatingActionButton(onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) }) {
-                    Icon(
-                        imageVector = Icons.Rounded.Add,
-                        contentDescription = stringResource(R.string.add)
-                    )
+            Scaffold(
+                floatingActionButton = {
+                    LargeFloatingActionButton(onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) }) {
+                        Icon(
+                            imageVector = Icons.Rounded.Add,
+                            contentDescription = stringResource(R.string.add)
+                        )
+                    }
                 }
-            }) {
+            ) {
                 AnimatedNavHost(
                     navController = navMainController,
                     startDestination = Screens.Home.router
                 ) {
                     composable(Screens.Home.router) { Home() }
-                    composable(Screens.History.router) { History() }
+                    composable(Screens.History.router) { History(navTotalController = navTotalController) }
                     composable(Screens.Me.router) { Me(navTotalController) }
                 }
             }
@@ -193,49 +200,56 @@ fun Main_Expanded(
     val currentDestination = navBackStackEntry?.destination
 
     Surface(modifier = Modifier.fillMaxSize()) {
-        PermanentNavigationDrawer(drawerContent = {
-            ModalDrawerSheet {
-                screens.forEach { screen ->
-                    NavigationDrawerItem(label = { Text(text = stringResource(screen.resourceId)) },
-                        selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
-                        onClick = {
-                            navMainController.navigate(screen.router) {
-                                // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
-                                popUpTo(navMainController.graph.findStartDestination().id) {
-                                    saveState = true
+        PermanentNavigationDrawer(
+            drawerContent = {
+                ModalDrawerSheet {
+                    screens.forEach { screen ->
+                        NavigationDrawerItem(
+                            label = { Text(text = stringResource(screen.resourceId)) },
+                            selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
+                            onClick = {
+                                navMainController.navigate(screen.router) {
+                                    // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
+                                    popUpTo(navMainController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }
+                                    launchSingleTop =
+                                        true//Avoid multiple copies of the same destination when reelecting the same item
+                                    restoreState =
+                                        true // Restore state when reelecting a previously selected item
                                 }
-                                launchSingleTop =
-                                    true//Avoid multiple copies of the same destination when reelecting the same item
-                                restoreState =
-                                    true // Restore state when reelecting a previously selected item
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = screen.icon,
+                                    contentDescription = stringResource(screen.resourceId)
+                                )
                             }
-                        },
-                        icon = {
-                            Icon(
-                                imageVector = screen.icon,
-                                contentDescription = stringResource(screen.resourceId)
-                            )
-                        }
-                    )
+                        )
+                    }
                 }
             }
-        }) {
-            Scaffold(floatingActionButton = {
-                ExtendedFloatingActionButton(onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) },
-                    icon = {
-                        Icon(
-                            imageVector = Icons.Rounded.Add,
-                            contentDescription = stringResource(id = R.string.add)
-                        )
-                    },
-                    text = { Text(text = stringResource(id = R.string.add)) })
-            }) {
+        ) {
+            Scaffold(
+                floatingActionButton = {
+                    ExtendedFloatingActionButton(
+                        text = { Text(text = stringResource(id = R.string.add)) },
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Rounded.Add,
+                                contentDescription = stringResource(id = R.string.add)
+                            )
+                        },
+                        onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) }
+                    )
+                }
+            ) {
                 AnimatedNavHost(
                     navController = navMainController,
                     startDestination = Screens.Home.router
                 ) {
                     composable(Screens.Home.router) { Home() }
-                    composable(Screens.History.router) { History() }
+                    composable(Screens.History.router) { History(navTotalController = navTotalController) }
                     composable(Screens.Me.router) { Me(navTotalController) }
                 }
             }

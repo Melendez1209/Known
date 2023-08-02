@@ -60,23 +60,29 @@ fun Me(navTotalController: NavHostController) {
                 }
 
             AsyncImage(
+                model = ImageRequest.Builder(LocalContext.current).data(imageUrl)
+                    .crossfade(enable = false).build(),
+                contentDescription = stringResource(R.string.avatar),
                 modifier = Modifier
                     .height(80.dp)
                     .width(80.dp)
                     .align(Alignment.CenterHorizontally)
                     .padding(top = 6.dp)
                     .clip(CircleShape)
-                    .combinedClickable(onClick = {},onLongClick =  { photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }),
-                model = ImageRequest.Builder(LocalContext.current).data(imageUrl)
-                    .crossfade(enable = false).build(),
-                contentDescription = stringResource(R.string.avatar),
+                    .combinedClickable(
+                        onClick = { navTotalController.navigate(Screens.Signin.router) },
+                        onDoubleClick = { navTotalController.navigate(Screens.Signup.router) },
+                        onLongClick = {
+                            photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                        }
+                    ),
                 contentScale = ContentScale.Crop
             )
             ListItem(
+                headlineContent = { Text(text = stringResource(id = R.string.settings)) },
                 modifier = Modifier
                     .clickable { navTotalController.navigate(Screens.Settings.router) }
                     .fillMaxWidth(),
-                headlineContent = { Text(text = stringResource(id = R.string.settings)) },
                 leadingContent = {
                     Icon(
                         imageVector = Icons.Rounded.Settings,
@@ -92,10 +98,10 @@ fun Me(navTotalController: NavHostController) {
             )
             Divider()
             ListItem(
+                headlineContent = { Text(text = stringResource(R.string.about)) },
                 modifier = Modifier
                     .clickable { navTotalController.navigate(Screens.About.router) }
                     .fillMaxWidth(),
-                headlineContent = { Text(text = stringResource(R.string.about)) },
                 leadingContent = {
                     Icon(
                         imageVector = Icons.Rounded.Info,

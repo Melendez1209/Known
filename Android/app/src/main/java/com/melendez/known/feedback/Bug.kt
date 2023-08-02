@@ -7,7 +7,6 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +20,7 @@ import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.Upload
+import androidx.compose.material.icons.rounded.UploadFile
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -31,6 +31,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -77,20 +78,27 @@ fun Bug_CompactExpanded(navTotalController: NavHostController) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    Column {
-        LargeTopAppBar(
-            title = { Text(text = stringResource(R.string.bug)) },
-            navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
-                    Icon(
-                        imageVector = Icons.Rounded.NavigateBefore,
-                        contentDescription = stringResource(R.string.back)
-                    )
-                }
-            },
-            scrollBehavior = scrollBehavior
+    Scaffold(
+        topBar = {
+            LargeTopAppBar(
+                title = { Text(text = stringResource(R.string.bug)) },
+                navigationIcon = {
+                    IconButton(onClick = { navTotalController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Rounded.NavigateBefore,
+                            contentDescription = stringResource(R.string.back)
+                        )
+                    }
+                },
+                scrollBehavior = scrollBehavior
+            )
+        }
+    ) { padding ->
+        Bug_Content(
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .padding(top = padding.calculateTopPadding())
         )
-        Bug_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
     }
 }
 
@@ -100,20 +108,27 @@ fun Bug_Medium(navTotalController: NavHostController) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    Column {
-        MediumTopAppBar(
-            title = { Text(text = stringResource(R.string.bug)) },
-            navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
-                    Icon(
-                        imageVector = Icons.Rounded.NavigateBefore,
-                        contentDescription = stringResource(R.string.back)
-                    )
-                }
-            },
-            scrollBehavior = scrollBehavior
+    Scaffold(
+        topBar = {
+            MediumTopAppBar(
+                title = { Text(text = stringResource(R.string.bug)) },
+                navigationIcon = {
+                    IconButton(onClick = { navTotalController.popBackStack() }) {
+                        Icon(
+                            imageVector = Icons.Rounded.NavigateBefore,
+                            contentDescription = stringResource(R.string.back)
+                        )
+                    }
+                },
+                scrollBehavior = scrollBehavior
+            )
+        }
+    ) { padding ->
+        Bug_Content(
+            modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
+                .padding(top = padding.calculateTopPadding())
         )
-        Bug_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
     }
 }
 
@@ -154,9 +169,6 @@ fun Bug_Content(modifier: Modifier) {
             onDismissRequest = {
                 showingDialog = false
             },
-            title = {
-                Text(text = stringResource(R.string.method))
-            },
             confirmButton = {
                 Button(
                     onClick = {
@@ -178,6 +190,15 @@ fun Bug_Content(modifier: Modifier) {
                 ) {
                     Text(text = stringResource(R.string.screenshots))
                 }
+            },
+            icon = {
+                Icon(
+                    imageVector = Icons.Rounded.UploadFile,
+                    contentDescription = stringResource(id = R.string.method)
+                )
+            },
+            title = {
+                Text(text = stringResource(R.string.method))
             }
         )
     }
@@ -186,19 +207,13 @@ fun Bug_Content(modifier: Modifier) {
         LazyColumn(modifier = modifier) {
             item {
                 OutlinedTextField(
+                    value = title,
+                    onValueChange = { title = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(top = 12.dp, start = 12.dp, end = 12.dp, bottom = 6.dp),
-                    value = title,
-                    onValueChange = { title = it },
-                    singleLine = true,
                     label = { Text(text = stringResource(R.string.title)) },
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                    keyboardActions = KeyboardActions(onNext = {
-                        focusManager.moveFocus(
-                            FocusDirection.Next
-                        )
-                    }),
+                    placeholder = { Text(text = stringResource(R.string.bug_about)) },
                     trailingIcon = {
                         IconButton(onClick = { title = "" }, enabled = title.isNotEmpty()) {
                             Icon(
@@ -206,24 +221,29 @@ fun Bug_Content(modifier: Modifier) {
                                 contentDescription = stringResource(R.string.clear)
                             )
                         }
-                    }
+                    },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
+                    keyboardActions = KeyboardActions(
+                        onNext = { focusManager.moveFocus(FocusDirection.Next) }
+                    ),
+                    singleLine = true
                 )
             }
             item {
                 Text(
-                    modifier = Modifier.padding(start = 12.dp),
                     text = stringResource(R.string.reproduce_bug),
+                    modifier = Modifier.padding(start = 12.dp),
                     style = MaterialTheme.typography.titleMedium
                 )
             }
             steps.forEachIndexed { index, step ->
                 item {
                     OutlinedTextField(
+                        value = step,
+                        onValueChange = { text: String -> steps[index] = text },
                         modifier = Modifier
                             .fillMaxWidth()
                             .padding(vertical = 3.dp, horizontal = 12.dp),
-                        value = step,
-                        onValueChange = { text: String -> steps[index] = text },
                         label = { Text(text = "${index + 1}.") },
                         trailingIcon = {
                             IconButton(
@@ -237,12 +257,14 @@ fun Bug_Content(modifier: Modifier) {
                             }
                         },
                         keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                        keyboardActions = KeyboardActions(onNext = {
-                            if (steps.all { it.isNotEmpty() } && steps.size < 10) {
-                                steps.add("")
+                        keyboardActions = KeyboardActions(
+                            onNext = {
+                                if (steps.all { it.isNotEmpty() } && steps.size < 10) {
+                                    steps.add("")
+                                }
+                                focusManager.moveFocus(FocusDirection.Next)
                             }
-                            focusManager.moveFocus(FocusDirection.Next)
-                        })
+                        )
                     )
                 }
             }
@@ -254,8 +276,8 @@ fun Bug_Content(modifier: Modifier) {
                     horizontalArrangement = Arrangement.SpaceAround
                 ) {
                     Button(
-                        modifier = Modifier.align(Alignment.CenterVertically),
                         onClick = { steps.add("") },
+                        modifier = Modifier.align(Alignment.CenterVertically),
                         enabled = steps.all { it.isNotEmpty() } && steps.size < 10
                     ) {
                         Icon(
@@ -265,9 +287,7 @@ fun Bug_Content(modifier: Modifier) {
                         Text(text = stringResource(id = R.string.add))
                     }
                     Button(
-                        onClick = {
-                            showingDialog = true
-                        }
+                        onClick = { showingDialog = true }
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.Upload,
@@ -279,52 +299,51 @@ fun Bug_Content(modifier: Modifier) {
             }
             item {
                 OutlinedTextField(
+                    value = actual,
+                    onValueChange = { actual = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 3.dp, horizontal = 12.dp)
                         .height(128.dp),
-                    value = actual,
-                    onValueChange = { actual = it },
                     label = { Text(text = stringResource(R.string.actual)) },
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Next),
-                    keyboardActions = KeyboardActions(onNext = {
-                        focusManager.moveFocus(
-                            FocusDirection.Next
-                        )
-                    })
+                    keyboardActions = KeyboardActions(
+                        onNext = {
+                            focusManager.moveFocus(FocusDirection.Next)
+                        }
+                    )
                 )
             }
             item {
                 OutlinedTextField(
+                    value = expected,
+                    onValueChange = { expected = it },
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(vertical = 3.dp, horizontal = 12.dp)
                         .height(128.dp),
-                    value = expected,
-                    onValueChange = { expected = it },
                     label = { Text(text = stringResource(R.string.expected)) },
+                    placeholder = { Text(text = stringResource(R.string.forward)) },
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
-                    keyboardActions = KeyboardActions(onDone = {
-                        if (title.isNotEmpty() && actual.isNotEmpty()) {
-                            feedbackBug(
-                                title = title,
-                                steps = steps,
-                                context = context,
-                                failure = failure
-                            )
-                        } else {
-                            Toast.makeText(context, toastTitle, Toast.LENGTH_SHORT).show()
-                            Log.e("Melendez", "Bug-withoutTitle: ")
+                    keyboardActions = KeyboardActions(
+                        onDone = {
+                            if (title.isNotEmpty() && actual.isNotEmpty()) {
+                                feedbackBug(
+                                    title = title,
+                                    steps = steps,
+                                    context = context,
+                                    failure = failure
+                                )
+                            } else {
+                                Toast.makeText(context, toastTitle, Toast.LENGTH_SHORT).show()
+                                Log.e("Melendez", "Bug-withoutTitle: ")
+                            }
                         }
-                    })
+                    )
                 )
             }
             item {
                 Button(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp, vertical = 6.dp),
-                    enabled = title.isNotEmpty() && actual.isNotEmpty(),
                     onClick = {
                         feedbackBug(
                             title = title,
@@ -332,7 +351,11 @@ fun Bug_Content(modifier: Modifier) {
                             context = context,
                             failure = failure
                         )
-                    }
+                    },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 6.dp),
+                    enabled = title.isNotEmpty() && actual.isNotEmpty()
                 ) {
                     Text(text = stringResource(R.string.preview))
                 }

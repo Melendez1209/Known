@@ -7,7 +7,6 @@
     <string name="add">添加</string>
     <string name="exam">考试</string>
     <string name="time">时间</string>
-    <string name="classification">分类</string>
     <string name="cancel">取消</string>
     <string name="search">搜索</string>
     <string name="clear">清除</string>
@@ -80,4 +79,12 @@
     <string name="screenshots">截图</string>
     <string name="screen_record">录屏</string>
     <string name="selected">已选中</string>
+    <string name="no_history">暂无历史记录</string>
+    <string name="bug_about">一个关于 … 的 Bug</string>
+    <string name="want_functionality">我想要 … 功能。</string>
+    <string name="forward">我期望…</string>
+    <string name="user_name">用户名</string>
+    <string name="sign_in">登录</string>
+    <string name="sign_up">注册</string>
+    <string name="password">密码</string>
 </resources>
