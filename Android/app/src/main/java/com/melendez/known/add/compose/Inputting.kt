@@ -259,8 +259,8 @@ fun Inputting_Content(modifier: Modifier) {
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Adaptive(320.dp),
             modifier = modifier.padding(horizontal = 12.dp),
-            verticalItemSpacing = 6.dp,
-            horizontalArrangement = Arrangement.spacedBy(6.dp)
+            verticalItemSpacing = 12.dp,
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) { courseList.forEach { s -> item { Subject_Card(subject = s) } } }
     }
 }
@@ -281,7 +281,7 @@ fun Subject_Card(subject: String) {
                 .padding(top = 6.dp),
             style = MaterialTheme.typography.titleLarge
         )
-        Row {
+        Row(modifier = Modifier.padding(start = 6.dp, end = 6.dp, bottom = 6.dp)) {
             OutlinedTextField(
                 value = full,
                 onValueChange = { full = it },
