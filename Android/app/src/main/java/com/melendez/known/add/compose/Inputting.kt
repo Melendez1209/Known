@@ -138,6 +138,9 @@ fun Inputting_Compact(
     onShowingChange: (Boolean) -> Unit,
     examName: String,
 ) {
+
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     Scaffold(topBar = {
         CenterAlignedTopAppBar(
             title = {
@@ -160,6 +163,7 @@ fun Inputting_Compact(
     }) { padding ->
         Inputting_Content(
             modifier = Modifier
+                .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .fillMaxSize()
                 .padding(top = padding.calculateTopPadding())
         )
@@ -245,7 +249,6 @@ fun Inputting_Expanded(
 
 @Composable
 fun Inputting_Content(modifier: Modifier) {
-
 
     val chinese = stringResource(R.string.chinese)
     val maths = stringResource(R.string.maths)

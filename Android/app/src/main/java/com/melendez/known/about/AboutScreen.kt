@@ -29,9 +29,11 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -57,6 +59,9 @@ fun AboutScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHos
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen_Compat(navTotalController: NavHostController) {
+
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     Surface(modifier = Modifier.fillMaxSize()) {
         Column {
             CenterAlignedTopAppBar(
@@ -78,7 +83,10 @@ fun AboutScreen_Compat(navTotalController: NavHostController) {
                     .height(180.dp)
                     .padding(vertical = 12.dp)
             )
-            About_Content(navTotalController = navTotalController)
+            About_Content(
+                modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                navTotalController = navTotalController
+            )
         }
     }
 }
@@ -86,6 +94,9 @@ fun AboutScreen_Compat(navTotalController: NavHostController) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AboutScreen_MediumExpanded(navTotalController: NavHostController) {
+
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+
     Surface(modifier = Modifier.fillMaxSize()) {
         Column {
             TopAppBar(
@@ -111,18 +122,21 @@ fun AboutScreen_MediumExpanded(navTotalController: NavHostController) {
                         .width(280.dp)
                         .padding(vertical = 12.dp)
                 )
-                About_Content(navTotalController = navTotalController)
+                About_Content(
+                    modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
+                    navTotalController = navTotalController
+                )
             }
         }
     }
 }
 
 @Composable
-fun About_Content(navTotalController: NavHostController) {
+fun About_Content(modifier: Modifier, navTotalController: NavHostController) {
 
     val context = LocalContext.current
 
-    LazyColumn {
+    LazyColumn(modifier = modifier) {
         item {
             ListItem(
                 headlineContent = { Text(text = stringResource(id = R.string.developers)) },
@@ -138,26 +152,6 @@ fun About_Content(navTotalController: NavHostController) {
                     Icon(
                         imageVector = Icons.Rounded.PeopleAlt,
                         contentDescription = stringResource(id = R.string.developers)
-                    )
-                }
-            )
-            Divider()
-        }
-        item {
-            ListItem(
-                headlineContent = { Text(text = stringResource(id = R.string.privacy)) },
-                modifier = Modifier.clickable {
-                    val intent = Intent(
-                        Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/Melendez1209/Known/blob/main/LICENSE")
-                    )
-                    context.startActivity(intent)
-                },
-                supportingContent = { Text(text = stringResource(id = R.string.policy)) },
-                leadingContent = {
-                    Icon(
-                        imageVector = Icons.Rounded.PrivacyTip,
-                        contentDescription = stringResource(id = R.string.privacy)
                     )
                 }
             )
@@ -185,6 +179,26 @@ fun About_Content(navTotalController: NavHostController) {
         }
         item {
             ListItem(
+                headlineContent = { Text(text = stringResource(id = R.string.privacy)) },
+                modifier = Modifier.clickable {
+                    val intent = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://github.com/Melendez1209/Known/blob/main/LICENSE")
+                    )
+                    context.startActivity(intent)
+                },
+                supportingContent = { Text(text = stringResource(id = R.string.policy)) },
+                leadingContent = {
+                    Icon(
+                        imageVector = Icons.Rounded.PrivacyTip,
+                        contentDescription = stringResource(id = R.string.privacy)
+                    )
+                }
+            )
+            Divider()
+        }
+        item {
+            ListItem(
                 headlineContent = { Text(text = stringResource(R.string.feedback)) },
                 modifier = Modifier.clickable { navTotalController.navigate(Screens.Feedback.router) },
                 supportingContent = { Text(text = stringResource(R.string.feedback_to)) },
@@ -202,7 +216,7 @@ fun About_Content(navTotalController: NavHostController) {
 @Preview(device = "id:pixel_7_pro")
 @Composable
 fun About_Content_Preview() {
-    About_Content(navTotalController = rememberNavController())
+    About_Content(modifier = Modifier, navTotalController = rememberNavController())
 }
 
 @Preview(device = "spec:parent=pixel_7_pro,orientation=landscape")
