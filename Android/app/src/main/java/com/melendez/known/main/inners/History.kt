@@ -5,7 +5,6 @@ import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -56,26 +55,31 @@ import com.melendez.known.Screens
 @Composable
 fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostController) {
 
-    val stateList = remember { mutableStateListOf<Boolean>(false, true) }
+    val checkboxes = remember { mutableStateListOf(false, false, false) }
 
     Surface {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            if (stateList.isNotEmpty()) {
+            if (checkboxes.isNotEmpty()) {
 
                 var visible by remember { mutableStateOf(false) }
+                val rowPadding by animateDpAsState(
+                    targetValue = if (visible) 36.dp else 12.dp,
+                    label = "Checkbox spacing to expand or not"
+                )
 
-                var parentState by remember(stateList) {
-                    mutableStateOf(
-                        when {
-                            stateList.all { it } -> ToggleableState.On
-                            stateList.all { !it } -> ToggleableState.Off
-                            else -> ToggleableState.Indeterminate
-                        }
-                    )
+                var triState by remember { mutableStateOf(ToggleableState.Indeterminate) }
+                val toggleTriState = {
+                    triState = when (triState) {
+                        ToggleableState.On -> ToggleableState.Off
+                        ToggleableState.Off -> ToggleableState.On
+                        else -> ToggleableState.On
+                    }
+                    checkboxes.indices.forEach { index ->
+                        checkboxes[index] = triState == ToggleableState.On
+                    }
                 }
-                val interactionSource = remember { MutableInteractionSource() }
 
-                var text by remember { mutableStateOf("") }
+                var key by remember { mutableStateOf("") }
                 var active by remember { mutableStateOf(false) }
                 val searchbarPadding by animateDpAsState(
                     targetValue = if (active) 0.dp else 12.dp,
@@ -83,8 +87,8 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                 )
 
                 SearchBar(
-                    query = text,
-                    onQueryChange = { text = it },
+                    query = key,
+                    onQueryChange = { key = it },
                     onSearch = { active = false },
                     active = active,
                     onActiveChange = { active = it },
@@ -100,10 +104,10 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                     },
                     trailingIcon = {
                         IconButton(
-                            enabled = if (text.isNotBlank()) true else active,
+                            enabled = if (key.isNotBlank()) true else active,
                             onClick = {
-                                if (text.isNotBlank()) {
-                                    text = ""
+                                if (key.isNotBlank()) {
+                                    key = ""
                                 } else {
                                     active = false
                                 }
@@ -111,7 +115,7 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Close,
-                                contentDescription = if (text.isNotBlank()) stringResource(R.string.clear) else stringResource(
+                                contentDescription = if (key.isNotBlank()) stringResource(R.string.clear) else stringResource(
                                     R.string.close_bar
                                 )
                             )
@@ -130,7 +134,7 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                             ListItem(
                                 headlineContent = { Text(resultText) },
                                 modifier = Modifier.clickable {
-                                    text = resultText
+                                    key = resultText
                                     active = false
                                 },
                                 supportingContent = { Text(text = "$index") }, //TODO: Marks
@@ -152,45 +156,12 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                     verticalAlignment = Alignment.CenterVertically
                 ) {
                     AnimatedVisibility(visible = visible) {
-                        TriStateCheckbox(
-                            state = parentState,
-                            onClick = {
-                                when (parentState) {
-                                    ToggleableState.On -> {
-                                        stateList.forEachIndexed { index: Int, b: Boolean ->
-                                            if (b) {
-                                                stateList[index] = false
-                                            }
-                                        }
-                                        parentState = ToggleableState.On
-                                    }
-
-                                    ToggleableState.Off -> {
-                                        stateList.forEachIndexed { index: Int, b: Boolean ->
-                                            if (!b) {
-                                                stateList[index] = true
-                                            }
-                                        }
-                                        parentState = ToggleableState.On
-                                    }
-
-                                    else -> {
-                                        stateList.forEachIndexed { index: Int, b: Boolean ->
-                                            if (!b) {
-                                                stateList[index] = true
-                                            }
-                                        }
-                                        parentState = ToggleableState.On
-                                    }
-                                }
-                            },
-                            interactionSource = interactionSource
-                        )
+                        TriStateCheckbox(state = triState, onClick = toggleTriState)
                     }
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(12.dp),
+                            .padding(start = rowPadding, end = 12.dp, top = 12.dp, bottom = 12.dp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         Text(
@@ -218,12 +189,14 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                     }
                 ) {
                     LazyColumn(modifier = if (paddingValues != null) Modifier.padding(bottom = paddingValues.calculateBottomPadding()) else Modifier) {
-                        stateList.forEachIndexed { index, it ->
+                        checkboxes.forEachIndexed { index, it ->
                             item {
                                 Row(
                                     modifier = Modifier.padding(
-                                        vertical = 6.dp,
-                                        horizontal = 12.dp
+                                        top = 6.dp,
+                                        bottom = 6.dp,
+                                        start = rowPadding,
+                                        end = 12.dp
                                     ),
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
@@ -231,16 +204,19 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                                     AnimatedVisibility(visible = visible) {
                                         Checkbox(
                                             checked = it,
-                                            onCheckedChange = { stateList[index] = it })
+                                            onCheckedChange = { checkboxes[index] = it }
+                                        )
                                     }
                                     Card(
-                                        modifier = Modifier.combinedClickable(
-                                            onClick = {
-                                                //TODO:Jump to the details page
-                                            }, onLongClick = {
-                                                visible = !visible
-                                            }
-                                        )
+                                        modifier = Modifier
+                                            .combinedClickable(
+                                                onClick = {
+                                                    //TODO:Jump to the details page
+                                                }, onLongClick = {
+                                                    checkboxes[index] = !visible
+                                                    visible = !visible
+                                                }
+                                            )
                                     ) {
                                         Row(
                                             modifier = Modifier
