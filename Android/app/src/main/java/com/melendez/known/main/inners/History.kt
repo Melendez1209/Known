@@ -1,5 +1,6 @@
 package com.melendez.known.main.inners
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -55,7 +56,7 @@ import com.melendez.known.Screens
 @Composable
 fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostController) {
 
-    val checkboxes = remember { mutableStateListOf(false, false, false) }
+    var checkboxes = remember { mutableStateListOf(false, false, false) }
 
     Surface {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
@@ -85,6 +86,11 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                     targetValue = if (active) 0.dp else 12.dp,
                     label = "SearchBar spacing to expand or not"
                 )
+
+                BackHandler(enabled = visible) {
+                    visible = false
+                    checkboxes = mutableStateListOf(false, false, false)
+                }
 
                 SearchBar(
                     query = key,
@@ -204,7 +210,17 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                                     AnimatedVisibility(visible = visible) {
                                         Checkbox(
                                             checked = it,
-                                            onCheckedChange = { checkboxes[index] = it }
+                                            onCheckedChange = {
+                                                checkboxes[index] = it
+                                                triState =
+                                                    if (
+                                                        checkboxes.stream().allMatch { it }
+                                                    ) ToggleableState.On
+                                                    else if (
+                                                        checkboxes.stream().allMatch { !it }
+                                                    ) ToggleableState.Off
+                                                    else ToggleableState.Indeterminate
+                                            }
                                         )
                                     }
                                     Card(
@@ -213,7 +229,20 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                                                 onClick = {
                                                     //TODO:Jump to the details page
                                                 }, onLongClick = {
-                                                    checkboxes[index] = !visible
+                                                    if (!visible) {
+                                                        checkboxes[index] = true
+                                                        triState =
+                                                            if (
+                                                                checkboxes.stream().allMatch { it }
+                                                            ) ToggleableState.On
+                                                            else if (
+                                                                checkboxes.stream().allMatch { !it }
+                                                            ) ToggleableState.Off
+                                                            else ToggleableState.Indeterminate
+                                                    } else {
+                                                        checkboxes =
+                                                            mutableStateListOf(false, false, false)
+                                                    }
                                                     visible = !visible
                                                 }
                                             )

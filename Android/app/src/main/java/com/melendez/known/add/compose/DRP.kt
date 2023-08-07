@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Adjust
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.NavigateNext
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -96,7 +97,7 @@ fun DRP(navTotalController: NavHostController) {
                         else navTotalController.popBackStack()
                     }) {
                         Icon(
-                            Icons.Rounded.Close,
+                            imageVector = if (state.selectedStartDateMillis != null) Icons.Rounded.Close else Icons.Rounded.NavigateBefore,
                             contentDescription = stringResource(R.string.cancel)
                         )
                     }
