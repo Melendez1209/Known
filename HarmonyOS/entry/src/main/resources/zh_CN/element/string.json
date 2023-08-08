@@ -1,0 +1,28 @@
+{
+  "string": [
+    {
+      "name": "module_desc",
+      "value": "模块描述"
+    },
+    {
+      "name": "EntryAbility_desc",
+      "value": "描述"
+    },
+    {
+      "name": "EntryAbility_label",
+      "value": "知学情"
+    },
+    {
+      "name": "Tabs_home",
+      "value": "首页"
+    },
+    {
+      "name": "Tabs_history",
+      "value": "历史"
+    },
+    {
+      "name": "Tabs_me",
+      "value": "我"
+    }
+  ]
+}
