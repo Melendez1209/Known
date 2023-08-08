@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
-import androidx.compose.material3.ExtendedFloatingActionButton
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LargeFloatingActionButton
@@ -101,6 +100,9 @@ fun Main_Compact(
                                 imageVector = screen.icon,
                                 contentDescription = stringResource(screen.resourceId)
                             )
+                        },
+                        label = {
+                            Text(text = stringResource(id = screen.resourceId))
                         }
                     )
                 }
@@ -241,16 +243,12 @@ fun Main_Expanded(
         ) {
             Scaffold(
                 floatingActionButton = {
-                    ExtendedFloatingActionButton(
-                        text = { Text(text = stringResource(id = R.string.add)) },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Rounded.Add,
-                                contentDescription = stringResource(id = R.string.add)
-                            )
-                        },
-                        onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) }
-                    )
+                    LargeFloatingActionButton(onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) }) {
+                        Icon(
+                            imageVector = Icons.Rounded.Add,
+                            contentDescription = stringResource(R.string.add)
+                        )
+                    }
                 }
             ) {
                 AnimatedNavHost(

@@ -165,7 +165,6 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
     val context = LocalContext.current
 
     // Variables related to settings
-    var labelMode by rememberSaveable { mutableStateOf(false) } // Whether to display the home navigation bar labels
     var colorMode by rememberSaveable { mutableStateOf(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) }
     var cityName by rememberSaveable { mutableStateOf("") }
     var grade by rememberSaveable { mutableIntStateOf(10) }
@@ -293,27 +292,6 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
                     }
                     AnimatedVisibility(visible = visibleAppearance) {
                         Column {
-                            ListItem(
-                                headlineContent = { Text(text = stringResource(id = R.string.hint_title)) },
-                                supportingContent = {
-                                    Text(
-                                        text = if (labelMode) stringResource(id = R.string.hint_on)
-                                        else stringResource(id = R.string.hint_off)
-                                    )
-                                },
-                                trailingContent = {
-                                    Switch(
-                                        checked = labelMode,
-                                        onCheckedChange = { labelMode = it },
-                                        thumbContent = {
-                                            Icon(
-                                                imageVector = if (labelMode) Icons.Rounded.Check else Icons.Rounded.Clear,
-                                                contentDescription = ""
-                                            )
-                                        }
-                                    )
-                                }
-                            )
                             HorizontalDivider()
                             ListItem(
                                 headlineContent = { Text(text = stringResource(R.string.dynamic_color)) },
