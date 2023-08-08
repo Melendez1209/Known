@@ -22,6 +22,7 @@ import com.melendez.known.account.compose.Signin
 import com.melendez.known.account.compose.Signup
 import com.melendez.known.add.compose.DRP
 import com.melendez.known.add.compose.Inputting
+import com.melendez.known.detail.Detail
 import com.melendez.known.feedback.Bug
 import com.melendez.known.feedback.Feature
 import com.melendez.known.feedback.Feedback
@@ -151,6 +152,9 @@ class MainActivity : ComponentActivity() {
                             widthSizeClass = widthSizeClass,
                             navTotalController = navTotalController
                         )
+                    }
+                    composable(Screens.Detail.router) {
+                        Detail(navTotalController = navTotalController)
                     }
                 }
             }

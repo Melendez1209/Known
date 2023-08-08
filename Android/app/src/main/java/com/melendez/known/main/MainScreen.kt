@@ -1,3 +1,5 @@
+@file:Suppress("DEPRECATION")
+
 package com.melendez.known.main
 
 import android.annotation.SuppressLint
@@ -30,6 +32,7 @@ import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
@@ -38,11 +41,10 @@ import com.melendez.known.main.inners.History
 import com.melendez.known.main.inners.Home
 import com.melendez.known.main.inners.Me
 
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun MainScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
 
-    val navMainController = rememberAnimatedNavController()
+    val navMainController = rememberNavController()
     val screens = listOf(Screens.Home, Screens.History, Screens.Me)
 
     when (widthSizeClass) {
@@ -116,7 +118,12 @@ fun Main_Compact(
             navController = navMainController,
             startDestination = Screens.Home.router
         ) {
-            composable(Screens.Home.router) { Home(paddings) }
+            composable(Screens.Home.router) {
+                Home(
+                    paddingValues = paddings,
+                    navTotalController = navTotalController
+                )
+            }
             composable(Screens.History.router) {
                 History(paddings, navTotalController = navTotalController)
             }
@@ -178,7 +185,9 @@ fun Main_Medium(
                     navController = navMainController,
                     startDestination = Screens.Home.router
                 ) {
-                    composable(Screens.Home.router) { Home() }
+                    composable(Screens.Home.router) {
+                        Home(navTotalController = navTotalController)
+                    }
                     composable(Screens.History.router) { History(navTotalController = navTotalController) }
                     composable(Screens.Me.router) { Me(navTotalController) }
                 }
@@ -248,7 +257,9 @@ fun Main_Expanded(
                     navController = navMainController,
                     startDestination = Screens.Home.router
                 ) {
-                    composable(Screens.Home.router) { Home() }
+                    composable(Screens.Home.router) {
+                        Home(navTotalController = navTotalController)
+                    }
                     composable(Screens.History.router) { History(navTotalController = navTotalController) }
                     composable(Screens.Me.router) { Me(navTotalController) }
                 }

@@ -87,4 +87,7 @@
     <string name="sign_in">登录</string>
     <string name="sign_up">注册</string>
     <string name="password">密码</string>
+    <string name="edit">编辑</string>
+    <string name="share">分享</string>
+    <string name="print">打印</string>
 </resources>

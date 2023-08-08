@@ -31,11 +31,11 @@ import androidx.compose.material.icons.rounded.Feedback
 import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.Divider
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
@@ -314,7 +314,7 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
                                     )
                                 }
                             )
-                            Divider()
+                            HorizontalDivider()
                             ListItem(
                                 headlineContent = { Text(text = stringResource(R.string.dynamic_color)) },
                                 overlineContent = {
@@ -374,7 +374,7 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
                                     }
                                 }
                             )
-                            Divider()
+                            HorizontalDivider()
                             ListItem(
                                 headlineContent = { Text(text = stringResource(id = R.string.grade)) },
                                 trailingContent = {
@@ -404,7 +404,7 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
                                     }
                                 }
                             )
-                            Divider()
+                            HorizontalDivider()
                             ListItem(
                                 headlineContent = { Text(text = stringResource(R.string.optional)) },
                                 trailingContent = {

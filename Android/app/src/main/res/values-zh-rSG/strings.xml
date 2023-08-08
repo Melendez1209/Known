@@ -87,4 +87,7 @@
     <string name="sign_in">登錄</string>
     <string name="sign_up">註冊</string>
     <string name="password">密碼</string>
+    <string name="edit">編輯</string>
+    <string name="share">分享</string>
+    <string name="print">列印</string>
 </resources>

@@ -7,6 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -65,16 +66,34 @@ import org.json.JSONObject
 @Composable
 fun Bug(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
     when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> Bug_CompactExpanded(navTotalController = navTotalController)
-        WindowWidthSizeClass.Medium -> Bug_Medium(navTotalController = navTotalController)
-        WindowWidthSizeClass.Expanded -> Bug_CompactExpanded(navTotalController = navTotalController)
-        else -> Bug_CompactExpanded(navTotalController = navTotalController)
+        WindowWidthSizeClass.Compact -> Bug_CompactExpanded(
+            widthSizeClass = widthSizeClass,
+            navTotalController = navTotalController
+        )
+
+        WindowWidthSizeClass.Medium -> Bug_Medium(
+            widthSizeClass = widthSizeClass,
+            navTotalController = navTotalController
+        )
+
+        WindowWidthSizeClass.Expanded -> Bug_CompactExpanded(
+            widthSizeClass = widthSizeClass,
+            navTotalController = navTotalController
+        )
+
+        else -> Bug_CompactExpanded(
+            widthSizeClass = widthSizeClass,
+            navTotalController = navTotalController
+        )
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Bug_CompactExpanded(navTotalController: NavHostController) {
+fun Bug_CompactExpanded(
+    widthSizeClass: WindowWidthSizeClass,
+    navTotalController: NavHostController,
+) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
@@ -95,6 +114,7 @@ fun Bug_CompactExpanded(navTotalController: NavHostController) {
         }
     ) { padding ->
         Bug_Content(
+            widthSizeClass = widthSizeClass,
             modifier = Modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .padding(top = padding.calculateTopPadding())
@@ -104,7 +124,7 @@ fun Bug_CompactExpanded(navTotalController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Bug_Medium(navTotalController: NavHostController) {
+fun Bug_Medium(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
@@ -125,6 +145,7 @@ fun Bug_Medium(navTotalController: NavHostController) {
         }
     ) { padding ->
         Bug_Content(
+            widthSizeClass = widthSizeClass,
             modifier = Modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .padding(top = padding.calculateTopPadding())
@@ -133,7 +154,7 @@ fun Bug_Medium(navTotalController: NavHostController) {
 }
 
 @Composable
-fun Bug_Content(modifier: Modifier) {
+fun Bug_Content(widthSizeClass: WindowWidthSizeClass, modifier: Modifier) {
 
     val focusManager = LocalFocusManager.current
     var showingDialog by remember { mutableStateOf(false) }
@@ -269,31 +290,66 @@ fun Bug_Content(modifier: Modifier) {
                 }
             }
             item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(top = 3.dp, start = 12.dp, end = 12.dp),
-                    horizontalArrangement = Arrangement.SpaceAround
-                ) {
-                    Button(
-                        onClick = { steps.add("") },
-                        modifier = Modifier.align(Alignment.CenterVertically),
-                        enabled = steps.all { it.isNotEmpty() } && steps.size < 10
+                if (widthSizeClass == WindowWidthSizeClass.Compact) {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 3.dp, start = 12.dp, end = 12.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
                     ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Add,
-                            contentDescription = stringResource(id = R.string.add)
-                        )
-                        Text(text = stringResource(id = R.string.add))
+                        Button(
+                            onClick = { steps.add("") },
+                            enabled = steps.all { it.isNotEmpty() } && steps.size < 10
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Add,
+                                contentDescription = stringResource(id = R.string.add)
+                            )
+                            Text(text = stringResource(id = R.string.add))
+                        }
+                        Button(
+                            onClick = { showingDialog = true }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Upload,
+                                contentDescription = stringResource(R.string.upload)
+                            )
+                            Text(
+                                text = stringResource(R.string.upload),
+                                textAlign = TextAlign.Center
+                            )
+                        }
                     }
-                    Button(
-                        onClick = { showingDialog = true }
+                } else {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 3.dp, start = 12.dp, end = 12.dp),
+                        horizontalArrangement = Arrangement.SpaceAround
                     ) {
-                        Icon(
-                            imageVector = Icons.Rounded.Upload,
-                            contentDescription = stringResource(R.string.upload)
-                        )
-                        Text(text = stringResource(R.string.upload), textAlign = TextAlign.Center)
+                        Button(
+                            onClick = { steps.add("") },
+                            modifier = Modifier.align(Alignment.CenterVertically),
+                            enabled = steps.all { it.isNotEmpty() } && steps.size < 10
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Add,
+                                contentDescription = stringResource(id = R.string.add)
+                            )
+                            Text(text = stringResource(id = R.string.add))
+                        }
+                        Button(
+                            onClick = { showingDialog = true }
+                        ) {
+                            Icon(
+                                imageVector = Icons.Rounded.Upload,
+                                contentDescription = stringResource(R.string.upload)
+                            )
+                            Text(
+                                text = stringResource(R.string.upload),
+                                textAlign = TextAlign.Center
+                            )
+                        }
                     }
                 }
             }

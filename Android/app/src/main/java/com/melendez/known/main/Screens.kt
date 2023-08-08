@@ -10,7 +10,7 @@ import com.melendez.known.R
 
 
 sealed class Screens(val router: String, @StringRes val resourceId: Int, val icon: ImageVector) {
-    object Home : Screens("home", R.string.home, Icons.Rounded.Home)
-    object History : Screens("history", R.string.history, Icons.Rounded.History)
-    object Me : Screens("account", R.string.me, Icons.Rounded.AccountCircle)
+    data object Home : Screens("home", R.string.home, Icons.Rounded.Home)
+    data object History : Screens("history", R.string.history, Icons.Rounded.History)
+    data object Me : Screens("account", R.string.me, Icons.Rounded.AccountCircle)
 }

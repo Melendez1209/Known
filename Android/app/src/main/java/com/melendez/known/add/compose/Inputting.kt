@@ -345,7 +345,6 @@ fun Subject_Card_Preview() {
     Subject_Card(subject = "Subject")
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Preview(device = "id:pixel_7_pro")
 @Composable
 fun Inputting_Preview() {

@@ -86,4 +86,7 @@
     <string name="user_name">User Name</string>
     <string name="sign_up">Sign up</string>
     <string name="password">Password</string>
+    <string name="edit">Edit</string>
+    <string name="share">Share</string>
+    <string name="print">Print</string>
 </resources>

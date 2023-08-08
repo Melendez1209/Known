@@ -68,7 +68,7 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                     label = "Checkbox spacing to expand or not"
                 )
 
-                var triState by remember { mutableStateOf(ToggleableState.Indeterminate) }
+                var triState by remember { mutableStateOf(ToggleableState.Off) }
                 val toggleTriState = {
                     triState = when (triState) {
                         ToggleableState.On -> ToggleableState.Off
@@ -185,8 +185,8 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                     }
                 }
 
-                val _isRefreshing: MutableLiveData<Boolean> = MutableLiveData(false)
-                val isRefreshing by _isRefreshing.observeAsState(false) //TODO:Replace the LiveData with the Room
+                val refreshing: MutableLiveData<Boolean> = MutableLiveData(false)
+                val isRefreshing by refreshing.observeAsState(false) //TODO:Replace the LiveData with the Room
 
                 SwipeRefresh(
                     state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
@@ -210,7 +210,7 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                                     AnimatedVisibility(visible = visible) {
                                         Checkbox(
                                             checked = it,
-                                            onCheckedChange = {
+                                            onCheckedChange = { it ->
                                                 checkboxes[index] = it
                                                 triState =
                                                     if (
@@ -227,7 +227,7 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                                         modifier = Modifier
                                             .combinedClickable(
                                                 onClick = {
-                                                    //TODO:Jump to the details page
+                                                    navTotalController.navigate(Screens.Detail.router)
                                                 }, onLongClick = {
                                                     if (!visible) {
                                                         checkboxes[index] = true

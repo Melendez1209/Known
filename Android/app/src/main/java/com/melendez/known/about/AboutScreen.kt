@@ -21,8 +21,8 @@ import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.PeopleAlt
 import androidx.compose.material.icons.rounded.PrivacyTip
 import androidx.compose.material3.CenterAlignedTopAppBar
-import androidx.compose.material3.Divider
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
@@ -155,7 +155,7 @@ fun About_Content(modifier: Modifier, navTotalController: NavHostController) {
                     )
                 }
             )
-            Divider()
+            HorizontalDivider()
         }
         item {
             ListItem(
@@ -175,7 +175,7 @@ fun About_Content(modifier: Modifier, navTotalController: NavHostController) {
                     )
                 }
             )
-            Divider()
+            HorizontalDivider()
         }
         item {
             ListItem(
@@ -195,7 +195,7 @@ fun About_Content(modifier: Modifier, navTotalController: NavHostController) {
                     )
                 }
             )
-            Divider()
+            HorizontalDivider()
         }
         item {
             ListItem(

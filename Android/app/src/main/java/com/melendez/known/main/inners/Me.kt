@@ -17,7 +17,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.NavigateNext
 import androidx.compose.material.icons.rounded.Settings
-import androidx.compose.material3.Divider
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.Surface
@@ -96,7 +96,7 @@ fun Me(navTotalController: NavHostController) {
                     )
                 }
             )
-            Divider()
+            HorizontalDivider()
             ListItem(
                 headlineContent = { Text(text = stringResource(R.string.about)) },
                 modifier = Modifier

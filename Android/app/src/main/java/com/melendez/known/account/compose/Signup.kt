@@ -17,7 +17,6 @@ import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material3.Button
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -65,7 +64,7 @@ fun Signup(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostCont
 fun Signup_Compat(navTotalController: NavHostController) {
     Surface(modifier = Modifier.fillMaxSize()) {
         Column {
-            CenterAlignedTopAppBar(
+            TopAppBar(
                 title = { Text(text = stringResource(R.string.sign_up)) },
                 navigationIcon = {
                     IconButton(onClick = { navTotalController.popBackStack() }) {

@@ -87,4 +87,7 @@
     <string name="sign_in">Login</string>
     <string name="sign_up">Register</string>
     <string name="password">Password</string>
+    <string name="edit">Edit</string>
+    <string name="share">Share</string>
+    <string name="print">Print</string>
 </resources>
