@@ -55,7 +55,11 @@ import com.melendez.known.Screens
 @Suppress("DEPRECATION")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
-fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostController) {
+fun History(
+    paddingValues: PaddingValues? = null,
+    navTotalController: NavHostController,
+    onEditingChange: (Boolean) -> Unit
+) {
 
     var checkboxes = remember { mutableStateListOf(false, false, false) }
 
@@ -63,9 +67,9 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             if (checkboxes.isNotEmpty()) {
 
-                var visible by remember { mutableStateOf(false) }
+                var isEditing by remember { mutableStateOf(false) }
                 val rowPadding by animateDpAsState(
-                    targetValue = if (visible) 36.dp else 12.dp,
+                    targetValue = if (isEditing) 36.dp else 12.dp,
                     label = "Checkbox spacing to expand or not"
                 )
 
@@ -88,8 +92,9 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                     label = "SearchBar spacing to expand or not"
                 )
 
-                BackHandler(enabled = visible) {
-                    visible = false
+                BackHandler(enabled = isEditing) {
+                    isEditing = false
+                    onEditingChange(isEditing)
                     checkboxes = mutableStateListOf(false, false, false)
                 }
 
@@ -164,7 +169,7 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    AnimatedVisibility(visible = visible) {
+                    AnimatedVisibility(visible = isEditing) {
                         TriStateCheckbox(state = triState, onClick = toggleTriState)
                     }
                     Row(
@@ -210,7 +215,7 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                                     horizontalArrangement = Arrangement.SpaceBetween,
                                     verticalAlignment = Alignment.CenterVertically
                                 ) {
-                                    AnimatedVisibility(visible = visible) {
+                                    AnimatedVisibility(visible = isEditing) {
                                         Checkbox(
                                             checked = it,
                                             onCheckedChange = { it ->
@@ -232,7 +237,7 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                                                 onClick = {
                                                     navTotalController.navigate(Screens.Detail.router)
                                                 }, onLongClick = {
-                                                    if (!visible) {
+                                                    if (!isEditing) {
                                                         checkboxes[index] = true
                                                         triState =
                                                             if (
@@ -246,7 +251,8 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
                                                         checkboxes =
                                                             mutableStateListOf(false, false, false)
                                                     }
-                                                    visible = !visible
+                                                    isEditing = !isEditing
+                                                    onEditingChange(isEditing)
                                                 }
                                             )
                                     ) {
@@ -297,5 +303,5 @@ fun History(paddingValues: PaddingValues? = null, navTotalController: NavHostCon
 @Preview(device = "id:pixel_7_pro")
 @Composable
 fun History_Preview() {
-    History(navTotalController = rememberNavController())
+    History(navTotalController = rememberNavController(), onEditingChange = {})
 }

@@ -8,8 +8,16 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
+import androidx.compose.material.icons.rounded.Delete
+import androidx.compose.material.icons.rounded.Edit
+import androidx.compose.material.icons.rounded.Favorite
+import androidx.compose.material.icons.rounded.FavoriteBorder
+import androidx.compose.material.icons.rounded.Print
+import androidx.compose.material.icons.rounded.Share
+import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
 import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationBar
@@ -24,6 +32,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -76,33 +87,76 @@ fun Main_Compact(
     screens: List<Screens>,
 ) {
 
+    var isEditing by remember { mutableStateOf(false) }
     val navBackStackEntry by navMainController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
     Scaffold(
         bottomBar = {
             NavigationBar {
-                screens.forEach { screen ->
-                    NavigationBarItem(selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
-                        onClick = {
-                            navMainController.navigate(screen.router) {
-                                popUpTo(navMainController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }// Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
-                                launchSingleTop =
-                                    true//Avoid multiple copies of the same destination when reelecting the same item
-                                restoreState =
-                                    true // Restore state when reelecting a previously selected item
+                if (!isEditing) {
+                    screens.forEach { screen ->
+                        NavigationBarItem(selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
+                            onClick = {
+                                navMainController.navigate(screen.router) {
+                                    popUpTo(navMainController.graph.findStartDestination().id) {
+                                        saveState = true
+                                    }// Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
+                                    launchSingleTop =
+                                        true//Avoid multiple copies of the same destination when reelecting the same item
+                                    restoreState =
+                                        true // Restore state when reelecting a previously selected item
+                                }
+                            },
+                            icon = {
+                                Icon(
+                                    imageVector = screen.icon,
+                                    contentDescription = stringResource(screen.resourceId)
+                                )
+                            },
+                            label = {
+                                Text(text = stringResource(id = screen.resourceId))
+                            }
+                        )
+                    }
+                } else {
+
+                    var isFavorite by remember { mutableStateOf(false) }
+
+                    BottomAppBar(
+                        actions = {
+                            IconButton(onClick = { /*TODO*/ }) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Share,
+                                    contentDescription = stringResource(R.string.share)
+                                )
+                            }
+                            IconButton(onClick = { /*TODO*/ }) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Print,
+                                    contentDescription = stringResource(R.string.print)
+                                )
+                            }
+                            IconButton(onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) }) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Edit,
+                                    contentDescription = stringResource(R.string.edit)
+                                )
+                            }
+                            IconButton(onClick = { isFavorite = !isFavorite }) {
+                                Icon(
+                                    imageVector = if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite,
+                                    contentDescription = stringResource(R.string.share)
+                                )
                             }
                         },
-                        icon = {
-                            Icon(
-                                imageVector = screen.icon,
-                                contentDescription = stringResource(screen.resourceId)
-                            )
-                        },
-                        label = {
-                            Text(text = stringResource(id = screen.resourceId))
+                        floatingActionButton = {
+                            FloatingActionButton(onClick = { /*TODO*/ }) {
+                                Icon(
+                                    imageVector = Icons.Rounded.Delete,
+                                    contentDescription = stringResource(R.string.delete)
+                                )
+                            }
                         }
                     )
                 }
@@ -127,7 +181,10 @@ fun Main_Compact(
                 )
             }
             composable(Screens.History.router) {
-                History(paddings, navTotalController = navTotalController)
+                History(
+                    paddingValues = paddings,
+                    navTotalController = navTotalController,
+                    onEditingChange = { isEditing = it })
             }
             composable(Screens.Me.router) { Me(navTotalController) }
         }
@@ -143,6 +200,7 @@ fun Main_Medium(
     screens: List<Screens>,
 ) {
 
+    var isEditing by remember { mutableStateOf(false) }
     val navBackStackEntry by navMainController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
@@ -163,6 +221,7 @@ fun Main_Medium(
                                 restoreState =
                                     true// Restore state when reelecting a previously selected item
                             }
+                            isEditing = false
                         },
                         icon = {
                             Icon(
@@ -174,6 +233,41 @@ fun Main_Medium(
                 }
             }
             Scaffold(
+                bottomBar = {
+                    if (isEditing) {
+
+                        var isFavorite by remember { mutableStateOf(false) }
+
+                        BottomAppBar(
+                            actions = {
+                                IconButton(onClick = { /*TODO*/ }) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Share,
+                                        contentDescription = stringResource(R.string.share)
+                                    )
+                                }
+                                IconButton(onClick = { /*TODO*/ }) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Print,
+                                        contentDescription = stringResource(R.string.print)
+                                    )
+                                }
+                                IconButton(onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) }) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Edit,
+                                        contentDescription = stringResource(R.string.edit)
+                                    )
+                                }
+                                IconButton(onClick = { isFavorite = !isFavorite }) {
+                                    Icon(
+                                        imageVector = if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite,
+                                        contentDescription = stringResource(R.string.share)
+                                    )
+                                }
+                            }
+                        )
+                    }
+                },
                 floatingActionButton = {
                     LargeFloatingActionButton(onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) }) {
                         Icon(
@@ -190,7 +284,11 @@ fun Main_Medium(
                     composable(Screens.Home.router) {
                         Home(navTotalController = navTotalController)
                     }
-                    composable(Screens.History.router) { History(navTotalController = navTotalController) }
+                    composable(Screens.History.router) {
+                        History(
+                            navTotalController = navTotalController,
+                            onEditingChange = { isEditing = it })
+                    }
                     composable(Screens.Me.router) { Me(navTotalController) }
                 }
             }
@@ -207,6 +305,7 @@ fun Main_Expanded(
     screens: List<Screens>,
 ) {
 
+    var isEditing by remember { mutableStateOf(false) }
     val navBackStackEntry by navMainController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
@@ -229,6 +328,9 @@ fun Main_Expanded(
                                     restoreState =
                                         true // Restore state when reelecting a previously selected item
                                 }
+                                if (screen.router != Screens.History.router) {
+                                    isEditing = false
+                                }
                             },
                             icon = {
                                 Icon(
@@ -242,6 +344,41 @@ fun Main_Expanded(
             }
         ) {
             Scaffold(
+                bottomBar = {
+                    if (isEditing) {
+
+                        var isFavorite by remember { mutableStateOf(false) }
+
+                        BottomAppBar(
+                            actions = {
+                                IconButton(onClick = { /*TODO*/ }) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Share,
+                                        contentDescription = stringResource(R.string.share)
+                                    )
+                                }
+                                IconButton(onClick = { /*TODO*/ }) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Print,
+                                        contentDescription = stringResource(R.string.print)
+                                    )
+                                }
+                                IconButton(onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) }) {
+                                    Icon(
+                                        imageVector = Icons.Rounded.Edit,
+                                        contentDescription = stringResource(R.string.edit)
+                                    )
+                                }
+                                IconButton(onClick = { isFavorite = !isFavorite }) {
+                                    Icon(
+                                        imageVector = if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite,
+                                        contentDescription = stringResource(R.string.share)
+                                    )
+                                }
+                            }
+                        )
+                    }
+                },
                 floatingActionButton = {
                     LargeFloatingActionButton(onClick = { navTotalController.navigate(com.melendez.known.Screens.DRP.router) }) {
                         Icon(
@@ -258,7 +395,11 @@ fun Main_Expanded(
                     composable(Screens.Home.router) {
                         Home(navTotalController = navTotalController)
                     }
-                    composable(Screens.History.router) { History(navTotalController = navTotalController) }
+                    composable(Screens.History.router) {
+                        History(
+                            navTotalController = navTotalController,
+                            onEditingChange = { isEditing = it })
+                    }
                     composable(Screens.Me.router) { Me(navTotalController) }
                 }
             }

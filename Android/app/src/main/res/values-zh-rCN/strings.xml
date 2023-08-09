@@ -90,4 +90,5 @@
     <string name="edit">编辑</string>
     <string name="share">分享</string>
     <string name="print">打印</string>
+    <string name="delete">删除</string>
 </resources>
