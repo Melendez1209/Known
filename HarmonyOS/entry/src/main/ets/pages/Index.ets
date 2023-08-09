@@ -11,7 +11,7 @@ struct Index {
         Image(this.index == index ? icon_fill : icon_normal)
           .size({ width: 25, height: 25 })
           .fillColor(this.index == index ? "#264ff7" : "#2e2e2f")
-        Text(label).fontSize(16).fontColor(this.index == index ? "#264ff7" : "#2e2e2f")
+        Text(label).fontSize(12).fontColor(this.index == index ? "#264ff7" : "#2e2e2f")
         Blank()
       }.height('100%').width("100%").onClick(() => {
         this.index = index;
@@ -39,7 +39,10 @@ struct Index {
 
         TabContent() {
           Column() {
-            Text($r("app.string.Tabs_me")).fontSize(30)
+            Image($r("app.media.ic_user_portrait"))
+              .width('25%')
+              .height('10%')
+              .objectFit(ImageFit.Contain)
           }.width('100%').height('100%')
         }
         .tabBar(this.Tab($r("app.string.Tabs_me"), $r("app.media.ic_public_contacts"), $r("app.media.ic_public_contacts_filled"), 2))
