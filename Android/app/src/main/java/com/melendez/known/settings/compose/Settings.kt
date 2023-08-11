@@ -292,7 +292,6 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
                     }
                     AnimatedVisibility(visible = visibleAppearance) {
                         Column {
-                            HorizontalDivider()
                             ListItem(
                                 headlineContent = { Text(text = stringResource(R.string.dynamic_color)) },
                                 overlineContent = {

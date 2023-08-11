@@ -96,7 +96,8 @@ fun Main_Compact(
             NavigationBar {
                 if (!isEditing) {
                     screens.forEach { screen ->
-                        NavigationBarItem(selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
+                        NavigationBarItem(
+                            selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
                             onClick = {
                                 navMainController.navigate(screen.router) {
                                     popUpTo(navMainController.graph.findStartDestination().id) {
@@ -110,7 +111,7 @@ fun Main_Compact(
                             },
                             icon = {
                                 Icon(
-                                    imageVector = screen.icon,
+                                    imageVector = if (currentDestination?.hierarchy?.any { it.route == screen.router } == true) screen.iconSelected else screen.iconUnelected,
                                     contentDescription = stringResource(screen.resourceId)
                                 )
                             },
@@ -225,9 +226,11 @@ fun Main_Medium(
                         },
                         icon = {
                             Icon(
-                                imageVector = screen.icon,
+                                imageVector = if (currentDestination?.hierarchy?.any { it.route == screen.router } == true) screen.iconSelected else screen.iconUnelected,
                                 contentDescription = stringResource(screen.resourceId)
                             )
+                        }, label = {
+                            Text(text = stringResource(id = screen.resourceId))
                         }
                     )
                 }
@@ -334,7 +337,7 @@ fun Main_Expanded(
                             },
                             icon = {
                                 Icon(
-                                    imageVector = screen.icon,
+                                    imageVector = if (currentDestination?.hierarchy?.any { it.route == screen.router } == true) screen.iconSelected else screen.iconUnelected,
                                     contentDescription = stringResource(screen.resourceId)
                                 )
                             }
