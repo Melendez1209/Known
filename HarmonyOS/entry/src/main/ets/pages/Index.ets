@@ -1,3 +1,5 @@
+import router from '@ohos.router'
+
 @Entry
 @Component
 struct Index {
@@ -9,15 +11,17 @@ struct Index {
       Column() {
         Blank()
         Image(this.index == index ? icon_fill : icon_normal)
-          .size({ width: 25, height: 25 })
+          .size({ width: 24, height: 24 })
           .fillColor(this.index == index ? "#264ff7" : "#2e2e2f")
-        Text(label).fontSize(12).fontColor(this.index == index ? "#264ff7" : "#2e2e2f")
-        Blank()
+        Text(label).margin({ top: 4 }).fontSize(10).fontColor(this.index == index ? "#264ff7" : "#2e2e2f")
       }.height('100%').width("100%").onClick(() => {
         this.index = index;
         this.controller.changeIndex(this.index);
       })
     }
+    .justifyContent(FlexAlign.Center)
+    .width('100%')
+    .height(56)
   }
 
   build() {
@@ -40,9 +44,24 @@ struct Index {
         TabContent() {
           Column() {
             Image($r("app.media.ic_user_portrait"))
-              .width('25%')
-              .height('10%')
-              .objectFit(ImageFit.Contain)
+              .width(78)
+              .height(78)
+              .objectFit(ImageFit.Contain).margin({ top: 8 })
+            Row() {
+              Row() {
+                Image($r('app.media.ic_public_settings')).height(36).objectFit(ImageFit.Contain).margin({ left: 8 })
+                Text($r('app.string.Settings_settings')).fontSize(20).margin({ left: 4 })
+              }
+
+              Image($r('app.media.ic_public_arrow_right')).height(22).objectFit(ImageFit.Contain).margin({ right: 8 })
+            }
+            .justifyContent(FlexAlign.SpaceBetween)
+            .width('100%')
+            .height(44)
+            .margin({ top: 8 })
+            .onClick(() => {
+              router.pushUrl({ url: 'pages/Settings/Settings' })
+            })
           }.width('100%').height('100%')
         }
         .tabBar(this.Tab($r("app.string.Tabs_me"), $r("app.media.ic_public_contacts"), $r("app.media.ic_public_contacts_filled"), 2))

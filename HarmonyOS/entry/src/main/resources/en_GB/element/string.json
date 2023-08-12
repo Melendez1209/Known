@@ -23,6 +23,14 @@
     {
       "name": "Tabs_me",
       "value": "Me"
+    },
+    {
+      "name": "Settings_settings",
+      "value": "Settings"
+    },
+    {
+      "name": "Settings_appearance",
+      "value": "Appearance"
     }
   ]
 }
