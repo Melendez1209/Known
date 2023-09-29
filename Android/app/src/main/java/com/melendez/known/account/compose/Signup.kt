@@ -13,8 +13,8 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.Visibility
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -69,7 +69,7 @@ fun Signup_Compat(navTotalController: NavHostController) {
                 navigationIcon = {
                     IconButton(onClick = { navTotalController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.Rounded.NavigateBefore,
+                            imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }
@@ -98,7 +98,7 @@ fun Signup_MediumExpanded(navTotalController: NavHostController) {
                 navigationIcon = {
                     IconButton(onClick = { navTotalController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.Rounded.NavigateBefore,
+                            imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }

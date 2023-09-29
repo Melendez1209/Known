@@ -94,7 +94,7 @@ fun History(
 
                 BackHandler(enabled = isEditing) {
                     isEditing = false
-                    onEditingChange(isEditing)
+                    onEditingChange(false)
                     checkboxes = mutableStateListOf(false, false, false)
                 }
 

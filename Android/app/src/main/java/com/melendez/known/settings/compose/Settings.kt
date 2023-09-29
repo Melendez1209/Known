@@ -22,13 +22,13 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.ArrowDropDown
 import androidx.compose.material.icons.rounded.Book
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Clear
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material.icons.rounded.Feedback
-import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
@@ -93,7 +93,7 @@ fun Settings_CompactExpanded(navTotalController: NavHostController) {
             navigationIcon = {
                 IconButton(onClick = { navTotalController.popBackStack() }) {
                     Icon(
-                        imageVector = Icons.Rounded.NavigateBefore,
+                        imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
                         contentDescription = stringResource(R.string.back)
                     )
                 }
@@ -131,7 +131,7 @@ fun Settings_Medium(navTotalController: NavHostController) {
             navigationIcon = {
                 IconButton(onClick = { navTotalController.popBackStack() }) {
                     Icon(
-                        imageVector = Icons.Rounded.NavigateBefore,
+                        imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
                         contentDescription = stringResource(R.string.back)
                     )
                 }

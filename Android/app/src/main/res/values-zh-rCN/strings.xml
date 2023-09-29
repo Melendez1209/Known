@@ -23,9 +23,6 @@
     <string name="policy">隐私协议</string>
     <string name="developers">开发者</string>
     <string name="all_contributors">知学情 的所有贡献者</string>
-    <string name="hint_title">导航栏标签</string>
-    <string name="hint_on">关闭以隐藏导航栏标签</string>
-    <string name="hint_off">开启以显示导航栏标签</string>
     <string name="appearance">外观</string>
     <string name="dynamic_color">动态颜色</string>
     <string name="apply_wallpaper">根据设备壁纸更改主题色</string>
@@ -91,4 +88,6 @@
     <string name="share">分享</string>
     <string name="print">打印</string>
     <string name="delete">删除</string>
+    <string name="favorite">喜欢</string>
+    <string name="education_information">教育资讯</string>
 </resources>

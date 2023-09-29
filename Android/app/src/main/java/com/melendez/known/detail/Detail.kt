@@ -2,11 +2,11 @@ package com.melendez.known.detail
 
 import android.annotation.SuppressLint
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material.icons.rounded.Favorite
 import androidx.compose.material.icons.rounded.FavoriteBorder
-import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.Print
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.BottomAppBar
@@ -43,7 +43,7 @@ fun Detail(navTotalController: NavHostController) {
                 navigationIcon = {
                     IconButton(onClick = { navTotalController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.Rounded.NavigateBefore,
+                            imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }
@@ -67,7 +67,7 @@ fun Detail(navTotalController: NavHostController) {
                     IconButton(onClick = { isFavorite = !isFavorite }) {
                         Icon(
                             imageVector = if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite,
-                            contentDescription = stringResource(R.string.share)
+                            contentDescription = stringResource(R.string.favorite)
                         )
                     }
                     IconButton(onClick = { /*TODO*/ }) {
@@ -87,9 +87,7 @@ fun Detail(navTotalController: NavHostController) {
                 }
             )
         }
-    ) {
-
-    }
+    ) { }
 }
 
 @Preview(device = "id:pixel_7_pro")

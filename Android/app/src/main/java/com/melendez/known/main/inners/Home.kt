@@ -18,15 +18,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
-import com.melendez.known.Screens
 import kotlin.random.Random
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home(paddingValues: PaddingValues? = null, navTotalController: NavHostController) {
+fun Home(paddingValues: PaddingValues? = null) {
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyVerticalStaggeredGrid(
             columns = StaggeredGridCells.Adaptive(160.dp),
@@ -40,9 +37,10 @@ fun Home(paddingValues: PaddingValues? = null, navTotalController: NavHostContro
             items(20) {
                 Card(
                     modifier = Modifier.height(Random.nextInt(130, 290).dp),
-                    onClick = { navTotalController.navigate(Screens.Detail.router) }) {
+                    onClick = { /*TODO: navigate to information page*/ }
+                ) {
                     Text(
-                        text = stringResource(id = R.string.exam),
+                        text = stringResource(id = R.string.education_information),
                         modifier = Modifier
                             .align(Alignment.CenterHorizontally)
                             .padding(vertical = 3.dp, horizontal = 3.dp),
@@ -57,5 +55,5 @@ fun Home(paddingValues: PaddingValues? = null, navTotalController: NavHostContro
 @Preview(device = "id:pixel_7_pro")
 @Composable
 fun Home_Preview() {
-    Home(navTotalController = rememberNavController())
+    Home()
 }

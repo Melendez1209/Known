@@ -11,8 +11,8 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -72,7 +72,7 @@ fun Feature_CompactExpanded(navTotalController: NavHostController) {
                 navigationIcon = {
                     IconButton(onClick = { navTotalController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.Rounded.NavigateBefore,
+                            imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
                             contentDescription = stringResource(R.string.back)
                         )
                     }
@@ -103,7 +103,7 @@ fun Feature_Medium(navTotalController: NavHostController) {
                 navigationIcon = {
                     IconButton(onClick = { navTotalController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.Rounded.NavigateBefore,
+                            imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
                             contentDescription = stringResource(R.string.back)
                         )
                     }

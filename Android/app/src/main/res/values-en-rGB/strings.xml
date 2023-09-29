@@ -23,9 +23,6 @@
     <string name="policy">Privacy Policy</string>
     <string name="developers">Developers</string>
     <string name="all_contributors">All contributors to Know</string>
-    <string name="hint_title">Navigation bar labels</string>
-    <string name="hint_on">Disable to hide navigation bar labels</string>
-    <string name="hint_off">Enable to show navigation bar labels</string>
     <string name="appearance">Appearance</string>
     <string name="dynamic_color">Dynamic Color</string>
     <string name="apply_wallpaper">Apply wallpaper tones to theme colours</string>
@@ -91,4 +88,6 @@
     <string name="share">Share</string>
     <string name="print">Print</string>
     <string name="delete">Delete</string>
+    <string name="favorite">Mark as favourite</string>
+    <string name="education_information">Education Information</string>
 </resources>

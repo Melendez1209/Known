@@ -15,9 +15,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.AttachMoney
 import androidx.compose.material.icons.rounded.Feedback
-import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.PeopleAlt
 import androidx.compose.material.icons.rounded.PrivacyTip
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -69,7 +69,7 @@ fun AboutScreen_Compat(navTotalController: NavHostController) {
                 navigationIcon = {
                     IconButton(onClick = { navTotalController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.Rounded.NavigateBefore,
+                            imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }
@@ -104,7 +104,7 @@ fun AboutScreen_MediumExpanded(navTotalController: NavHostController) {
                 navigationIcon = {
                     IconButton(onClick = { navTotalController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.Rounded.NavigateBefore,
+                            imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }

@@ -177,8 +177,7 @@ fun Main_Compact(
         ) {
             composable(Screens.Home.router) {
                 Home(
-                    paddingValues = paddings,
-                    navTotalController = navTotalController
+                    paddingValues = paddings
                 )
             }
             composable(Screens.History.router) {
@@ -285,7 +284,7 @@ fun Main_Medium(
                     startDestination = Screens.Home.router
                 ) {
                     composable(Screens.Home.router) {
-                        Home(navTotalController = navTotalController)
+                        Home()
                     }
                     composable(Screens.History.router) {
                         History(
@@ -396,7 +395,7 @@ fun Main_Expanded(
                     startDestination = Screens.Home.router
                 ) {
                     composable(Screens.Home.router) {
-                        Home(navTotalController = navTotalController)
+                        Home()
                     }
                     composable(Screens.History.router) {
                         History(

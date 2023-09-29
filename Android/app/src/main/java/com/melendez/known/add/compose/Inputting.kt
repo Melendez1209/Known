@@ -10,9 +10,9 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -154,7 +154,7 @@ fun Inputting_Compact(
             navigationIcon = {
                 IconButton(onClick = { navTotalController.popBackStack() }) {
                     Icon(
-                        imageVector = Icons.Rounded.NavigateBefore,
+                        imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
                         contentDescription = stringResource(R.string.back)
                     )
                 }
@@ -194,7 +194,7 @@ fun Inputting_Medium(
             navigationIcon = {
                 IconButton(onClick = { navTotalController.popBackStack() }) {
                     Icon(
-                        imageVector = Icons.Rounded.NavigateBefore,
+                        imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
                         contentDescription = stringResource(R.string.back)
                     )
                 }
@@ -232,7 +232,7 @@ fun Inputting_Expanded(
             navigationIcon = {
                 IconButton(onClick = { navTotalController.popBackStack() }) {
                     Icon(
-                        imageVector = Icons.Rounded.NavigateBefore,
+                        imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
                         contentDescription = stringResource(R.string.back)
                     )
                 }

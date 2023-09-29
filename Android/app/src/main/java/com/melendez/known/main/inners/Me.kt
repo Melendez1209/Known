@@ -14,8 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.NavigateNext
 import androidx.compose.material.icons.rounded.Info
-import androidx.compose.material.icons.rounded.NavigateNext
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
@@ -47,8 +47,7 @@ import com.melendez.known.Screens
 fun Me(navTotalController: NavHostController) {
     Surface {
         Column {
-
-            var imageUrl: Any? by rememberSaveable { mutableStateOf(R.drawable.baseline_account_circle_24) }
+            var imageUrl: Any? by rememberSaveable { mutableStateOf(R.drawable.outline_account_circle_24) }
             val photoPicker =
                 rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) {
                     if (it != null) {
@@ -91,7 +90,7 @@ fun Me(navTotalController: NavHostController) {
                 },
                 trailingContent = {
                     Icon(
-                        imageVector = Icons.Rounded.NavigateNext,
+                        imageVector = Icons.AutoMirrored.Rounded.NavigateNext,
                         contentDescription = stringResource(id = R.string.settings)
                     )
                 }
@@ -110,7 +109,7 @@ fun Me(navTotalController: NavHostController) {
                 },
                 trailingContent = {
                     Icon(
-                        imageVector = Icons.Rounded.NavigateNext,
+                        imageVector = Icons.AutoMirrored.Rounded.NavigateNext,
                         contentDescription = stringResource(R.string.about)
                     )
                 }

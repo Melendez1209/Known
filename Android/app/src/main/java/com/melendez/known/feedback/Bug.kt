@@ -17,9 +17,9 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.Upload
 import androidx.compose.material.icons.rounded.UploadFile
 import androidx.compose.material3.AlertDialog
@@ -104,7 +104,7 @@ fun Bug_CompactExpanded(
                 navigationIcon = {
                     IconButton(onClick = { navTotalController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.Rounded.NavigateBefore,
+                            imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
                             contentDescription = stringResource(R.string.back)
                         )
                     }
@@ -135,7 +135,7 @@ fun Bug_Medium(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHost
                 navigationIcon = {
                     IconButton(onClick = { navTotalController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.Rounded.NavigateBefore,
+                            imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
                             contentDescription = stringResource(R.string.back)
                         )
                     }

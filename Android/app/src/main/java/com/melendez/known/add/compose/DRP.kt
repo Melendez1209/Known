@@ -5,10 +5,10 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
+import androidx.compose.material.icons.automirrored.rounded.NavigateNext
 import androidx.compose.material.icons.rounded.Adjust
 import androidx.compose.material.icons.rounded.Close
-import androidx.compose.material.icons.rounded.NavigateBefore
-import androidx.compose.material.icons.rounded.NavigateNext
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -52,7 +52,7 @@ fun DRP(navTotalController: NavHostController) {
                 Button(
                     onClick = {
                         showingDialog = false
-                        //TODO:Save incomplete content
+                        //TODO: Save incomplete content
                         navTotalController.popBackStack()
                     },
                     modifier = Modifier.padding(4.dp)
@@ -97,7 +97,7 @@ fun DRP(navTotalController: NavHostController) {
                         else navTotalController.popBackStack()
                     }) {
                         Icon(
-                            imageVector = if (state.selectedStartDateMillis != null) Icons.Rounded.Close else Icons.Rounded.NavigateBefore,
+                            imageVector = if (state.selectedStartDateMillis != null) Icons.Rounded.Close else Icons.AutoMirrored.Rounded.NavigateBefore,
                             contentDescription = stringResource(R.string.cancel)
                         )
                     }
@@ -114,7 +114,7 @@ fun DRP(navTotalController: NavHostController) {
                         enabled = state.selectedEndDateMillis != null
                     ) {
                         Icon(
-                            imageVector = Icons.Rounded.NavigateNext,
+                            imageVector = Icons.AutoMirrored.Rounded.NavigateNext,
                             contentDescription = stringResource(R.string.next)
                         )
                     }
