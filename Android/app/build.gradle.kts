@@ -56,15 +56,15 @@ android {
 
 dependencies {
 
-    val composeBom = "2023.09.01"
-    val ui = "1.6.0-alpha06"
-    val material = "1.2.0-alpha08"
+    val composeBom = "2023.09.02"
+    val ui = "1.6.0-alpha08"
+    val material = "1.2.0-alpha10"
     val accompanist = "0.33.2-alpha"
 
-    implementation("androidx.core:core-ktx:1.12.0")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0-alpha02")
+    implementation("androidx.core:core-ktx:1.13.0-alpha01")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0-beta01")
     implementation("androidx.activity:activity-compose:1.8.0-rc01")
-    implementation("io.coil-kt:coil-compose:2.4.0")
+    implementation("io.coil-kt:coil-compose:2.5.0")
     implementation("com.android.volley:volley:1.2.1")
     implementation("androidx.compose.ui:ui:$ui")
     implementation("androidx.compose.ui:ui-graphics:$ui")
