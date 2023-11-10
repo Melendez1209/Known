@@ -12,6 +12,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material.icons.rounded.Edit
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
@@ -158,7 +159,15 @@ fun Inputting_Compact(
                         contentDescription = stringResource(R.string.back)
                     )
                 }
-            }
+            },
+            actions = {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Rounded.Done,
+                        contentDescription = stringResource(R.string.done)
+                    )
+                }
+            },
         )
     }) { padding ->
         Inputting_Content(
@@ -199,6 +208,14 @@ fun Inputting_Medium(
                     )
                 }
             },
+            actions = {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Rounded.Done,
+                        contentDescription = stringResource(R.string.done)
+                    )
+                }
+            },
             scrollBehavior = scrollBehavior
         )
         Inputting_Content(
@@ -234,6 +251,14 @@ fun Inputting_Expanded(
                     Icon(
                         imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
                         contentDescription = stringResource(R.string.back)
+                    )
+                }
+            },
+            actions = {
+                IconButton(onClick = { /*TODO*/ }) {
+                    Icon(
+                        imageVector = Icons.Rounded.Done,
+                        contentDescription = stringResource(R.string.done)
                     )
                 }
             },

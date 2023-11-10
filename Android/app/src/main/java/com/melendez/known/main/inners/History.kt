@@ -134,10 +134,7 @@ fun History(
                         }
                     }
                 ) {
-                    LazyColumn(
-                        modifier = Modifier.fillMaxWidth(),
-                        verticalArrangement = Arrangement.spacedBy(4.dp)
-                    ) {
+                    LazyColumn(modifier = Modifier.fillMaxWidth()) {
                         items(4) { index ->
 
                             val resultText = stringResource(R.string.exam) + index

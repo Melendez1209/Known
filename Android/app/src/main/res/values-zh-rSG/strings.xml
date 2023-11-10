@@ -90,4 +90,5 @@
     <string name="delete">刪除</string>
     <string name="favorite">喜歡</string>
     <string name="education_information">教育資訊</string>
+    <string name="done">完成</string>
 </resources>

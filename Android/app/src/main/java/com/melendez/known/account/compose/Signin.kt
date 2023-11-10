@@ -1,5 +1,6 @@
 package com.melendez.known.account.compose
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -125,6 +126,7 @@ fun Signin_MediumExpanded(navTotalController: NavHostController) {
 fun Signin_Content(navTotalController: NavHostController) {
 
     val focusManager = LocalFocusManager.current
+    val previousDestinationRoute = navTotalController.previousBackStackEntry?.destination?.route
 
     var userName by rememberSaveable { mutableStateOf("") }
     var password by rememberSaveable { mutableStateOf("") }
@@ -188,7 +190,14 @@ fun Signin_Content(navTotalController: NavHostController) {
             Button(onClick = { /*TODO: Sign in*/ }) {
                 Text(text = stringResource(id = R.string.sign_in))
             }
-            TextButton(onClick = { navTotalController.navigate(Screens.Signup.router) }) {
+            TextButton(onClick = {
+                Log.d("Melendez", "Signin_Content: last page:$previousDestinationRoute")
+                if (previousDestinationRoute != "Signup") {
+                    navTotalController.navigate(Screens.Signup.router)
+                } else {
+                    navTotalController.popBackStack()
+                }
+            }) {
                 Text(stringResource(R.string.sign_up))
             }
         }

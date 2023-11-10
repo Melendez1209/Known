@@ -19,7 +19,9 @@ import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
@@ -271,7 +273,9 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
                 Column(Modifier.fillMaxWidth()) {
                     Button(
                         onClick = { navTotalController.navigate(Screens.Signin.router) },
-                        modifier = Modifier.align(Alignment.CenterHorizontally),
+                        modifier = Modifier
+                            .align(Alignment.CenterHorizontally)
+                            .widthIn(max = 320.dp),
                     ) {
                         Text(text = stringResource(R.string.sign_to))
                     }
@@ -281,12 +285,15 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Row(
                         modifier = Modifier
+                            .height(48.dp)
                             .fillMaxWidth()
                             .clickable { visibleAppearance = !visibleAppearance }
                     ) {
                         Text(
                             text = stringResource(R.string.appearance),
-                            modifier = Modifier.padding(start = 12.dp, top = 6.dp, bottom = 6.dp),
+                            modifier = Modifier
+                                .padding(start = 12.dp)
+                                .align(Alignment.CenterVertically),
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
@@ -322,12 +329,15 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
                 Column(modifier = Modifier.fillMaxWidth()) {
                     Row(
                         modifier = Modifier
+                            .height(48.dp)
                             .fillMaxWidth()
                             .clickable { visibleAnalysis = !visibleAnalysis }
                     ) {
                         Text(
                             text = stringResource(R.string.analysis),
-                            modifier = Modifier.padding(start = 12.dp, top = 6.dp, bottom = 6.dp),
+                            modifier = Modifier
+                                .padding(start = 12.dp)
+                                .align(Alignment.CenterVertically),
                             style = MaterialTheme.typography.titleLarge
                         )
                     }
