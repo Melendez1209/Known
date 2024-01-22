@@ -22,6 +22,7 @@ import com.melendez.known.account.compose.Signin
 import com.melendez.known.account.compose.Signup
 import com.melendez.known.add.compose.DRP
 import com.melendez.known.add.compose.Inputting
+import com.melendez.known.prophets.compose.Prophets
 import com.melendez.known.detail.Detail
 import com.melendez.known.feedback.Bug
 import com.melendez.known.feedback.Feature
@@ -155,6 +156,9 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Screens.Detail.router) {
                         Detail(navTotalController = navTotalController)
+                    }
+                    composable(Screens.Prophets.router) {
+                        Prophets(navTotalController = navTotalController)
                     }
                 }
             }

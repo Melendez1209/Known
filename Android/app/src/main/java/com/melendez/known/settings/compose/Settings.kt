@@ -9,13 +9,11 @@ import android.location.Geocoder
 import android.location.LocationManager
 import android.os.Build
 import android.util.Log
-import android.widget.Toast
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.InternalAnimationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowColumn
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -23,15 +21,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.widthIn
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.ArrowDropDown
-import androidx.compose.material.icons.rounded.Book
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Clear
-import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material.icons.rounded.Feedback
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
@@ -44,7 +41,6 @@ import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
@@ -159,7 +155,6 @@ fun Settings_Medium(navTotalController: NavHostController) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @SuppressLint("MissingPermission", "MutableCollectionMutableState")
 @Composable
 fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) {
@@ -177,95 +172,15 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
     var visibleAppearance by remember { mutableStateOf(true) }
     var visibleAnalysis by remember { mutableStateOf(true) }
     var expanded by remember { mutableStateOf(false) }
-    var showingDialog by remember { mutableStateOf(false) }
 
-    if (showingDialog) {
-
-        val physiotherapy = stringResource(R.string.physiotherapy)
-        val chemotherapy = stringResource(R.string.chemotherapy)
-        val biology = stringResource(R.string.biology)
-        val political = stringResource(R.string.political)
-        val history = stringResource(R.string.history)
-        val geography = stringResource(R.string.geography)
-        val courseList = listOf(physiotherapy, chemotherapy, biology, political, history, geography)
-
-        val message = stringResource(id = R.string.wrong_courses)
-
-        AlertDialog(
-            onDismissRequest = {
-                courses.clear()
-                showingDialog = false
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        if (courses.size != 3) {
-                            Toast.makeText(context, message, Toast.LENGTH_LONG).show()
-                        } else {
-                            showingDialog = false
-                        }
-                    },
-                    modifier = Modifier.padding(4.dp)
-                ) {
-                    Text(stringResource(R.string.reserve))
-                }
-            },
-            dismissButton = {
-                OutlinedButton(
-                    onClick = {
-                        courses.clear()
-                        showingDialog = false
-                    },
-                    modifier = Modifier.padding(4.dp)
-                ) {
-                    Text(stringResource(R.string.discard))
-                }
-            },
-            icon = {
-                Icon(
-                    imageVector = Icons.Rounded.Book,
-                    contentDescription = stringResource(id = R.string.optional)
-                )
-            },
-            title = {
-                Text(text = stringResource(id = R.string.take_course))
-            },
-            text = {
-                FlowColumn(horizontalArrangement = Arrangement.Center) {
-                    courseList.forEach { s ->
-
-                        var selected by rememberSaveable { mutableStateOf(s in courses) }
-
-                        FilterChip(
-                            selected = selected,
-                            onClick = {
-                                courses.apply {
-                                    if (s in this) {
-                                        remove(s)
-                                    } else {
-                                        add(s)
-                                    }
-                                }
-                                selected = !selected
-                            },
-                            label = { Text(text = s) },
-                            modifier = Modifier.padding(horizontal = 3.dp),
-                            leadingIcon = {
-                                Row {
-                                    AnimatedVisibility(visible = s in courses) {
-                                        Icon(
-                                            imageVector = Icons.Rounded.Done,
-                                            contentDescription = stringResource(R.string.selected)
-                                        )
-                                    }
-                                }
-                            }
-                        )
-                    }
-                }
-            }
-        )
-    }
+    val courseList = listOf(
+        stringResource(R.string.physiotherapy),
+        stringResource(R.string.chemotherapy),
+        stringResource(R.string.biology),
+        stringResource(R.string.political),
+        stringResource(R.string.history),
+        stringResource(R.string.geography)
+    )
 
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyColumn(modifier = modifier) {
@@ -394,13 +309,45 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
                             HorizontalDivider()
                             ListItem(
                                 headlineContent = { Text(text = stringResource(R.string.optional)) },
-                                trailingContent = {
-                                    TextButton(onClick = { showingDialog = true }) {
-                                        Text(
-                                            text = if (courses.isNotEmpty()) courses.toString() else stringResource(
-                                                id = R.string.take_course
-                                            )
-                                        )
+                                supportingContent = {
+                                    LazyRow {
+                                        item {
+                                            courseList.forEach { s ->
+
+                                                var selected by rememberSaveable { mutableStateOf(s in courses) }
+
+                                                FilterChip(
+                                                    selected = selected,
+                                                    onClick = {
+                                                        courses.apply {
+                                                            if (s in this) {
+                                                                remove(s)
+                                                            } else {
+                                                                if (courses.size < 3) {
+                                                                    add(s)
+                                                                } else {
+                                                                    Log.d(
+                                                                        "Melendez",
+                                                                        "Settings_Content: More than 3"
+                                                                    )
+                                                                }
+                                                            }
+                                                        }
+                                                        selected = !selected
+                                                    },
+                                                    label = { Text(text = s) },
+                                                    modifier = Modifier.padding(horizontal = 3.dp)
+                                                )
+                                            }
+                                        }
+                                        item {
+                                            IconButton(onClick = { TODO(" Add a new Subject") }) {
+                                                Icon(
+                                                    imageVector = Icons.Rounded.Add,
+                                                    contentDescription = stringResource(id = R.string.add)
+                                                )
+                                            }
+                                        }
                                     }
                                 }
                             )
@@ -444,7 +391,7 @@ fun getCityName(context: Context): String {
     }
 }
 
-@Preview(device = "id:pixel_7_pro")
+@Preview(device = "id:pixel_8_pro")
 @Composable
 fun Settings_Preview() {
     Settings(

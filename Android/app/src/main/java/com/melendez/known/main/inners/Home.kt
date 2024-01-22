@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -21,7 +20,6 @@ import androidx.compose.ui.unit.dp
 import com.melendez.known.R
 import kotlin.random.Random
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home(paddingValues: PaddingValues? = null) {
     Surface(modifier = Modifier.fillMaxSize()) {
@@ -52,7 +50,7 @@ fun Home(paddingValues: PaddingValues? = null) {
     }
 }
 
-@Preview(device = "id:pixel_7_pro")
+@Preview(device = "id:pixel_8_pro")
 @Composable
 fun Home_Preview() {
     Home()

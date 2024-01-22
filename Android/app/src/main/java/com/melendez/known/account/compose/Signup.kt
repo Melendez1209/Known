@@ -205,7 +205,7 @@ fun Signup_Content(navTotalController: NavHostController) {
     }
 }
 
-@Preview(device = "id:pixel_7_pro")
+@Preview(device = "id:pixel_8_pro")
 @Composable
 fun Signup_Preview() {
     Signup(

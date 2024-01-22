@@ -54,7 +54,7 @@
     <string name="summary">内容</string>
     <string name="reproduce_bug">复现步骤</string>
     <string name="expected">期望结果</string>
-    <string name="upload">上传截图或录屏</string>
+    <string name="upload_feedback">上传截图或录屏</string>
     <string name="actual">实际结果</string>
     <string name="preview">在 Github 上预览</string>
     <string name="failure">反馈失败</string>
@@ -62,7 +62,6 @@
     <string name="district">地区</string>
     <string name="locate">定位</string>
     <string name="optional">课程选择</string>
-    <string name="take_course">选科</string>
     <string name="physiotherapy">物理</string>
     <string name="biology">生物</string>
     <string name="chemotherapy">化学</string>
@@ -88,7 +87,13 @@
     <string name="share">分享</string>
     <string name="print">打印</string>
     <string name="delete">删除</string>
-    <string name="favorite">喜欢</string>
+    <string name="favourite">喜欢</string>
     <string name="education_information">教育资讯</string>
     <string name="done">完成</string>
+    <string name="all">全部</string>
+    <string name="upload_ai">上传照片</string>
+    <string name="ask">发送</string>
+    <string name="ask_something">问点什么吧</string>
+    <string name="ai_analyse">与知者一起分析</string>
+    <string name="prophets">先知</string>
 </resources>

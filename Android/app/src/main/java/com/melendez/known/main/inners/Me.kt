@@ -118,7 +118,7 @@ fun Me(navTotalController: NavHostController) {
     }
 }
 
-@Preview(device = "id:pixel_7_pro", showBackground = true)
+@Preview(device = "id:pixel_8_pro")
 @Composable
 fun Me_Preview() {
     Me(navTotalController = rememberNavController())

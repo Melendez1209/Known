@@ -312,10 +312,10 @@ fun Bug_Content(widthSizeClass: WindowWidthSizeClass, modifier: Modifier) {
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Upload,
-                                contentDescription = stringResource(R.string.upload)
+                                contentDescription = stringResource(R.string.upload_feedback)
                             )
                             Text(
-                                text = stringResource(R.string.upload),
+                                text = stringResource(R.string.upload_feedback),
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -343,10 +343,10 @@ fun Bug_Content(widthSizeClass: WindowWidthSizeClass, modifier: Modifier) {
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Upload,
-                                contentDescription = stringResource(R.string.upload)
+                                contentDescription = stringResource(R.string.upload_feedback)
                             )
                             Text(
-                                text = stringResource(R.string.upload),
+                                text = stringResource(R.string.upload_feedback),
                                 textAlign = TextAlign.Center
                             )
                         }
@@ -452,7 +452,7 @@ fun feedbackBug(title: String, steps: MutableList<String>, context: Context, fai
     queue.add(jsonObjectRequest)
 }
 
-@Preview(device = "id:pixel_7_pro")
+@Preview(device = "id:pixel_8_pro")
 @Composable
 fun Bug_Preview() {
     Bug(widthSizeClass = WindowWidthSizeClass.Compact, navTotalController = rememberNavController())

@@ -84,7 +84,7 @@ fun MainScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHost
 fun Main_Compact(
     navTotalController: NavHostController,
     navMainController: NavHostController,
-    screens: List<Screens>,
+    screens: List<Screens>
 ) {
 
     var isEditing by remember { mutableStateOf(false) }
@@ -197,7 +197,7 @@ fun Main_Compact(
 fun Main_Medium(
     navTotalController: NavHostController,
     navMainController: NavHostController,
-    screens: List<Screens>,
+    screens: List<Screens>
 ) {
 
     var isEditing by remember { mutableStateOf(false) }
@@ -304,7 +304,7 @@ fun Main_Medium(
 fun Main_Expanded(
     navTotalController: NavHostController,
     navMainController: NavHostController,
-    screens: List<Screens>,
+    screens: List<Screens>
 ) {
 
     var isEditing by remember { mutableStateOf(false) }
@@ -410,7 +410,7 @@ fun Main_Expanded(
 }
 
 @OptIn(ExperimentalAnimationApi::class)
-@Preview(device = "id:pixel_7_pro")
+@Preview(device = "id:pixel_8_pro")
 @Composable
 fun MainScreen_Preview() {
     MainScreen(

@@ -54,7 +54,7 @@
     <string name="summary">Summary</string>
     <string name="reproduce_bug">Steps to reproduce the bug</string>
     <string name="expected">Expected result</string>
-    <string name="upload">Upload screenshots or a screen record</string>
+    <string name="upload_feedback">Upload screenshots or a screen record</string>
     <string name="actual">Actual result</string>
     <string name="preview">Preview on Github</string>
     <string name="failure">Feedback Failure</string>
@@ -62,7 +62,6 @@
     <string name="district">District</string>
     <string name="locate">Locate</string>
     <string name="optional">Optional courses</string>
-    <string name="take_course">Take courses</string>
     <string name="physiotherapy">Physiotherapy</string>
     <string name="biology">Biology</string>
     <string name="chemotherapy">Chemotherapy</string>
@@ -88,7 +87,13 @@
     <string name="share">Share</string>
     <string name="print">Print</string>
     <string name="delete">Delete</string>
-    <string name="favorite">Mark as favourite</string>
+    <string name="favourite">Mark as favourite</string>
     <string name="education_information">Education Information</string>
     <string name="done">Done</string>
+    <string name="all">All</string>
+    <string name="upload_ai">Ask with a image</string>
+    <string name="ask">Ask</string>
+    <string name="ask_something">Ask something</string>
+    <string name="ai_analyse">Analyse with Know-er</string>
+    <string name="prophets">Prophets</string>
 </resources>

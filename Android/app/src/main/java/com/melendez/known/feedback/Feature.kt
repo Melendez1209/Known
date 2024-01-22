@@ -227,7 +227,7 @@ fun feedbackFeature(title: String, feature: String, context: Context, failure: S
     queue.add(jsonObjectRequest)
 }
 
-@Preview(device = "id:pixel_7_pro")
+@Preview(device = "id:pixel_8_pro")
 @Composable
 fun Feature_Preview() {
     Feature(

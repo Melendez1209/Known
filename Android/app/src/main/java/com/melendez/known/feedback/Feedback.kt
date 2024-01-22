@@ -135,7 +135,7 @@ fun Feedback_Content(modifier: Modifier, navTotalController: NavHostController) 
     }
 }
 
-@Preview(device = "id:pixel_7_pro")
+@Preview(device = "id:pixel_8_pro")
 @Composable
 fun Feedback_Preview() {
     Feedback(

@@ -213,13 +213,13 @@ fun About_Content(modifier: Modifier, navTotalController: NavHostController) {
     }
 }
 
-@Preview(device = "id:pixel_7_pro")
+@Preview(device = "id:pixel_8_pro")
 @Composable
 fun About_Content_Preview() {
     About_Content(modifier = Modifier, navTotalController = rememberNavController())
 }
 
-@Preview(device = "spec:parent=pixel_7_pro,orientation=landscape")
+@Preview(device = "spec:parent=pixel_8_pro,orientation=landscape")
 @Composable
 fun AboutScreen_Preview() {
     AboutScreen(

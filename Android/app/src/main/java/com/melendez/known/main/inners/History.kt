@@ -297,7 +297,7 @@ fun History(
     }
 }
 
-@Preview(device = "id:pixel_7_pro")
+@Preview(device = "id:pixel_8_pro")
 @Composable
 fun History_Preview() {
     History(navTotalController = rememberNavController(), onEditingChange = {})
