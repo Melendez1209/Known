@@ -1,6 +1,9 @@
 package com.melendez.known.detail
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -30,6 +33,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -42,6 +46,12 @@ import com.melendez.known.Screens
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Detail(navTotalController: NavHostController) {
+
+    val context = LocalContext.current
+    val launcher = rememberLauncherForActivityResult(
+        contract = ActivityResultContracts.StartActivityForResult(),
+        onResult = {}
+    )
 
     var isFavorite by remember { mutableStateOf(false) }
 
@@ -61,7 +71,16 @@ fun Detail(navTotalController: NavHostController) {
         bottomBar = {
             BottomAppBar(
                 actions = {
-                    IconButton(onClick = { /*TODO*/ }) {
+                    IconButton(onClick = {
+                        val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                            type = "text/plain"
+                            putExtra(
+                                Intent.EXTRA_TEXT,
+                                "Known"
+                            )//TODO: replace Known with detail info
+                        }
+                        launcher.launch(shareIntent)
+                    }) {
                         Icon(
                             imageVector = Icons.Rounded.Share,
                             contentDescription = stringResource(R.string.share)
