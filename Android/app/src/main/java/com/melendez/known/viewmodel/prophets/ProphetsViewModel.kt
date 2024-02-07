@@ -1,5 +1,6 @@
 package com.melendez.known.viewmodel.prophets
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.ai.client.generativeai.GenerativeModel
@@ -20,8 +21,10 @@ class ProphetsViewModel(private val generativeModel: GenerativeModel) : ViewMode
         viewModelScope.launch {
             try {
                 val response = generativeModel.generateContent(prompt)
+                Log.i("Known", "ask: prompt: $prompt")
                 response.text?.let { outputContent ->
                     _uiState.value = ProphetsUiState.Success(outputContent)
+                    Log.i("Known", "ask: returning info: $outputContent")
                 }
             } catch (e: Exception) {
                 _uiState.value = ProphetsUiState.Error(e.localizedMessage ?: "")

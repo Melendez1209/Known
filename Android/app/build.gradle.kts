@@ -1,7 +1,6 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("kotlin-kapt")
 }
 
 android {
@@ -23,7 +22,7 @@ android {
 
     buildTypes {
         release {
-            buildConfigField("String", "apiKey", """"AIzaSyCPValw3nAxCl6eI60pCf88jdNM9PVtEF4"""")
+            buildConfigField("String", "apiKey", """"AIzaSyCI8YN38esP9is0vEAw3NkmwySSBYb1GqM"""")
             isMinifyEnabled = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
@@ -32,7 +31,7 @@ android {
             isShrinkResources = true
         }
         debug {
-            buildConfigField("String", "apiKey", """"AIzaSyCPValw3nAxCl6eI60pCf88jdNM9PVtEF4"""")
+            buildConfigField("String", "apiKey", """"AIzaSyCI8YN38esP9is0vEAw3NkmwySSBYb1GqM"""")
             isMinifyEnabled = false
             isShrinkResources = false
         }
@@ -65,16 +64,12 @@ dependencies {
     val material = "1.2.0-alpha12"
     val accompanist = "0.33.2-alpha"
     val lifecycle = "2.7.0-rc02"
-    val room = "2.6.1"
-
-    kapt("androidx.room:room-compiler:2.6.1")
 
     implementation("androidx.core:core-ktx:1.13.0-alpha02")
     implementation("androidx.activity:activity-compose:1.9.0-alpha01")
     implementation("io.coil-kt:coil-compose:2.5.0")
     implementation("com.android.volley:volley:1.2.1")
     implementation("com.google.ai.client.generativeai:generativeai:0.1.1")
-    implementation("androidx.room:room-runtime:$room")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle")
     implementation("androidx.compose.ui:ui:$ui")
