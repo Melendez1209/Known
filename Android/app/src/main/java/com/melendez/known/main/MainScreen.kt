@@ -117,7 +117,8 @@ fun Main_Compact(
                             },
                             label = {
                                 Text(text = stringResource(id = screen.resourceId))
-                            }
+                            },
+                            alwaysShowLabel = false
                         )
                     }
                 } else {
@@ -230,7 +231,8 @@ fun Main_Medium(
                             )
                         }, label = {
                             Text(text = stringResource(id = screen.resourceId))
-                        }
+                        },
+                        alwaysShowLabel = false
                     )
                 }
             }
