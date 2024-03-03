@@ -96,4 +96,7 @@
     <string name="ask_something">問點什麼吧</string>
     <string name="ai_analyse">與知者一起分析</string>
     <string name="prophets">先知</string>
+    <string name="confirm">確認</string>
+    <string name="attention">注意</string>
+    <string name="disclaimer">您的贊助行為不屬於軟體發行方（ Known 團隊）的經營性行為！ 僅作您對於本軟體（ Known ）發展的支援！ 我們的軟體功能完全免費！</string>
 </resources>

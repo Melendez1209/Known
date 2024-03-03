@@ -68,8 +68,7 @@ fun Inputting(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostC
                     enabled = examName.isNotEmpty(),
                     onClick = {
                         showingDialog = false
-                    },
-                    modifier = Modifier.padding(4.dp)
+                    }
                 ) {
                     Text(stringResource(R.string.reserve))
                 }
@@ -79,8 +78,7 @@ fun Inputting(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostC
                     onClick = {
                         showingDialog = false
                         examName = ""
-                    },
-                    modifier = Modifier.padding(4.dp)
+                    }
                 ) {
                     Text(stringResource(R.string.discard))
                 }

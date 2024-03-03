@@ -59,17 +59,17 @@ android {
 
 dependencies {
 
-    val composeBom = "2023.10.01"
-    val ui = "1.6.0-beta02"
-    val material = "1.2.0-alpha12"
-    val accompanist = "0.33.2-alpha"
-    val lifecycle = "2.7.0-rc02"
+    val composeBom = "2024.02.01"
+    val ui = "1.7.0-alpha03"
+    val material = "1.3.0-alpha01"
+    val accompanist = "0.35.0-alpha"
+    val lifecycle = "2.8.0-alpha02"
 
-    implementation("androidx.core:core-ktx:1.13.0-alpha02")
-    implementation("androidx.activity:activity-compose:1.9.0-alpha01")
-    implementation("io.coil-kt:coil-compose:2.5.0")
+    implementation("androidx.core:core-ktx:1.13.0-alpha05")
+    implementation("androidx.activity:activity-compose:1.9.0-alpha03")
+    implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("com.android.volley:volley:1.2.1")
-    implementation("com.google.ai.client.generativeai:generativeai:0.1.1")
+    implementation("com.google.ai.client.generativeai:generativeai:0.2.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle")
     implementation("androidx.compose.ui:ui:$ui")

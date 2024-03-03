@@ -195,8 +195,7 @@ fun Bug_Content(widthSizeClass: WindowWidthSizeClass, modifier: Modifier) {
                     onClick = {
                         showingDialog = false
                         videoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.VideoOnly))
-                    },
-                    modifier = Modifier.padding(4.dp)
+                    }
                 ) {
                     Text(stringResource(R.string.screen_record))
                 }
@@ -206,8 +205,7 @@ fun Bug_Content(widthSizeClass: WindowWidthSizeClass, modifier: Modifier) {
                     onClick = {
                         showingDialog = false
                         pickMultipleMedia.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                    },
-                    modifier = Modifier.padding(4.dp)
+                    }
                 ) {
                     Text(text = stringResource(R.string.screenshots))
                 }

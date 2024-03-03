@@ -96,4 +96,7 @@
     <string name="ask_something">问点什么吧</string>
     <string name="ai_analyse">与知者一起分析</string>
     <string name="prophets">先知</string>
+    <string name="confirm">确认</string>
+    <string name="attention">注意</string>
+    <string name="disclaimer">您的赞助行为不属于软件发行方（ Known 团队）的经营性行为！仅作您对于本软件（ Known ）发展的支持！我们的软件功能完全免费！</string>
 </resources>
