@@ -3,6 +3,7 @@
 package com.melendez.known.main
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -15,25 +16,28 @@ import androidx.compose.material.icons.rounded.FavoriteBorder
 import androidx.compose.material.icons.rounded.Print
 import androidx.compose.material.icons.rounded.Share
 import androidx.compose.material3.BottomAppBar
+import androidx.compose.material3.DismissibleDrawerSheet
+import androidx.compose.material3.DismissibleNavigationDrawer
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeFloatingActionButton
-import androidx.compose.material3.ModalDrawerSheet
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.NavigationRail
 import androidx.compose.material3.NavigationRailItem
-import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -50,6 +54,7 @@ import com.melendez.known.R
 import com.melendez.known.main.inners.History
 import com.melendez.known.main.inners.Home
 import com.melendez.known.main.inners.Me
+import kotlinx.coroutines.launch
 
 @Composable
 fun MainScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
@@ -313,10 +318,17 @@ fun Main_Expanded(
     val navBackStackEntry by navMainController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val scope = rememberCoroutineScope()
+
+    BackHandler(enabled = drawerState.isOpen) {
+        scope.launch { drawerState.close() }
+    }
+
     Surface(modifier = Modifier.fillMaxSize()) {
-        PermanentNavigationDrawer(
+        DismissibleNavigationDrawer(
             drawerContent = {
-                ModalDrawerSheet {
+                DismissibleDrawerSheet {
                     screens.forEach { screen ->
                         NavigationDrawerItem(
                             label = { Text(text = stringResource(screen.resourceId)) },
@@ -345,7 +357,8 @@ fun Main_Expanded(
                         )
                     }
                 }
-            }
+            },
+            drawerState = drawerState
         ) {
             Scaffold(
                 bottomBar = {
