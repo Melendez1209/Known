@@ -14,4 +14,5 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "Known"
-include(":app")
+include(":mobile")
+include(":wear")
