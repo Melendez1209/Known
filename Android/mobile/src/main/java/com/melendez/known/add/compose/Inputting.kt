@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
 import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
@@ -18,6 +19,7 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -26,7 +28,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -140,7 +141,7 @@ fun Inputting_Compact(
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    Scaffold(topBar = {
+    Column {
         CenterAlignedTopAppBar(
             title = {
                 TextButton(onClick = { onShowingChange(true) }) {
@@ -166,16 +167,14 @@ fun Inputting_Compact(
                     )
                 }
             },
+            scrollBehavior = scrollBehavior
         )
-    }) { padding ->
         Inputting_Content(
             modifier = Modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
                 .fillMaxSize()
-                .padding(top = padding.calculateTopPadding())
         )
     }
-
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -279,7 +278,22 @@ fun Inputting_Content(modifier: Modifier) {
     val physiotherapy = stringResource(R.string.physiotherapy)
     val chemotherapy = stringResource(R.string.chemotherapy)
     val biology = stringResource(R.string.biology)
-    val courseList = listOf(chinese, maths, language, physiotherapy, chemotherapy, biology)
+    val political = stringResource(R.string.political)
+    val history = stringResource(R.string.history)
+    val geography = stringResource(R.string.geography)
+    val pe = stringResource(R.string.pe)
+    val courseList = listOf(
+        chinese,
+        maths,
+        language,
+        physiotherapy,
+        chemotherapy,
+        biology,
+        political,
+        history,
+        geography,
+        pe
+    )
 
     Surface(modifier = Modifier.fillMaxSize()) {
         LazyVerticalStaggeredGrid(
@@ -287,26 +301,40 @@ fun Inputting_Content(modifier: Modifier) {
             modifier = modifier.padding(horizontal = 12.dp),
             verticalItemSpacing = 12.dp,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
-        ) { courseList.forEach { s -> item { Subject_Card(subject = s) } } }
+        ) {
+            courseList.forEachIndexed { index, s ->
+                item { Subject_Card(subject = s, check = index > 2, isChecked = index != 9) }
+            }
+        }
     }
 }
 
 @Composable
-fun Subject_Card(subject: String) {
+fun Subject_Card(subject: String, check: Boolean = true, isChecked: Boolean = true) {
 
     val focusManager = LocalFocusManager.current
 
+    var checked by rememberSaveable { mutableStateOf(isChecked) }
     var mark by rememberSaveable { mutableStateOf("") }
     var full by rememberSaveable { mutableStateOf("") }
 
     Card {
-        Text(
-            text = subject,
-            modifier = Modifier
-                .align(Alignment.CenterHorizontally)
-                .padding(top = 6.dp),
-            style = MaterialTheme.typography.titleLarge
-        )
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+            Text(
+                text = subject,
+                modifier = Modifier
+                    .padding(top = 6.dp, start = 10.dp)
+                    .align(Alignment.CenterVertically),
+                style = MaterialTheme.typography.titleLarge
+            )
+            if (check) {
+                Checkbox(
+                    checked = checked,
+                    onCheckedChange = { checked = it },
+                    modifier = Modifier.align(Alignment.CenterVertically)
+                )
+            }
+        }
         Row(modifier = Modifier.padding(start = 6.dp, end = 6.dp, bottom = 6.dp)) {
             OutlinedTextField(
                 value = full,
@@ -314,6 +342,7 @@ fun Subject_Card(subject: String) {
                 modifier = Modifier
                     .padding(horizontal = 4.dp, vertical = 6.dp)
                     .weight(1f),
+                enabled = checked,
                 label = { Text(stringResource(R.string.full_mark)) },
                 placeholder = { Text(text = "150") },
                 trailingIcon = {
@@ -329,7 +358,7 @@ fun Subject_Card(subject: String) {
                     keyboardType = KeyboardType.Number
                 ),
                 keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Right) }),
-                singleLine = true,
+                singleLine = true
             )
             OutlinedTextField(
                 value = mark,
@@ -337,6 +366,7 @@ fun Subject_Card(subject: String) {
                 modifier = Modifier
                     .padding(horizontal = 3.dp, vertical = 6.dp)
                     .weight(1f),
+                enabled = checked,
                 label = { Text(stringResource(R.string.mark)) },
                 placeholder = { Text(text = "150") },
                 trailingIcon = {

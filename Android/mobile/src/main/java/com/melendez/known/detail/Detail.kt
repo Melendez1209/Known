@@ -29,6 +29,7 @@ import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -56,6 +57,7 @@ fun Detail(navTotalController: NavHostController) {
     )
 
     var isFavorite by remember { mutableStateOf(false) }
+    val behaviorTop = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val scrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
 
     Scaffold(
@@ -70,7 +72,9 @@ fun Detail(navTotalController: NavHostController) {
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }
-                })
+                },
+                scrollBehavior = behaviorTop
+            )
         },
         bottomBar = {
             BottomAppBar(
@@ -150,7 +154,8 @@ fun Detail(navTotalController: NavHostController) {
             stringResource(R.string.biology),
             stringResource(R.string.political),
             stringResource(R.string.history),
-            stringResource(R.string.geography)
+            stringResource(R.string.geography),
+            stringResource(R.string.pe)
         )
         var course by remember { mutableIntStateOf(0) }
 
@@ -173,6 +178,7 @@ fun Detail(navTotalController: NavHostController) {
                 modifier = Modifier
                     .padding(bottom = it.calculateBottomPadding())
                     .fillMaxWidth()
+                    .nestedScroll(behaviorTop.nestedScrollConnection)
             ) {
                 items(50) {
                     Text(text = "$it")

@@ -60,20 +60,21 @@ android {
 
 dependencies {
 
-    val composeBom = "2024.04.00"
-    val ui = "1.7.0-alpha06"
-    val material = "1.3.0-alpha04"
-    val accompanist = "0.35.0-alpha"
-    val lifecycle = "2.8.0-alpha04"
+    val composeBom = "2024.06.00"
+    val ui = "1.7.0-beta04"
+    val material = "1.3.0-beta04"
+    val accompanist = "0.35.1-alpha"
+    val lifecycle = "2.8.2"
 
-    implementation("androidx.core:core-ktx:1.13.0-rc01")
-    implementation("androidx.activity:activity-compose:1.9.0-rc01")
+    implementation("androidx.core:core-ktx:1.13.1")
+    implementation("androidx.activity:activity-compose:1.9.0")
     implementation("io.coil-kt:coil-compose:2.6.0")
     implementation("com.android.volley:volley:1.2.1")
-    implementation("com.google.ai.client.generativeai:generativeai:0.3.0")
+    implementation("com.google.ai.client.generativeai:generativeai:0.8.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle")
     implementation("androidx.compose.ui:ui:$ui")
+    implementation("androidx.compose.animation:animation:$ui")
     implementation("androidx.compose.ui:ui-graphics:$ui")
     implementation("androidx.compose.ui:ui-tooling-preview:$ui")
     implementation("androidx.compose.runtime:runtime-livedata:$ui")
@@ -85,8 +86,8 @@ dependencies {
     implementation(platform("androidx.compose:compose-bom:$composeBom"))
 
     //Firebase
-    implementation(platform("com.google.firebase:firebase-bom:32.8.0"))// The BoM for the Firebase platform
-    implementation("com.google.firebase:firebase-messaging:23.4.1")
+    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))// The BoM for the Firebase platform
+    implementation("com.google.firebase:firebase-messaging:24.0.0")
 
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$ui")
     androidTestImplementation(platform("androidx.compose:compose-bom:$composeBom"))
