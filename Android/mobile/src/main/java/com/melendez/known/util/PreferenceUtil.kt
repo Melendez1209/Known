@@ -3,9 +3,12 @@ package com.melendez.known.util
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
+import com.google.android.material.color.DynamicColors
+import com.melendez.known.App.Companion.applicationScope
 import com.melendez.known.R
 import com.melendez.known.colour.PaletteStyle
 import com.melendez.known.ui.theme.DEFAULT_SEED_COLOR
+import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.update

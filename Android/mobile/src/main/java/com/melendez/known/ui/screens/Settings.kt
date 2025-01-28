@@ -61,9 +61,13 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
+import com.melendez.known.colour.LocalTonalPalettes
 import com.melendez.known.colour.PaletteStyle
 import com.melendez.known.colour.TonalPalettes
 import com.melendez.known.colour.TonalPalettes.Companion.toTonalPalettes
+import com.melendez.known.colour.a1
+import com.melendez.known.colour.a2
+import com.melendez.known.colour.a3
 import com.melendez.known.common.LocalDynamicColorSwitch
 import com.melendez.known.common.LocalPaletteStyleIndex
 import com.melendez.known.common.LocalSeedColor
@@ -196,7 +200,7 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.Center,
                 ) {
-                    ColorButtons(com.junkfood.seal.ui.page.settings.appearance.ColorList[page])
+                    ColorButtons(ColorList[page])
                 }
             } else {
                 // ColorButton for Monochrome theme
