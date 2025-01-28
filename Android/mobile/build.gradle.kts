@@ -2,16 +2,16 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
-
 android {
     namespace = "com.melendez.known"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "com.melendez.known"
         minSdk = 29
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 1
         versionName = "1.0.12"
 
@@ -60,17 +60,19 @@ android {
 
 dependencies {
 
-    val composeBom = "2024.06.00"
-    val ui = "1.7.0-beta04"
-    val material = "1.3.0-beta04"
-    val accompanist = "0.35.1-alpha"
-    val lifecycle = "2.8.2"
 
-    implementation("androidx.core:core-ktx:1.13.1")
-    implementation("androidx.activity:activity-compose:1.9.0")
-    implementation("io.coil-kt:coil-compose:2.6.0")
+    val composeBom = "2025.01.00"
+    val ui = "1.8.0-alpha08"
+    val material = "1.4.0-alpha06"
+    val accompanist = "0.36.0"
+    val lifecycle = "2.9.0-alpha08"
+
+    implementation("androidx.core:core-ktx:1.16.0-alpha01")
+    implementation("androidx.activity:activity-compose:1.10.0")
+    implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("com.android.volley:volley:1.2.1")
-    implementation("com.google.ai.client.generativeai:generativeai:0.8.0")
+    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
+    implementation("me.zhanghai.compose.preference:library:1.1.1")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle")
     implementation("androidx.compose.ui:ui:$ui")
@@ -78,16 +80,12 @@ dependencies {
     implementation("androidx.compose.ui:ui-graphics:$ui")
     implementation("androidx.compose.ui:ui-tooling-preview:$ui")
     implementation("androidx.compose.runtime:runtime-livedata:$ui")
-    implementation("androidx.compose.material:material-icons-extended:$ui")
+    implementation("androidx.compose.material:material-icons-extended:1.7.6")
     implementation("androidx.compose.material3:material3:$material")
     implementation("androidx.compose.material3:material3-window-size-class:$material")
     implementation("com.google.accompanist:accompanist-navigation-animation:$accompanist")
     implementation("com.google.accompanist:accompanist-swiperefresh:$accompanist")
     implementation(platform("androidx.compose:compose-bom:$composeBom"))
-
-    //Firebase
-    implementation(platform("com.google.firebase:firebase-bom:33.0.0"))// The BoM for the Firebase platform
-    implementation("com.google.firebase:firebase-messaging:24.0.0")
 
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:$ui")
     androidTestImplementation(platform("androidx.compose:compose-bom:$composeBom"))

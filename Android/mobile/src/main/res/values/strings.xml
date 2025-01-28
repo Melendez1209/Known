@@ -1,6 +1,4 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <string name="app_name">Known</string>
-    <string name="home">Home</string>
     <string name="me">Me</string>
     <string name="history">History</string>
     <string name="add">Add new</string>
@@ -86,7 +84,7 @@
     <string name="share">Share</string>
     <string name="print">Print</string>
     <string name="delete">Delete</string>
-    <string name="favourite">Add to favorite</string>
+    <string name="add_favourite">Add to favorite</string>
     <string name="education_information">Education Information</string>
     <string name="done">Done</string>
     <string name="all">All</string>
@@ -99,4 +97,12 @@
     <string name="attention">Attention</string>
     <string name="disclaimer">Your sponsorship is not a Marketing Effort of the Software Publisher (Known Team)! It is only a way for you to support the development of the software (Known)! Our software is completely free of charge!</string>
     <string name="pe">PE</string>
+    <string name="classmates">Classmates</string>
+    <string name="favourites">Favourites</string>
+    <string name="app_name">Known</string>
+    <string name="home">Home</string>
+    <string name="google" translatable="false">Google</string>
+    <string name="follow_system">System</string>
+    <string name="on">On</string>
+    <string name="off">Off</string>
 </resources>

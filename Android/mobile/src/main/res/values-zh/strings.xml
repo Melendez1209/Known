@@ -87,7 +87,7 @@
     <string name="share">分享</string>
     <string name="print">打印</string>
     <string name="delete">删除</string>
-    <string name="favourite">喜欢</string>
+    <string name="add_favourite">收藏</string>
     <string name="education_information">教育资讯</string>
     <string name="done">完成</string>
     <string name="all">全部</string>
@@ -100,4 +100,9 @@
     <string name="attention">注意</string>
     <string name="disclaimer">您的赞助行为不属于软件发行方（ Known 团队）的经营性行为！仅作您对于本软件（ Known ）发展的支持！我们的软件功能完全免费！</string>
     <string name="pe">体育</string>
+    <string name="classmates">同学</string>
+    <string name="favourites">收藏</string>
+    <string name="follow_system">跟随系统</string>
+    <string name="on">开</string>
+    <string name="off">关</string>
 </resources>

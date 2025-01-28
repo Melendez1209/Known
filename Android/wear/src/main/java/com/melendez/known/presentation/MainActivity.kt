@@ -10,17 +10,26 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.rounded.History
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Devices
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.wear.compose.material.Chip
+import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.MaterialTheme
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
@@ -36,38 +45,58 @@ class MainActivity : ComponentActivity() {
         setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
-            WearApp("Android")
+            WearApp()
         }
     }
 }
 
 @Composable
-fun WearApp(greetingName: String) {
+fun WearApp() {
+
+    val listState = rememberRes
+
     KnownTheme {
-        Box(
+        Box {
+            TimeText()
+            LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
                 .background(MaterialTheme.colors.background),
-            contentAlignment = Alignment.Center
+                contentPadding = PaddingValues(
+                    top = 32.dp,
+                    start = 8.dp,
+                    end = 8.dp,
+                    bottom = 32.dp
+                ),
+                verticalArrangement = Arrangement.Center,
+                state = listState
         ) {
-            TimeText()
-            Greeting(greetingName = greetingName)
+                items(3) {
+                    Chip(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(bottom = 8.dp),
+                        onClick = {},
+                        label = { Text(stringResource(R.string.history), maxLines = 1) },
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Rounded.History,
+                                "History",
+                                modifier = Modifier
+                                    .size(24.dp)
+                                    .wrapContentSize(align = Alignment.Center)
+                            )
+                        }
+                    )
+                }
+            }
         }
     }
+
 }
 
-@Composable
-fun Greeting(greetingName: String) {
-    Text(
-        modifier = Modifier.fillMaxWidth(),
-        textAlign = TextAlign.Center,
-        color = MaterialTheme.colors.primary,
-        text = stringResource(R.string.hello_world, greetingName)
-    )
-}
-
-@Preview(device = Devices.WEAR_OS_SMALL_ROUND, showSystemUi = true)
+@Preview(device = "id:wearos_large_round", showSystemUi = true)
 @Composable
 fun DefaultPreview() {
-    WearApp("Preview Android")
+    WearApp()
 }

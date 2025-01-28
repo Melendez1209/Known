@@ -16,19 +16,20 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
-import com.melendez.known.about.AboutScreen
-import com.melendez.known.account.compose.Signin
-import com.melendez.known.account.compose.Signup
-import com.melendez.known.add.compose.DRP
-import com.melendez.known.add.compose.Inputting
-import com.melendez.known.detail.Detail
-import com.melendez.known.feedback.Bug
-import com.melendez.known.feedback.Feature
-import com.melendez.known.feedback.Feedback
-import com.melendez.known.main.MainScreen
-import com.melendez.known.prophets.compose.Prophets
-import com.melendez.known.settings.compose.Settings
-import com.melendez.known.theme.KnownTheme
+import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.melendez.known.ui.screens.AboutScreen
+import com.melendez.known.ui.screens.Detail
+import com.melendez.known.ui.screens.Prophets
+import com.melendez.known.ui.screens.Screens
+import com.melendez.known.ui.screens.Settings
+import com.melendez.known.ui.screens.Signin
+import com.melendez.known.ui.screens.add.DRP
+import com.melendez.known.ui.screens.add.Inputting
+import com.melendez.known.ui.screens.feedback.Bug
+import com.melendez.known.ui.screens.feedback.Feature
+import com.melendez.known.ui.screens.feedback.Feedback
+import com.melendez.known.ui.screens.main.MainScreen
+import com.melendez.known.ui.theme.KnownTheme
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalAnimationApi::class)
 class MainActivity : ComponentActivity() {
@@ -144,12 +145,6 @@ class MainActivity : ComponentActivity() {
                     }
                     composable(Screens.Signin.router) {
                         Signin(
-                            widthSizeClass = widthSizeClass,
-                            navTotalController = navTotalController
-                        )
-                    }
-                    composable(Screens.Signup.router) {
-                        Signup(
                             widthSizeClass = widthSizeClass,
                             navTotalController = navTotalController
                         )
