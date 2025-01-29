@@ -78,6 +78,7 @@ dependencies {
     implementation("me.zhanghai.compose.preference:library:1.1.1")
     implementation("androidx.compose.material:material-icons-extended:1.7.6")
     implementation("com.google.android.material:material:1.13.0-alpha10")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.36.0")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle")

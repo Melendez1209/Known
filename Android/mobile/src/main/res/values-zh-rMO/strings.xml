@@ -105,4 +105,8 @@
     <string name="follow_system">跟隨系統</string>
     <string name="on">開</string>
     <string name="off">關</string>
+    <string name="multiselect_mode">多選模式</string>
+    <string name="custom_command_enabled_hint">部分選項在使用自訂命令時不可用</string>
+    <string name="open_settings">開啟設定</string>
+    <string name="dynamic_color_desc">將桌布顏色套用至應用程式主題</string>
 </resources>

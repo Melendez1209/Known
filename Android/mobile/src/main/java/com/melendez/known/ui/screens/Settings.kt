@@ -21,6 +21,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
@@ -28,6 +29,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
 import androidx.compose.material.icons.outlined.Check
+import androidx.compose.material.icons.outlined.Colorize
 import androidx.compose.material.icons.rounded.Feedback
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -60,6 +62,8 @@ import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.google.accompanist.pager.HorizontalPagerIndicator
+import com.google.android.material.color.DynamicColors
 import com.melendez.known.R
 import com.melendez.known.colour.LocalTonalPalettes
 import com.melendez.known.colour.PaletteStyle
@@ -68,9 +72,10 @@ import com.melendez.known.colour.TonalPalettes.Companion.toTonalPalettes
 import com.melendez.known.colour.a1
 import com.melendez.known.colour.a2
 import com.melendez.known.colour.a3
-import com.melendez.known.common.LocalDynamicColorSwitch
-import com.melendez.known.common.LocalPaletteStyleIndex
-import com.melendez.known.common.LocalSeedColor
+import com.melendez.known.ui.components.LocalDynamicColorSwitch
+import com.melendez.known.ui.components.LocalPaletteStyleIndex
+import com.melendez.known.ui.components.LocalSeedColor
+import com.melendez.known.ui.components.PreferenceSwitch
 import com.melendez.known.util.PreferenceUtil
 import com.melendez.known.util.STYLE_MONOCHROME
 import com.melendez.known.util.STYLE_TONAL_SPOT
@@ -168,6 +173,7 @@ fun Settings_Medium(navTotalController: NavHostController) {
     }
 }
 
+@Suppress("DEPRECATION")
 @SuppressLint("MissingPermission", "MutableCollectionMutableState")
 @Composable
 fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) {
@@ -187,47 +193,75 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
             ) {
                 pageCount
             }
-
-        HorizontalPager(
-            modifier = Modifier
-                .fillMaxWidth()
-                .clearAndSetSemantics {},
-            state = pagerState,
-            contentPadding = PaddingValues(horizontal = 12.dp),
-        ) { page ->
-            if (page < pageCount - 1) {
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                ) {
-                    ColorButtons(ColorList[page])
+        LazyColumn(modifier = modifier) {
+            item {
+                Column {
+                    HorizontalPager(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .clearAndSetSemantics {},
+                        state = pagerState,
+                        contentPadding = PaddingValues(horizontal = 12.dp),
+                    ) { page ->
+                        if (page < pageCount - 1) {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center,
+                            ) {
+                                ColorButtons(ColorList[page])
+                            }
+                        } else {
+                            // ColorButton for Monochrome theme
+                            val isSelected =
+                                LocalPaletteStyleIndex.current == STYLE_MONOCHROME &&
+                                        !LocalDynamicColorSwitch.current
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center,
+                            ) {
+                                ColorButtonImpl(
+                                    modifier = Modifier,
+                                    isSelected = { isSelected },
+                                    tonalPalettes =
+                                        Color.Black.toTonalPalettes(PaletteStyle.Monochrome),
+                                    onClick = {
+                                        PreferenceUtil.switchDynamicColor(enabled = false)
+                                        PreferenceUtil.modifyThemeSeedColor(
+                                            Color.Black.toArgb(),
+                                            STYLE_MONOCHROME,
+                                        )
+                                    },
+                                )
+                            }
+                        }
+                    }
+                    HorizontalPagerIndicator(
+                        pagerState = pagerState,
+                        pageCount = pageCount,
+                        modifier =
+                            Modifier
+                                .clearAndSetSemantics {}
+                                .align(Alignment.CenterHorizontally)
+                                .padding(vertical = 12.dp),
+                        activeColor = MaterialTheme.colorScheme.primary,
+                        inactiveColor = MaterialTheme.colorScheme.outlineVariant,
+                        indicatorHeight = 6.dp,
+                        indicatorWidth = 6.dp,
+                    )
                 }
-            } else {
-                // ColorButton for Monochrome theme
-                val isSelected =
-                    LocalPaletteStyleIndex.current == STYLE_MONOCHROME &&
-                            !LocalDynamicColorSwitch.current
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                ) {
-                    ColorButtonImpl(
-                        modifier = Modifier,
-                        isSelected = { isSelected },
-                        tonalPalettes =
-                            Color.Black.toTonalPalettes(PaletteStyle.Monochrome),
-                        onClick = {
-                            PreferenceUtil.switchDynamicColor(enabled = false)
-                            PreferenceUtil.modifyThemeSeedColor(
-                                Color.Black.toArgb(),
-                                STYLE_MONOCHROME,
-                            )
-                        },
+            }
+            if (DynamicColors.isDynamicColorAvailable()) {
+                item {
+                    PreferenceSwitch(
+                        title = stringResource(id = R.string.dynamic_color),
+                        description = stringResource(id = R.string.dynamic_color_desc),
+                        icon = Icons.Outlined.Colorize,
+                        isChecked = LocalDynamicColorSwitch.current,
+                        onClick = { PreferenceUtil.switchDynamicColor() },
                     )
                 }
             }
         }
-
 
 //        ProvidePreferenceLocals {
 //            LazyColumn {
