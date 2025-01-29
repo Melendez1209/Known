@@ -111,4 +111,5 @@
     <string name="dynamic_color_desc">Apply colors from wallpapers to the app theme</string>
     <string name="dark_theme">Dark theme</string>
     <string name="sample">Sample</string>
+    <string name="language">Display language</string>
 </resources>

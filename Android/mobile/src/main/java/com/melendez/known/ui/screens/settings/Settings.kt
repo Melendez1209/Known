@@ -31,6 +31,7 @@ import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Colorize
 import androidx.compose.material.icons.outlined.DarkMode
+import androidx.compose.material.icons.outlined.Language
 import androidx.compose.material.icons.outlined.LightMode
 import androidx.compose.material.icons.rounded.Feedback
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -78,6 +79,7 @@ import com.melendez.known.ui.components.LocalDarkTheme
 import com.melendez.known.ui.components.LocalDynamicColorSwitch
 import com.melendez.known.ui.components.LocalPaletteStyleIndex
 import com.melendez.known.ui.components.LocalSeedColor
+import com.melendez.known.ui.components.PreferenceItem
 import com.melendez.known.ui.components.PreferenceSwitch
 import com.melendez.known.ui.components.PreferenceSwitchWithDivider
 import com.melendez.known.ui.screens.Screens
@@ -87,7 +89,9 @@ import com.melendez.known.util.PreferenceUtil
 import com.melendez.known.util.STYLE_MONOCHROME
 import com.melendez.known.util.STYLE_TONAL_SPOT
 import com.melendez.known.util.paletteStyles
+import com.melendez.known.util.toDisplayName
 import io.material.hct.Hct
+import java.util.Locale
 
 
 private val ColorList =
@@ -280,6 +284,15 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
                     },
                     onClick = { navTotalController.navigate(Screens.Dark.router) },
                 )
+            }
+            item {
+                PreferenceItem(
+                    title = stringResource(R.string.language),
+                    icon = Icons.Outlined.Language,
+                    description = Locale.getDefault().toDisplayName(),
+                ) {
+                    navTotalController.navigate(Screens.Language.router)
+                }
             }
         }
 

@@ -29,6 +29,7 @@ import com.melendez.known.ui.screens.feedback.Feature
 import com.melendez.known.ui.screens.feedback.Feedback
 import com.melendez.known.ui.screens.main.MainScreen
 import com.melendez.known.ui.screens.settings.Dark
+import com.melendez.known.ui.screens.settings.Language
 import com.melendez.known.ui.screens.settings.Settings
 import com.melendez.known.ui.theme.KnownTheme
 
@@ -116,6 +117,9 @@ class MainActivity : ComponentActivity() {
                     composable(Screens.Dark.router) {
                         Dark()
                     }
+                    composable(Screens.Language.router) {
+                        Language()
+                    }
                     composable(Screens.DRP.router) { DRP(navTotalController = navTotalController) }
                     composable(Screens.Inputting.router) {
                         Inputting(
@@ -159,7 +163,6 @@ class MainActivity : ComponentActivity() {
                     composable(Screens.Prophets.router) {
                         Prophets(navTotalController = navTotalController)
                     }
-
                 }
             }
         }

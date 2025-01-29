@@ -111,4 +111,5 @@
     <string name="dynamic_color_desc">將桌布顏色套用至應用程式主題</string>
     <string name="dark_theme">深色主題</string>
     <string name="sample">示例</string>
+    <string name="language">介面語言</string>
 </resources>

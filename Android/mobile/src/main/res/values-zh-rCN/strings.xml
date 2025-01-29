@@ -111,4 +111,5 @@
     <string name="dynamic_color_desc">将壁纸颜色应用于应用主题</string>
     <string name="dark_theme">深色模式</string>
     <string name="sample">示例</string>
+    <string name="language">界面语言</string>
 </resources>
