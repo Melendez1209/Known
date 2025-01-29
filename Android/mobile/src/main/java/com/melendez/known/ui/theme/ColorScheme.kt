@@ -5,6 +5,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.Stable
 import androidx.compose.ui.graphics.Color
+import com.melendez.known.colour.TonalPalettes
 import com.melendez.known.ui.components.LocalFixedColorRoles
 
 const val DEFAULT_SEED_COLOR = 0xa3d48d
@@ -64,6 +65,7 @@ data class FixedColorRoles(
     val onTertiaryFixedVariant: Color,
 ) {
     companion object {
+
         @Stable
         internal fun fromColorSchemes(
             lightColors: ColorScheme,
@@ -83,6 +85,26 @@ data class FixedColorRoles(
                 secondaryFixedDim = darkColors.secondary,
                 tertiaryFixedDim = darkColors.tertiary,
             )
+        }
+
+        @Stable
+        internal fun fromTonalPalettes(palettes: TonalPalettes): FixedColorRoles {
+            return with(palettes) {
+                FixedColorRoles(
+                    primaryFixed = accent1(90.toDouble()),
+                    primaryFixedDim = accent1(80.toDouble()),
+                    onPrimaryFixed = accent1(10.toDouble()),
+                    onPrimaryFixedVariant = accent1(30.toDouble()),
+                    secondaryFixed = accent2(90.toDouble()),
+                    secondaryFixedDim = accent2(80.toDouble()),
+                    onSecondaryFixed = accent2(10.toDouble()),
+                    onSecondaryFixedVariant = accent2(30.toDouble()),
+                    tertiaryFixed = accent3(90.toDouble()),
+                    tertiaryFixedDim = accent3(80.toDouble()),
+                    onTertiaryFixed = accent3(10.toDouble()),
+                    onTertiaryFixedVariant = accent3(30.toDouble()),
+                )
+            }
         }
     }
 }

@@ -30,10 +30,11 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
 import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Colorize
-import androidx.compose.material.icons.outlined.DarkMode
-import androidx.compose.material.icons.outlined.Language
-import androidx.compose.material.icons.outlined.LightMode
+import androidx.compose.material.icons.rounded.Colorize
+import androidx.compose.material.icons.rounded.DarkMode
 import androidx.compose.material.icons.rounded.Feedback
+import androidx.compose.material.icons.rounded.Language
+import androidx.compose.material.icons.rounded.LightMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -266,7 +267,7 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
                     PreferenceSwitch(
                         title = stringResource(id = R.string.dynamic_color),
                         description = stringResource(id = R.string.dynamic_color_desc),
-                        icon = Icons.Outlined.Colorize,
+                        icon = if (LocalDynamicColorSwitch.current) Icons.Rounded.Colorize else Icons.Outlined.Colorize,
                         isChecked = LocalDynamicColorSwitch.current,
                         onClick = { PreferenceUtil.switchDynamicColor() },
                     )
@@ -276,7 +277,7 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
                 val isDarkTheme = LocalDarkTheme.current.isDarkTheme()
                 PreferenceSwitchWithDivider(
                     title = stringResource(id = R.string.dark_theme),
-                    icon = if (isDarkTheme) Icons.Outlined.DarkMode else Icons.Outlined.LightMode,
+                    icon = if (isDarkTheme) Icons.Rounded.DarkMode else Icons.Rounded.LightMode,
                     isChecked = isDarkTheme,
                     description = LocalDarkTheme.current.getDarkThemeDesc(),
                     onChecked = {
@@ -288,26 +289,15 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
             item {
                 PreferenceItem(
                     title = stringResource(R.string.language),
-                    icon = Icons.Outlined.Language,
+                    icon = Icons.Rounded.Language,
                     description = Locale.getDefault().toDisplayName(),
                 ) {
                     navTotalController.navigate(Screens.Language.router)
                 }
             }
         }
-
-//        ProvidePreferenceLocals {
-//            LazyColumn {
-//                switchPreference(
-//                    key = "switch_preference",
-//                    defaultValue = true,
-//                    title = { Text(text = "Switch preference") },
-//                    icon = { Icon(imageVector = Icons.Outlined.Info, contentDescription = null) },
-//                    summary = { Text(text = if (it) "On" else "Off") }
-//                )
-//            }
-//        }
     }
+}
 
 
 //    val context = LocalContext.current
@@ -488,7 +478,6 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
 //            }
 //        }
 //    }
-}
 
 
 @Composable
