@@ -11,6 +11,7 @@ import com.melendez.known.ui.theme.DEFAULT_SEED_COLOR
 import com.tencent.mmkv.MMKV
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
@@ -47,31 +48,48 @@ object PreferenceUtil {
         MutableStateFlow(
             AppSettings(
                 DarkThemePreference(
-                    darkThemeValue =
-                        kv.decodeInt(
-                            DARK_THEME_VALUE,
-                            DarkThemePreference.FOLLOW_SYSTEM
-                        ),
-                    isHighContrastModeEnabled = kv.decodeBool(
-                        HIGH_CONTRAST,
-                        false
+                    darkThemeValue = kv.decodeInt(
+                        DARK_THEME_VALUE,
+                        DarkThemePreference.FOLLOW_SYSTEM
                     ),
+                    isHighContrastModeEnabled = kv.decodeBool(HIGH_CONTRAST, false),
                 ),
-                isDynamicColorEnabled =
-                    kv.decodeBool(
-                        DYNAMIC_COLOR,
-                        DynamicColors.isDynamicColorAvailable()
-                    ),
-                seedColor = kv.decodeInt(
-                    THEME_COLOR,
-                    DEFAULT_SEED_COLOR
+                isDynamicColorEnabled = kv.decodeBool(
+                    DYNAMIC_COLOR,
+                    DynamicColors.isDynamicColorAvailable()
                 ),
-                paletteStyleIndex = kv.decodeInt(
-                    PALETTE_STYLE,
-                    0
-                ),
+                seedColor = kv.decodeInt(THEME_COLOR, DEFAULT_SEED_COLOR),
+                paletteStyleIndex = kv.decodeInt(PALETTE_STYLE, 0),
             )
         )
+
+    val AppSettingsStateFlow = mutableAppSettingsStateFlow.asStateFlow()
+
+    fun modifyDarkThemePreference(
+        darkThemeValue: Int = AppSettingsStateFlow.value.darkTheme.darkThemeValue,
+        isHighContrastModeEnabled: Boolean =
+            AppSettingsStateFlow.value.darkTheme.isHighContrastModeEnabled,
+    ) {
+        applicationScope.launch(Dispatchers.IO) {
+            mutableAppSettingsStateFlow.update {
+                it.copy(
+                    darkTheme =
+                        AppSettingsStateFlow.value.darkTheme.copy(
+                            darkThemeValue = darkThemeValue,
+                            isHighContrastModeEnabled = isHighContrastModeEnabled,
+                        )
+                )
+            }
+            kv.encode(
+                DARK_THEME_VALUE,
+                darkThemeValue
+            )
+            kv.encode(
+                HIGH_CONTRAST,
+                isHighContrastModeEnabled
+            )
+        }
+    }
 
     fun switchDynamicColor(
         enabled: Boolean = !mutableAppSettingsStateFlow.value.isDynamicColorEnabled

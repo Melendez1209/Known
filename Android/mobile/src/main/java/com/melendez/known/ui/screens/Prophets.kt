@@ -186,7 +186,7 @@ fun ChatArea(
     }
 }
 
-@Preview(device = "id:pixel_8_pro")
+@Preview(device = "id:pixel_9_pro")
 @Composable
 fun Prophets_Preview() {
     Prophets(navTotalController = rememberNavController())

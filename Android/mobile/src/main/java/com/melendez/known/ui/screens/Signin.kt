@@ -104,7 +104,7 @@ fun Signin_MediumExpanded(navTotalController: NavHostController) {
     }
 }
 
-@Preview(device = "id:pixel_8_pro")
+@Preview(device = "id:pixel_9_pro")
 @Composable
 fun Signin_Content() {
     Column {

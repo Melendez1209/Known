@@ -109,4 +109,6 @@
     <string name="custom_command_enabled_hint">Some options are unavailable when using custom command</string>
     <string name="open_settings">Open settings</string>
     <string name="dynamic_color_desc">Apply colors from wallpapers to the app theme</string>
+    <string name="dark_theme">Dark theme</string>
+    <string name="sample">Sample</string>
 </resources>

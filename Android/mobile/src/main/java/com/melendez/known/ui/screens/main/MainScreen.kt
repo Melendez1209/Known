@@ -412,7 +412,7 @@ fun Main_Expanded(
 }
 
 @OptIn(ExperimentalAnimationApi::class)
-@Preview(device = "id:pixel_8_pro")
+@Preview(device = "id:pixel_9_pro")
 @Composable
 fun MainScreen_Preview() {
     MainScreen(

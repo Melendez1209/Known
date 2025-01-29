@@ -399,7 +399,7 @@ fun Subject_Card_Preview() {
     Subject_Card(subject = "Subject")
 }
 
-@Preview(device = "id:pixel_7_pro")
+@Preview(device = "id:pixel_9_pro")
 @Composable
 fun Inputting_Preview() {
     Inputting(

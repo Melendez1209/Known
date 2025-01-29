@@ -109,4 +109,6 @@
     <string name="custom_command_enabled_hint">部分選項在使用自訂命令時不可用</string>
     <string name="open_settings">開啟設定</string>
     <string name="dynamic_color_desc">將桌布顏色套用至應用程式主題</string>
+    <string name="dark_theme">深色主題</string>
+    <string name="sample">示例</string>
 </resources>

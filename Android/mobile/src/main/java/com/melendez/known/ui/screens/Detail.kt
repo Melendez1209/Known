@@ -187,7 +187,7 @@ fun Detail(navTotalController: NavHostController) {
     }
 }
 
-@Preview(device = "id:pixel_8_pro")
+@Preview(device = "id:pixel_9_pro")
 @Composable
 fun Detail_Preview() {
     Detail(navTotalController = rememberNavController())

@@ -36,10 +36,10 @@ fun Home(paddingValues: PaddingValues? = null) {
 
         val items =
             listOf(
-                CarouselItem(0, R.drawable.plane, R.string.app_name),
-                CarouselItem(1, R.drawable.hiot, R.string.about),
-                CarouselItem(2, R.drawable.sunset, R.string.actual),
-                CarouselItem(3, R.drawable.crose, R.string.add)
+                CarouselItem(0, R.drawable.sample0, R.string.sample),
+                CarouselItem(1, R.drawable.sample1, R.string.sample),
+                CarouselItem(2, R.drawable.sample2, R.string.sample),
+                CarouselItem(3, R.drawable.sample3, R.string.sample)
             )
 
 
@@ -61,7 +61,7 @@ fun Home(paddingValues: PaddingValues? = null) {
                 val item = items[i]
                 Image(
                     painter = rememberAsyncImagePainter(item.drawableRes),
-                    contentDescription = stringResource(item.contentDescriptionResId),
+                    contentDescription = stringResource(item.contentDescriptionResId) + i,
                     modifier = Modifier
                         .height(220.dp)
                         .maskClip(MaterialTheme.shapes.extraLarge),
@@ -72,7 +72,7 @@ fun Home(paddingValues: PaddingValues? = null) {
     }
 }
 
-@Preview(device = "id:pixel_8_pro")
+@Preview(device = "id:pixel_9_pro")
 @Composable
 fun Home_Preview() {
     Home()

@@ -21,7 +21,6 @@ import com.melendez.known.ui.screens.AboutScreen
 import com.melendez.known.ui.screens.Detail
 import com.melendez.known.ui.screens.Prophets
 import com.melendez.known.ui.screens.Screens
-import com.melendez.known.ui.screens.Settings
 import com.melendez.known.ui.screens.Signin
 import com.melendez.known.ui.screens.add.DRP
 import com.melendez.known.ui.screens.add.Inputting
@@ -29,6 +28,8 @@ import com.melendez.known.ui.screens.feedback.Bug
 import com.melendez.known.ui.screens.feedback.Feature
 import com.melendez.known.ui.screens.feedback.Feedback
 import com.melendez.known.ui.screens.main.MainScreen
+import com.melendez.known.ui.screens.settings.Dark
+import com.melendez.known.ui.screens.settings.Settings
 import com.melendez.known.ui.theme.KnownTheme
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalAnimationApi::class)
@@ -112,6 +113,9 @@ class MainActivity : ComponentActivity() {
                             navTotalController = navTotalController
                         )
                     }
+                    composable(Screens.Dark.router) {
+                        Dark()
+                    }
                     composable(Screens.DRP.router) { DRP(navTotalController = navTotalController) }
                     composable(Screens.Inputting.router) {
                         Inputting(
@@ -155,6 +159,7 @@ class MainActivity : ComponentActivity() {
                     composable(Screens.Prophets.router) {
                         Prophets(navTotalController = navTotalController)
                     }
+
                 }
             }
         }

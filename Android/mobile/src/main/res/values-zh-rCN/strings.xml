@@ -109,4 +109,6 @@
     <string name="custom_command_enabled_hint">部分选项在自定义命令模式下不可用</string>
     <string name="open_settings">打开应用设置</string>
     <string name="dynamic_color_desc">将壁纸颜色应用于应用主题</string>
+    <string name="dark_theme">深色模式</string>
+    <string name="sample">示例</string>
 </resources>

@@ -75,7 +75,6 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("com.android.volley:volley:1.2.1")
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
-    implementation("me.zhanghai.compose.preference:library:1.1.1")
     implementation("androidx.compose.material:material-icons-extended:1.7.6")
     implementation("com.google.android.material:material:1.13.0-alpha10")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.36.0")

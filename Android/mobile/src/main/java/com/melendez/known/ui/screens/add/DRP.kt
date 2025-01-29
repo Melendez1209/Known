@@ -132,7 +132,7 @@ fun DRP(navTotalController: NavHostController) {
     }
 }
 
-@Preview(group = "DateRangePicker", device = "id:pixel_7_pro")
+@Preview(device = "id:pixel_9_pro")
 @Composable
 fun DRP_preview() {
     DRP(navTotalController = rememberNavController())

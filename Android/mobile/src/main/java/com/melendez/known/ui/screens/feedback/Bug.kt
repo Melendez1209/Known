@@ -450,7 +450,7 @@ fun feedbackBug(title: String, steps: MutableList<String>, context: Context, fai
     queue.add(jsonObjectRequest)
 }
 
-@Preview(device = "id:pixel_8_pro")
+@Preview(device = "id:pixel_9_pro")
 @Composable
 fun Bug_Preview() {
     Bug(widthSizeClass = WindowWidthSizeClass.Compact, navTotalController = rememberNavController())
