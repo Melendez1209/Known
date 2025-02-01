@@ -100,24 +100,24 @@ private val ColorList =
 
 
 @Composable
-fun Settings(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
+fun Appearance(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
     when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> Settings_CompactExpanded(navTotalController = navTotalController)
-        WindowWidthSizeClass.Medium -> Settings_Medium(navTotalController = navTotalController)
-        WindowWidthSizeClass.Expanded -> Settings_CompactExpanded(navTotalController = navTotalController)
-        else -> Settings_CompactExpanded(navTotalController = navTotalController)
+        WindowWidthSizeClass.Compact -> Appearance_CompactExpanded(navTotalController = navTotalController)
+        WindowWidthSizeClass.Medium -> Appearance_Medium(navTotalController = navTotalController)
+        WindowWidthSizeClass.Expanded -> Appearance_CompactExpanded(navTotalController = navTotalController)
+        else -> Appearance_CompactExpanded(navTotalController = navTotalController)
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Settings_CompactExpanded(navTotalController: NavHostController) {
+fun Appearance_CompactExpanded(navTotalController: NavHostController) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Column {
         LargeTopAppBar(
-            title = { Text(text = stringResource(R.string.settings)) },
+            title = { Text(text = stringResource(R.string.look_and_feel)) },
             navigationIcon = {
                 IconButton(onClick = { navTotalController.popBackStack() }) {
                     Icon(
@@ -149,13 +149,13 @@ fun Settings_CompactExpanded(navTotalController: NavHostController) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Settings_Medium(navTotalController: NavHostController) {
+fun Appearance_Medium(navTotalController: NavHostController) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Column {
         MediumTopAppBar(
-            title = { Text(text = stringResource(R.string.settings)) },
+            title = { Text(text = stringResource(R.string.look_and_feel)) },
             navigationIcon = {
                 IconButton(onClick = { navTotalController.popBackStack() }) {
                     Icon(
@@ -580,7 +580,7 @@ fun RowScope.ColorButtonImpl(
 @Preview(device = "id:pixel_9_pro")
 @Composable
 fun Settings_Preview() {
-    Settings(
+    Appearance(
         widthSizeClass = WindowWidthSizeClass.Compact,
         navTotalController = rememberNavController()
     )
