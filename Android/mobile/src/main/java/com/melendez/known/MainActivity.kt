@@ -28,9 +28,9 @@ import com.melendez.known.ui.screens.feedback.Bug
 import com.melendez.known.ui.screens.feedback.Feature
 import com.melendez.known.ui.screens.feedback.Feedback
 import com.melendez.known.ui.screens.main.MainScreen
+import com.melendez.known.ui.screens.settings.Appearance
 import com.melendez.known.ui.screens.settings.Dark
 import com.melendez.known.ui.screens.settings.Language
-import com.melendez.known.ui.screens.settings.Settings
 import com.melendez.known.ui.theme.KnownTheme
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalAnimationApi::class)
@@ -109,7 +109,7 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Screens.Settings.router) {
-                        Settings(
+                        Appearance(
                             widthSizeClass = widthSizeClass,
                             navTotalController = navTotalController
                         )

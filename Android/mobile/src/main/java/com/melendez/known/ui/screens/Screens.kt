@@ -2,7 +2,7 @@ package com.melendez.known.ui.screens
 
 sealed class Screens(val router: String) {
     data object Main : Screens("MainScreen")
-    data object Settings : Screens("Settings")
+    data object Settings : Screens("Appearance")
     data object Dark : Screens("Dark")
     data object Language : Screens("Language")
     data object DRP : Screens("DateRangePicker")

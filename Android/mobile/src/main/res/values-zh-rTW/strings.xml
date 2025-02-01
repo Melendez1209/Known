@@ -112,4 +112,5 @@
     <string name="dark_theme">深色主題</string>
     <string name="sample">示例</string>
     <string name="language">介面語言</string>
+    <string name="look_and_feel"><![CDATA[介面與外觀]]></string>
 </resources>
