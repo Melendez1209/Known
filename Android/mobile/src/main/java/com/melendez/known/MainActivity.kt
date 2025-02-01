@@ -115,7 +115,10 @@ class MainActivity : ComponentActivity() {
                         )
                     }
                     composable(Screens.Dark.router) {
-                        Dark()
+                        Dark(
+                            widthSizeClass = widthSizeClass,
+                            navTotalController = navTotalController
+                        )
                     }
                     composable(Screens.Language.router) {
                         Language()

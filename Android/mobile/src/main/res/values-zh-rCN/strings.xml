@@ -113,4 +113,6 @@
     <string name="sample">示例</string>
     <string name="language">界面语言</string>
     <string name="look_and_feel"><![CDATA[视觉和样式]]></string>
+    <string name="additional_settings">附加设置</string>
+    <string name="high_contrast">高对比度深色主题</string>
 </resources>

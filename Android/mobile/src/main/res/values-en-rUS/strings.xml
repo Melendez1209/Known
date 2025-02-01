@@ -113,4 +113,6 @@
     <string name="sample">Sample</string>
     <string name="language">Display language</string>
     <string name="look_and_feel"><![CDATA[Look & feel]]></string>
+    <string name="additional_settings">Additional settings</string>
+    <string name="high_contrast">High contrast dark theme</string>
 </resources>
