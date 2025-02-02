@@ -51,6 +51,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
 
+const val weblate = "https://hosted.weblate.org/engage/"
 
 @Composable
 fun AboutScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {

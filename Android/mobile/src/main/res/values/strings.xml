@@ -115,4 +115,9 @@
     <string name="look_and_feel"><![CDATA[Look & feel]]></string>
     <string name="additional_settings">Additional settings</string>
     <string name="high_contrast">High contrast dark theme</string>
+    <string name="translate">Translate</string>
+    <string name="translate_desc">Help translate this app on Hosted Weblate</string>
+    <string name="suggested">Suggested</string>
+    <string name="all_languages">All languages</string>
+    <string name="system_settings">System settings</string>
 </resources>

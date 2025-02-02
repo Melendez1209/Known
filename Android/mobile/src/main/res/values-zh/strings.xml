@@ -115,4 +115,9 @@
     <string name="look_and_feel"><![CDATA[视觉和样式]]></string>
     <string name="additional_settings">附加设置</string>
     <string name="high_contrast">高对比度深色主题</string>
+    <string name="translate">翻译</string>
+    <string name="translate_desc">在 Weblate 上帮助我们翻译此应用</string>
+    <string name="suggested">推荐</string>
+    <string name="all_languages">所有语言</string>
+    <string name="system_settings">系统设置</string>
 </resources>

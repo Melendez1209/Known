@@ -115,4 +115,9 @@
     <string name="look_and_feel"><![CDATA[介面與外觀]]></string>
     <string name="additional_settings">其他設定</string>
     <string name="high_contrast">高對比深色主題</string>
+    <string name="translate">翻譯</string>
+    <string name="translate_desc">在 Hosted Weblate 上協助翻譯此應用程式</string>
+    <string name="suggested">建議</string>
+    <string name="all_languages">所有語言</string>
+    <string name="system_settings">系統設定</string>
 </resources>
