@@ -1,25 +1,25 @@
 document.addEventListener('DOMContentLoaded', () => {
     const themeDropdown = document.querySelector('.theme-dropdown');
     
-    // 获取系统主题
+    // Get system theme
     function getSystemTheme() {
         return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
     }
     
-    // 应用主题
+    // Apply theme
     function applyTheme(theme) {
         const actualTheme = theme === 'system' ? getSystemTheme() : theme;
         document.documentElement.setAttribute('data-theme', actualTheme);
         document.documentElement.setAttribute('data-theme-setting', theme);
         
-        // 更新图标显示
+        // Update icon display
         updateThemeIcon(theme);
         
-        // 更新选中状态
+        // Update selected state
         updateSelectedTheme(theme);
     }
     
-    // 更新主题图标
+    // Update theme icon
     function updateThemeIcon(theme) {
         const darkIcon = document.querySelector('.dark-icon');
         const lightIcon = document.querySelector('.light-icon');
@@ -38,25 +38,25 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
-    // 更新选中状态
+    // Update selected state
     function updateSelectedTheme(theme) {
-        // 先移除所有选中状态
+        // Remove all selected states first
         document.querySelectorAll('.theme-dropdown button').forEach(btn => {
             btn.removeAttribute('data-selected');
         });
         
-        // 设置当前主题的选中状态
+        // Set selected state for current theme
         const selectedButton = document.querySelector(`.theme-dropdown button[data-theme="${theme}"]`);
         if (selectedButton) {
             selectedButton.setAttribute('data-selected', 'true');
         }
     }
     
-    // 初始化主题
+    // Initialise theme
     const savedTheme = localStorage.getItem('theme') || 'system';
     applyTheme(savedTheme);
     
-    // 监听主题选择
+    // Listen for theme selection
     themeDropdown.addEventListener('click', (e) => {
         const button = e.target.closest('button');
         if (!button) return;
@@ -66,7 +66,7 @@ document.addEventListener('DOMContentLoaded', () => {
         applyTheme(theme);
     });
     
-    // 监听系统主题变化
+    // Listen for system theme changes
     window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
         const currentThemeSetting = document.documentElement.getAttribute('data-theme-setting');
         if (currentThemeSetting === 'system') {

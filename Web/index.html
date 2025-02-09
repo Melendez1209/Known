@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script>
-        // 检查系统主题和用户偏好
+        // Check system theme and user preferences
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
         const savedTheme = localStorage.getItem('theme');
 
-        // 设置初始主题
+        // Set initial theme
         if (savedTheme) {
             document.documentElement.setAttribute('data-theme', savedTheme);
         } else {
@@ -19,6 +19,7 @@
         }
     </script>
     <script src="src/script.js" defer></script>
+    <script src="src/main.js" type="module"></script>
 </head>
 <body>
 <header>
@@ -121,5 +122,24 @@
 <footer>
     <p>&copy; 2024 Known. 基于 MIT 协议开源。</p>
 </footer>
+
+<select id="language-selector">
+    <script>
+        // Dynamically generate language options
+        const locales = {
+            'zh-CN': '简体中文',
+            'zh-TW': '繁體中文（台灣）',
+            'zh-HK': '繁體中文（香港）',
+            'zh-MO': '繁體中文（澳門）',
+            'zh-SG': '繁體中文（新加坡）',
+            'en-US': 'English (US)',
+            'en-GB': 'English (UK)'
+        };
+        
+        Object.entries(locales).forEach(([code, name]) => {
+            document.write(`<option value="${code}">${name}</option>`);
+        });
+    </script>
+</select>
 </body>
 </html>
