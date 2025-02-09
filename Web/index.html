@@ -7,11 +7,11 @@
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script>
-        // 检查系统主题和用户偏好
+        // Check system theme and user preferences
         const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
         const savedTheme = localStorage.getItem('theme');
-        
-        // 设置初始主题
+
+        // Set initial theme
         if (savedTheme) {
             document.documentElement.setAttribute('data-theme', savedTheme);
         } else {
@@ -19,80 +19,127 @@
         }
     </script>
     <script src="src/script.js" defer></script>
+    <script src="src/main.js" type="module"></script>
 </head>
 <body>
-    <header>
-        <nav>
-            <div class="logo">
-                <img src="res/Logo.png" alt="Known Logo">
-            </div>
-            <ul>
-                <li><a href="#home" data-i18n="nav.home">首页</a></li>
-                <li><a href="#features" data-i18n="nav.features">功能</a></li>
-                <li><a href="#download" data-i18n="nav.download">下载</a></li>
-                <li><a href="#about" data-i18n="nav.about">关于</a></li>
-            </ul>
-        </nav>
-    </header>
-
-    <main>
-        <section id="home" class="hero">
-            <h1>Known</h1>
-            <p class="subtitle">你的智能学习助手</p>
-            <div class="cta-buttons">
-                <a href="#download" class="cta-primary">立即下载</a>
-                <a href="#features" class="cta-secondary">了解更多</a>
-            </div>
-        </section>
-
-        <section id="features">
-            <h2>主要功能</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <i class="fas fa-chart-line" style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                    <h3>成绩分析</h3>
-                    <p>智能分析考试成绩，追踪学习进度</p>
+<header>
+    <nav>
+        <div class="logo">
+            <img src="res/Logo.png" alt="Known Logo">
+        </div>
+        <ul>
+            <li><a href="#home" data-i18n="nav.home">首页</a></li>
+            <li><a href="#features" data-i18n="nav.features">功能</a></li>
+            <li><a href="#download" data-i18n="nav.download">下载</a></li>
+            <li><a  href="#about" data-i18n="nav.about">关于</a></li>
+            <li class="theme-selector">
+                <button class="theme-toggle">
+                    <i class="fas fa-sun light-icon"></i>
+                    <i class="fas fa-moon dark-icon"></i>
+                    <i class="fas fa-desktop system-icon"></i>
+                </button>
+                <div class="theme-dropdown">
+                    <button data-theme="light">
+                        <i class="fas fa-sun"></i>
+                        浅色模式
+                    </button>
+                    <button data-theme="dark" class="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                        深色模式
+                    </button>
+                    <button data-theme="system">
+                        <i class="fas fa-desktop"></i>
+                        跟随系统
+                    </button>
                 </div>
-                <div class="feature-card">
-                    <i class="fas fa-trophy" style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                    <h3>学习激励</h3>
-                    <p>个性化的激励系统，让学习更有动力</p>
-                </div>
-                <div class="feature-card">
-                    <i class="fas fa-chart-pie" style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                    <h3>数据统计</h3>
-                    <p>直观的数据可视化，清晰展示学习成果</p>
-                </div>
-            </div>
-        </section>
+            </li>
+        </ul>
+    </nav>
+</header>
 
-        <section id="download">
-            <h2 data-i18n="download.title">下载应用</h2>
-            <div class="download-options">
-                <a href="#" class="download-button android">
-                    <img src="https://developer.android.google.cn/static/images/logos/android.svg?hl=zh-cn" alt="Android" class="platform-icon">
-                    <span data-i18n="download.android">Android</span>
-                    <span class="version-text">v1.0.0</span>
-                </a>
-                <a href="#" class="download-button harmony">
-                    <img src="https://ts4.cn.mm.bing.net/th?id=ODLS.3c17df29-83d4-4042-820e-4b42e82c1f01&w=32&h=32&qlt=90&pcl=fffffa&o=6&pid=1.2" alt="HarmonyOS" class="platform-icon">
-                    <span data-i18n="download.harmony">HarmonyOS</span>
-                    <span class="version-text">v1.0.0</span>
-                </a>
-            </div>
-        </section>
+<main>
+    <section id="home" class="hero">
+        <h1>Known</h1>
+        <p class="subtitle">你的智能学习助手</p>
+        <div class="cta-buttons">
+            <a href="#download" class="cta-primary">立即下载</a>
+            <a href="#features" class="cta-secondary">了解更多</a>
+        </div>
+    </section>
 
-        <section id="about">
-            <h2>关于 Known</h2>
-            <p>Known 是由北京的一名初中生开发的应用程序，旨在帮助学生更好地分析考试成绩并保持学习动力。我们希望 Known 能够成为你学习路上的得力助手。</p>
-            <div class="github-link">
-                <a href="https://github.com/Melendez1209/Known" target="_blank">在 GitHub 上查看项目</a>
+    <section id="features">
+        <h2>主要功能</h2>
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-chart-line"
+                   style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3>成绩分析</h3>
+                <p>智能分析考试成绩，追踪学习进度</p>
             </div>
-        </section>
-    </main>
+            <div class="feature-card">
+                <i class="fas fa-trophy"
+                   style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3>学习激励</h3>
+                <p>个性化的激励系统，让学习更有动力</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-chart-pie"
+                   style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3>数据统计</h3>
+                <p>直观的数据可视化，清晰展示学习成果</p>
+            </div>
+        </div>
+    </section>
 
-    <footer>
-        <p>&copy; 2024 Known. 基于 MIT 协议开源。</p>
-    </footer>
+    <section id="download">
+        <h2 data-i18n="download.title">下载应用</h2>
+        <div class="download-options">
+            <a href="#" class="download-button android">
+                <img src="https://developer.android.google.cn/static/images/logos/android.svg?hl=zh-cn" alt="Android"
+                     class="platform-icon">
+                <span data-i18n="download.android">Android</span>
+                <span class="version-text">v1.0.0</span>
+            </a>
+            <a href="#" class="download-button harmony">
+                <img src="https://ts4.cn.mm.bing.net/th?id=ODLS.3c17df29-83d4-4042-820e-4b42e82c1f01&w=32&h=32&qlt=90&pcl=fffffa&o=6&pid=1.2"
+                     alt="HarmonyOS" class="platform-icon">
+                <span data-i18n="download.harmony">HarmonyOS</span>
+                <span class="version-text">v1.0.0</span>
+            </a>
+        </div>
+    </section>
+
+    <section id="about">
+        <h2>关于 Known</h2>
+        <p>Known 是由北京的一名初中生开发的应用程序，旨在帮助学生更好地分析考试成绩并保持学习动力。我们希望 Known
+            能够成为你学习路上的得力助手。</p>
+        <div class="github-link">
+            <a href="https://github.com/Melendez1209/Known" target="_blank">在 GitHub 上查看项目</a>
+        </div>
+    </section>
+</main>
+
+<footer>
+    <p>&copy; 2024 Known. 基于 MIT 协议开源。</p>
+</footer>
+
+<select id="language-selector">
+    <script>
+        // Dynamically generate language options
+        const locales = {
+            'zh-CN': '简体中文',
+            'zh-TW': '繁體中文（台灣）',
+            'zh-HK': '繁體中文（香港）',
+            'zh-MO': '繁體中文（澳門）',
+            'zh-SG': '繁體中文（新加坡）',
+            'en-US': 'English (US)',
+            'en-GB': 'English (UK)'
+        };
+        
+        Object.entries(locales).forEach(([code, name]) => {
+            document.write(`<option value="${code}">${name}</option>`);
+        });
+    </script>
+</select>
 </body>
 </html>
