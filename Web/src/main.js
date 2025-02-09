@@ -69,14 +69,14 @@ function updateLanguage(locale) {
   });
 }
 
-// 监听语言选择器变化
+// Listen for language selector changes
 document.getElementById('language-selector').addEventListener('change', (event) => {
   const selectedLocale = event.target.value;
   updateLanguage(selectedLocale);
   localStorage.setItem('preferred-locale', selectedLocale);
 });
 
-// 初始化语言
+// Initialize language
 const savedLocale = localStorage.getItem('preferred-locale');
 const initialLocale = savedLocale || getDefaultLocale();
 document.getElementById('language-selector').value = initialLocale;
