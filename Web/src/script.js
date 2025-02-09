@@ -91,4 +91,39 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadText.style.opacity = '1';
         versionText.style.opacity = '0';
     });
+
+    // Language selection
+    const langDropdown = document.querySelector('.lang-dropdown');
+    
+    // Initialize language
+    const savedLang = localStorage.getItem('lang') || 'zh-CN';
+    document.documentElement.setAttribute('lang', savedLang);
+    updateSelectedLang(savedLang);
+    
+    function updateSelectedLang(lang) {
+        // Remove all selected states first
+        document.querySelectorAll('.lang-dropdown button').forEach(btn => {
+            btn.removeAttribute('data-selected');
+        });
+        
+        // Set selected state for current language
+        const selectedButton = document.querySelector(`.lang-dropdown button[data-lang="${lang}"]`);
+        if (selectedButton) {
+            selectedButton.setAttribute('data-selected', 'true');
+        }
+    }
+    
+    // Listen for language selection
+    langDropdown.addEventListener('click', (e) => {
+        const button = e.target.closest('button');
+        if (!button) return;
+        
+        const lang = button.dataset.lang;
+        localStorage.setItem('lang', lang);
+        document.documentElement.setAttribute('lang', lang);
+        updateSelectedLang(lang);
+        
+        // Reload page to apply new language
+        // window.location.reload();  // Uncomment this when i18n is implemented
+    });
 }); 

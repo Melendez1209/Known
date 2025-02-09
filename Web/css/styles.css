@@ -261,12 +261,11 @@ section {
     box-shadow: 0 4px 12px var(--shadow-color);
     padding: 0.8rem;
     z-index: 1000;
-    min-width: 150px;
+    min-width: 180px;
     gap: 0.5rem;
     display: flex;
     flex-direction: column;
     
-    /* 修改显示/隐藏的方式 */
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px);
@@ -274,7 +273,6 @@ section {
 }
 
 .theme-selector:hover .theme-dropdown {
-    /* 修改显示状态 */
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
@@ -283,7 +281,7 @@ section {
 .theme-dropdown button {
     display: flex;
     align-items: center;
-    gap: 0.5rem;
+    gap: 0.8rem;
     width: 100%;
     padding: 0.8rem 1rem;
     border: none;
@@ -293,10 +291,19 @@ section {
     transition: background-color 0.2s;
     border-radius: 4px;
     margin: 0;
+    font-size: 0.95rem;
+    white-space: nowrap;
 }
 
 .theme-dropdown button:hover {
     background: var(--shadow-color);
+}
+
+.theme-dropdown button i {
+    display: inline-block;
+    width: 1.2rem;
+    text-align: center;
+    flex-shrink: 0;
 }
 
 /* 添加选中项的样式 */
@@ -353,7 +360,7 @@ section {
     display: none;
 }
 
-/* 语言选择器样式 */
+/* Language selector styles */
 .lang-selector {
     position: relative;
 }
@@ -365,31 +372,56 @@ section {
     background: var(--card-background);
     border-radius: 8px;
     box-shadow: 0 4px 12px var(--shadow-color);
-    padding: 0.5rem;
-    display: none;
+    padding: 0.8rem;
     z-index: 1000;
-    min-width: 150px;
+    min-width: 180px;
+    gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
 }
 
 .lang-selector:hover .lang-dropdown {
-    display: block;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
 .lang-dropdown button {
     display: flex;
     align-items: center;
+    gap: 0.8rem;
     width: 100%;
-    padding: 0.5rem 1rem;
+    padding: 0.8rem 1rem;
     border: none;
     background: none;
     color: var(--text-color);
     cursor: pointer;
     transition: background-color 0.2s;
     border-radius: 4px;
+    margin: 0;
+    font-size: 0.95rem;
+    white-space: nowrap;
 }
 
 .lang-dropdown button:hover {
     background: var(--shadow-color);
+}
+
+.lang-dropdown button::before {
+    content: '';
+}
+
+/* Add selected state styles */
+.lang-dropdown button[data-selected="true"]::before {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    color: var(--primary-color);
 }
 
 .lang-toggle {
@@ -404,6 +436,11 @@ section {
 
 .lang-toggle:hover {
     color: var(--primary-color);
+}
+
+/* Remove old language selector */
+#language-selector {
+    display: none;
 }
 
 .download-btn {
@@ -443,4 +480,89 @@ section {
 
 .download-btn:hover .download-text {
     opacity: 0;
+}
+
+/* Common dropdown styles */
+.theme-dropdown,
+.lang-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: var(--card-background);
+    border-radius: 8px;
+    box-shadow: 0 4px 12px var(--shadow-color);
+    padding: 0.8rem;
+    z-index: 1000;
+    min-width: 180px;
+    gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
+}
+
+/* Common dropdown button styles */
+.theme-dropdown button,
+.lang-dropdown button {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: none;
+    background: none;
+    color: var(--text-color);
+    cursor: pointer;
+    transition: background-color 0.2s;
+    border-radius: 4px;
+    margin: 0;
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+/* Icon container for both dropdowns */
+.theme-dropdown button i,
+.lang-dropdown button::before {
+    display: inline-block;
+    width: 1.2rem;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* Language dropdown specific styles */
+.lang-dropdown button::before {
+    content: '';
+}
+
+.lang-dropdown button[data-selected="true"]::before {
+    content: '\f00c';
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    color: var(--primary-color);
+}
+
+/* Hover states */
+.theme-dropdown button:hover,
+.lang-dropdown button:hover {
+    background: var(--shadow-color);
+}
+
+/* Toggle button styles */
+.theme-toggle,
+.lang-toggle {
+    background: none;
+    border: none;
+    color: var(--text-color);
+    cursor: pointer;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    transition: color 0.3s ease;
+}
+
+.theme-toggle:hover,
+.lang-toggle:hover {
+    color: var(--primary-color);
 } 

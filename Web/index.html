@@ -31,7 +31,35 @@
             <li><a href="#home" data-i18n="nav.home">首页</a></li>
             <li><a href="#features" data-i18n="nav.features">功能</a></li>
             <li><a href="#download" data-i18n="nav.download">下载</a></li>
-            <li><a  href="#about" data-i18n="nav.about">关于</a></li>
+            <li><a href="#about" data-i18n="nav.about">关于</a></li>
+            <li class="lang-selector">
+                <button class="lang-toggle">
+                    <i class="fas fa-globe"></i>
+                </button>
+                <div class="lang-dropdown">
+                    <button data-lang="zh-CN">
+                        <span>简体中文</span>
+                    </button>
+                    <button data-lang="zh-TW">
+                        <span>繁體中文（台灣）</span>
+                    </button>
+                    <button data-lang="zh-HK">
+                        <span>繁體中文（香港）</span>
+                    </button>
+                    <button data-lang="zh-MO">
+                        <span>繁體中文（澳門）</span>
+                    </button>
+                    <button data-lang="zh-SG">
+                        <span>繁體中文（新加坡）</span>
+                    </button>
+                    <button data-lang="en-US">
+                        <span>English (US)</span>
+                    </button>
+                    <button data-lang="en-GB">
+                        <span>English (UK)</span>
+                    </button>
+                </div>
+            </li>
             <li class="theme-selector">
                 <button class="theme-toggle">
                     <i class="fas fa-sun light-icon"></i>
@@ -122,24 +150,5 @@
 <footer>
     <p>&copy; 2024 Known. 基于 MIT 协议开源。</p>
 </footer>
-
-<select id="language-selector">
-    <script>
-        // Dynamically generate language options
-        const locales = {
-            'zh-CN': '简体中文',
-            'zh-TW': '繁體中文（台灣）',
-            'zh-HK': '繁體中文（香港）',
-            'zh-MO': '繁體中文（澳門）',
-            'zh-SG': '繁體中文（新加坡）',
-            'en-US': 'English (US)',
-            'en-GB': 'English (UK)'
-        };
-        
-        Object.entries(locales).forEach(([code, name]) => {
-            document.write(`<option value="${code}">${name}</option>`);
-        });
-    </script>
-</select>
 </body>
 </html>
