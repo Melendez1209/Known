@@ -14,6 +14,9 @@ document.addEventListener('DOMContentLoaded', () => {
         
         // 更新图标显示
         updateThemeIcon(theme);
+        
+        // 更新选中状态
+        updateSelectedTheme(theme);
     }
     
     // 更新主题图标
@@ -32,6 +35,20 @@ document.addEventListener('DOMContentLoaded', () => {
             darkIcon.style.display = 'inline-block';
         } else {
             lightIcon.style.display = 'inline-block';
+        }
+    }
+    
+    // 更新选中状态
+    function updateSelectedTheme(theme) {
+        // 先移除所有选中状态
+        document.querySelectorAll('.theme-dropdown button').forEach(btn => {
+            btn.removeAttribute('data-selected');
+        });
+        
+        // 设置当前主题的选中状态
+        const selectedButton = document.querySelector(`.theme-dropdown button[data-theme="${theme}"]`);
+        if (selectedButton) {
+            selectedButton.setAttribute('data-selected', 'true');
         }
     }
     

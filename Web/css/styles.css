@@ -1,7 +1,7 @@
 :root {
     /* 浅色模式变量 */
     --primary-color: #A54BCF;
-    --secondary-color: #2c3e50;
+    --secondary-color: #006E2B;
     --background-color: #f8f5fb;
     --text-color: #2c3e50;
     --gradient-secondary: #C78AE6;
@@ -13,10 +13,10 @@
 
 /* 深色模式变量 */
 [data-theme="dark"] {
-    --background-color: #1a1a1a;
+    --background-color: #2b2b2b;
     --text-color: #e0e0e0;
-    --card-background: #2d2d2d;
-    --nav-background: #2d2d2d;
+    --card-background: #363636;
+    --nav-background: #363636;
     --shadow-color: rgba(165, 75, 207, 0.2);
     --shadow-color-hover: rgba(165, 75, 207, 0.4);
 }
@@ -259,14 +259,25 @@ section {
     background: var(--card-background);
     border-radius: 8px;
     box-shadow: 0 4px 12px var(--shadow-color);
-    padding: 0.5rem;
-    display: none;
+    padding: 0.8rem;
     z-index: 1000;
     min-width: 150px;
+    gap: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    
+    /* 修改显示/隐藏的方式 */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
 }
 
 .theme-selector:hover .theme-dropdown {
-    display: block;
+    /* 修改显示状态 */
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
 }
 
 .theme-dropdown button {
@@ -274,17 +285,35 @@ section {
     align-items: center;
     gap: 0.5rem;
     width: 100%;
-    padding: 0.5rem 1rem;
+    padding: 0.8rem 1rem;
     border: none;
     background: none;
     color: var(--text-color);
     cursor: pointer;
     transition: background-color 0.2s;
     border-radius: 4px;
+    margin: 0;
 }
 
 .theme-dropdown button:hover {
     background: var(--shadow-color);
+}
+
+/* 添加选中项的样式 */
+.theme-dropdown button[data-theme="light"][data-selected="true"],
+.theme-dropdown button[data-theme="dark"][data-selected="true"],
+.theme-dropdown button[data-theme="system"][data-selected="true"] {
+    color: var(--primary-color);
+    background: var(--shadow-color);
+}
+
+/* 第一个和最后一个按钮的特殊处理 */
+.theme-dropdown button:first-child {
+    margin-top: 0;
+}
+
+.theme-dropdown button:last-child {
+    margin-bottom: 0;
 }
 
 /* 图标样式 */
@@ -302,7 +331,7 @@ section {
 }
 
 /* 主题切换按钮样式 */
-.theme-toggle {
+.theme-selector button {
     background: none;
     border: none;
     color: var(--text-color);
@@ -312,7 +341,7 @@ section {
     transition: color 0.3s ease;
 }
 
-.theme-toggle:hover {
+.theme-selector button:hover {
     color: var(--primary-color);
 }
 
@@ -400,7 +429,7 @@ section {
     bottom: -20px;
     font-size: 12px;
     opacity: 0;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
 }
 
 .download-btn:hover .download-icon {
