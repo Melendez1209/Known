@@ -36,7 +36,7 @@ body {
     transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* 导航栏样式 */
+/* Navigation styles */
 nav {
     display: flex;
     justify-content: space-between;
@@ -44,25 +44,66 @@ nav {
     padding: 1rem 5%;
     background: var(--nav-background);
     box-shadow: 0 2px 10px var(--shadow-color);
+    height: 4rem; /* Fixed navigation bar height */
 }
 
 .logo img {
-    height: 40px;
+    height: 2.5rem; /* Adjust logo size */
+    vertical-align: middle;
 }
 
 nav ul {
     display: flex;
     list-style: none;
     gap: 2rem;
+    align-items: center; /* Ensure all items are vertically centred */
+    height: 100%;
+}
+
+nav ul li {
+    display: flex;
+    align-items: center;
+    height: 100%;
 }
 
 nav a {
     text-decoration: none;
     color: var(--text-color);
     font-weight: 500;
+    font-size: 0.95rem; /* Unified font size */
+    padding: 0.5rem 0;
+    display: flex;
+    align-items: center;
 }
 
-/* 主要内容样式 */
+/* Theme and language toggle buttons alignment */
+.theme-toggle,
+.lang-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 2.5rem; /* 与其他导航项目保持一致的高度 */
+    width: 2.5rem;
+    padding: 0;
+    font-size: 1.1rem; /* 稍微调整图标大小 */
+}
+
+/* Ensure dropdowns are properly aligned */
+.theme-dropdown,
+.lang-dropdown {
+    top: calc(100% + 0.5rem); /* Adjust dropdown menu position */
+}
+
+/* Remove any margins that might affect alignment */
+.theme-selector,
+.lang-selector {
+    margin: 0;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+/* Main content styles */
 section {
     padding: 5rem 10%;
 }
