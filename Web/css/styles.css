@@ -460,7 +460,7 @@ section {
 /* Add selected state styles */
 .lang-dropdown button[data-selected="true"]::before {
     content: '\f00c';
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 6 Free', serif;
     font-weight: 900;
     color: var(--primary-color);
 }
@@ -580,7 +580,7 @@ section {
 
 .lang-dropdown button[data-selected="true"]::before {
     content: '\f00c';
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 6 Free', serif;
     font-weight: 900;
     color: var(--primary-color);
 }
