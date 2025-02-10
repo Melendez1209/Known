@@ -46,7 +46,8 @@ const locales = {
     },
     footer: {
       copyright: '基于 MIT 协议开源。'
-    }
+    },
+    appName: '知学情'
   },
   'zh-TW': {
     name: '繁體中文（台灣）',
@@ -95,7 +96,8 @@ const locales = {
     },
     footer: {
       copyright: '基於 MIT 協議開源。'
-    }
+    },
+    appName: '知学情'
   },
   'zh-HK': {
     name: '繁體中文（香港）',
@@ -144,7 +146,8 @@ const locales = {
     },
     footer: {
       copyright: '基于 MIT 协议开源。'
-    }
+    },
+    appName: '知学情'
   },
   'zh-MO': {
     name: '繁體中文（澳門）',
@@ -193,7 +196,8 @@ const locales = {
     },
     footer: {
       copyright: '基于 MIT 协议开源。'
-    }
+    },
+    appName: '知学情'
   },
   'zh-SG': {
     name: '繁體中文（新加坡）',
@@ -242,7 +246,8 @@ const locales = {
     },
     footer: {
       copyright: '基于 MIT 协议开源。'
-    }
+    },
+    appName: '知学情'
   },
   'en-US': {
     name: 'English (US)',
