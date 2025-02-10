@@ -27,6 +27,10 @@ const locales = {
       statistics: {
         title: '数据统计',
         desc: '直观的数据可视化，清晰展示学习成果'
+      },
+      planning: {
+        title: '智能规划',
+        desc: '基于AI的学习计划制定，合理安排时间'
       }
     },
     download: {
@@ -77,6 +81,10 @@ const locales = {
       statistics: {
         title: '數據統計',
         desc: '直觀的數據可視化，清晰展示學習成果'
+      },
+      planning: {
+        title: '智能規劃',
+        desc: '基於AI的學習計劃制定，合理安排時間'
       }
     },
     download: {
@@ -127,6 +135,10 @@ const locales = {
       statistics: {
         title: '数据统计',
         desc: '直观的数据可视化，清晰展示学习成果'
+      },
+      planning: {
+        title: '智能规划',
+        desc: '基于AI的学习计划制定，合理安排时间'
       }
     },
     download: {
@@ -177,6 +189,10 @@ const locales = {
       statistics: {
         title: '数据统计',
         desc: '直观的数据可视化，清晰展示学习成果'
+      },
+      planning: {
+        title: '智能规划',
+        desc: '基于AI的学习计划制定，合理安排时间'
       }
     },
     download: {
@@ -227,6 +243,10 @@ const locales = {
       statistics: {
         title: '数据统计',
         desc: '直观的数据可视化，清晰展示学习成果'
+      },
+      planning: {
+        title: '智能规划',
+        desc: '基于AI的学习计划制定，合理安排时间'
       }
     },
     download: {
@@ -277,6 +297,10 @@ const locales = {
       statistics: {
         title: 'Data Statistics',
         desc: 'Intuitive data visualization of learning outcomes'
+      },
+      planning: {
+        title: 'Smart Planning',
+        desc: 'AI-based study planning for efficient time management'
       }
     },
     download: {
@@ -296,7 +320,8 @@ const locales = {
     },
     footer: {
       copyright: 'Licensed under MIT.'
-    }
+    },
+    appName: 'Known'
   },
   'en-GB': {
     name: 'English (UK)',
@@ -326,6 +351,10 @@ const locales = {
       statistics: {
         title: 'Data Statistics',
         desc: 'Intuitive data visualization of learning outcomes'
+      },
+      planning: {
+        title: 'Smart Planning',
+        desc: 'AI-based study planning for efficient time management'
       }
     },
     download: {
