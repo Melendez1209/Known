@@ -88,34 +88,40 @@
 
 <main>
     <section id="home" class="hero">
-        <h1>知学情</h1>
-        <p class="subtitle">你的智能学习助手</p>
+        <h1 data-i18n="appName">知学情</h1>
+        <p class="subtitle" data-i18n="hero.subtitle">你的智能学习助手</p>
         <div class="cta-buttons">
-            <a href="#download" class="cta-primary">立即下载</a>
-            <a href="#features" class="cta-secondary">了解更多</a>
+            <a href="#download" class="cta-primary" data-i18n="hero.cta.download">立即下载</a>
+            <a href="#features" class="cta-secondary" data-i18n="hero.cta.learnMore">了解更多</a>
         </div>
     </section>
 
     <section id="features">
-        <h2>主要功能</h2>
+        <h2 data-i18n="features.title">主要功能</h2>
         <div class="features-grid">
             <div class="feature-card">
                 <i class="fas fa-chart-line"
                    style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h3>成绩分析</h3>
-                <p>智能分析考试成绩，追踪学习进度</p>
+                <h3 data-i18n="features.analysis.title">成绩分析</h3>
+                <p data-i18n="features.analysis.desc">智能分析考试成绩，追踪学习进度</p>
             </div>
             <div class="feature-card">
                 <i class="fas fa-trophy"
                    style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h3>学习激励</h3>
-                <p>个性化的激励系统，让学习更有动力</p>
+                <h3 data-i18n="features.motivation.title">学习激励</h3>
+                <p data-i18n="features.motivation.desc">个性化的激励系统，让学习更有动力</p>
             </div>
             <div class="feature-card">
                 <i class="fas fa-chart-pie"
                    style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h3>数据统计</h3>
-                <p>直观的数据可视化，清晰展示学习成果</p>
+                <h3 data-i18n="features.statistics.title">数据统计</h3>
+                <p data-i18n="features.statistics.desc">直观的数据可视化，清晰展示学习成果</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-lightbulb"
+                   style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3 data-i18n="features.planning.title">智能规划</h3>
+                <p data-i18n="features.planning.desc">基于AI的学习计划制定，合理安排时间</p>
             </div>
         </div>
     </section>
@@ -139,17 +145,17 @@
     </section>
 
     <section id="about">
-        <h2>关于 Known</h2>
-        <p>Known 是由北京的一名初中生开发的应用程序，旨在帮助学生更好地分析考试成绩并保持学习动力。我们希望 Known
+        <h2 data-i18n="about.title">关于 Known</h2>
+        <p data-i18n="about.description">Known 是由北京的一名初中生开发的应用程序，旨在帮助学生更好地分析考试成绩并保持学习动力。我们希望 Known
             能够成为你学习路上的得力助手。</p>
         <div class="github-link">
-            <a href="https://github.com/Melendez1209/Known" target="_blank">在 GitHub 上查看项目</a>
+            <a href="https://github.com/Melendez1209/Known" target="_blank" data-i18n="about.github">在 GitHub 上查看项目</a>
         </div>
     </section>
 </main>
 
 <footer>
-    <p>&copy; 2024 Known. 基于 MIT 协议开源。</p>
+    <p>&copy; 2024 Known. <span data-i18n="footer.copyright">基于 MIT 协议开源。</span></p>
 </footer>
 </body>
 </html>
