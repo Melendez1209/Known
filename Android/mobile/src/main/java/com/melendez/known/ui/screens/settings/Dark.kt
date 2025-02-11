@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
@@ -120,6 +121,7 @@ fun Dark_Content(modifier: Modifier) {
 
     val darkThemePreference = LocalDarkTheme.current
     val isHighContrastModeEnabled = darkThemePreference.isHighContrastModeEnabled
+    val preferenceUtil: PreferenceUtil = viewModel()
 
     Surface(modifier.fillMaxSize()) {
         LazyColumn(modifier = modifier) {
@@ -128,7 +130,7 @@ fun Dark_Content(modifier: Modifier) {
                     text = stringResource(R.string.follow_system),
                     selected = darkThemePreference.darkThemeValue == FOLLOW_SYSTEM,
                 ) {
-                    PreferenceUtil.modifyDarkThemePreference(FOLLOW_SYSTEM)
+                    preferenceUtil.modifyDarkThemePreference(FOLLOW_SYSTEM)
                 }
             }
             item {
@@ -136,7 +138,7 @@ fun Dark_Content(modifier: Modifier) {
                     text = stringResource(R.string.on),
                     selected = darkThemePreference.darkThemeValue == ON,
                 ) {
-                    PreferenceUtil.modifyDarkThemePreference(ON)
+                    preferenceUtil.modifyDarkThemePreference(ON)
                 }
             }
             item {
@@ -144,7 +146,7 @@ fun Dark_Content(modifier: Modifier) {
                     text = stringResource(R.string.off),
                     selected = darkThemePreference.darkThemeValue == OFF,
                 ) {
-                    PreferenceUtil.modifyDarkThemePreference(OFF)
+                    preferenceUtil.modifyDarkThemePreference(OFF)
                 }
             }
             item { PreferenceSubtitle(text = stringResource(R.string.additional_settings)) }
@@ -154,7 +156,7 @@ fun Dark_Content(modifier: Modifier) {
                     icon = Icons.Outlined.Contrast,
                     isChecked = isHighContrastModeEnabled,
                     onClick = {
-                        PreferenceUtil.modifyDarkThemePreference(
+                        preferenceUtil.modifyDarkThemePreference(
                             isHighContrastModeEnabled = !isHighContrastModeEnabled
                         )
                     }

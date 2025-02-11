@@ -14,9 +14,11 @@ import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSiz
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.ui.platform.LocalView
 import androidx.core.view.ViewCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
+import com.melendez.known.data.repository.SettingsRepository
 import com.melendez.known.ui.screens.AboutScreen
 import com.melendez.known.ui.screens.Detail
 import com.melendez.known.ui.screens.Prophets
@@ -32,16 +34,21 @@ import com.melendez.known.ui.screens.settings.Appearance
 import com.melendez.known.ui.screens.settings.Dark
 import com.melendez.known.ui.screens.settings.Language
 import com.melendez.known.ui.theme.KnownTheme
+import com.melendez.known.util.PreferenceUtil
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalAnimationApi::class)
 class MainActivity : ComponentActivity() {
+    private lateinit var settingsRepository: SettingsRepository
 
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        // Request per
+
+
 
         setContent {
+            val preferenceUtil: PreferenceUtil = viewModel()
+            preferenceUtil.initializeSettings()
 
             // Set the content colour of the status bar
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
