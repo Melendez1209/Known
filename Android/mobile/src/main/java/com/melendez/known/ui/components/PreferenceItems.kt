@@ -20,12 +20,12 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.selection.selectable
 import androidx.compose.foundation.selection.toggleable
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Check
-import androidx.compose.material.icons.outlined.Info
-import androidx.compose.material.icons.outlined.TipsAndUpdates
-import androidx.compose.material.icons.outlined.ToggleOn
-import androidx.compose.material.icons.outlined.Translate
-import androidx.compose.material.icons.outlined.Update
+import androidx.compose.material.icons.rounded.Check
+import androidx.compose.material.icons.rounded.Info
+import androidx.compose.material.icons.rounded.TipsAndUpdates
+import androidx.compose.material.icons.rounded.ToggleOn
+import androidx.compose.material.icons.rounded.Translate
+import androidx.compose.material.icons.rounded.Update
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -169,12 +169,12 @@ fun PreferenceItemPreview() {
                 PreferenceItem(
                     title = "title",
                     description = "description",
-                    icon = Icons.Outlined.Update,
+                    icon = Icons.Rounded.Update,
                 )
                 PreferenceItemVariant(
                     title = "title",
                     description = "description",
-                    icon = Icons.Outlined.Update,
+                    icon = Icons.Rounded.Update,
                 )
             }
         }
@@ -323,7 +323,7 @@ fun PreferenceSwitchPreview() {
         PreferenceSwitch(
             title = "PreferenceSwitch",
             description = "Supporting text",
-            icon = Icons.Outlined.ToggleOn,
+            icon = Icons.Rounded.ToggleOn,
             isChecked = b,
         ) {
             b = !b
@@ -337,14 +337,14 @@ fun PreferenceSwitchWithDividerPreview() {
     PreferenceSwitchWithDivider(
         title = "PreferenceSwitch",
         description = "Supporting text",
-        icon = Icons.Outlined.ToggleOn,
+        icon = Icons.Rounded.ToggleOn,
     )
 }
 
 @Composable
 fun rememberThumbContent(
     isChecked: Boolean,
-    checkedIcon: ImageVector = Icons.Outlined.Check,
+    checkedIcon: ImageVector = Icons.Rounded.Check,
 ): (@Composable () -> Unit)? =
     remember(isChecked, checkedIcon) {
         if (isChecked) {
@@ -602,7 +602,7 @@ fun PreferencesHintCardPreview() {
     CompositionLocalProvider(LocalTonalPalettes provides Color.Green.toTonalPalettes()) {
         PreferencesHintCard(
             title = "Explore new features",
-            icon = Icons.Outlined.TipsAndUpdates,
+            icon = Icons.Rounded.TipsAndUpdates,
             description = "Find out what's new in this version",
             containerColor = FixedAccentColors.primaryFixed,
             contentColor = FixedAccentColors.onPrimaryFixed,
@@ -614,7 +614,7 @@ fun PreferencesHintCardPreview() {
 fun PreferencesHintCard(
     title: String = "Title ".repeat(2),
     description: String? = "Description text ".repeat(3),
-    icon: ImageVector? = Icons.Outlined.Translate,
+    icon: ImageVector? = Icons.Rounded.Translate,
     containerColor: Color = FixedAccentColors.secondaryFixed,
     contentColor: Color = FixedAccentColors.onSecondaryFixed,
     onClick: () -> Unit = {},
@@ -891,7 +891,7 @@ fun PreferenceSubtitle(
 fun PreferenceInfo(
     modifier: Modifier = Modifier,
     text: String,
-    icon: ImageVector = Icons.Outlined.Info,
+    icon: ImageVector = Icons.Rounded.Info,
     applyPaddings: Boolean = true,
 ) {
     Column(
