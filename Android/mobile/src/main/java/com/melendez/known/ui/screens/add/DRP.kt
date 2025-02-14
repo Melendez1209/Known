@@ -5,7 +5,7 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.NavigateNext
 import androidx.compose.material.icons.rounded.Adjust
 import androidx.compose.material.icons.rounded.Close
@@ -94,7 +94,7 @@ fun DRP(navTotalController: NavHostController) {
                         else navTotalController.popBackStack()
                     }) {
                         Icon(
-                            imageVector = if (state.selectedStartDateMillis != null) Icons.Rounded.Close else Icons.AutoMirrored.Rounded.NavigateBefore,
+                            imageVector = if (state.selectedStartDateMillis != null) Icons.Rounded.Close else Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(R.string.cancel)
                         )
                     }

@@ -17,7 +17,6 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Upload
@@ -27,12 +26,9 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -61,94 +57,26 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.melendez.known.R
+import com.melendez.known.ui.components.SharedTopBar
 import org.json.JSONObject
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Bug(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
-    when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> Bug_CompactExpanded(
-            widthSizeClass = widthSizeClass,
-            navTotalController = navTotalController
-        )
-
-        WindowWidthSizeClass.Medium -> Bug_Medium(
-            widthSizeClass = widthSizeClass,
-            navTotalController = navTotalController
-        )
-
-        WindowWidthSizeClass.Expanded -> Bug_CompactExpanded(
-            widthSizeClass = widthSizeClass,
-            navTotalController = navTotalController
-        )
-
-        else -> Bug_CompactExpanded(
-            widthSizeClass = widthSizeClass,
-            navTotalController = navTotalController
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Bug_CompactExpanded(
-    widthSizeClass: WindowWidthSizeClass,
-    navTotalController: NavHostController,
-) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    Scaffold(
-        topBar = {
-            LargeTopAppBar(
-                title = { Text(text = stringResource(R.string.bug)) },
-                navigationIcon = {
-                    IconButton(onClick = { navTotalController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
-                            contentDescription = stringResource(R.string.back)
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior
-            )
-        }
-    ) { padding ->
+    Column {
+        SharedTopBar(
+            widthSizeClass = widthSizeClass,
+            navTotalController = navTotalController,
+            title = stringResource(R.string.bug),
+            scrollBehavior = scrollBehavior
+        )
         Bug_Content(
             widthSizeClass = widthSizeClass,
             modifier = Modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .padding(top = padding.calculateTopPadding())
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Bug_Medium(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
-
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
-    Scaffold(
-        topBar = {
-            MediumTopAppBar(
-                title = { Text(text = stringResource(R.string.bug)) },
-                navigationIcon = {
-                    IconButton(onClick = { navTotalController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
-                            contentDescription = stringResource(R.string.back)
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior
-            )
-        }
-    ) { padding ->
-        Bug_Content(
-            widthSizeClass = widthSizeClass,
-            modifier = Modifier
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .padding(top = padding.calculateTopPadding())
         )
     }
 }

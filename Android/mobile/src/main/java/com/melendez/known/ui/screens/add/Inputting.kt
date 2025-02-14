@@ -1,4 +1,3 @@
-
 package com.melendez.known.ui.screens.add
 
 import androidx.compose.foundation.layout.Arrangement
@@ -12,7 +11,7 @@ import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.Done
 import androidx.compose.material.icons.rounded.Edit
@@ -155,7 +154,7 @@ fun Inputting_Compact(
             navigationIcon = {
                 IconButton(onClick = { navTotalController.popBackStack() }) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
+                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                         contentDescription = stringResource(R.string.back)
                     )
                 }
@@ -201,7 +200,7 @@ fun Inputting_Medium(
             navigationIcon = {
                 IconButton(onClick = { navTotalController.popBackStack() }) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
+                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                         contentDescription = stringResource(R.string.back)
                     )
                 }
@@ -247,7 +246,7 @@ fun Inputting_Expanded(
             navigationIcon = {
                 IconButton(onClick = { navTotalController.popBackStack() }) {
                     Icon(
-                        imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
+                        imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                         contentDescription = stringResource(R.string.back)
                     )
                 }
