@@ -10,27 +10,7 @@
     },
     {
       "name": "EntryAbility_label",
-      "value": "Known"
-    },
-    {
-      "name": "Tabs_home",
-      "value": "Home"
-    },
-    {
-      "name": "Tabs_history",
-      "value": "History"
-    },
-    {
-      "name": "Tabs_me",
-      "value": "Me"
-    },
-    {
-      "name": "Settings_settings",
-      "value": "Settings"
-    },
-    {
-      "name": "Settings_appearance",
-      "value": "Appearance"
+      "value": "label"
     }
   ]
 }
