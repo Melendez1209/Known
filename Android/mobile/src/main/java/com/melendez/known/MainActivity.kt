@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.WindowInsetsController
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.enableEdgeToEdge
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
@@ -18,7 +19,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.google.accompanist.navigation.animation.AnimatedNavHost
 import com.google.accompanist.navigation.animation.composable
 import com.google.accompanist.navigation.animation.rememberAnimatedNavController
-import com.melendez.known.data.repository.SettingsRepository
 import com.melendez.known.ui.screens.AboutScreen
 import com.melendez.known.ui.screens.Detail
 import com.melendez.known.ui.screens.Prophets
@@ -38,13 +38,10 @@ import com.melendez.known.util.PreferenceUtil
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class, ExperimentalAnimationApi::class)
 class MainActivity : ComponentActivity() {
-    private lateinit var settingsRepository: SettingsRepository
-
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
+        enableEdgeToEdge()
 
         setContent {
             val preferenceUtil: PreferenceUtil = viewModel()

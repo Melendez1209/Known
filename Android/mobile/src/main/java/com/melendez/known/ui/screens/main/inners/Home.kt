@@ -3,12 +3,9 @@ package com.melendez.known.ui.screens.main.inners
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -26,7 +23,7 @@ import com.melendez.known.R
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home(paddingValues: PaddingValues? = null) {
-    Surface(modifier = Modifier.fillMaxSize()) {
+    Surface {
 
         data class CarouselItem(
             val id: Int,
@@ -41,33 +38,22 @@ fun Home(paddingValues: PaddingValues? = null) {
                 CarouselItem(2, R.drawable.sample2, R.string.sample),
                 CarouselItem(3, R.drawable.sample3, R.string.sample)
             )
-
-
-        Column(
-            modifier = if (paddingValues != null) Modifier
-                .padding(top = 8.dp, bottom = paddingValues.calculateBottomPadding())
-                .fillMaxSize()
-            else Modifier
-                .padding(top = 8.dp)
-                .fillMaxSize()
-        ) {
-            HorizontalMultiBrowseCarousel(
-                state = rememberCarouselState { items.count() },
-                preferredItemWidth = 260.dp,
-                modifier = Modifier.fillMaxWidth(),
-                itemSpacing = 8.dp,
-                contentPadding = PaddingValues(horizontal = 16.dp)
-            ) { i ->
-                val item = items[i]
-                Image(
-                    painter = rememberAsyncImagePainter(item.drawableRes),
-                    contentDescription = stringResource(item.contentDescriptionResId) + i,
-                    modifier = Modifier
-                        .height(220.dp)
-                        .maskClip(MaterialTheme.shapes.extraLarge),
-                    contentScale = ContentScale.Crop
-                )
-            }
+        HorizontalMultiBrowseCarousel(
+            state = rememberCarouselState { items.count() },
+            preferredItemWidth = 260.dp,
+            modifier = Modifier.fillMaxWidth(),
+            itemSpacing = 8.dp,
+            contentPadding = PaddingValues(horizontal = 16.dp)
+        ) { i ->
+            val item = items[i]
+            Image(
+                painter = rememberAsyncImagePainter(item.drawableRes),
+                contentDescription = stringResource(item.contentDescriptionResId) + i,
+                modifier = Modifier
+                    .height(220.dp)
+                    .maskClip(MaterialTheme.shapes.extraLarge),
+                contentScale = ContentScale.Crop
+            )
         }
     }
 }
