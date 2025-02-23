@@ -9,7 +9,7 @@ const translations = {
         'error.heading': 'Not Found',
         'error.message': 'Sorry, The page you visited may have been removed.',
         'error.home': 'Back to Home',
-        'error.refresh': 'Refresh Page'
+        'error.refresh': 'Refresh'
     }
 };
 
