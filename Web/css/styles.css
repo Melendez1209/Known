@@ -9,8 +9,8 @@
     --nav-background: white;
     --shadow-color: rgba(165, 75, 207, 0.1);
     --shadow-color-hover: rgba(165, 75, 207, 0.2);
-    --background-rgb: 248, 245, 251;  /* RGB values for #f8f5fb */
-    --text-rgb: 44, 62, 80;          /* RGB values for #2c3e50 */
+    --background-rgb: 248, 245, 251; /* RGB values for #f8f5fb */
+    --text-rgb: 44, 62, 80; /* RGB values for #2c3e50 */
 }
 
 /* Dark mode variables */
@@ -21,8 +21,8 @@
     --nav-background: #363636;
     --shadow-color: rgba(165, 75, 207, 0.2);
     --shadow-color-hover: rgba(165, 75, 207, 0.4);
-    --background-rgb: 43, 43, 43;    /* RGB values for #2b2b2b */
-    --text-rgb: 224, 224, 224;       /* RGB values for #e0e0e0 */
+    --background-rgb: 43, 43, 43; /* RGB values for #2b2b2b */
+    --text-rgb: 224, 224, 224; /* RGB values for #e0e0e0 */
 }
 
 * {
@@ -302,14 +302,14 @@ section {
 }
 
 /* Update link color */
-.github-link {
+.open-source-link {
     display: flex;
     gap: 1.5rem;
     justify-content: center;
     margin-top: 2rem;
 }
 
-.github-link a {
+.open-source-link a {
     display: flex;
     align-items: center;
     gap: 0.5rem;
@@ -323,13 +323,13 @@ section {
     transition: all 0.3s ease;
 }
 
-.github-link a:hover {
+.open-source-link a:hover {
     transform: translateY(-2px);
     box-shadow: 0 4px 8px var(--shadow-color-hover);
     color: var(--primary-color);
 }
 
-.github-link a i {
+.open-source-link a i {
     font-size: 1.2rem;
 }
 
@@ -447,89 +447,6 @@ section {
 }
 
 [data-theme="light"] .light-icon {
-    display: none;
-}
-
-/* Language selector styles */
-.lang-selector {
-    position: relative;
-}
-
-.lang-dropdown {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    background: var(--card-background);
-    border-radius: 8px;
-    box-shadow: 0 4px 12px var(--shadow-color);
-    padding: 0.8rem;
-    z-index: 1000;
-    min-width: 180px;
-    gap: 0.5rem;
-    display: flex;
-    flex-direction: column;
-
-    opacity: 0;
-    visibility: hidden;
-    transform: translateY(-10px);
-    transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
-}
-
-.lang-selector:hover .lang-dropdown {
-    opacity: 1;
-    visibility: visible;
-    transform: translateY(0);
-}
-
-.lang-dropdown button {
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
-    width: 100%;
-    padding: 0.8rem 1rem;
-    border: none;
-    background: none;
-    color: var(--text-color);
-    cursor: pointer;
-    transition: background-color 0.2s;
-    border-radius: 4px;
-    margin: 0;
-    font-size: 0.95rem;
-    white-space: nowrap;
-}
-
-.lang-dropdown button:hover {
-    background: var(--shadow-color);
-}
-
-.lang-dropdown button::before {
-    content: '';
-}
-
-/* Add selected state styles */
-.lang-dropdown button[data-selected="true"]::before {
-    content: '\f00c';
-    font-family: 'Font Awesome 6 Free', serif;
-    font-weight: 900;
-    color: var(--primary-color);
-}
-
-.lang-toggle {
-    background: none;
-    border: none;
-    color: var(--text-color);
-    cursor: pointer;
-    padding: 0.5rem;
-    font-size: 1.2rem;
-    transition: color 0.3s ease;
-}
-
-.lang-toggle:hover {
-    color: var(--primary-color);
-}
-
-/* Remove old language selector */
-#language-selector {
     display: none;
 }
 

@@ -1,15 +1,15 @@
 const translations = {
     zh: {
-        'error.heading': '抱歉，页面走丢了',
-        'error.message': '您访问的页面可能已被移除',
+        'error.heading': '抱歉，页面走丢了~',
+        'error.message': '您访问的页面可能已被移除。',
         'error.home': '返回首页',
         'error.refresh': '刷新页面'
     },
     en: {
-        'error.heading': 'Sorry, Page Not Found',
-        'error.message': 'The page you visited may have been removed',
+        'error.heading': 'Not Found',
+        'error.message': 'Sorry, The page you visited may have been removed.',
         'error.home': 'Back to Home',
-        'error.refresh': 'Refresh Page'
+        'error.refresh': 'Refresh'
     }
 };
 

@@ -91,22 +91,4 @@ document.addEventListener('DOMContentLoaded', () => {
         downloadText.style.opacity = '1';
         versionText.style.opacity = '0';
     });
-
-    // Language selection
-    const langDropdown = document.querySelector('.lang-dropdown');
-    
-    // Initialising the language selection state
-    const savedLang = localStorage.getItem('lang') || 'zh-CN';
-    updateSelectedLang(savedLang);
-    
-    function updateSelectedLang(lang) {
-        document.querySelectorAll('.lang-dropdown button').forEach(btn => {
-            btn.removeAttribute('data-selected');
-        });
-        
-        const selectedButton = document.querySelector(`.lang-dropdown button[data-lang="${lang}"]`);
-        if (selectedButton) {
-            selectedButton.setAttribute('data-selected', 'true');
-        }
-    }
 }); 
