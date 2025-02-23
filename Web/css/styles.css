@@ -302,15 +302,35 @@ section {
 }
 
 /* Update link color */
+.github-link {
+    display: flex;
+    gap: 1.5rem;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
 .github-link a {
-    color: var(--primary-color);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    color: var(--text-color);
     text-decoration: none;
     font-weight: 500;
-    transition: color 0.2s;
+    padding: 0.8rem 1.5rem;
+    border-radius: 8px;
+    background: var(--card-background);
+    box-shadow: 0 2px 4px var(--shadow-color);
+    transition: all 0.3s ease;
 }
 
 .github-link a:hover {
-    color: var(--gradient-secondary);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px var(--shadow-color-hover);
+    color: var(--primary-color);
+}
+
+.github-link a i {
+    font-size: 1.2rem;
 }
 
 /* Theme selector styles */
@@ -640,4 +660,4 @@ section {
 /* To prevent content from being blocked by the fixed navigation bar, add a top margin to the main element */
 main {
     margin-top: 60px;
-} 
+}
