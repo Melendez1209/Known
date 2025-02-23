@@ -9,6 +9,8 @@
     --nav-background: white;
     --shadow-color: rgba(165, 75, 207, 0.1);
     --shadow-color-hover: rgba(165, 75, 207, 0.2);
+    --background-rgb: 248, 245, 251;  /* RGB values for #f8f5fb */
+    --text-rgb: 44, 62, 80;          /* RGB values for #2c3e50 */
 }
 
 /* Dark mode variables */
@@ -19,6 +21,8 @@
     --nav-background: #363636;
     --shadow-color: rgba(165, 75, 207, 0.2);
     --shadow-color-hover: rgba(165, 75, 207, 0.4);
+    --background-rgb: 43, 43, 43;    /* RGB values for #2b2b2b */
+    --text-rgb: 224, 224, 224;       /* RGB values for #e0e0e0 */
 }
 
 * {
@@ -142,7 +146,7 @@ section {
 
 .cta-primary, .cta-secondary {
     padding: 0.8rem 2rem;
-    border-radius: 5px;
+    border-radius: 14px;
     text-decoration: none;
     font-weight: 500;
 }
