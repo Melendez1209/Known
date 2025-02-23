@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404</title>
+    <link rel="icon" type="image/png" href="assets/Logo.png">
+    <link rel="stylesheet" href="css/404.css">
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-logo">
+            <img src="assets/Logo.png" alt="Known Logo">
+        </div>
+        <div class="error-content">
+            <h1>404</h1>
+            <h2 data-i18n="error.heading">抱歉，页面走丢了</h2>
+            <p data-i18n="error.message">您访问的页面可能已被移除</p>
+            <div class="button-group">
+                <a href="index.html" class="back-home" data-i18n="error.home">返回首页</a>
+                <button class="refresh-btn" onclick="window.location.reload()" data-i18n="error.refresh">刷新页面</button>
+            </div>
+        </div>
+    </div>
+    <script src="src/i18n.js"></script>
+</body>
+</html> 
