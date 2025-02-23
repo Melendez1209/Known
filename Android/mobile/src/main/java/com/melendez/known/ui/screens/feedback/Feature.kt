@@ -3,6 +3,7 @@ package com.melendez.known.ui.screens.feedback
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -11,16 +12,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -46,76 +43,24 @@ import com.android.volley.Response
 import com.android.volley.toolbox.JsonObjectRequest
 import com.android.volley.toolbox.Volley
 import com.melendez.known.R
+import com.melendez.known.ui.components.SharedTopBar
 import org.json.JSONObject
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Feature(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
-    when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> Feature_CompactExpanded(navTotalController = navTotalController)
-        WindowWidthSizeClass.Medium -> Feature_Medium(navTotalController = navTotalController)
-        WindowWidthSizeClass.Expanded -> Feature_CompactExpanded(navTotalController = navTotalController)
-        else -> Feature_CompactExpanded(navTotalController = navTotalController)
-    }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Feature_CompactExpanded(navTotalController: NavHostController) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
-    Scaffold(
-        topBar = {
-            LargeTopAppBar(
-                title = { Text(text = stringResource(R.string.feature)) },
-                navigationIcon = {
-                    IconButton(onClick = { navTotalController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
-                            contentDescription = stringResource(R.string.back)
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior
-            )
-        }
-    ) { padding ->
-        Feature_Content(
-            modifier = Modifier
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .padding(top = padding.calculateTopPadding())
+    Column {
+        SharedTopBar(
+            widthSizeClass = widthSizeClass,
+            navTotalController = navTotalController,
+            title = stringResource(R.string.feature),
+            scrollBehavior = scrollBehavior
         )
-    }
-}
-
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Feature_Medium(navTotalController: NavHostController) {
-
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
-    Scaffold(
-        topBar = {
-            MediumTopAppBar(
-                title = { Text(text = stringResource(R.string.feature)) },
-                navigationIcon = {
-                    IconButton(onClick = { navTotalController.popBackStack() }) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
-                            contentDescription = stringResource(R.string.back)
-                        )
-                    }
-                },
-                scrollBehavior = scrollBehavior
-            )
-        }
-    ) { padding ->
         Feature_Content(
-            modifier = Modifier
-                .nestedScroll(scrollBehavior.nestedScrollConnection)
-                .padding(top = padding.calculateTopPadding())
+            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection)
         )
     }
 }

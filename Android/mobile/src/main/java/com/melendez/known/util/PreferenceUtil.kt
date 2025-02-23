@@ -1,114 +1,69 @@
 package com.melendez.known.util
 
-import androidx.compose.foundation.isSystemInDarkTheme
+import android.app.Application
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.google.android.material.color.DynamicColors
-import com.melendez.known.App.Companion.applicationScope
+import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.melendez.known.R
 import com.melendez.known.colour.PaletteStyle
-import com.melendez.known.ui.theme.DEFAULT_SEED_COLOR
-import com.tencent.mmkv.MMKV
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
+import com.melendez.known.data.AppDatabase
+import com.melendez.known.data.entity.Settings
+import com.melendez.known.data.repository.SettingsRepository
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
 const val STYLE_TONAL_SPOT = 0
 const val STYLE_MONOCHROME = 4
 
-const val DARK_THEME_VALUE = "dark_theme_value"
-const val PALETTE_STYLE = "palette_style"
+val paletteStyles = listOf(
+    PaletteStyle.TonalSpot,
+    PaletteStyle.Spritz,
+    PaletteStyle.FruitSalad,
+    PaletteStyle.Vibrant,
+    PaletteStyle.Monochrome,
+)
 
-private const val THEME_COLOR = "theme_color"
-private const val DYNAMIC_COLOR = "dynamic_color"
-private const val HIGH_CONTRAST = "high_contrast"
-
-val paletteStyles =
-    listOf(
-        PaletteStyle.TonalSpot,
-        PaletteStyle.Spritz,
-        PaletteStyle.FruitSalad,
-        PaletteStyle.Vibrant,
-        PaletteStyle.Monochrome,
-    )
-
-object PreferenceUtil {
-    private val kv: MMKV = MMKV.defaultMMKV()
-
-    data class AppSettings(
-        val darkTheme: DarkThemePreference = DarkThemePreference(),
-        val isDynamicColorEnabled: Boolean = false,
-        val seedColor: Int = DEFAULT_SEED_COLOR,
-        val paletteStyleIndex: Int = 0,
-    )
-
-    private val mutableAppSettingsStateFlow =
-        MutableStateFlow(
-            AppSettings(
-                DarkThemePreference(
-                    darkThemeValue = kv.decodeInt(
-                        DARK_THEME_VALUE,
-                        DarkThemePreference.FOLLOW_SYSTEM
-                    ),
-                    isHighContrastModeEnabled = kv.decodeBool(HIGH_CONTRAST, false),
-                ),
-                isDynamicColorEnabled = kv.decodeBool(
-                    DYNAMIC_COLOR,
-                    DynamicColors.isDynamicColorAvailable()
-                ),
-                seedColor = kv.decodeInt(THEME_COLOR, DEFAULT_SEED_COLOR),
-                paletteStyleIndex = kv.decodeInt(PALETTE_STYLE, 0),
-            )
-        )
-
-    val AppSettingsStateFlow = mutableAppSettingsStateFlow.asStateFlow()
+class PreferenceUtil(application: Application) : AndroidViewModel(application) {
+    private val repository: SettingsRepository
+    val settings: Flow<Settings?>
+    
+    init {
+        val settingsDao = AppDatabase.getDatabase(application).settingsDao()
+        repository = SettingsRepository(settingsDao)
+        settings = repository.settings
+    }
 
     fun modifyDarkThemePreference(
-        darkThemeValue: Int = AppSettingsStateFlow.value.darkTheme.darkThemeValue,
-        isHighContrastModeEnabled: Boolean =
-            AppSettingsStateFlow.value.darkTheme.isHighContrastModeEnabled,
+        darkThemeValue: Int = DarkThemePreference.FOLLOW_SYSTEM,
+        isHighContrastModeEnabled: Boolean = false
     ) {
-        applicationScope.launch(Dispatchers.IO) {
-            mutableAppSettingsStateFlow.update {
-                it.copy(
-                    darkTheme =
-                        AppSettingsStateFlow.value.darkTheme.copy(
-                            darkThemeValue = darkThemeValue,
-                            isHighContrastModeEnabled = isHighContrastModeEnabled,
-                        )
-                )
-            }
-            kv.encode(
-                DARK_THEME_VALUE,
-                darkThemeValue
-            )
-            kv.encode(
-                HIGH_CONTRAST,
-                isHighContrastModeEnabled
-            )
+        viewModelScope.launch {
+            repository.updateDarkMode(darkThemeValue)
+            repository.updateHighContrastMode(isHighContrastModeEnabled)
         }
     }
 
-    fun switchDynamicColor(
-        enabled: Boolean = !mutableAppSettingsStateFlow.value.isDynamicColorEnabled
-    ) {
-        applicationScope.launch(Dispatchers.IO) {
-            mutableAppSettingsStateFlow.update { it.copy(isDynamicColorEnabled = enabled) }
-            kv.encode(DYNAMIC_COLOR, enabled)
+    fun switchDynamicColor(enabled: Boolean = false) {
+        viewModelScope.launch {
+            repository.updateDynamicColor(enabled)
         }
     }
 
-    fun modifyThemeSeedColor(colorArgb: Int, paletteStyleIndex: Int) {
-        applicationScope.launch(Dispatchers.IO) {
-            mutableAppSettingsStateFlow.update {
-                it.copy(seedColor = colorArgb, paletteStyleIndex = paletteStyleIndex)
-            }
-            kv.encode(THEME_COLOR, colorArgb)
-            kv.encode(PALETTE_STYLE, paletteStyleIndex)
+    fun modifyThemeSeedColor(color: Int, paletteStyle: Int) {
+        viewModelScope.launch {
+            repository.updateThemeColor(color)
+            repository.updatePaletteStyle(paletteStyle)
         }
     }
+
+    fun initializeSettings() {
+        viewModelScope.launch {
+            repository.initializeSettings()
+        }
+    }
+
+    // 其他设置方法...
 }
 
 data class DarkThemePreference(
@@ -121,9 +76,8 @@ data class DarkThemePreference(
         const val OFF = 3
     }
 
-    @Composable
-    fun isDarkTheme(): Boolean {
-        return if (darkThemeValue == FOLLOW_SYSTEM) isSystemInDarkTheme() else darkThemeValue == ON
+    fun isDarkTheme(isSystemInDarkTheme: Boolean): Boolean {
+        return if (darkThemeValue == FOLLOW_SYSTEM) isSystemInDarkTheme else darkThemeValue == ON
     }
 
     @Composable

@@ -6,6 +6,7 @@ import android.annotation.SuppressLint
 import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
@@ -173,6 +174,7 @@ fun Main_Compact(
         }
     ) { paddings ->
         AnimatedNavHost(
+            modifier = Modifier.padding(top = paddings.calculateTopPadding()),
             navController = navMainController,
             startDestination = Screens.Home.router
         ) {
@@ -280,8 +282,9 @@ fun Main_Medium(
                         )
                     }
                 }
-            ) {
+            ) { paddings ->
                 AnimatedNavHost(
+                    modifier = Modifier.padding(top = paddings.calculateTopPadding()),
                     navController = navMainController,
                     startDestination = Screens.Home.router
                 ) {
@@ -391,8 +394,9 @@ fun Main_Expanded(
                         )
                     }
                 }
-            ) {
+            ) { paddings ->
                 AnimatedNavHost(
+                    modifier = Modifier.padding(top = paddings.calculateTopPadding()),
                     navController = navMainController,
                     startDestination = Screens.Home.router
                 ) {

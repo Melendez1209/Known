@@ -1,9 +1,9 @@
 {
   "app": {
     "bundleName": "com.melendez.known",
-    "vendor": "example",
-    "versionCode": 1000000,
-    "versionName": "1.0.0",
+    "vendor": "melendez",
+    "versionCode": 1,
+    "versionName": "1.0.4",
     "icon": "$media:app_icon",
     "label": "$string:app_name"
   }

@@ -39,11 +39,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = "17"
     }
     buildFeatures {
         compose = true
@@ -61,26 +61,26 @@ android {
 
 dependencies {
 
-    val composeBom = "2025.01.00"
-    val ui = "1.8.0-alpha08"
-    val material = "1.4.0-alpha06"
+
+    val composeBom = "2025.01.01"
+    val ui = "1.8.0-beta01"
+    val material = "1.4.0-alpha07"
     val accompanist = "0.36.0"
-    val lifecycle = "2.9.0-alpha08"
-    val room = "2.7.0-alpha12"
+    val lifecycle = "2.9.0-alpha09"
+    val room = "2.7.0-alpha13"
 
-    implementation("com.tencent:mmkv:2.0.2")
-
-    implementation("androidx.core:core-ktx:1.16.0-alpha01")
+    implementation("androidx.core:core-ktx:1.16.0-alpha02")
     implementation("androidx.activity:activity-compose:1.10.0")
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("com.android.volley:volley:1.2.1")
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
-    implementation("androidx.compose.material:material-icons-extended:1.7.6")
+    implementation("androidx.compose.material:material-icons-extended:1.7.7")
     implementation("com.google.android.material:material:1.13.0-alpha10")
     implementation("com.google.accompanist:accompanist-pager-indicators:0.36.0")
 
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle")
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle")
 
     implementation("androidx.compose.ui:ui:$ui")
     implementation("androidx.compose.animation:animation:$ui")

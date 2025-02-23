@@ -1,6 +1,10 @@
 name: Greetings
 
-on: [pull_request_target, issues]
+on:
+  pull_request_target:
+    types: [closed]
+  issues:
+    types: [closed]
 
 jobs:
   greeting:
@@ -10,6 +14,9 @@ jobs:
       pull-requests: write
     steps:
     - uses: actions/first-interaction@v1
+      if: |
+        (github.event_name == 'pull_request_target' && github.event.pull_request.merged == true) ||
+        (github.event_name == 'issues')
       with:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         issue-message: "Message that will be displayed on users' first issue"

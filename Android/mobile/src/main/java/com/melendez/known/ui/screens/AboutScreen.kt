@@ -15,7 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
+import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.rounded.AttachMoney
 import androidx.compose.material.icons.rounded.Feedback
 import androidx.compose.material.icons.rounded.PeopleAlt
@@ -60,6 +60,7 @@ fun AboutScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHos
         WindowWidthSizeClass.Medium, WindowWidthSizeClass.Expanded -> AboutScreen_MediumExpanded(
             navTotalController = navTotalController
         )
+
         else -> AboutScreen_Compat(navTotalController = navTotalController)
     }
 }
@@ -77,7 +78,7 @@ fun AboutScreen_Compat(navTotalController: NavHostController) {
                 navigationIcon = {
                     IconButton(onClick = { navTotalController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
+                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }
@@ -112,7 +113,7 @@ fun AboutScreen_MediumExpanded(navTotalController: NavHostController) {
                 navigationIcon = {
                     IconButton(onClick = { navTotalController.popBackStack() }) {
                         Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
+                            imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(id = R.string.back)
                         )
                     }

@@ -9,6 +9,7 @@ import android.location.Geocoder
 import android.location.LocationManager
 import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -27,22 +28,16 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
-import androidx.compose.material.icons.outlined.Check
 import androidx.compose.material.icons.outlined.Colorize
+import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Colorize
 import androidx.compose.material.icons.rounded.DarkMode
-import androidx.compose.material.icons.rounded.Feedback
 import androidx.compose.material.icons.rounded.Language
 import androidx.compose.material.icons.rounded.LightMode
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
@@ -64,6 +59,8 @@ import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getSystemService
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.HorizontalPagerIndicator
@@ -76,16 +73,15 @@ import com.melendez.known.colour.TonalPalettes.Companion.toTonalPalettes
 import com.melendez.known.colour.a1
 import com.melendez.known.colour.a2
 import com.melendez.known.colour.a3
-import com.melendez.known.ui.components.LocalDarkTheme
 import com.melendez.known.ui.components.LocalDynamicColorSwitch
 import com.melendez.known.ui.components.LocalPaletteStyleIndex
 import com.melendez.known.ui.components.LocalSeedColor
 import com.melendez.known.ui.components.PreferenceItem
 import com.melendez.known.ui.components.PreferenceSwitch
 import com.melendez.known.ui.components.PreferenceSwitchWithDivider
+import com.melendez.known.ui.components.SharedTopBar
 import com.melendez.known.ui.screens.Screens
-import com.melendez.known.util.DarkThemePreference.Companion.OFF
-import com.melendez.known.util.DarkThemePreference.Companion.ON
+import com.melendez.known.util.DarkThemePreference
 import com.melendez.known.util.PreferenceUtil
 import com.melendez.known.util.STYLE_MONOCHROME
 import com.melendez.known.util.STYLE_TONAL_SPOT
@@ -99,86 +95,19 @@ private val ColorList =
     ((4..10) + (1..3)).map { it * 35.0 }.map { Color(Hct.from(it, 40.0, 40.0).toInt()) }
 
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Appearance(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
-    when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> Appearance_CompactExpanded(navTotalController = navTotalController)
-        WindowWidthSizeClass.Medium -> Appearance_Medium(navTotalController = navTotalController)
-        WindowWidthSizeClass.Expanded -> Appearance_CompactExpanded(navTotalController = navTotalController)
-        else -> Appearance_CompactExpanded(navTotalController = navTotalController)
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Appearance_CompactExpanded(navTotalController: NavHostController) {
-
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Column {
-        LargeTopAppBar(
-            title = { Text(text = stringResource(R.string.look_and_feel)) },
-            navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
-                        contentDescription = stringResource(R.string.back)
-                    )
-                }
-            },
-            actions = {
-                IconButton(
-                    onClick = {
-                        navTotalController.navigate(Screens.Feedback.router)
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Feedback,
-                        contentDescription = stringResource(R.string.feedback)
-                    )
-                }
-            },
+        SharedTopBar(
+            title = stringResource(R.string.dark_theme),
+            widthSizeClass = widthSizeClass,
+            navTotalController = navTotalController,
             scrollBehavior = scrollBehavior
         )
-        Settings_Content(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            navTotalController = navTotalController
-        )
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Appearance_Medium(navTotalController: NavHostController) {
-
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
-    Column {
-        MediumTopAppBar(
-            title = { Text(text = stringResource(R.string.look_and_feel)) },
-            navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
-                        contentDescription = stringResource(R.string.back)
-                    )
-                }
-            },
-            actions = {
-                IconButton(
-                    onClick = {
-                        navTotalController.navigate(Screens.Feedback.router)
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Feedback,
-                        contentDescription = stringResource(R.string.feedback)
-                    )
-                }
-            },
-            scrollBehavior = scrollBehavior
-        )
-        Settings_Content(
+        Appearance_Content(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             navTotalController = navTotalController
         )
@@ -188,7 +117,10 @@ fun Appearance_Medium(navTotalController: NavHostController) {
 @Suppress("DEPRECATION")
 @SuppressLint("MissingPermission", "MutableCollectionMutableState")
 @Composable
-fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) {
+fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController) {
+    val preferenceUtil: PreferenceUtil = viewModel()
+    val settings = preferenceUtil.settings.collectAsStateWithLifecycle(initialValue = null)
+    val isSystemInDarkTheme = isSystemInDarkTheme()
 
     Surface(modifier.fillMaxSize()) {
 
@@ -220,7 +152,7 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
                                 modifier = Modifier.fillMaxWidth(),
                                 horizontalArrangement = Arrangement.Center,
                             ) {
-                                ColorButtons(ColorList[page])
+                                ColorButtons(ColorList[page], preferenceUtil)
                             }
                         } else {
                             // ColorButton for Monochrome theme
@@ -237,8 +169,8 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
                                     tonalPalettes =
                                         Color.Black.toTonalPalettes(PaletteStyle.Monochrome),
                                     onClick = {
-                                        PreferenceUtil.switchDynamicColor(enabled = false)
-                                        PreferenceUtil.modifyThemeSeedColor(
+                                        preferenceUtil.switchDynamicColor(enabled = false)
+                                        preferenceUtil.modifyThemeSeedColor(
                                             Color.Black.toArgb(),
                                             STYLE_MONOCHROME,
                                         )
@@ -267,21 +199,36 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
                     PreferenceSwitch(
                         title = stringResource(id = R.string.dynamic_color),
                         description = stringResource(id = R.string.dynamic_color_desc),
-                        icon = if (LocalDynamicColorSwitch.current) Icons.Rounded.Colorize else Icons.Outlined.Colorize,
-                        isChecked = LocalDynamicColorSwitch.current,
-                        onClick = { PreferenceUtil.switchDynamicColor() },
+                        icon = if (settings.value?.isDynamicColorEnabled == true)
+                            Icons.Rounded.Colorize
+                        else Icons.Outlined.Colorize,
+                        isChecked = settings.value?.isDynamicColorEnabled == true,
+                        onClick = { preferenceUtil.switchDynamicColor(!settings.value?.isDynamicColorEnabled!!) },
                     )
                 }
             }
             item {
-                val isDarkTheme = LocalDarkTheme.current.isDarkTheme()
+                val darkThemePreference = DarkThemePreference(
+                    darkThemeValue = settings.value?.darkThemeValue
+                        ?: DarkThemePreference.FOLLOW_SYSTEM,
+                    isHighContrastModeEnabled = settings.value?.isHighContrastMode == true
+                )
+
+                val isDarkTheme = darkThemePreference.isDarkTheme(isSystemInDarkTheme)
+
                 PreferenceSwitchWithDivider(
                     title = stringResource(id = R.string.dark_theme),
-                    icon = if (isDarkTheme) Icons.Rounded.DarkMode else Icons.Rounded.LightMode,
+                    icon = if (isDarkTheme)
+                        Icons.Rounded.DarkMode
+                    else Icons.Rounded.LightMode,
                     isChecked = isDarkTheme,
-                    description = LocalDarkTheme.current.getDarkThemeDesc(),
+                    description = darkThemePreference.getDarkThemeDesc(),
                     onChecked = {
-                        PreferenceUtil.modifyDarkThemePreference(if (isDarkTheme) OFF else ON)
+                        preferenceUtil.modifyDarkThemePreference(
+                            if (isDarkTheme)
+                                DarkThemePreference.OFF
+                            else DarkThemePreference.ON
+                        )
                     },
                     onClick = { navTotalController.navigate(Screens.Dark.router) },
                 )
@@ -439,7 +386,7 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
 //                                                    expanded = false
 //                                                    Log.d(
 //                                                        "Melendez",
-//                                                        "Settings_Content: grade:$grade"
+//                                                        "Appearance_Content: grade:$grade"
 //                                                    )
 //                                                }
 //                                            )
@@ -481,9 +428,14 @@ fun Settings_Content(modifier: Modifier, navTotalController: NavHostController) 
 
 
 @Composable
-fun RowScope.ColorButtons(color: Color) {
+fun RowScope.ColorButtons(color: Color, preferenceUtil: PreferenceUtil) {
     paletteStyles.subList(STYLE_TONAL_SPOT, STYLE_MONOCHROME).forEachIndexed { index, style ->
-        ColorButton(color = color, index = index, tonalStyle = style)
+        ColorButton(
+            color = color,
+            index = index,
+            tonalStyle = style,
+            preferenceUtil = preferenceUtil
+        )
     }
 }
 
@@ -493,6 +445,7 @@ fun RowScope.ColorButton(
     color: Color = Color.Green,
     index: Int = 0,
     tonalStyle: PaletteStyle = PaletteStyle.TonalSpot,
+    preferenceUtil: PreferenceUtil
 ) {
     val tonalPalettes by remember { mutableStateOf(color.toTonalPalettes(tonalStyle)) }
     val isSelect =
@@ -500,8 +453,8 @@ fun RowScope.ColorButton(
                 LocalSeedColor.current == color.toArgb() &&
                 LocalPaletteStyleIndex.current == index
     ColorButtonImpl(modifier = modifier, tonalPalettes = tonalPalettes, isSelected = { isSelect }) {
-        PreferenceUtil.switchDynamicColor(enabled = false)
-        PreferenceUtil.modifyThemeSeedColor(color.toArgb(), index)
+        preferenceUtil.switchDynamicColor(enabled = false)
+        preferenceUtil.modifyThemeSeedColor(color.toArgb(), index)
     }
 }
 
@@ -563,7 +516,7 @@ fun RowScope.ColorButtonImpl(
                                 .drawBehind { drawCircle(containerColor) }
                     ) {
                         Icon(
-                            imageVector = Icons.Outlined.Check,
+                            imageVector = Icons.Rounded.Check,
                             contentDescription = null,
                             modifier = Modifier
                                 .size(iconSize)

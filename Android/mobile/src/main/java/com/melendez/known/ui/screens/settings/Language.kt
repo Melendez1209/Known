@@ -17,15 +17,10 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForwardIos
-import androidx.compose.material.icons.automirrored.rounded.NavigateBefore
 import androidx.compose.material.icons.outlined.Translate
-import androidx.compose.material.icons.rounded.Feedback
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
@@ -51,128 +46,16 @@ import com.melendez.known.R
 import com.melendez.known.ui.components.PreferenceSingleChoiceItem
 import com.melendez.known.ui.components.PreferenceSubtitle
 import com.melendez.known.ui.components.PreferencesHintCard
-import com.melendez.known.ui.screens.Screens
+import com.melendez.known.ui.components.SharedTopBar
 import com.melendez.known.ui.screens.weblate
 import com.melendez.known.util.LocaleLanguageCodeMap
 import com.melendez.known.util.toDisplayName
 import java.util.Locale
 
-@Composable
-fun Language(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
-    when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> Language_CompactExpanded(navTotalController = navTotalController)
-        WindowWidthSizeClass.Medium -> Language_Medium(navTotalController = navTotalController)
-        WindowWidthSizeClass.Expanded -> Language_CompactExpanded(navTotalController = navTotalController)
-        else -> Language_CompactExpanded(navTotalController = navTotalController)
-    }
-}
-
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun Language_CompactExpanded(navTotalController: NavHostController) {
-
-    val context = LocalContext.current
-
-    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
-    val preferredLocales = remember {
-        val defaultLocaleListCompat = LocaleListCompat.getDefault()
-        val mLocaleSet = mutableSetOf<Locale>()
-
-        for (index in 0..defaultLocaleListCompat.size()) {
-            val locale = defaultLocaleListCompat[index]
-            if (locale != null) {
-                mLocaleSet.add(locale)
-            }
-        }
-
-        return@remember mLocaleSet
-    }
-    val supportedLocales = LocaleLanguageCodeMap.keys
-    val intent =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            Intent(Settings.ACTION_APP_LOCALE_SETTINGS).apply {
-                val uri = Uri.fromParts("package", context.packageName, null)
-                data = uri
-            }
-        } else {
-            Intent()
-        }
-
-    val selectedLocale by remember { mutableStateOf(Locale.getDefault()) }
-    val suggestedLocales =
-        remember(preferredLocales) {
-            val localeSet = mutableSetOf<Locale>()
-
-            preferredLocales.forEach { desired ->
-                val matchedLocale =
-                    supportedLocales.firstOrNull { supported ->
-                        LocaleListCompat.matchesLanguageAndScript(
-                            /* supported = */ desired,
-                            /* desired = */ supported,
-                        )
-                    }
-                if (matchedLocale != null) {
-                    localeSet.add(matchedLocale)
-                }
-            }
-
-            return@remember localeSet
-        }
-    val otherLocales = supportedLocales - suggestedLocales
-    val isSystemLocaleSettingsAvailable =
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            context.packageManager
-                .queryIntentActivities(intent, PackageManager.MATCH_ALL)
-                .isNotEmpty()
-        } else {
-            false
-        }
-
-    Column {
-        LargeTopAppBar(
-            title = { Text(text = stringResource(R.string.language)) },
-            navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
-                        contentDescription = stringResource(R.string.back)
-                    )
-                }
-            },
-            actions = {
-                IconButton(
-                    onClick = {
-                        navTotalController.navigate(Screens.Feedback.router)
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Feedback,
-                        contentDescription = stringResource(R.string.feedback)
-                    )
-                }
-            },
-            scrollBehavior = scrollBehavior
-        )
-        Language_Content(
-            modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            suggestedLocales = suggestedLocales,
-            otherLocales = otherLocales,
-            isSystemLocaleSettingsAvailable = isSystemLocaleSettingsAvailable,
-            onNavigateToSystemLocaleSettings = {
-                if (isSystemLocaleSettingsAvailable) {
-                    context.startActivity(intent)
-                }
-            },
-            selectedLocale = selectedLocale
-        )
-    }
-}
-
 @SuppressLint("QueryPermissionsNeeded")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Language_Medium(navTotalController: NavHostController) {
+fun Language(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
 
     val context = LocalContext.current
 
@@ -233,28 +116,10 @@ fun Language_Medium(navTotalController: NavHostController) {
         }
 
     Column {
-        MediumTopAppBar(
-            title = { Text(text = stringResource(R.string.language)) },
-            navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
-                    Icon(
-                        imageVector = Icons.AutoMirrored.Rounded.NavigateBefore,
-                        contentDescription = stringResource(R.string.back)
-                    )
-                }
-            },
-            actions = {
-                IconButton(
-                    onClick = {
-                        navTotalController.navigate(Screens.Feedback.router)
-                    }
-                ) {
-                    Icon(
-                        imageVector = Icons.Rounded.Feedback,
-                        contentDescription = stringResource(R.string.feedback)
-                    )
-                }
-            },
+        SharedTopBar(
+            title = stringResource(R.string.dark_theme),
+            widthSizeClass = widthSizeClass,
+            navTotalController = navTotalController,
             scrollBehavior = scrollBehavior
         )
         Language_Content(
