@@ -38,94 +38,25 @@ setupCounter(document.getElementById('counter-value'));
 
 //TIP There's much more in WebStorm to help you be more productive. Press <shortcut actionId="Shift"/> <shortcut actionId="Shift"/> and search for <b>Learn WebStorm</b> to open our learning hub with more things for you to try.
 
-function getDefaultLocale() {
-    // Getting Saved Language Settings
-    const savedLocale = localStorage.getItem('lang');
-    if (savedLocale && locales[savedLocale]) {
-        return savedLocale;
-    }
-    
-    // Get system language
-    const userLanguage = navigator.language;
-    
-    // Check for direct matching of supported languages
-    if (locales[userLanguage]) {
-        return userLanguage;
-    }
-    
-    // Check the base language section for matches
-    const baseLanguage = userLanguage.split('-')[0];
-    const matchingLocales = Object.keys(locales).filter(locale => 
-        locale.startsWith(baseLanguage)
-    );
-    
-    // If a matching language is found, return the first match
-    if (matchingLocales.length > 0) {
-        return matchingLocales[0];
-    }
-    
-    // If there is no matching language, American English is used by default
-    return 'en-US';
-}
-
-// Language Switching Handling Functions
-function updateLanguage(locale) {
-    document.documentElement.lang = locale;
-    const translations = locales[locale];
-    
-    // Update all elements with data-i18n attribute
-    document.querySelectorAll('[data-i18n]').forEach(element => {
-        const keys = element.getAttribute('data-i18n').split('.');
-        let value = translations;
-        for (const key of keys) {
-            value = value[key];
-        }
-        if (value) {
-            element.textContent = value;
-        }
-    });
-
-    // Updating page titles
-    document.title = translations.appName || '知学情';
-
-    // Updated icon text for theme switch buttons
-    document.querySelectorAll('.theme-dropdown button').forEach(button => {
-        const themeKey = button.getAttribute('data-theme');
-        if (themeKey && translations.theme[themeKey]) {
-            const icon = button.querySelector('i');
-            const text = document.createTextNode(translations.theme[themeKey]);
-            button.innerHTML = '';
-            if (icon) button.appendChild(icon);
-            button.appendChild(text);
-        }
-    });
-}
-
-// Initialise language settings
 document.addEventListener('DOMContentLoaded', () => {
-    const defaultLocale = getDefaultLocale();
-    updateLanguage(defaultLocale);
+    // 主题切换相关的代码可以保留
+    const themeToggle = document.querySelector('.theme-toggle');
+    const themeDropdown = document.querySelector('.theme-dropdown');
     
-    // If this is the first visit (no saved language settings), save the currently used language to localStorage
-    if (!localStorage.getItem('lang')) {
-        localStorage.setItem('lang', defaultLocale);
-    }
-    
-    // Listen for language switching button clicks
-    document.querySelector('.lang-dropdown').addEventListener('click', (e) => {
-        const button = e.target.closest('button');
-        if (!button) return;
-        
-        const newLocale = button.getAttribute('data-lang');
-        if (newLocale) {
-            localStorage.setItem('lang', newLocale);
-            updateLanguage(newLocale);
+    if (themeToggle && themeDropdown) {
+        themeToggle.addEventListener('click', () => {
+            themeDropdown.classList.toggle('show');
+        });
+
+        themeDropdown.addEventListener('click', (e) => {
+            const button = e.target.closest('button');
+            if (!button) return;
             
-            // Update selected state
-            document.querySelectorAll('.lang-dropdown button').forEach(btn => {
-                btn.removeAttribute('data-selected');
-            });
-            button.setAttribute('data-selected', 'true');
-        }
-    });
+            const newTheme = button.getAttribute('data-theme');
+            if (newTheme) {
+                document.documentElement.setAttribute('data-theme', newTheme);
+                localStorage.setItem('theme', newTheme);
+            }
+        });
+    }
 });

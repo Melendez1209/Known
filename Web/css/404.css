@@ -35,6 +35,7 @@ body {
 
 .error-content {
     flex: 1;
+    text-align: center;
 }
 
 .error-content h1 {
@@ -72,9 +73,8 @@ body {
 
 .button-group {
     display: flex;
-    gap: 1rem;
     justify-content: center;
-    align-items: center;
+    gap: 20px;
 }
 
 .refresh-btn {

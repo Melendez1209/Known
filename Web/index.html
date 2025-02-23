@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en-US">
+<html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,16 +19,6 @@
             document.documentElement.setAttribute('data-theme', prefersDark.matches ? 'dark' : 'light');
         }
     </script>
-    <script>
-        const _hmt = _hmt || [];
-        (function () {
-            const hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?d3b89062a7531fd6593f30b6022c4242";
-            const s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();
-    </script>
-
     <script src="src/script.js" defer></script>
     <script src="src/main.js" type="module"></script>
 </head>
@@ -39,38 +29,10 @@
             <img src="assets/Logo.png" alt="Known Logo">
         </div>
         <ul>
-            <li><a href="#home" data-i18n="nav.home">首页</a></li>
-            <li><a href="#features" data-i18n="nav.features">功能</a></li>
-            <li><a href="#download" data-i18n="nav.download">下载</a></li>
-            <li><a href="#about" data-i18n="nav.about">关于</a></li>
-            <li class="lang-selector">
-                <button class="lang-toggle">
-                    <i class="fas fa-globe"></i>
-                </button>
-                <div class="lang-dropdown">
-                    <button data-lang="zh-CN">
-                        <span>简体中文</span>
-                    </button>
-                    <button data-lang="zh-TW">
-                        <span>繁體中文（台灣）</span>
-                    </button>
-                    <button data-lang="zh-HK">
-                        <span>繁體中文（香港）</span>
-                    </button>
-                    <button data-lang="zh-MO">
-                        <span>繁體中文（澳門）</span>
-                    </button>
-                    <button data-lang="zh-SG">
-                        <span>繁體中文（新加坡）</span>
-                    </button>
-                    <button data-lang="en-US">
-                        <span>English (US)</span>
-                    </button>
-                    <button data-lang="en-GB">
-                        <span>English (UK)</span>
-                    </button>
-                </div>
-            </li>
+            <li><a href="#home">首页</a></li>
+            <li><a href="#features">功能</a></li>
+            <li><a href="#download">下载</a></li>
+            <li><a href="#about">关于</a></li>
             <li class="theme-selector">
                 <button class="theme-toggle">
                     <i class="fas fa-sun light-icon"></i>
@@ -98,81 +60,82 @@
 
 <main>
     <section id="home" class="hero">
-        <h1 data-i18n="appName">知学情</h1>
-        <p class="subtitle" data-i18n="hero.subtitle">你的智能学习助手</p>
+        <h1>知学情</h1>
+        <p class="subtitle">你的智能学习助手</p>
         <div class="cta-buttons">
-            <a href="#download" class="cta-primary" data-i18n="hero.cta.download">立即下载</a>
-            <a href="#features" class="cta-secondary" data-i18n="hero.cta.learnMore">了解更多</a>
+            <a href="#download" class="cta-primary">立即下载</a>
+            <a href="#features" class="cta-secondary">了解更多</a>
         </div>
     </section>
 
     <section id="features">
-        <h2 data-i18n="features.title">主要功能</h2>
+        <h2>主要功能</h2>
         <div class="features-grid">
             <div class="feature-card">
-                <i class="fas fa-chart-line"
-                   style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h3 data-i18n="features.analysis.title">成绩分析</h3>
-                <p data-i18n="features.analysis.desc">智能分析考试成绩，追踪学习进度</p>
+                <i class="fas fa-chart-line" style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3>成绩分析</h3>
+                <p>智能分析考试成绩，追踪学习进度</p>
             </div>
             <div class="feature-card">
-                <i class="fas fa-trophy"
-                   style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h3 data-i18n="features.motivation.title">学习激励</h3>
-                <p data-i18n="features.motivation.desc">个性化的激励系统，让学习更有动力</p>
+                <i class="fas fa-trophy" style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3>学习激励</h3>
+                <p>个性化的激励系统，让学习更有动力</p>
             </div>
             <div class="feature-card">
-                <i class="fas fa-chart-pie"
-                   style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h3 data-i18n="features.statistics.title">数据统计</h3>
-                <p data-i18n="features.statistics.desc">直观的数据可视化，清晰展示学习成果</p>
+                <i class="fas fa-chart-pie" style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3>数据统计</h3>
+                <p>直观的数据可视化，清晰展示学习成果</p>
             </div>
             <div class="feature-card">
-                <i class="fas fa-lightbulb"
-                   style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h3 data-i18n="features.planning.title">智能规划</h3>
-                <p data-i18n="features.planning.desc">基于AI的学习计划制定，合理安排时间</p>
+                <i class="fas fa-lightbulb" style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3>智能规划</h3>
+                <p>基于AI的学习计划制定，合理安排时间</p>
             </div>
         </div>
     </section>
 
     <section id="download">
-        <h2 data-i18n="download.title">下载应用</h2>
+        <h2>下载应用</h2>
         <div class="download-options">
             <a href="#" class="download-button android">
                 <img src="https://developer.android.google.cn/static/images/logos/android.svg?hl=zh-cn" alt="Android"
                      class="platform-icon">
-                <span data-i18n="download.android">Android</span>
+                <span>Android</span>
                 <span class="version-text">v1.0.0</span>
             </a>
             <a href="#" class="download-button harmony">
                 <img src="https://ts4.cn.mm.bing.net/th?id=ODLS.3c17df29-83d4-4042-820e-4b42e82c1f01&w=32&h=32&qlt=90&pcl=fffffa&o=6&pid=1.2"
                      alt="HarmonyOS" class="platform-icon">
-                <span data-i18n="download.harmony">HarmonyOS</span>
+                <span>HarmonyOS</span>
                 <span class="version-text">v1.0.0</span>
             </a>
         </div>
     </section>
 
-    <section id="about">
-        <h2 data-i18n="about.title">关于 Known</h2>
-        <p data-i18n="about.description">Known 是由北京的一名初中生开发的应用程序，旨在帮助学生更好地分析考试成绩并保持学习动力。我们希望
-            Known 能够成为你学习路上的得力助手。</p>
-        <div class="github-link">
-            <a href="https://github.com/Melendez1209/Known" target="_blank" data-i18n="about.github">
+    <section id="Open Source">
+        <h2>开源地址</h2>
+        <div class="open-source-link">
+            <a href="https://github.com/Melendez1209/Known" target="_blank">
                 <i class="fab fa-github"></i>
                 在 GitHub 上查看项目
             </a>
-            <a href="https://gitee.com/geng-yiming-1209/Known" target="_blank" data-i18n="about.gitee">
+            <a href="https://gitee.com/geng-yiming-1209/Known" target="_blank">
                 <i class="fab fa-git-alt"></i>
                 在 Gitee 上查看项目
             </a>
         </div>
     </section>
+
+    <section id="about">
+        <h2>关于 Known</h2>
+        <p>Known 是由北京的一名初中生开发的应用程序，旨在帮助学生更好地分析考试成绩并保持学习动力。我们希望
+            Known 能够成为你学习路上的得力助手。</p>
+    </section>
+
 </main>
 
 <footer>
-    <p>&copy; 2024 Known. <span data-i18n="footer.copyright">基于 MIT 协议开源。</span></p>
+    <p>&copy; 2024 Known. 基于 MIT 协议开源。</p>
 </footer>
 </body>
 </html>
