@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en-US">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>知学情</title>
-    <link rel="icon" type="image/png" href="assets/Logo.png">
-    <link rel="stylesheet" href="css/styles.css">
+    <title>Known</title>
+    <link rel="icon" type="image/png" href="assets/media/Logo.png">
+    <link rel="stylesheet" href="css/index.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <script>
         // Check system theme and user preferences
@@ -26,13 +26,13 @@
 <header>
     <nav>
         <div class="logo">
-            <img src="assets/Logo.png" alt="Known Logo">
+            <img src="assets/media/Logo.png" alt="Known Logo">
         </div>
         <ul>
-            <li><a href="#home">首页</a></li>
-            <li><a href="#features">功能</a></li>
-            <li><a href="#download">下载</a></li>
-            <li><a href="#about">关于</a></li>
+            <li><a href="#home" data-i18n="nav.home">Home</a></li>
+            <li><a href="#features" data-i18n="nav.features">Features</a></li>
+            <li><a href="#download" data-i18n="nav.download">Download</a></li>
+            <li><a href="#about" data-i18n="nav.about">About</a></li>
             <li class="theme-selector">
                 <button class="theme-toggle">
                     <i class="fas fa-sun light-icon"></i>
@@ -42,15 +42,34 @@
                 <div class="theme-dropdown">
                     <button data-theme="light">
                         <i class="fas fa-sun"></i>
-                        浅色模式
+                        <span data-i18n="theme.light">Light Mode</span>
                     </button>
                     <button data-theme="dark" class="theme-toggle">
                         <i class="fas fa-moon"></i>
-                        深色模式
+                        <span data-i18n="theme.dark">Dark Mode</span>
                     </button>
                     <button data-theme="system">
                         <i class="fas fa-desktop"></i>
-                        跟随系统
+                        <span data-i18n="theme.system">Follow System</span>
+                    </button>
+                </div>
+            </li>
+            <li class="lang-selector">
+                <button class="lang-toggle">
+                    <i class="fas fa-globe"></i>
+                </button>
+                <div class="lang-dropdown">
+                    <button data-lang="zh" data-selected="true">
+                        <span>简体中文</span>
+                    </button>
+                    <button data-lang="zh-tw">
+                        <span>繁體中文</span>
+                    </button>
+                    <button data-lang="en">
+                        <span>English (US)</span>
+                    </button>
+                    <button data-lang="en-GB">
+                        <span>English (UK)</span>
                     </button>
                 </div>
             </li>
@@ -60,42 +79,48 @@
 
 <main>
     <section id="home" class="hero">
-        <h1>知学情</h1>
-        <p class="subtitle">你的智能学习助手</p>
+        <h1 data-i18n="hero.title">Known</h1>
+        <p class="subtitle" data-i18n="hero.subtitle">Your Intelligent Learning Assistant</p>
         <div class="cta-buttons">
-            <a href="#download" class="cta-primary">立即下载</a>
-            <a href="#features" class="cta-secondary">了解更多</a>
+            <a href="#download" class="cta-primary" data-i18n="hero.download">Download Now</a>
+            <a href="#features" class="cta-secondary" data-i18n="hero.learnMore">Learn More</a>
         </div>
     </section>
 
     <section id="features">
-        <h2>主要功能</h2>
+        <h2 data-i18n="features.title">Key Features</h2>
         <div class="features-grid">
             <div class="feature-card">
-                <i class="fas fa-chart-line" style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h3>成绩分析</h3>
-                <p>智能分析考试成绩，追踪学习进度</p>
+                <i class="fas fa-chart-line"
+                   style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3 data-i18n="features.analysis">Grade Analysis</h3>
+                <p data-i18n="features.analysis.desc">Intelligent analysis of test scores and tracking of learning
+                    progress.</p>
             </div>
             <div class="feature-card">
-                <i class="fas fa-trophy" style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h3>学习激励</h3>
-                <p>个性化的激励系统，让学习更有动力</p>
+                <i class="fas fa-trophy"
+                   style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3 data-i18n="features.motivation">Learning Motivation</h3>
+                <p data-i18n="features.motivation.desc">Personalized incentive system for more motivated learning.</p>
             </div>
             <div class="feature-card">
-                <i class="fas fa-chart-pie" style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h3>数据统计</h3>
-                <p>直观的数据可视化，清晰展示学习成果</p>
+                <i class="fas fa-chart-pie"
+                   style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3 data-i18n="features.statistics">Data Statistics</h3>
+                <p data-i18n="features.statistics.desc">Intuitive learning visualization for clear demonstration of
+                    learning outcomes.</p>
             </div>
             <div class="feature-card">
-                <i class="fas fa-lightbulb" style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h3>智能规划</h3>
-                <p>基于AI的学习计划制定，合理安排时间</p>
+                <i class="fas fa-lightbulb"
+                   style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3 data-i18n="features.planning">Intelligent Planning</h3>
+                <p data-i18n="features.planning.desc">AI-based study plan development to rationalize scheduling.</p>
             </div>
         </div>
     </section>
 
     <section id="download">
-        <h2>下载应用</h2>
+        <h2 data-i18n="download.title">Download App</h2>
         <div class="download-options">
             <a href="#" class="download-button android">
                 <img src="https://developer.android.google.cn/static/images/logos/android.svg?hl=zh-cn" alt="Android"
@@ -113,29 +138,32 @@
     </section>
 
     <section id="Open Source">
-        <h2>开源地址</h2>
+        <h2 data-i18n="opensource.title">Open Source</h2>
         <div class="open-source-link">
             <a href="https://github.com/Melendez1209/Known" target="_blank">
                 <i class="fab fa-github"></i>
-                在 GitHub 上查看项目
+                <span>GitHub</span>
             </a>
             <a href="https://gitee.com/geng-yiming-1209/Known" target="_blank">
                 <i class="fab fa-git-alt"></i>
-                在 Gitee 上查看项目
+                <span>Gitee</span>
             </a>
         </div>
     </section>
 
     <section id="about">
-        <h2>关于 Known</h2>
-        <p>Known 是由北京的一名初中生开发的应用程序，旨在帮助学生更好地分析考试成绩并保持学习动力。我们希望
-            Known 能够成为你学习路上的得力助手。</p>
+        <h2 data-i18n="about.title">About Known</h2>
+        <p data-i18n="about.description">Known is an app developed by a junior high school student (now a senior in high
+            school) in Beijing to help students better analyze their test scores and stay motivated. We hope Known can
+            be your right hand on your study journey.</p>
     </section>
 
 </main>
 
 <footer>
-    <p>&copy; 2024 Known. 基于 MIT 协议开源。</p>
+    <p>&copy; 2024 Known. <span data-i18n="footer.copyright">Open-sourced under MIT License.</span></p>
 </footer>
+
+<script src="src/i18n.js"></script>
 </body>
 </html>
