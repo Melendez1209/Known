@@ -2,6 +2,7 @@
 
 package com.melendez.known.ui.components
 
+import android.os.Build
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
@@ -21,7 +22,6 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
 
-
 @Composable
 fun SharedTopBar(
     widthSizeClass: WindowWidthSizeClass,
@@ -30,11 +30,24 @@ fun SharedTopBar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
+    val activity = LocalActivity.current
+    val supportsPredictiveBack = Build.VERSION.SDK_INT >= 34
+
+    val onBackPressed: () -> Unit = {
+        if (supportsPredictiveBack && activity != null) {
+            // Using predictive back API
+            activity.onBackPressedDispatcher.onBackPressed()
+        } else {
+            // Traditional back operation
+            navTotalController.popBackStack()
+        }
+    }
+
     if (widthSizeClass == WindowWidthSizeClass.Medium) {
         MediumTopAppBar(
             title = { Text(text = title) },
             navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
+                IconButton(onClick = onBackPressed) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                         contentDescription = stringResource(R.string.back)
@@ -48,7 +61,7 @@ fun SharedTopBar(
         LargeTopAppBar(
             title = { Text(text = title) },
             navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
+                IconButton(onClick = onBackPressed) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                         contentDescription = stringResource(R.string.back)

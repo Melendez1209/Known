@@ -28,7 +28,7 @@ import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Colorize
+import androidx.compose.material.icons.outlined.Gesture
 import androidx.compose.material.icons.rounded.Check
 import androidx.compose.material.icons.rounded.Colorize
 import androidx.compose.material.icons.rounded.DarkMode
@@ -115,7 +115,7 @@ fun Appearance(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHost
 }
 
 @Suppress("DEPRECATION")
-@SuppressLint("MissingPermission", "MutableCollectionMutableState")
+@SuppressLint("MissingPermission", "MutableCollectionMutableState", "MemberExtensionConflict")
 @Composable
 fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController) {
     val preferenceUtil: PreferenceUtil = viewModel()
@@ -196,18 +196,22 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
             }
             if (DynamicColors.isDynamicColorAvailable()) {
                 item {
+
+                    val isDynamicColorEnabled = LocalDynamicColorSwitch.current
+
                     PreferenceSwitch(
                         title = stringResource(id = R.string.dynamic_color),
                         description = stringResource(id = R.string.dynamic_color_desc),
-                        icon = if (settings.value?.isDynamicColorEnabled == true)
-                            Icons.Rounded.Colorize
-                        else Icons.Outlined.Colorize,
-                        isChecked = settings.value?.isDynamicColorEnabled == true,
-                        onClick = { preferenceUtil.switchDynamicColor(!settings.value?.isDynamicColorEnabled!!) },
+                        icon = Icons.Rounded.Colorize,
+                        isChecked = isDynamicColorEnabled,
+                        onClick = {
+                            preferenceUtil.switchDynamicColor(enabled = !isDynamicColorEnabled)
+                        },
                     )
                 }
             }
             item {
+
                 val darkThemePreference = DarkThemePreference(
                     darkThemeValue = settings.value?.darkThemeValue
                         ?: DarkThemePreference.FOLLOW_SYSTEM,
@@ -240,6 +244,37 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
                     description = Locale.getDefault().toDisplayName(),
                 ) {
                     navTotalController.navigate(Screens.Language.router)
+                }
+            }
+
+            // Add predictive back gesture settings item(Android 14+)
+            if (android.os.Build.VERSION.SDK_INT >= 34) {
+                item {
+                    PreferenceSwitch(
+                        title = stringResource(id = R.string.predictive_back),
+                        description = stringResource(id = R.string.predictive_back_desc),
+                        icon = Icons.Outlined.Gesture,
+                        isChecked = settings.value?.predictiveBackEnabled ?: true,
+                        onClick = {
+                            preferenceUtil.setPredictiveBackEnabled(!(settings.value?.predictiveBackEnabled ?: true))
+                        },
+                    )
+                }
+
+                // If predictive back is enabled, display animation settings
+                if (settings.value?.predictiveBackEnabled == true) {
+                    item {
+                        PreferenceSwitch(
+                            title = stringResource(id = R.string.predictive_back_animation),
+                            description = stringResource(id = R.string.predictive_back_animation_desc),
+                            icon = null,
+                            isChecked = settings.value?.predictiveBackAnimationEnabled ?: true,
+                            onClick = {
+                                preferenceUtil.setPredictiveBackAnimationEnabled(!(settings.value?.predictiveBackAnimationEnabled ?: true))
+                            },
+                            enabled = settings.value?.predictiveBackEnabled ?: true
+                        )
+                    }
                 }
             }
         }

@@ -120,4 +120,12 @@
     <string name="suggested">推荐</string>
     <string name="all_languages">所有语言</string>
     <string name="system_settings">系统设置</string>
+    <!-- 预测性返回手势相关字符串 -->
+    <string name="predictive_back">预测性返回</string>
+    <string name="predictive_back_desc">启用更流畅的返回手势体验（需要Android 14+）</string>
+    <string name="predictive_back_animation">预测性返回动画</string>
+    <string name="predictive_back_animation_desc">在返回时显示视觉过渡动画</string>
+    <string name="swipe_to_go_back">向右滑动返回</string>
+    <string name="back_to_previous_screen">返回到上一屏幕</string>
+    <string name="back_to_home">返回到主页</string>
 </resources>

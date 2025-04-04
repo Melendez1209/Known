@@ -1,5 +1,6 @@
 package com.melendez.known.ui.components
 
+import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -781,6 +782,7 @@ fun CreditItem(
     }
 }
 
+@SuppressLint("MemberExtensionConflict")
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 @Preview

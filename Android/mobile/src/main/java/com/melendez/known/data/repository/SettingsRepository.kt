@@ -31,6 +31,14 @@ class SettingsRepository(private val settingsDao: SettingsDao) {
         settingsDao.updatePaletteStyle(index)
     }
 
+    suspend fun updatePredictiveBack(enabled: Boolean) {
+        settingsDao.updatePredictiveBack(enabled)
+    }
+
+    suspend fun updatePredictiveBackAnimation(enabled: Boolean) {
+        settingsDao.updatePredictiveBackAnimation(enabled)
+    }
+
     suspend fun initializeSettings() {
         settingsDao.updateSettings(Settings())
     }
