@@ -120,4 +120,11 @@
     <string name="suggested">Suggested</string>
     <string name="all_languages">All languages</string>
     <string name="system_settings">System settings</string>
+    <string name="predictive_back">Predictive Back Gesture</string>
+    <string name="predictive_back">Predictive Back Gesture</string>
+    <string name="predictive_back">Predictive Back Gesture</string>
+    <string name="predictive_back">Predictive Back Gesture</string>
+    <string name="predictive_back">Predictive Back Gesture</string>
+    <string name="predictive_back">Predictive Back Gesture</string>
+    <string name="predictive_back_desc">Enable a smoother back gesture experience</string>
 </resources>

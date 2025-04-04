@@ -120,8 +120,8 @@
     <string name="suggested">Suggested</string>
     <string name="all_languages">All languages</string>
     <string name="system_settings">System settings</string>
-    <string name="predictive_back">Predictive Back</string>
-    <string name="predictive_back_desc">Enable smoother back gesture experience (Android 14+ required)</string>
+    <string name="predictive_back">Predictive Back Gesture</string>
+    <string name="predictive_back_desc">Enable smoother back gesture experience</string>
     <string name="predictive_back_animation">Predictive Back Animation</string>
     <string name="predictive_back_animation_desc">Show visual transition animations when going back</string>
     <string name="swipe_to_go_back">Swipe right to go back</string>

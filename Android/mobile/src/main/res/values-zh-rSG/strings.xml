@@ -98,7 +98,7 @@
     <string name="prophets">先知</string>
     <string name="confirm">確認</string>
     <string name="attention">注意</string>
-    <string name="disclaimer">您的贊助行為不屬於軟體發行方（ Known 團隊）的經營性行為！ 僅作您對於本軟體（ Known ）發展的支援！ 我們的軟體功能完全免費！</string>
+    <string name="disclaimer">您的贊助行為唔屬於軟件發行方（ 知學情 團隊）嘅經營性行為！ 僅作您對於本項目（ 知學情 ）發展支持！ 我哋嘅軟件功能完全免費！</string>
     <string name="pe">體育</string>
     <string name="classmates">同学</string>
     <string name="favourites">收藏</string>
@@ -120,4 +120,6 @@
     <string name="suggested">建議</string>
     <string name="all_languages">所有語言</string>
     <string name="system_settings">系統設定</string>
+    <string name="predictive_back">預測性返回手勢</string>
+    <string name="predictive_back_desc">啟用更流暢嘅返回手勢體驗</string>
 </resources>

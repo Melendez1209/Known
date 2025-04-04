@@ -103,7 +103,7 @@ fun Appearance(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHost
 
     Column {
         SharedTopBar(
-            title = stringResource(R.string.dark_theme),
+            title = stringResource(R.string.look_and_feel),
             widthSizeClass = widthSizeClass,
             navTotalController = navTotalController,
             scrollBehavior = scrollBehavior

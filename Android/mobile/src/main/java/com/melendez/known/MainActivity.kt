@@ -7,9 +7,12 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -53,18 +56,18 @@ class MainActivity : ComponentActivity() {
         // Initialise predictive back gesture support
         initPredictiveBackGesture()
 
-        // Get PreferenceUtil instance
-        val preferenceUtil: PreferenceUtil = PreferenceUtil(application)
-        
         // Initialise settings
+        val preferenceUtil = PreferenceUtil(application)
         preferenceUtil.forceInitializeSettingsSync()
 
         setContent {
+
             val navTotalController = rememberNavController()
             val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
             val viewModelPreferenceUtil: PreferenceUtil = viewModel()
             // Collecting the current settings from the database
-            val settings = viewModelPreferenceUtil.settings.collectAsStateWithLifecycle(initialValue = null).value
+            val settings =
+                viewModelPreferenceUtil.settings.collectAsStateWithLifecycle(initialValue = null).value
             val isSystemInDarkTheme = isSystemInDarkTheme()
             // Current dark theme settings that should be used
             val darkThemePreference = settings?.let {
@@ -74,7 +77,7 @@ class MainActivity : ComponentActivity() {
                 )
             } ?: DarkThemePreference()
             val isDarkTheme = darkThemePreference.isDarkTheme(isSystemInDarkTheme)
-            
+
             // Setting the CompositionLocalProvider to Provide Theme Parameters
             CompositionLocalProvider(
                 LocalActivity provides this,
@@ -82,85 +85,87 @@ class MainActivity : ComponentActivity() {
                 LocalSeedColor provides (settings?.themeColor ?: DEFAULT_SEED_COLOR),
                 LocalDynamicColorSwitch provides (settings?.isDynamicColorEnabled ?: false),
                 LocalPaletteStyleIndex provides (settings?.paletteStyleIndex ?: 0),
-                LocalTonalPalettes provides if (settings?.themeColor != null && settings.themeColor != 0) 
-                    Color(settings.themeColor).toTonalPalettes() 
-                else 
+                LocalTonalPalettes provides if (settings?.themeColor != null && settings.themeColor != 0)
+                    Color(settings.themeColor).toTonalPalettes()
+                else
                     Color(DEFAULT_SEED_COLOR).toTonalPalettes()
             ) {
                 KnownTheme(
                     darkTheme = isDarkTheme,
                     isHighContrastModeEnabled = darkThemePreference.isHighContrastModeEnabled
                 ) {
-                    NavHost(
-                        navController = navTotalController,
-                        startDestination = Screens.Main.router
-                    ) {
-                        animatedComposable(Screens.Main.router) {
-                            MainScreen(
-                                widthSizeClass = widthSizeClass,
-                                navTotalController = navTotalController
-                            )
-                        }
-                        animatedComposable(Screens.Settings.router) {
-                            Appearance(
-                                widthSizeClass = widthSizeClass,
-                                navTotalController = navTotalController
-                            )
-                        }
-                        animatedComposable(Screens.Dark.router) {
-                            Dark(
-                                widthSizeClass = widthSizeClass,
-                                navTotalController = navTotalController
-                            )
-                        }
-                        animatedComposable(Screens.Language.router) {
-                            Language(
-                                widthSizeClass = widthSizeClass,
-                                navTotalController = navTotalController
-                            )
-                        }
-                        animatedComposable(Screens.DRP.router) { DRP(navTotalController = navTotalController) }
-                        animatedComposable(Screens.Inputting.router) {
-                            Inputting(
-                                widthSizeClass = widthSizeClass,
-                                navTotalController = navTotalController
-                            )
-                        }
-                        animatedComposable(Screens.About.router) {
-                            AboutScreen(
-                                widthSizeClass = widthSizeClass,
-                                navTotalController = navTotalController
-                            )
-                        }
-                        animatedComposable(Screens.Feedback.router) {
-                            Feedback(
-                                widthSizeClass = widthSizeClass,
-                                navTotalController = navTotalController
-                            )
-                        }
-                        animatedComposable(Screens.Bug.router) {
-                            Bug(
-                                widthSizeClass = widthSizeClass,
-                                navTotalController = navTotalController
-                            )
-                        }
-                        animatedComposable(Screens.Feature.router) {
-                            Feature(
-                                widthSizeClass = widthSizeClass,
-                                navTotalController = navTotalController
-                            )
-                        }
-                        animatedComposable(Screens.Signin.router) {
-                            Signin(
-                                widthSizeClass = widthSizeClass,
-                                navTotalController = navTotalController
-                            )
-                        }
-                        animatedComposable(Screens.Detail.router) {
-                            Detail(navTotalController = navTotalController)
-                        }
-                        animatedComposable(Screens.Prophets.router) {
-                            Prophets(navTotalController = navTotalController)
+                    Surface(modifier = Modifier.fillMaxSize()) {
+                        NavHost(
+                            navController = navTotalController,
+                            startDestination = Screens.Main.router
+                        ) {
+                            animatedComposable(Screens.Main.router) {
+                                MainScreen(
+                                    widthSizeClass = widthSizeClass,
+                                    navTotalController = navTotalController
+                                )
+                            }
+                            animatedComposable(Screens.Settings.router) {
+                                Appearance(
+                                    widthSizeClass = widthSizeClass,
+                                    navTotalController = navTotalController
+                                )
+                            }
+                            animatedComposable(Screens.Dark.router) {
+                                Dark(
+                                    widthSizeClass = widthSizeClass,
+                                    navTotalController = navTotalController
+                                )
+                            }
+                            animatedComposable(Screens.Language.router) {
+                                Language(
+                                    widthSizeClass = widthSizeClass,
+                                    navTotalController = navTotalController
+                                )
+                            }
+                            animatedComposable(Screens.DRP.router) { DRP(navTotalController = navTotalController) }
+                            animatedComposable(Screens.Inputting.router) {
+                                Inputting(
+                                    widthSizeClass = widthSizeClass,
+                                    navTotalController = navTotalController
+                                )
+                            }
+                            animatedComposable(Screens.About.router) {
+                                AboutScreen(
+                                    widthSizeClass = widthSizeClass,
+                                    navTotalController = navTotalController
+                                )
+                            }
+                            animatedComposable(Screens.Feedback.router) {
+                                Feedback(
+                                    widthSizeClass = widthSizeClass,
+                                    navTotalController = navTotalController
+                                )
+                            }
+                            animatedComposable(Screens.Bug.router) {
+                                Bug(
+                                    widthSizeClass = widthSizeClass,
+                                    navTotalController = navTotalController
+                                )
+                            }
+                            animatedComposable(Screens.Feature.router) {
+                                Feature(
+                                    widthSizeClass = widthSizeClass,
+                                    navTotalController = navTotalController
+                                )
+                            }
+                            animatedComposable(Screens.Signin.router) {
+                                Signin(
+                                    widthSizeClass = widthSizeClass,
+                                    navTotalController = navTotalController
+                                )
+                            }
+                            animatedComposable(Screens.Detail.router) {
+                                Detail(navTotalController = navTotalController)
+                            }
+                            animatedComposable(Screens.Prophets.router) {
+                                Prophets(navTotalController = navTotalController)
+                            }
                         }
                     }
                 }

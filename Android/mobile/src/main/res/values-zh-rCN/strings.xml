@@ -98,7 +98,7 @@
     <string name="prophets">先知</string>
     <string name="confirm">确认</string>
     <string name="attention">注意</string>
-    <string name="disclaimer">您的赞助行为不属于软件发行方（ Known 团队）的经营性行为！仅作您对于本软件（ Known ）发展的支持！我们的软件功能完全免费！</string>
+    <string name="disclaimer">您的赞助行为不属于软件发行方（ 知学情 团队）的经营性行为！仅作您对于本项目（ 知学情 ）发展的支持！我们的软件功能完全免费！</string>
     <string name="pe">体育</string>
     <string name="classmates">同学</string>
     <string name="favourites">收藏</string>
@@ -121,8 +121,8 @@
     <string name="all_languages">所有语言</string>
     <string name="system_settings">系统设置</string>
     <!-- 预测性返回手势相关字符串 -->
-    <string name="predictive_back">预测性返回</string>
-    <string name="predictive_back_desc">启用更流畅的返回手势体验（需要Android 14+）</string>
+    <string name="predictive_back">预测性返回手势</string>
+    <string name="predictive_back_desc">启用更流畅的返回手势体验</string>
     <string name="predictive_back_animation">预测性返回动画</string>
     <string name="predictive_back_animation_desc">在返回时显示视觉过渡动画</string>
     <string name="swipe_to_go_back">向右滑动返回</string>
