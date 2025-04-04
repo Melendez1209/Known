@@ -27,7 +27,7 @@ val paletteStyles = listOf(
 class PreferenceUtil(application: Application) : AndroidViewModel(application) {
     private val repository: SettingsRepository
     val settings: Flow<Settings?>
-    
+
     init {
         val settingsDao = AppDatabase.getDatabase(application).settingsDao()
         repository = SettingsRepository(settingsDao)
@@ -62,14 +62,24 @@ class PreferenceUtil(application: Application) : AndroidViewModel(application) {
             repository.initializeSettings()
         }
     }
-    
+
+    // Forced synchronisation of initialisation settings
+    fun forceInitializeSettingsSync() {
+        // Execute synchronously in the main thread to ensure that the database has initial settings
+        try {
+            kotlinx.coroutines.runBlocking { repository.initializeSettings() }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
     // Predictive back gesture settings method
     fun setPredictiveBackEnabled(enabled: Boolean) {
         viewModelScope.launch {
             repository.updatePredictiveBack(enabled)
         }
     }
-    
+
     fun setPredictiveBackAnimationEnabled(enabled: Boolean) {
         viewModelScope.launch {
             repository.updatePredictiveBackAnimation(enabled)

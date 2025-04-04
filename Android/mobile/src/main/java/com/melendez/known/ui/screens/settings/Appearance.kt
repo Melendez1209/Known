@@ -13,12 +13,12 @@ import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.sizeIn
@@ -81,6 +81,7 @@ import com.melendez.known.ui.components.PreferenceSwitch
 import com.melendez.known.ui.components.PreferenceSwitchWithDivider
 import com.melendez.known.ui.components.SharedTopBar
 import com.melendez.known.ui.screens.Screens
+import com.melendez.known.ui.theme.DEFAULT_SEED_COLOR
 import com.melendez.known.util.DarkThemePreference
 import com.melendez.known.util.PreferenceUtil
 import com.melendez.known.util.STYLE_MONOCHROME
@@ -140,42 +141,49 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
         LazyColumn(modifier = modifier) {
             item {
                 Column {
+                    // Theme colour selector
+                    var currentColorSelection =
+                        if (settings.value?.themeColor != null && settings.value?.themeColor != 0) {
+                            Color(settings.value!!.themeColor)
+                        } else {
+                            // If not set in the database or set to 0, the default colour is used
+                            Color(DEFAULT_SEED_COLOR)
+                        }
+
+                    val paletteStyleIndex = settings.value?.paletteStyleIndex ?: 0
+
                     HorizontalPager(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .clearAndSetSemantics {},
                         state = pagerState,
-                        contentPadding = PaddingValues(horizontal = 12.dp),
+                        modifier = Modifier
+                            .padding(horizontal = 12.dp)
+                            .fillMaxWidth()
+                            .height(100.dp)
                     ) { page ->
-                        if (page < pageCount - 1) {
+                        if (page == 0) {
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center,
+                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                modifier = Modifier.fillMaxWidth()
                             ) {
-                                ColorButtons(ColorList[page], preferenceUtil)
+                                paletteStyles.subList(STYLE_TONAL_SPOT, STYLE_MONOCHROME)
+                                    .forEachIndexed { index, style ->
+                                        ColorButton(
+                                            color = currentColorSelection,
+                                            index = index,
+                                            tonalStyle = style,
+                                            preferenceUtil = preferenceUtil,
+                                            isSelected = (!LocalDynamicColorSwitch.current &&
+                                                    (settings.value?.themeColor == currentColorSelection.toArgb()) &&
+                                                    paletteStyleIndex == index)
+                                        )
+                                    }
                             }
                         } else {
-                            // ColorButton for Monochrome theme
-                            val isSelected =
-                                LocalPaletteStyleIndex.current == STYLE_MONOCHROME &&
-                                        !LocalDynamicColorSwitch.current
+                            val color = ColorList[page - 1]
                             Row(
-                                modifier = Modifier.fillMaxWidth(),
-                                horizontalArrangement = Arrangement.Center,
+                                horizontalArrangement = Arrangement.SpaceEvenly,
+                                modifier = Modifier.fillMaxWidth()
                             ) {
-                                ColorButtonImpl(
-                                    modifier = Modifier,
-                                    isSelected = { isSelected },
-                                    tonalPalettes =
-                                        Color.Black.toTonalPalettes(PaletteStyle.Monochrome),
-                                    onClick = {
-                                        preferenceUtil.switchDynamicColor(enabled = false)
-                                        preferenceUtil.modifyThemeSeedColor(
-                                            Color.Black.toArgb(),
-                                            STYLE_MONOCHROME,
-                                        )
-                                    },
-                                )
+                                ColorButtons(color = color, preferenceUtil = preferenceUtil)
                             }
                         }
                     }
@@ -303,14 +311,14 @@ fun RowScope.ColorButton(
     color: Color = Color.Green,
     index: Int = 0,
     tonalStyle: PaletteStyle = PaletteStyle.TonalSpot,
-    preferenceUtil: PreferenceUtil
+    preferenceUtil: PreferenceUtil,
+    isSelected: Boolean = false
 ) {
     val tonalPalettes by remember { mutableStateOf(color.toTonalPalettes(tonalStyle)) }
-    val isSelect =
-        !LocalDynamicColorSwitch.current &&
-                LocalSeedColor.current == color.toArgb() &&
-                LocalPaletteStyleIndex.current == index
-    ColorButtonImpl(modifier = modifier, tonalPalettes = tonalPalettes, isSelected = { isSelect }) {
+    ColorButtonImpl(
+        modifier = modifier,
+        tonalPalettes = tonalPalettes,
+        isSelected = { isSelected }) {
         preferenceUtil.switchDynamicColor(enabled = false)
         preferenceUtil.modifyThemeSeedColor(color.toArgb(), index)
     }
