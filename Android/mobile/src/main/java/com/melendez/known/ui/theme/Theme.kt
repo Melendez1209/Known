@@ -9,6 +9,8 @@ import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.dynamicDarkColorScheme
+import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.LaunchedEffect
@@ -23,6 +25,7 @@ import androidx.core.view.ViewCompat
 import com.google.android.material.color.MaterialColors
 import com.melendez.known.colour.LocalTonalPalettes
 import com.melendez.known.colour.dynamicColorScheme
+import com.melendez.known.ui.components.LocalDynamicColorSwitch
 import com.melendez.known.ui.components.LocalFixedColorRoles
 
 fun Color.applyOpacity(enabled: Boolean): Color {
@@ -46,8 +49,9 @@ fun KnownTheme(
     isHighContrastModeEnabled: Boolean = false,
     content: @Composable () -> Unit,
 ) {
-
     val view = LocalView.current
+    val isDynamicColorEnabled = LocalDynamicColorSwitch.current
+    val context = view.context as? Activity
 
     LaunchedEffect(darkTheme) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
@@ -65,19 +69,26 @@ fun KnownTheme(
         }
     }
 
+    // Select different colour schemes depending on whether dynamic colours are enabled or not
     val colorScheme =
-        dynamicColorScheme(!darkTheme).run {
-            if (isHighContrastModeEnabled && darkTheme)
-                copy(
-                    surface = Color.Black,
-                    background = Color.Black,
-                    surfaceContainerLowest = Color.Black,
-                    surfaceContainerLow = surfaceContainerLowest,
-                    surfaceContainer = surfaceContainerLow,
-                    surfaceContainerHigh = surfaceContainerLow,
-                    surfaceContainerHighest = surfaceContainer,
-                )
-            else this
+        if (isDynamicColorEnabled && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S && context != null) {
+            // Use the dynamic colours provided by the system
+            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
+        } else {
+            // Using custom colour schemes
+            dynamicColorScheme(!darkTheme).run {
+                if (isHighContrastModeEnabled && darkTheme)
+                    copy(
+                        surface = Color.Black,
+                        background = Color.Black,
+                        surfaceContainerLowest = Color.Black,
+                        surfaceContainerLow = surfaceContainerLowest,
+                        surfaceContainer = surfaceContainerLow,
+                        surfaceContainerHigh = surfaceContainerLow,
+                        surfaceContainerHighest = surfaceContainer,
+                    )
+                else this
+            }
         }
 
     val textStyle =
@@ -88,20 +99,18 @@ fun KnownTheme(
 
     val tonalPalettes = LocalTonalPalettes.current
 
-
     if (!view.isInEditMode) {
         SideEffect {
-            (view.context as Activity).window.statusBarColor = colorScheme.surface.hashCode()
-            (view.context as Activity).window.navigationBarColor = colorScheme.surface.hashCode()
+            context?.window?.statusBarColor = colorScheme.surface.hashCode()
+            context?.window?.navigationBarColor = colorScheme.surface.hashCode()
             ViewCompat.getWindowInsetsController(view)?.isAppearanceLightStatusBars
         }
     }
 
     CompositionLocalProvider(
         LocalFixedColorRoles provides FixedColorRoles.fromTonalPalettes(tonalPalettes),
-        LocalTextStyle provides textStyle,
-
-        ) {
+        LocalTextStyle provides textStyle
+    ) {
         MaterialTheme(
             colorScheme = colorScheme,
             typography = Typography,

@@ -6,13 +6,22 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.ui.graphics.Color
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.melendez.known.colour.LocalTonalPalettes
+import com.melendez.known.colour.TonalPalettes.Companion.toTonalPalettes
 import com.melendez.known.ui.components.LocalActivity
+import com.melendez.known.ui.components.LocalDarkTheme
+import com.melendez.known.ui.components.LocalDynamicColorSwitch
+import com.melendez.known.ui.components.LocalPaletteStyleIndex
+import com.melendez.known.ui.components.LocalSeedColor
 import com.melendez.known.ui.components.animatedComposable
 import com.melendez.known.ui.screens.AboutScreen
 import com.melendez.known.ui.screens.Detail
@@ -28,7 +37,9 @@ import com.melendez.known.ui.screens.main.MainScreen
 import com.melendez.known.ui.screens.settings.Appearance
 import com.melendez.known.ui.screens.settings.Dark
 import com.melendez.known.ui.screens.settings.Language
+import com.melendez.known.ui.theme.DEFAULT_SEED_COLOR
 import com.melendez.known.ui.theme.KnownTheme
+import com.melendez.known.util.DarkThemePreference
 import com.melendez.known.util.PreferenceUtil
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
@@ -42,15 +53,44 @@ class MainActivity : ComponentActivity() {
         // Initialise predictive back gesture support
         initPredictiveBackGesture()
 
+        // Get PreferenceUtil instance
+        val preferenceUtil: PreferenceUtil = PreferenceUtil(application)
+        
+        // Initialise settings
+        preferenceUtil.forceInitializeSettingsSync()
+
         setContent {
             val navTotalController = rememberNavController()
             val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
-            val preferenceUtil: PreferenceUtil = viewModel()
-
-            preferenceUtil.initializeSettings()
-
-            CompositionLocalProvider(LocalActivity provides this) {
-                KnownTheme {
+            val viewModelPreferenceUtil: PreferenceUtil = viewModel()
+            // Collecting the current settings from the database
+            val settings = viewModelPreferenceUtil.settings.collectAsStateWithLifecycle(initialValue = null).value
+            val isSystemInDarkTheme = isSystemInDarkTheme()
+            // Current dark theme settings that should be used
+            val darkThemePreference = settings?.let {
+                DarkThemePreference(
+                    darkThemeValue = it.darkThemeValue,
+                    isHighContrastModeEnabled = it.isHighContrastMode
+                )
+            } ?: DarkThemePreference()
+            val isDarkTheme = darkThemePreference.isDarkTheme(isSystemInDarkTheme)
+            
+            // Setting the CompositionLocalProvider to Provide Theme Parameters
+            CompositionLocalProvider(
+                LocalActivity provides this,
+                LocalDarkTheme provides darkThemePreference,
+                LocalSeedColor provides (settings?.themeColor ?: DEFAULT_SEED_COLOR),
+                LocalDynamicColorSwitch provides (settings?.isDynamicColorEnabled ?: false),
+                LocalPaletteStyleIndex provides (settings?.paletteStyleIndex ?: 0),
+                LocalTonalPalettes provides if (settings?.themeColor != null && settings.themeColor != 0) 
+                    Color(settings.themeColor).toTonalPalettes() 
+                else 
+                    Color(DEFAULT_SEED_COLOR).toTonalPalettes()
+            ) {
+                KnownTheme(
+                    darkTheme = isDarkTheme,
+                    isHighContrastModeEnabled = darkThemePreference.isHighContrastModeEnabled
+                ) {
                     NavHost(
                         navController = navTotalController,
                         startDestination = Screens.Main.router
