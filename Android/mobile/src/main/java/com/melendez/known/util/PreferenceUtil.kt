@@ -62,8 +62,21 @@ class PreferenceUtil(application: Application) : AndroidViewModel(application) {
             repository.initializeSettings()
         }
     }
+    
+    // Predictive back gesture settings method
+    fun setPredictiveBackEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            repository.updatePredictiveBack(enabled)
+        }
+    }
+    
+    fun setPredictiveBackAnimationEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            repository.updatePredictiveBackAnimation(enabled)
+        }
+    }
 
-    // 其他设置方法...
+    // Other settings methods...
 }
 
 data class DarkThemePreference(

@@ -19,10 +19,6 @@ class SettingsRepository(private val settingsDao: SettingsDao) {
         settingsDao.updateDynamicColor(isDynamicColor)
     }
 
-    suspend fun updateLanguage(language: String) {
-        settingsDao.updateLanguage(language)
-    }
-
     suspend fun updateThemeColor(color: Int) {
         settingsDao.updateThemeColor(color)
     }
@@ -31,7 +27,15 @@ class SettingsRepository(private val settingsDao: SettingsDao) {
         settingsDao.updatePaletteStyle(index)
     }
 
+    suspend fun updatePredictiveBack(enabled: Boolean) {
+        settingsDao.updatePredictiveBack(enabled)
+    }
+
+    suspend fun updatePredictiveBackAnimation(enabled: Boolean) {
+        settingsDao.updatePredictiveBackAnimation(enabled)
+    }
+
     suspend fun initializeSettings() {
         settingsDao.updateSettings(Settings())
     }
-} 
+}

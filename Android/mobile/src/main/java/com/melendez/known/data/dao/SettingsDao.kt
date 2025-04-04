@@ -32,4 +32,11 @@ interface SettingsDao {
     
     @Query("UPDATE settings SET paletteStyleIndex = :index WHERE id = 1")
     suspend fun updatePaletteStyle(index: Int)
+    
+    // Predictive back gesture related queries
+    @Query("UPDATE settings SET predictiveBackEnabled = :enabled WHERE id = 1")
+    suspend fun updatePredictiveBack(enabled: Boolean)
+    
+    @Query("UPDATE settings SET predictiveBackAnimationEnabled = :enabled WHERE id = 1")
+    suspend fun updatePredictiveBackAnimation(enabled: Boolean)
 } 

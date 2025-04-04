@@ -1,9 +1,6 @@
-@file:Suppress("DEPRECATION")
-
 package com.melendez.known.ui.screens.main
 
 import android.annotation.SuppressLint
-import androidx.compose.animation.ExperimentalAnimationApi
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -42,11 +39,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.navigation.animation.AnimatedNavHost
-import com.google.accompanist.navigation.animation.composable
-import com.google.accompanist.navigation.animation.rememberAnimatedNavController
 import com.melendez.known.R
 import com.melendez.known.ui.screens.main.inners.History
 import com.melendez.known.ui.screens.main.inners.Home
@@ -79,7 +75,6 @@ fun MainScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHost
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Main_Compact(
@@ -173,16 +168,12 @@ fun Main_Compact(
             }
         }
     ) { paddings ->
-        AnimatedNavHost(
+        NavHost(
             modifier = Modifier.padding(top = paddings.calculateTopPadding()),
             navController = navMainController,
             startDestination = Screens.Home.router
         ) {
-            composable(Screens.Home.router) {
-                Home(
-                    paddingValues = paddings
-                )
-            }
+            composable(Screens.Home.router) { Home() }
             composable(Screens.History.router) {
                 History(
                     paddingValues = paddings,
@@ -195,7 +186,6 @@ fun Main_Compact(
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Main_Medium(
     navTotalController: NavHostController,
@@ -283,7 +273,7 @@ fun Main_Medium(
                     }
                 }
             ) { paddings ->
-                AnimatedNavHost(
+                NavHost(
                     modifier = Modifier.padding(top = paddings.calculateTopPadding()),
                     navController = navMainController,
                     startDestination = Screens.Home.router
@@ -304,7 +294,6 @@ fun Main_Medium(
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
-@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun Main_Expanded(
     navTotalController: NavHostController,
@@ -395,7 +384,7 @@ fun Main_Expanded(
                     }
                 }
             ) { paddings ->
-                AnimatedNavHost(
+                NavHost(
                     modifier = Modifier.padding(top = paddings.calculateTopPadding()),
                     navController = navMainController,
                     startDestination = Screens.Home.router
@@ -415,12 +404,11 @@ fun Main_Expanded(
     }
 }
 
-@OptIn(ExperimentalAnimationApi::class)
 @Preview(device = "id:pixel_9_pro")
 @Composable
 fun MainScreen_Preview() {
     MainScreen(
         widthSizeClass = WindowWidthSizeClass.Compact,
-        navTotalController = rememberAnimatedNavController()
+        navTotalController = rememberNavController()
     )
 }

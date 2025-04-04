@@ -2,6 +2,7 @@
 
 package com.melendez.known.ui.theme
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.os.Build
 import android.view.WindowInsetsController.APPEARANCE_LIGHT_STATUS_BARS
@@ -38,6 +39,7 @@ fun Color.harmonizeWith(other: Color) =
 fun Color.harmonizeWithPrimary(): Color =
     this.harmonizeWith(other = MaterialTheme.colorScheme.primary)
 
+@SuppressLint("MemberExtensionConflict")
 @Composable
 fun KnownTheme(
     darkTheme: Boolean = isSystemInDarkTheme(),
@@ -102,7 +104,6 @@ fun KnownTheme(
         ) {
         MaterialTheme(
             colorScheme = colorScheme,
-            shapes = Shapes,
             typography = Typography,
             content = content,
         )
