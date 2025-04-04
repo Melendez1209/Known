@@ -25,7 +25,7 @@ import androidx.compose.material3.FloatingActionButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.ScrollableTabRow
+import androidx.compose.material3.SecondaryScrollableTabRow
 import androidx.compose.material3.Tab
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
@@ -159,7 +159,7 @@ fun Detail(navTotalController: NavHostController) {
         var course by remember { mutableIntStateOf(0) }
 
         Column {
-            ScrollableTabRow(
+            SecondaryScrollableTabRow(
                 selectedTabIndex = course,
                 modifier = Modifier
                     .fillMaxWidth()
