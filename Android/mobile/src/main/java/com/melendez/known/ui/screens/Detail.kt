@@ -179,8 +179,8 @@ fun Detail(navTotalController: NavHostController) {
                     .fillMaxWidth()
                     .nestedScroll(behaviorTop.nestedScrollConnection)
             ) {
-                items(50) {
-                    Text(text = "$it")
+                items(50) { count ->
+                    Text(text = "$count")
                 }
             }
         }

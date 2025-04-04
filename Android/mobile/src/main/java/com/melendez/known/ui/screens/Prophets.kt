@@ -1,5 +1,6 @@
 package com.melendez.known.ui.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -47,6 +48,7 @@ import com.melendez.known.R
 import com.melendez.known.ui.viewmodel.prophets.ProphetsUiState
 import com.melendez.known.ui.viewmodel.prophets.ProphetsViewModel
 
+@SuppressLint("ViewModelConstructorInComposable")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Prophets(navTotalController: NavHostController) {

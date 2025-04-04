@@ -173,11 +173,7 @@ fun Main_Compact(
             navController = navMainController,
             startDestination = Screens.Home.router
         ) {
-            composable(Screens.Home.router) {
-                Home(
-                    paddingValues = paddings
-                )
-            }
+            composable(Screens.Home.router) { Home() }
             composable(Screens.History.router) {
                 History(
                     paddingValues = paddings,

@@ -137,6 +137,7 @@ fun Language(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostCo
     }
 }
 
+@SuppressLint("MemberExtensionConflict")
 @Composable
 fun Language_Content(
     modifier: Modifier,

@@ -256,7 +256,9 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
                         icon = Icons.Outlined.Gesture,
                         isChecked = settings.value?.predictiveBackEnabled ?: true,
                         onClick = {
-                            preferenceUtil.setPredictiveBackEnabled(!(settings.value?.predictiveBackEnabled ?: true))
+                            preferenceUtil.setPredictiveBackEnabled(
+                                !(settings.value?.predictiveBackEnabled ?: true)
+                            )
                         },
                     )
                 }
@@ -270,7 +272,9 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
                             icon = null,
                             isChecked = settings.value?.predictiveBackAnimationEnabled ?: true,
                             onClick = {
-                                preferenceUtil.setPredictiveBackAnimationEnabled(!(settings.value?.predictiveBackAnimationEnabled ?: true))
+                                preferenceUtil.setPredictiveBackAnimationEnabled(
+                                    !(settings.value?.predictiveBackAnimationEnabled ?: true)
+                                )
                             },
                             enabled = settings.value?.predictiveBackEnabled ?: true
                         )
@@ -280,187 +284,6 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
         }
     }
 }
-
-
-//    val context = LocalContext.current
-//
-//    // Variables related to settings
-//    var colorMode by rememberSaveable { mutableStateOf(Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) }
-//    var cityName by rememberSaveable { mutableStateOf("") }
-//    var grade by rememberSaveable { mutableIntStateOf(10) }
-//    val courseList = listOf(
-//        stringResource(R.string.physiotherapy),
-//        stringResource(R.string.chemotherapy),
-//        stringResource(R.string.biology),
-//        stringResource(R.string.political),
-//        stringResource(R.string.history),
-//        stringResource(R.string.geography)
-//    )
-//    val courses =
-//        rememberSaveable { mutableListOf(courseList[0], courseList[1], courseList[2]) }
-//
-//
-//    // Variables related to components
-//    var visibleAppearance by remember { mutableStateOf(true) }
-//    var visibleAnalysis by remember { mutableStateOf(true) }
-//    var expanded by remember { mutableStateOf(false) }
-//
-//    Surface(modifier = Modifier.fillMaxSize()) {
-//        LazyColumn(modifier = modifier) {
-//            item {
-//                Column(Modifier.fillMaxWidth()) {
-//                    Button(
-//                        onClick = { navTotalController.navigate(Screens.Signin.router) },
-//                        modifier = Modifier
-//                            .align(Alignment.CenterHorizontally)
-//                            .widthIn(max = 320.dp),
-//                    ) {
-//                        Text(text = stringResource(R.string.sign_to))
-//                    }
-//                }
-//            }
-//            item {
-//                Column(modifier = Modifier.fillMaxWidth()) {
-//                    Row(
-//                        modifier = Modifier
-//                            .height(48.dp)
-//                            .fillMaxWidth()
-//                            .clickable { visibleAppearance = !visibleAppearance }
-//                    ) {
-//                        Text(
-//                            text = stringResource(R.string.appearance),
-//                            modifier = Modifier
-//                                .padding(start = 12.dp)
-//                                .align(Alignment.CenterVertically),
-//                            style = MaterialTheme.typography.titleLarge
-//                        )
-//                    }
-//                    AnimatedVisibility(visible = visibleAppearance) {
-//                        Column {
-//                            ListItem(
-//                                headlineContent = { Text(text = stringResource(R.string.dynamic_color)) },
-//                                overlineContent = {
-//                                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) Text(
-//                                        text = stringResource(R.string.low_version)
-//                                    )
-//                                },
-//                                supportingContent = { Text(text = stringResource(R.string.apply_wallpaper)) },
-//                                trailingContent = {
-//                                    Switch(
-//                                        enabled = Build.VERSION.SDK_INT >= Build.VERSION_CODES.S,
-//                                        checked = colorMode,
-//                                        onCheckedChange = { colorMode = it },
-//                                        thumbContent = {
-//                                            Icon(
-//                                                imageVector = if (colorMode) Icons.Rounded.Check else Icons.Rounded.Clear,
-//                                                contentDescription = ""
-//                                            )
-//                                        }
-//                                    )
-//                                }
-//                            )
-//                        }
-//                    }
-//                }
-//            }
-//            item {
-//                Column(modifier = Modifier.fillMaxWidth()) {
-//                    Row(
-//                        modifier = Modifier
-//                            .height(48.dp)
-//                            .fillMaxWidth()
-//                            .clickable { visibleAnalysis = !visibleAnalysis }
-//                    ) {
-//                        Text(
-//                            text = stringResource(R.string.analysis),
-//                            modifier = Modifier
-//                                .padding(start = 12.dp)
-//                                .align(Alignment.CenterVertically),
-//                            style = MaterialTheme.typography.titleLarge
-//                        )
-//                    }
-//                    AnimatedVisibility(visible = visibleAnalysis) {
-//                        Column {
-//
-//                            val gradeList = mutableListOf(
-//                                stringResource(id = R.string.g7),
-//                                stringResource(id = R.string.g8),
-//                                stringResource(id = R.string.g9),
-//                                stringResource(id = R.string.g10),
-//                                stringResource(id = R.string.g11),
-//                                stringResource(id = R.string.g12)
-//                            )
-//
-//                            ListItem(
-//                                headlineContent = { Text(text = (stringResource(R.string.district))) },
-//                                trailingContent = {
-//                                    TextButton(onClick = { cityName = getCityName(context) }) {
-//                                        Text(text = cityName.ifEmpty { stringResource(R.string.locate) })
-//                                    }
-//                                }
-//                            )
-//                            HorizontalDivider()
-//                            ListItem(
-//                                headlineContent = { Text(text = stringResource(id = R.string.grade)) },
-//                                trailingContent = {
-//                                    Button(onClick = { expanded = true }) {
-//                                        Text(text = gradeList[grade - 7])
-//                                        Icon(
-//                                            imageVector = Icons.Rounded.ArrowDropDown,
-//                                            contentDescription = stringResource(R.string.select_grade)
-//                                        )
-//                                    }
-//                                    DropdownMenu(
-//                                        expanded = expanded,
-//                                        onDismissRequest = { expanded = false }) {
-//                                        gradeList.forEach {
-//                                            DropdownMenuItem(
-//                                                text = { Text(text = it) },
-//                                                onClick = {
-//                                                    grade = gradeList.indexOf(it) + 7
-//                                                    expanded = false
-//                                                    Log.d(
-//                                                        "Melendez",
-//                                                        "Appearance_Content: grade:$grade"
-//                                                    )
-//                                                }
-//                                            )
-//                                        }
-//                                    }
-//                                }
-//                            )
-//                            HorizontalDivider()
-//                            ListItem(
-//                                headlineContent = { Text(text = stringResource(R.string.optional)) },
-//                                supportingContent = {
-//                                    Row(modifier = Modifier.horizontalScroll(rememberScrollState())) {
-//                                        courseList.forEach { s ->
-//                                            var selected by rememberSaveable { mutableStateOf(s in courses) }
-//                                            FilterChip(
-//                                                selected = selected,
-//                                                onClick = {
-//                                                    selected = !selected/*TODO*/
-//                                                },
-//                                                label = { Text(text = s) }
-//                                            )
-//                                            Spacer(modifier = Modifier.width(6.dp))
-//                                        }
-//                                        IconButton(onClick = { /*TODO*/ }) {
-//                                            Icon(
-//                                                imageVector = Icons.Rounded.Add,
-//                                                contentDescription = stringResource(id = R.string.add)
-//                                            )
-//                                        }
-//                                    }
-//                                }
-//                            )
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-
 
 @Composable
 fun RowScope.ColorButtons(color: Color, preferenceUtil: PreferenceUtil) {

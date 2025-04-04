@@ -1,7 +1,6 @@
 package com.melendez.known.ui.screens
 
 import android.content.Intent
-import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -47,6 +46,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
@@ -156,7 +156,7 @@ fun About_Content(modifier: Modifier, navTotalController: NavHostController) {
                     onClick = {
                         val intent = Intent(
                             Intent.ACTION_VIEW,
-                            Uri.parse("https://bmc.link/markmelendez")
+                            "https://bmc.link/markmelendez".toUri()
                         )
                         context.startActivity(intent)
                     },
@@ -197,7 +197,7 @@ fun About_Content(modifier: Modifier, navTotalController: NavHostController) {
                 modifier = Modifier.clickable {
                     val intent = Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/Melendez1209/known/graphs/contributors")
+                        "https://github.com/Melendez1209/known/graphs/contributors".toUri()
                     )
                     context.startActivity(intent)
                 },
@@ -233,7 +233,7 @@ fun About_Content(modifier: Modifier, navTotalController: NavHostController) {
                 modifier = Modifier.clickable {
                     val intent = Intent(
                         Intent.ACTION_VIEW,
-                        Uri.parse("https://github.com/Melendez1209/Known/blob/main/LICENSE")
+                        "https://github.com/Melendez1209/Known/blob/main/LICENSE".toUri()
                     )
                     context.startActivity(intent)
                 },

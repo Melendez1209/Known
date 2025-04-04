@@ -1,5 +1,6 @@
 package com.melendez.known.ui.screens.main.inners
 
+import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
@@ -52,6 +53,7 @@ import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.melendez.known.R
 import com.melendez.known.ui.screens.Screens
 
+@SuppressLint("MemberExtensionConflict")
 @Suppress("DEPRECATION")
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable

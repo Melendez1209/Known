@@ -22,7 +22,7 @@ import com.melendez.known.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Home(paddingValues: PaddingValues? = null) {
+fun Home() {
     Surface {
 
         data class CarouselItem(
