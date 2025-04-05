@@ -88,7 +88,7 @@ import com.melendez.known.util.STYLE_MONOCHROME
 import com.melendez.known.util.STYLE_TONAL_SPOT
 import com.melendez.known.util.paletteStyles
 import com.melendez.known.util.toDisplayName
-import io.material.hct.Hct
+import io.material.hct.material.hct.Hct
 import java.util.Locale
 
 
@@ -142,7 +142,7 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
             item {
                 Column {
                     // Theme colour selector
-                    var currentColorSelection =
+                    val currentColorSelection =
                         if (settings.value?.themeColor != null && settings.value?.themeColor != 0) {
                             Color(settings.value!!.themeColor)
                         } else {
