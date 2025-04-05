@@ -25,7 +25,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -47,7 +47,7 @@ import com.melendez.known.ui.screens.Screens
 fun Me(navTotalController: NavHostController) {
     Surface {
         Column {
-            var imageUrl: Any? by rememberSaveable { mutableStateOf(R.drawable.outline_account_circle_24) }
+            var imageUrl: Any? by remember { mutableStateOf(R.drawable.outline_account_circle_24) }
             val photoPicker =
                 rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) {
                     if (it != null) {

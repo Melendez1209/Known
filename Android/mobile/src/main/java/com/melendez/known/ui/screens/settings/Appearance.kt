@@ -267,26 +267,8 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
                             preferenceUtil.setPredictiveBackEnabled(
                                 !(settings.value?.predictiveBackEnabled ?: true)
                             )
-                        },
+                        }
                     )
-                }
-
-                // If predictive back is enabled, display animation settings
-                if (settings.value?.predictiveBackEnabled == true) {
-                    item {
-                        PreferenceSwitch(
-                            title = stringResource(id = R.string.predictive_back_animation),
-                            description = stringResource(id = R.string.predictive_back_animation_desc),
-                            icon = null,
-                            isChecked = settings.value?.predictiveBackAnimationEnabled ?: true,
-                            onClick = {
-                                preferenceUtil.setPredictiveBackAnimationEnabled(
-                                    !(settings.value?.predictiveBackAnimationEnabled ?: true)
-                                )
-                            },
-                            enabled = settings.value?.predictiveBackEnabled ?: true
-                        )
-                    }
                 }
             }
         }
@@ -374,12 +356,11 @@ fun RowScope.ColorButtonImpl(
                             .size(24.dp),
                     ) {}
                     Box(
-                        modifier =
-                            Modifier
-                                .align(Alignment.Center)
-                                .clip(CircleShape)
-                                .size(containerSize)
-                                .drawBehind { drawCircle(containerColor) }
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .clip(CircleShape)
+                            .size(containerSize)
+                            .drawBehind { drawCircle(containerColor) }
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.Check,

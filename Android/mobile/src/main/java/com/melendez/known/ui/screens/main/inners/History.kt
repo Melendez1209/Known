@@ -37,7 +37,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -63,19 +63,19 @@ fun History(
     onEditingChange: (Boolean) -> Unit
 ) {
 
-    var checkboxes = remember { mutableStateListOf(false, false, false) }
+    var checkboxes = rememberSaveable { mutableStateListOf(false, false, false) }
 
     Surface {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
             if (checkboxes.isNotEmpty()) {
 
-                var isEditing by remember { mutableStateOf(false) }
+                var isEditing by rememberSaveable { mutableStateOf(false) }
                 val rowPadding by animateDpAsState(
                     targetValue = if (isEditing) 36.dp else 12.dp,
                     label = "Checkbox spacing to expand or not"
                 )
 
-                var triState by remember { mutableStateOf(ToggleableState.Off) }
+                var triState by rememberSaveable { mutableStateOf(ToggleableState.Off) }
                 val toggleTriState = {
                     triState = when (triState) {
                         ToggleableState.On -> ToggleableState.Off
@@ -87,8 +87,8 @@ fun History(
                     }
                 }
 
-                var key by remember { mutableStateOf("") }
-                var active by remember { mutableStateOf(false) }
+                var key by rememberSaveable { mutableStateOf("") }
+                var active by rememberSaveable { mutableStateOf(false) }
                 val searchbarPadding by animateDpAsState(
                     targetValue = if (active) 0.dp else 12.dp,
                     label = "SearchBar spacing to expand or not"

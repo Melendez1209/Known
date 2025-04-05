@@ -80,12 +80,6 @@ class PreferenceUtil(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun setPredictiveBackAnimationEnabled(enabled: Boolean) {
-        viewModelScope.launch {
-            repository.updatePredictiveBackAnimation(enabled)
-        }
-    }
-
     // Other settings methods...
 }
 

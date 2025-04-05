@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -83,7 +84,7 @@ fun Main_Compact(
     screens: List<Screens>
 ) {
 
-    var isEditing by remember { mutableStateOf(false) }
+    var isEditing by rememberSaveable { mutableStateOf(false) }
     val navBackStackEntry by navMainController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
@@ -193,7 +194,7 @@ fun Main_Medium(
     screens: List<Screens>
 ) {
 
-    var isEditing by remember { mutableStateOf(false) }
+    var isEditing by rememberSaveable { mutableStateOf(false) }
     val navBackStackEntry by navMainController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 
@@ -301,7 +302,7 @@ fun Main_Expanded(
     screens: List<Screens>
 ) {
 
-    var isEditing by remember { mutableStateOf(false) }
+    var isEditing by rememberSaveable { mutableStateOf(false) }
     val navBackStackEntry by navMainController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
 

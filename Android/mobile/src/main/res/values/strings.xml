@@ -8,7 +8,7 @@
     <string name="search">Search</string>
     <string name="clear">Clear</string>
     <string name="settings">Settings</string>
-    <string name="back">Back to previous page</string>
+    <string name="back">Back to previous screen</string>
     <string name="close_bar">Close the Search Bar</string>
     <string name="about">About</string>
     <string name="mark">My marks</string>
@@ -122,9 +122,4 @@
     <string name="system_settings">System settings</string>
     <string name="predictive_back">Predictive Back Gesture</string>
     <string name="predictive_back_desc">Enable smoother back gesture experience</string>
-    <string name="predictive_back_animation">Predictive Back Animation</string>
-    <string name="predictive_back_animation_desc">Show visual transition animations when going back</string>
-    <string name="swipe_to_go_back">Swipe right to go back</string>
-    <string name="back_to_previous_screen">Back to previous screen</string>
-    <string name="back_to_home">Back to home</string>
 </resources>

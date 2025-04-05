@@ -15,6 +15,5 @@ data class Settings(
     val themeColor: Int = 0,
     val paletteStyleIndex: Int = 0,
     // Predictive back gesture settings
-    val predictiveBackEnabled: Boolean = true,
-    val predictiveBackAnimationEnabled: Boolean = true
+    val predictiveBackEnabled: Boolean = true
 ) 
