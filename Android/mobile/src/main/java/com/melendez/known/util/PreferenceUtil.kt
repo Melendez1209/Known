@@ -79,14 +79,6 @@ class PreferenceUtil(application: Application) : AndroidViewModel(application) {
             repository.updatePredictiveBack(enabled)
         }
     }
-
-    fun setPredictiveBackAnimationEnabled(enabled: Boolean) {
-        viewModelScope.launch {
-            repository.updatePredictiveBackAnimation(enabled)
-        }
-    }
-
-    // Other settings methods...
 }
 
 data class DarkThemePreference(

@@ -11,7 +11,7 @@
     <string name="search">搜索</string>
     <string name="clear">清除</string>
     <string name="settings">設置</string>
-    <string name="back">返回上一級</string>
+    <string name="back">返抵上一屏幕</string>
     <string name="close_bar">關閉搜索列</string>
     <string name="about">關於</string>
     <string name="mark">我的分數</string>
@@ -98,7 +98,7 @@
     <string name="prophets">先知</string>
     <string name="confirm">確認</string>
     <string name="attention">注意</string>
-    <string name="disclaimer">您的贊助行為不屬於軟體發行方（ Known 團隊）的經營性行為！ 僅作您對於本軟體（ Known ）發展的支援！ 我們的軟體功能完全免費！</string>
+    <string name="disclaimer">您的贊助行為唔屬於軟件發行方（ 知學情 團隊）嘅經營性行為！ 僅作您對於本項目（ 知學情 ）發展支持！ 我哋嘅軟件功能完全免費！</string>
     <string name="pe">體育</string>
     <string name="classmates">同学</string>
     <string name="favourites">收藏</string>
@@ -120,4 +120,17 @@
     <string name="suggested">建議</string>
     <string name="all_languages">所有語言</string>
     <string name="system_settings">系統設定</string>
+    <string name="predictive_back">預測性返回手勢</string>
+    <string name="predictive_back_desc">啟用更流暢嘅返回手勢體驗</string>
+    <string name="email">郵箱</string>
+    <string name="email_hint">請輸入您的郵箱</string>
+    <string name="password_hint">請輸入您的密碼</string>
+    <string name="forgot_password">忘記密碼？</string>
+    <string name="no_account">未有賬號？</string>
+    <string name="has_account">已有賬號？</string>
+    <string name="or_continue_with">或透過以下方式繼續</string>
+    <string name="google_sign_in">使用 Google 賬號登錄</string>
+    <string name="email_sign_in">使用郵箱登錄</string>
+    <string name="register_with_email">使用郵箱註冊</string>
+    <string name="sign_out">退出登錄</string>
 </resources>

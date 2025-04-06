@@ -11,7 +11,7 @@
     <string name="search">Search</string>
     <string name="clear">Clear</string>
     <string name="settings">Settings</string>
-    <string name="back">Back to previous page</string>
+    <string name="back">Back to previous screen</string>
     <string name="close_bar">Close the search bar</string>
     <string name="about">About</string>
     <string name="mark">My marks</string>
@@ -120,4 +120,17 @@
     <string name="suggested">Suggested</string>
     <string name="all_languages">All languages</string>
     <string name="system_settings">System settings</string>
+    <string name="predictive_back">Predictive Back Gesture</string>
+    <string name="predictive_back_desc">Enable a smoother back gesture experience</string>
+    <string name="email">Email</string>
+    <string name="email_hint">Enter your email</string>
+    <string name="password_hint">Enter your password</string>
+    <string name="forgot_password">Forgot password?</string>
+    <string name="no_account">Don\'t have an account?</string>
+    <string name="has_account">Already have an account?</string>
+    <string name="or_continue_with">Or continue with</string>
+    <string name="google_sign_in">Sign in with Google</string>
+    <string name="email_sign_in">Sign in with Email</string>
+    <string name="register_with_email">Register with Email</string>
+    <string name="sign_out">Sign out</string>
 </resources>

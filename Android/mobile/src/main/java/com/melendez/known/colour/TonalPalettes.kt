@@ -1,9 +1,8 @@
 package com.melendez.known.colour
 
-import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.toArgb
-import io.material.hct.Hct
+import io.material.hct.material.hct.Hct
 
 typealias TonalPalette = Map<Double, Color>
 
@@ -79,32 +78,6 @@ class TonalPalettes(
             accent3 = tonalValues.associateWith { transform(it, style.accent3Spec) },
             neutral1 = M3SurfaceTonalValues.associateWith { transform(it, style.neutral1Spec) },
             neutral2 = tonalValues.associateWith { transform(it, style.neutral2Spec) }
-        )
-
-
-        private fun Color.toTonalPalette(
-            tonalValues: DoubleArray = M3TonalValues
-        ): TonalPalette =
-            tonalValues.associateWith { transform(it, ColorSpec()) }
-
-
-        /**
-         * Convert an existing `ColorScheme` to an MD3 `TonalPalettes`
-         *
-         * Notice: This function is `PaletteStyle` independent
-         *
-         * @see androidx.compose.material3.ColorScheme
-         * @see TonalPalettes
-         */
-        fun ColorScheme.toTonalPalettes(
-            tonalValues: DoubleArray = M3TonalValues
-        ): TonalPalettes = TonalPalettes(
-            keyColor = primary,
-            accent1 = primary.toTonalPalette(tonalValues),
-            accent2 = secondary.toTonalPalette(tonalValues),
-            accent3 = tertiary.toTonalPalette(tonalValues),
-            neutral1 = surface.toTonalPalette(M3SurfaceTonalValues),
-            neutral2 = surfaceVariant.toTonalPalette(tonalValues),
         )
 
         private fun Color.transform(tone: Double, spec: ColorSpec): Color {

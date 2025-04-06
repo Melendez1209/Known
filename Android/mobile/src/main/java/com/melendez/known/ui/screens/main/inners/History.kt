@@ -8,6 +8,7 @@ import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -15,10 +16,14 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material.pullrefresh.PullRefreshIndicator
+import androidx.compose.material.pullrefresh.pullRefresh
+import androidx.compose.material.pullrefresh.rememberPullRefreshState
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -33,11 +38,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TriStateCheckbox
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,37 +51,40 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.MutableLiveData
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import com.google.accompanist.swiperefresh.SwipeRefresh
-import com.google.accompanist.swiperefresh.rememberSwipeRefreshState
 import com.melendez.known.R
 import com.melendez.known.ui.screens.Screens
 
 @SuppressLint("MemberExtensionConflict")
 @Suppress("DEPRECATION")
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(
+    ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
+    ExperimentalMaterialApi::class
+)
 @Composable
 fun History(
     paddingValues: PaddingValues? = null,
     navTotalController: NavHostController,
     onEditingChange: (Boolean) -> Unit
 ) {
+    val checkboxes = remember { mutableStateListOf(false, false, false) }
+    var hasData by rememberSaveable { mutableStateOf(true) }
 
-    var checkboxes = remember { mutableStateListOf(false, false, false) }
+    LaunchedEffect(Unit) {
+        hasData = checkboxes.isNotEmpty()
+    }
 
     Surface {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            if (checkboxes.isNotEmpty()) {
-
-                var isEditing by remember { mutableStateOf(false) }
+            if (hasData && checkboxes.isNotEmpty()) {
+                var isEditing by rememberSaveable { mutableStateOf(false) }
                 val rowPadding by animateDpAsState(
                     targetValue = if (isEditing) 36.dp else 12.dp,
                     label = "Checkbox spacing to expand or not"
                 )
 
-                var triState by remember { mutableStateOf(ToggleableState.Off) }
+                var triState by rememberSaveable { mutableStateOf(ToggleableState.Off) }
                 val toggleTriState = {
                     triState = when (triState) {
                         ToggleableState.On -> ToggleableState.Off
@@ -87,8 +96,8 @@ fun History(
                     }
                 }
 
-                var key by remember { mutableStateOf("") }
-                var active by remember { mutableStateOf(false) }
+                var key by rememberSaveable { mutableStateOf("") }
+                var active by rememberSaveable { mutableStateOf(false) }
                 val searchbarPadding by animateDpAsState(
                     targetValue = if (active) 0.dp else 12.dp,
                     label = "SearchBar spacing to expand or not"
@@ -97,7 +106,8 @@ fun History(
                 BackHandler(enabled = isEditing) {
                     isEditing = false
                     onEditingChange(false)
-                    checkboxes = mutableStateListOf(false, false, false)
+                    checkboxes.clear()
+                    checkboxes.addAll(listOf(false, false, false))
                 }
 
                 SearchBar(
@@ -192,15 +202,16 @@ fun History(
                     }
                 }
 
-                val refreshing: MutableLiveData<Boolean> = MutableLiveData(false)
-                val isRefreshing by refreshing.observeAsState(false) //TODO:Replace the LiveData with the Room
-
-                SwipeRefresh(
-                    state = rememberSwipeRefreshState(isRefreshing = isRefreshing),
+                var isRefreshing by rememberSaveable { mutableStateOf(false) }
+                val pullRefreshState = rememberPullRefreshState(
+                    refreshing = isRefreshing,
                     onRefresh = {
-                        //TODO:Refresh
+                        isRefreshing = true
+                        isRefreshing = false
                     }
-                ) {
+                )
+
+                Box(modifier = Modifier.pullRefresh(pullRefreshState)) {
                     LazyColumn(modifier = if (paddingValues != null) Modifier.padding(bottom = paddingValues.calculateBottomPadding()) else Modifier) {
                         checkboxes.forEachIndexed { index, it ->
                             item {
@@ -247,8 +258,14 @@ fun History(
                                                             ) ToggleableState.Off
                                                             else ToggleableState.Indeterminate
                                                     } else {
-                                                        checkboxes =
-                                                            mutableStateListOf(false, false, false)
+                                                        checkboxes.clear()
+                                                        checkboxes.addAll(
+                                                            listOf(
+                                                                false,
+                                                                false,
+                                                                false
+                                                            )
+                                                        )
                                                     }
                                                     isEditing = !isEditing
                                                     onEditingChange(isEditing)
@@ -282,6 +299,12 @@ fun History(
                             }
                         }
                     }
+
+                    PullRefreshIndicator(
+                        refreshing = isRefreshing,
+                        state = pullRefreshState,
+                        modifier = Modifier.align(Alignment.TopCenter)
+                    )
                 }
             } else {
                 Text(

@@ -1,13 +1,6 @@
 package com.melendez.known.ui.screens.settings
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
-import android.content.pm.PackageManager
-import android.location.Geocoder
-import android.location.LocationManager
-import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -56,9 +49,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -88,7 +78,7 @@ import com.melendez.known.util.STYLE_MONOCHROME
 import com.melendez.known.util.STYLE_TONAL_SPOT
 import com.melendez.known.util.paletteStyles
 import com.melendez.known.util.toDisplayName
-import io.material.hct.Hct
+import io.material.hct.material.hct.Hct
 import java.util.Locale
 
 
@@ -103,7 +93,7 @@ fun Appearance(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHost
 
     Column {
         SharedTopBar(
-            title = stringResource(R.string.dark_theme),
+            title = stringResource(R.string.look_and_feel),
             widthSizeClass = widthSizeClass,
             navTotalController = navTotalController,
             scrollBehavior = scrollBehavior
@@ -142,7 +132,7 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
             item {
                 Column {
                     // Theme colour selector
-                    var currentColorSelection =
+                    val currentColorSelection =
                         if (settings.value?.themeColor != null && settings.value?.themeColor != 0) {
                             Color(settings.value!!.themeColor)
                         } else {
@@ -242,7 +232,7 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
                             else DarkThemePreference.ON
                         )
                     },
-                    onClick = { navTotalController.navigate(Screens.Dark.router) },
+                    onClick = {  },
                 )
             }
             item {
@@ -267,26 +257,8 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
                             preferenceUtil.setPredictiveBackEnabled(
                                 !(settings.value?.predictiveBackEnabled ?: true)
                             )
-                        },
+                        }
                     )
-                }
-
-                // If predictive back is enabled, display animation settings
-                if (settings.value?.predictiveBackEnabled == true) {
-                    item {
-                        PreferenceSwitch(
-                            title = stringResource(id = R.string.predictive_back_animation),
-                            description = stringResource(id = R.string.predictive_back_animation_desc),
-                            icon = null,
-                            isChecked = settings.value?.predictiveBackAnimationEnabled ?: true,
-                            onClick = {
-                                preferenceUtil.setPredictiveBackAnimationEnabled(
-                                    !(settings.value?.predictiveBackAnimationEnabled ?: true)
-                                )
-                            },
-                            enabled = settings.value?.predictiveBackEnabled ?: true
-                        )
-                    }
                 }
             }
         }
@@ -374,12 +346,11 @@ fun RowScope.ColorButtonImpl(
                             .size(24.dp),
                     ) {}
                     Box(
-                        modifier =
-                            Modifier
-                                .align(Alignment.Center)
-                                .clip(CircleShape)
-                                .size(containerSize)
-                                .drawBehind { drawCircle(containerColor) }
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .clip(CircleShape)
+                            .size(containerSize)
+                            .drawBehind { drawCircle(containerColor) }
                     ) {
                         Icon(
                             imageVector = Icons.Rounded.Check,
@@ -403,36 +374,4 @@ fun Settings_Preview() {
         widthSizeClass = WindowWidthSizeClass.Compact,
         navTotalController = rememberNavController()
     )
-}
-
-@Suppress("DEPRECATION")
-fun getCityName(context: Context): String {
-    // Check if the permission has been granted
-    if (ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        // If the permission has not been granted, request it
-        ActivityCompat.requestPermissions(
-            context as Activity,
-            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-            1
-        )
-        return ""
-    } else {
-        // If the permission has been granted, get the city name
-        // Get an instance of LocationManager
-        val locationManager = getSystemService(context, LocationManager::class.java)
-        // Get the device's last known location
-        val location = locationManager?.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-        // Create an instance of Geocoder
-        val geocoder = Geocoder(context)
-        // Get the city address information
-        val addresses = location?.let { geocoder.getFromLocation(it.latitude, it.longitude, 1) }
-        // Return the city name
-        val city = addresses?.get(0)?.locality ?: ""
-        Log.d("Melendez", "getCityName: city:$city")
-        return city
-    }
 }

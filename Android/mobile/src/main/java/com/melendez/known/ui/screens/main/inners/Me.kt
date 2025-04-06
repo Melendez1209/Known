@@ -14,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.Logout
 import androidx.compose.material.icons.automirrored.rounded.NavigateNext
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Settings
@@ -23,9 +24,10 @@ import androidx.compose.material3.ListItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -40,14 +42,32 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.melendez.known.R
+import com.melendez.known.data.UserManager
 import com.melendez.known.ui.screens.Screens
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Me(navTotalController: NavHostController) {
+    // Get user information
+    val isLoggedIn by UserManager.isLoggedIn.collectAsState()
+    val userAvatar by UserManager.userAvatar.collectAsState()
+    val userName by UserManager.userName.collectAsState()
+    val userEmail by UserManager.userEmail.collectAsState()
+
     Surface {
         Column {
-            var imageUrl: Any? by rememberSaveable { mutableStateOf(R.drawable.outline_account_circle_24) }
+            var imageUrl: Any? by remember {
+                mutableStateOf(
+                    if (isLoggedIn && userAvatar != null)
+                        userAvatar
+                    else
+                        UserManager.getDefaultAvatarResId()
+                )
+            }
+
+            imageUrl =
+                if (isLoggedIn && userAvatar != null) userAvatar else UserManager.getDefaultAvatarResId()
+
             val photoPicker =
                 rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) {
                     if (it != null) {
@@ -60,7 +80,7 @@ fun Me(navTotalController: NavHostController) {
 
             AsyncImage(
                 model = ImageRequest.Builder(LocalContext.current).data(imageUrl)
-                    .crossfade(enable = false).build(),
+                    .crossfade(enable = true).build(),
                 contentDescription = stringResource(R.string.avatar),
                 modifier = Modifier
                     .height(80.dp)
@@ -69,13 +89,38 @@ fun Me(navTotalController: NavHostController) {
                     .padding(top = 6.dp)
                     .clip(CircleShape)
                     .combinedClickable(
-                        onClick = { navTotalController.navigate(Screens.Signin.router) },
+                        onClick = {
+                            if (!isLoggedIn) {
+                                navTotalController.navigate(Screens.Signin.router)
+                            }
+                        },
                         onLongClick = {
-                            photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                            if (isLoggedIn) {
+                                photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                            } else {
+                                navTotalController.navigate(Screens.Signin.router)
+                            }
                         }
                     ),
                 contentScale = ContentScale.Crop
             )
+
+            Text(
+                text = if (isLoggedIn && !userName.isNullOrEmpty()) userName!! else stringResource(R.string.sign_in),
+                modifier = Modifier
+                    .align(Alignment.CenterHorizontally)
+                    .padding(vertical = 8.dp)
+            )
+
+            if (isLoggedIn && !userEmail.isNullOrEmpty()) {
+                Text(
+                    text = userEmail!!,
+                    modifier = Modifier
+                        .align(Alignment.CenterHorizontally)
+                        .padding(bottom = 8.dp)
+                )
+            }
+
             ListItem(
                 headlineContent = { Text(text = stringResource(id = R.string.settings)) },
                 modifier = Modifier
@@ -95,6 +140,7 @@ fun Me(navTotalController: NavHostController) {
                 }
             )
             HorizontalDivider()
+
             ListItem(
                 headlineContent = { Text(text = stringResource(R.string.about)) },
                 modifier = Modifier
@@ -113,6 +159,24 @@ fun Me(navTotalController: NavHostController) {
                     )
                 }
             )
+
+            if (isLoggedIn) {
+                HorizontalDivider()
+                ListItem(
+                    headlineContent = { Text(text = stringResource(R.string.sign_out)) },
+                    modifier = Modifier
+                        .clickable {
+                            UserManager.signOut()
+                        }
+                        .fillMaxWidth(),
+                    leadingContent = {
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Rounded.Logout,
+                            contentDescription = stringResource(R.string.sign_out)
+                        )
+                    }
+                )
+            }
         }
     }
 }

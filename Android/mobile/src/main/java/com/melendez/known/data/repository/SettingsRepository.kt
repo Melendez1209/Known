@@ -33,10 +33,6 @@ class SettingsRepository(private val settingsDao: SettingsDao) {
         settingsDao.updatePredictiveBack(enabled)
     }
 
-    suspend fun updatePredictiveBackAnimation(enabled: Boolean) {
-        settingsDao.updatePredictiveBackAnimation(enabled)
-    }
-
     suspend fun initializeSettings() {
         // Check if the setting already exists
         val currentSettings = settingsDao.getSettingsSync()
@@ -50,8 +46,7 @@ class SettingsRepository(private val settingsDao: SettingsDao) {
                 selectedLanguage = "",
                 themeColor = DEFAULT_SEED_COLOR,
                 paletteStyleIndex = 0,
-                predictiveBackEnabled = true,
-                predictiveBackAnimationEnabled = true
+                predictiveBackEnabled = true
             )
             settingsDao.updateSettings(defaultSettings)
         }
