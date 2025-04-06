@@ -122,4 +122,15 @@
     <string name="system_settings">系統設定</string>
     <string name="predictive_back">預測性返回手勢</string>
     <string name="predictive_back_desc">啟用更流暢嘅返回手勢體驗</string>
+    <string name="email">郵箱</string>
+    <string name="email_hint">請輸入您的郵箱</string>
+    <string name="password_hint">請輸入您的密碼</string>
+    <string name="forgot_password">忘記密碼？</string>
+    <string name="no_account">未有賬號？</string>
+    <string name="has_account">已有賬號？</string>
+    <string name="or_continue_with">或透過以下方式繼續</string>
+    <string name="google_sign_in">使用 Google 賬號登錄</string>
+    <string name="email_sign_in">使用郵箱登錄</string>
+    <string name="register_with_email">使用郵箱註冊</string>
+    <string name="sign_out">退出登錄</string>
 </resources>

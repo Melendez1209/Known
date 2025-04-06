@@ -1,13 +1,6 @@
 package com.melendez.known.ui.screens.settings
 
-import android.Manifest
 import android.annotation.SuppressLint
-import android.app.Activity
-import android.content.Context
-import android.content.pm.PackageManager
-import android.location.Geocoder
-import android.location.LocationManager
-import android.util.Log
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -56,9 +49,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -242,7 +232,7 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
                             else DarkThemePreference.ON
                         )
                     },
-                    onClick = { navTotalController.navigate(Screens.Dark.router) },
+                    onClick = {  },
                 )
             }
             item {
@@ -384,36 +374,4 @@ fun Settings_Preview() {
         widthSizeClass = WindowWidthSizeClass.Compact,
         navTotalController = rememberNavController()
     )
-}
-
-@Suppress("DEPRECATION")
-fun getCityName(context: Context): String {
-    // Check if the permission has been granted
-    if (ContextCompat.checkSelfPermission(
-            context,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        ) != PackageManager.PERMISSION_GRANTED
-    ) {
-        // If the permission has not been granted, request it
-        ActivityCompat.requestPermissions(
-            context as Activity,
-            arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
-            1
-        )
-        return ""
-    } else {
-        // If the permission has been granted, get the city name
-        // Get an instance of LocationManager
-        val locationManager = getSystemService(context, LocationManager::class.java)
-        // Get the device's last known location
-        val location = locationManager?.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-        // Create an instance of Geocoder
-        val geocoder = Geocoder(context)
-        // Get the city address information
-        val addresses = location?.let { geocoder.getFromLocation(it.latitude, it.longitude, 1) }
-        // Return the city name
-        val city = addresses?.get(0)?.locality ?: ""
-        Log.d("Melendez", "getCityName: city:$city")
-        return city
-    }
 }

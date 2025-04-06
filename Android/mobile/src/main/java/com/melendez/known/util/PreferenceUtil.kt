@@ -79,8 +79,6 @@ class PreferenceUtil(application: Application) : AndroidViewModel(application) {
             repository.updatePredictiveBack(enabled)
         }
     }
-
-    // Other settings methods...
 }
 
 data class DarkThemePreference(

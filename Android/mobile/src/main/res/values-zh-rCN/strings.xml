@@ -123,4 +123,15 @@
     <!-- 预测性返回手势相关字符串 -->
     <string name="predictive_back">预测性返回手势</string>
     <string name="predictive_back_desc">启用更流畅的返回手势体验</string>
+    <string name="email">邮箱</string>
+    <string name="email_hint">请输入您的邮箱</string>
+    <string name="password_hint">请输入您的密码</string>
+    <string name="forgot_password">忘记密码？</string>
+    <string name="no_account">还没有账号？</string>
+    <string name="has_account">已有账号？</string>
+    <string name="or_continue_with">或通过以下方式继续</string>
+    <string name="google_sign_in">使用谷歌账号登录</string>
+    <string name="email_sign_in">使用邮箱登录</string>
+    <string name="register_with_email">使用邮箱注册</string>
+    <string name="sign_out">退出登录</string>
 </resources>

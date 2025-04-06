@@ -28,7 +28,6 @@ fun NavGraphBuilder.animatedComposable(
     route: String,
     arguments: List<NamedNavArgument> = emptyList(),
     deepLinks: List<NavDeepLink> = emptyList(),
-    // custom animation parameters
     animationDurationMillis: Int = DEFAULT_ANIMATION_DURATION,
     scaleFactorForPredictiveBack: Float = DEFAULT_SCALE_FACTOR, 
     offsetFactorForPredictiveBack: Float = DEFAULT_TRANSITION_OFFSET,
