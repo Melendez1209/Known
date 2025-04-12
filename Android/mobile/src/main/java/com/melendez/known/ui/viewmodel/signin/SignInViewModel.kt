@@ -14,6 +14,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.OAuthProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -109,6 +110,39 @@ class SignInViewModel : ViewModel() {
                 Log.e("SignInViewModel", "Google登录失败", e)
                 _errorMessage.value = e.localizedMessage ?: "Google登录失败，请稍后再试"
             } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun signInWithGitHub(context: Context) {
+        val provider = OAuthProvider.newBuilder("github.com")
+        provider.addCustomParameter("login", "")
+        
+        viewModelScope.launch {
+            try {
+                _isLoading.value = true
+                _errorMessage.value = null
+                
+                val pendingResultTask = auth.pendingAuthResult
+                if (pendingResultTask != null) {
+                    pendingResultTask.await()
+                    _isSuccessful.value = true
+                } else {
+                    auth.startActivityForSignInWithProvider(context as android.app.Activity, provider.build())
+                        .addOnSuccessListener {
+                            _isSuccessful.value = true
+                            _isLoading.value = false
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("SignInViewModel", "GitHub登录失败", e)
+                            _errorMessage.value = e.localizedMessage ?: "GitHub登录失败，请稍后再试"
+                            _isLoading.value = false
+                        }
+                }
+            } catch (e: Exception) {
+                Log.e("SignInViewModel", "GitHub登录失败", e)
+                _errorMessage.value = e.localizedMessage ?: "GitHub登录失败，请稍后再试"
                 _isLoading.value = false
             }
         }
