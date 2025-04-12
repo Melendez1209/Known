@@ -28,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -52,55 +53,22 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
+import kotlin.math.roundToInt
+
+private const val DEFAULT_FULL_MARK = "150"
+private const val HALF_POINT = "5"
+private val NUMBER_PATTERN = Regex("^\\d*\\.?\\d*$")
 
 @Composable
 fun Inputting(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
-
     var showingDialog by remember { mutableStateOf(false) }
     var examName by rememberSaveable { mutableStateOf("") }
 
     if (showingDialog) {
-        AlertDialog(
-            onDismissRequest = {
-                showingDialog = false
-            },
-            confirmButton = {
-                Button(
-                    enabled = examName.isNotEmpty(),
-                    onClick = {
-                        showingDialog = false
-                    }
-                ) {
-                    Text(stringResource(R.string.reserve))
-                }
-            },
-            dismissButton = {
-                OutlinedButton(
-                    onClick = {
-                        showingDialog = false
-                        examName = ""
-                    }
-                ) {
-                    Text(stringResource(R.string.discard))
-                }
-            },
-            icon = {
-                Icon(
-                    imageVector = Icons.Rounded.Edit,
-                    contentDescription = stringResource(id = R.string.name_this)
-                )
-            },
-            title = {
-                Text(text = stringResource(id = R.string.name_this))
-            },
-            text = {
-                OutlinedTextField(
-                    value = examName,
-                    onValueChange = { examName = it },
-                    singleLine = true,
-                    label = { Text(text = stringResource(R.string.exam_name)) }
-                )
-            }
+        ExamNameDialog(
+            examName = examName,
+            onExamNameChange = { examName = it },
+            onDismiss = { showingDialog = false }
         )
     }
 
@@ -131,16 +99,60 @@ fun Inputting(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostC
     }
 }
 
+@Composable
+private fun ExamNameDialog(
+    examName: String,
+    onExamNameChange: (String) -> Unit,
+    onDismiss: () -> Unit
+) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            Button(
+                enabled = examName.isNotEmpty(),
+                onClick = onDismiss
+            ) {
+                Text(stringResource(R.string.reserve))
+            }
+        },
+        dismissButton = {
+            OutlinedButton(
+                onClick = {
+                    onDismiss()
+                    onExamNameChange("")
+                }
+            ) {
+                Text(stringResource(R.string.discard))
+            }
+        },
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.Edit,
+                contentDescription = stringResource(R.string.name_this)
+            )
+        },
+        title = {
+            Text(text = stringResource(R.string.name_this))
+        },
+        text = {
+            OutlinedTextField(
+                value = examName,
+                onValueChange = onExamNameChange,
+                singleLine = true,
+                label = { Text(text = stringResource(R.string.exam_name)) }
+            )
+        }
+    )
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Inputting_Compact(
+private fun Inputting_Compact(
     navTotalController: NavHostController,
     onShowingChange: (Boolean) -> Unit,
     examName: String,
 ) {
-
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
     Column {
         CenterAlignedTopAppBar(
             title = {
@@ -179,14 +191,12 @@ fun Inputting_Compact(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Inputting_Medium(
+private fun Inputting_Medium(
     navTotalController: NavHostController,
     onShowingChange: (Boolean) -> Unit,
     examName: String
 ) {
-
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
     Column {
         MediumTopAppBar(
             title = {
@@ -225,14 +235,12 @@ fun Inputting_Medium(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Inputting_Expanded(
+private fun Inputting_Expanded(
     navTotalController: NavHostController,
     onShowingChange: (Boolean) -> Unit,
     examName: String
 ) {
-
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
     Column {
         LargeTopAppBar(
             title = {
@@ -270,29 +278,18 @@ fun Inputting_Expanded(
 }
 
 @Composable
-fun Inputting_Content(modifier: Modifier) {
-
-    val chinese = stringResource(R.string.chinese)
-    val maths = stringResource(R.string.maths)
-    val language = stringResource(R.string.foreign_language)
-    val physiotherapy = stringResource(R.string.physiotherapy)
-    val chemotherapy = stringResource(R.string.chemotherapy)
-    val biology = stringResource(R.string.biology)
-    val political = stringResource(R.string.political)
-    val history = stringResource(R.string.history)
-    val geography = stringResource(R.string.geography)
-    val pe = stringResource(R.string.pe)
+private fun Inputting_Content(modifier: Modifier) {
     val courseList = listOf(
-        chinese,
-        maths,
-        language,
-        physiotherapy,
-        chemotherapy,
-        biology,
-        political,
-        history,
-        geography,
-        pe
+        stringResource(R.string.chinese),
+        stringResource(R.string.maths),
+        stringResource(R.string.foreign_language),
+        stringResource(R.string.physiotherapy),
+        stringResource(R.string.chemotherapy),
+        stringResource(R.string.biology),
+        stringResource(R.string.political),
+        stringResource(R.string.history),
+        stringResource(R.string.geography),
+        stringResource(R.string.pe)
     )
 
     Surface(modifier = Modifier.fillMaxSize()) {
@@ -302,105 +299,194 @@ fun Inputting_Content(modifier: Modifier) {
             verticalItemSpacing = 12.dp,
             horizontalArrangement = Arrangement.spacedBy(12.dp)
         ) {
-            courseList.forEachIndexed { index, s ->
-                item { Subject_Card(subject = s, check = index > 2, isChecked = index != 9) }
+            courseList.forEachIndexed { index, subject ->
+                item {
+                    Subject_Card(
+                        subject = subject,
+                        check = index > 2,
+                        isChecked = index != 9
+                    )
+                }
             }
         }
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Subject_Card(subject: String, check: Boolean = true, isChecked: Boolean = true) {
-
+private fun Subject_Card(subject: String, check: Boolean = true, isChecked: Boolean = true) {
     val focusManager = LocalFocusManager.current
-
     var checked by rememberSaveable { mutableStateOf(isChecked) }
     var mark by rememberSaveable { mutableStateOf("") }
-    var full by rememberSaveable { mutableStateOf("") }
+    var full by rememberSaveable { mutableStateOf(DEFAULT_FULL_MARK) }
+
+    fun processScoreInput(input: String): String {
+        if (input.isEmpty()) return input
+        val processedInput = if (input.endsWith(".")) {
+            input + HALF_POINT
+        } else {
+            input
+        }
+        return if (isValidScore(processedInput)) {
+            formatScore(processedInput)
+        } else {
+            input
+        }
+    }
 
     Card {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(
-                text = subject,
-                modifier = Modifier
-                    .padding(top = 6.dp, start = 10.dp)
-                    .align(Alignment.CenterVertically),
-                style = MaterialTheme.typography.titleLarge
-            )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 10.dp, vertical = 6.dp),
+            horizontalArrangement = Arrangement.spacedBy(
+                space = 8.dp,
+                alignment = Alignment.CenterHorizontally
+            ),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
             if (check) {
                 Checkbox(
                     checked = checked,
-                    onCheckedChange = { checked = it },
-                    modifier = Modifier.align(Alignment.CenterVertically)
+                    onCheckedChange = { checked = it }
                 )
             }
+            Text(
+                text = subject,
+                style = MaterialTheme.typography.titleLarge
+            )
+            Slider(
+                value = if (mark.isEmpty() || full.isEmpty()) 0f else mark.toFloat() / full.toFloat(),
+                onValueChange = {
+                    if (full.isNotEmpty()) {
+                        val rawScore = full.toFloat() * it
+                        val roundedScore = (rawScore * 2).roundToInt() / 2f
+                        mark = if (roundedScore == roundedScore.toInt().toFloat()) {
+                            roundedScore.toInt().toString()
+                        } else {
+                            roundedScore.toString()
+                        }
+                    }
+                },
+                modifier = Modifier.align(Alignment.CenterVertically),
+                enabled = checked && full.isNotEmpty(),
+                steps = (full.toFloat() * 2).toInt() - 1
+            )
         }
         Row(modifier = Modifier.padding(start = 6.dp, end = 6.dp, bottom = 6.dp)) {
-            OutlinedTextField(
+            ScoreTextField(
                 value = full,
-                onValueChange = { full = it },
+                onValueChange = {
+                    if (it.isEmpty() || it.matches(NUMBER_PATTERN)) {
+                        full = it
+                    }
+                },
+                label = stringResource(R.string.full_mark),
+                placeholder = DEFAULT_FULL_MARK,
                 modifier = Modifier
                     .padding(horizontal = 4.dp, vertical = 6.dp)
                     .weight(1f),
                 enabled = checked,
-                label = { Text(stringResource(R.string.full_mark)) },
-                placeholder = { Text(text = "150") },
-                trailingIcon = {
-                    IconButton(onClick = { full = "" }, enabled = full.isNotEmpty()) {
-                        Icon(
-                            imageVector = Icons.Rounded.Close,
-                            contentDescription = stringResource(R.string.clear)
-                        )
+                onClear = { full = "" },
+                onNext = { focusManager.moveFocus(FocusDirection.Right) }
+            )
+            ScoreTextField(
+                value = mark,
+                onValueChange = {
+                    if (it.isEmpty() || it.matches(NUMBER_PATTERN)) {
+                        mark = processScoreInput(it)
                     }
                 },
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.Number
-                ),
-                keyboardActions = KeyboardActions(onNext = { focusManager.moveFocus(FocusDirection.Right) }),
-                singleLine = true
-            )
-            OutlinedTextField(
-                value = mark,
-                onValueChange = { mark = it },
+                label = stringResource(R.string.mark),
+                placeholder = DEFAULT_FULL_MARK,
                 modifier = Modifier
                     .padding(horizontal = 3.dp, vertical = 6.dp)
                     .weight(1f),
                 enabled = checked,
-                label = { Text(stringResource(R.string.mark)) },
-                placeholder = { Text(text = "150") },
-                trailingIcon = {
-                    IconButton(onClick = { mark = "" }, enabled = mark.isNotEmpty()) {
-                        Icon(
-                            imageVector = Icons.Rounded.Close,
-                            contentDescription = stringResource(R.string.clear)
-                        )
+                onClear = { mark = "" },
+                onNext = { focusManager.moveFocus(FocusDirection.Next) },
+                isError = if (mark.isEmpty() || full.isEmpty()) false else {
+                    try {
+                        mark.toFloat() > full.toFloat()
+                    } catch (_: NumberFormatException) {
+                        false
                     }
-                },
-                isError = if (mark.isEmpty() || full.isEmpty()) false else mark.toFloat() > full.toFloat(),
-                keyboardOptions = KeyboardOptions(
-                    imeAction = ImeAction.Next,
-                    keyboardType = KeyboardType.Number
-                ),
-                keyboardActions = KeyboardActions(
-                    onNext = { focusManager.moveFocus(FocusDirection.Next) },
-                    onDone = null
-                ),
-                singleLine = true
+                }
             )
         }
+    }
+}
+
+@Composable
+private fun ScoreTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    label: String,
+    placeholder: String,
+    modifier: Modifier,
+    enabled: Boolean,
+    onClear: () -> Unit,
+    onNext: () -> Unit,
+    isError: Boolean = false
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        modifier = modifier,
+        enabled = enabled,
+        label = { Text(label) },
+        placeholder = { Text(placeholder) },
+        trailingIcon = {
+            IconButton(onClick = onClear, enabled = value.isNotEmpty()) {
+                Icon(
+                    imageVector = Icons.Rounded.Close,
+                    contentDescription = stringResource(R.string.clear)
+                )
+            }
+        },
+        isError = isError,
+        keyboardOptions = KeyboardOptions(
+            imeAction = ImeAction.Next,
+            keyboardType = KeyboardType.Decimal
+        ),
+        keyboardActions = KeyboardActions(onNext = { onNext() }),
+        singleLine = true
+    )
+}
+
+private fun isValidScore(input: String): Boolean {
+    if (input.isEmpty()) return true
+    return try {
+        val value = input.toFloat()
+        value >= 0 && (value == value.toInt().toFloat() || input.endsWith(".5"))
+    } catch (_: NumberFormatException) {
+        false
+    }
+}
+
+private fun formatScore(input: String): String {
+    if (input.isEmpty()) return ""
+    return try {
+        val value = input.toFloat()
+        if (value == value.toInt().toFloat()) {
+            value.toInt().toString()
+        } else {
+            input
+        }
+    } catch (_: NumberFormatException) {
+        input
     }
 }
 
 @Preview
 @Composable
-fun Subject_Card_Preview() {
+private fun Subject_Card_Preview() {
     Subject_Card(subject = "Subject")
 }
 
 @Preview(device = "id:pixel_9_pro")
 @Composable
-fun Inputting_Preview() {
+private fun Inputting_Preview() {
     Inputting(
         widthSizeClass = WindowWidthSizeClass.Compact,
         navTotalController = rememberNavController()
