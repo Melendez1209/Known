@@ -113,153 +113,151 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
     val settings = preferenceUtil.settings.collectAsStateWithLifecycle(initialValue = null)
     val isSystemInDarkTheme = isSystemInDarkTheme()
 
-    Surface(modifier.fillMaxSize()) {
 
-        val pageCount = ColorList.size + 1
+    val pageCount = ColorList.size + 1
 
-        val pagerState =
-            rememberPagerState(
-                initialPage =
-                    if (LocalPaletteStyleIndex.current == STYLE_MONOCHROME) pageCount
-                    else
-                        ColorList.indexOf(Color(LocalSeedColor.current)).run {
-                            if (this == -1) 0 else this
+    val pagerState =
+        rememberPagerState(
+            initialPage =
+                if (LocalPaletteStyleIndex.current == STYLE_MONOCHROME) pageCount
+                else
+                    ColorList.indexOf(Color(LocalSeedColor.current)).run {
+                        if (this == -1) 0 else this
+                    }
+        ) {
+            pageCount
+        }
+    LazyColumn(modifier = modifier) {
+        item {
+            Column {
+                // Theme colour selector
+                val currentColorSelection =
+                    if (settings.value?.themeColor != null && settings.value?.themeColor != 0) {
+                        Color(settings.value!!.themeColor)
+                    } else {
+                        // If not set in the database or set to 0, the default colour is used
+                        Color(DEFAULT_SEED_COLOR)
+                    }
+
+                val paletteStyleIndex = settings.value?.paletteStyleIndex ?: 0
+
+                HorizontalPager(
+                    state = pagerState,
+                    modifier = Modifier
+                        .padding(horizontal = 12.dp)
+                        .fillMaxWidth()
+                        .height(100.dp)
+                ) { page ->
+                    if (page == 0) {
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            paletteStyles.subList(STYLE_TONAL_SPOT, STYLE_MONOCHROME)
+                                .forEachIndexed { index, style ->
+                                    ColorButton(
+                                        color = currentColorSelection,
+                                        index = index,
+                                        tonalStyle = style,
+                                        preferenceUtil = preferenceUtil,
+                                        isSelected = (!LocalDynamicColorSwitch.current &&
+                                                (settings.value?.themeColor == currentColorSelection.toArgb()) &&
+                                                paletteStyleIndex == index)
+                                    )
+                                }
                         }
-            ) {
-                pageCount
-            }
-        LazyColumn(modifier = modifier) {
-            item {
-                Column {
-                    // Theme colour selector
-                    val currentColorSelection =
-                        if (settings.value?.themeColor != null && settings.value?.themeColor != 0) {
-                            Color(settings.value!!.themeColor)
-                        } else {
-                            // If not set in the database or set to 0, the default colour is used
-                            Color(DEFAULT_SEED_COLOR)
-                        }
-
-                    val paletteStyleIndex = settings.value?.paletteStyleIndex ?: 0
-
-                    HorizontalPager(
-                        state = pagerState,
-                        modifier = Modifier
-                            .padding(horizontal = 12.dp)
-                            .fillMaxWidth()
-                            .height(100.dp)
-                    ) { page ->
-                        if (page == 0) {
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceEvenly,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                paletteStyles.subList(STYLE_TONAL_SPOT, STYLE_MONOCHROME)
-                                    .forEachIndexed { index, style ->
-                                        ColorButton(
-                                            color = currentColorSelection,
-                                            index = index,
-                                            tonalStyle = style,
-                                            preferenceUtil = preferenceUtil,
-                                            isSelected = (!LocalDynamicColorSwitch.current &&
-                                                    (settings.value?.themeColor == currentColorSelection.toArgb()) &&
-                                                    paletteStyleIndex == index)
-                                        )
-                                    }
-                            }
-                        } else {
-                            val color = ColorList[page - 1]
-                            Row(
-                                horizontalArrangement = Arrangement.SpaceEvenly,
-                                modifier = Modifier.fillMaxWidth()
-                            ) {
-                                ColorButtons(color = color, preferenceUtil = preferenceUtil)
-                            }
+                    } else {
+                        val color = ColorList[page - 1]
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceEvenly,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            ColorButtons(color = color, preferenceUtil = preferenceUtil)
                         }
                     }
-                    HorizontalPagerIndicator(
-                        pagerState = pagerState,
-                        pageCount = pageCount,
-                        modifier =
-                            Modifier
-                                .clearAndSetSemantics {}
-                                .align(Alignment.CenterHorizontally)
-                                .padding(vertical = 12.dp),
-                        activeColor = MaterialTheme.colorScheme.primary,
-                        inactiveColor = MaterialTheme.colorScheme.outlineVariant,
-                        indicatorHeight = 6.dp,
-                        indicatorWidth = 6.dp,
-                    )
                 }
+                HorizontalPagerIndicator(
+                    pagerState = pagerState,
+                    pageCount = pageCount,
+                    modifier =
+                        Modifier
+                            .clearAndSetSemantics {}
+                            .align(Alignment.CenterHorizontally)
+                            .padding(vertical = 12.dp),
+                    activeColor = MaterialTheme.colorScheme.primary,
+                    inactiveColor = MaterialTheme.colorScheme.outlineVariant,
+                    indicatorHeight = 6.dp,
+                    indicatorWidth = 6.dp,
+                )
             }
-            if (DynamicColors.isDynamicColorAvailable()) {
-                item {
-
-                    val isDynamicColorEnabled = LocalDynamicColorSwitch.current
-
-                    PreferenceSwitch(
-                        title = stringResource(id = R.string.dynamic_color),
-                        description = stringResource(id = R.string.dynamic_color_desc),
-                        icon = Icons.Rounded.Colorize,
-                        isChecked = isDynamicColorEnabled,
-                        onClick = {
-                            preferenceUtil.switchDynamicColor(enabled = !isDynamicColorEnabled)
-                        },
-                    )
-                }
-            }
+        }
+        if (DynamicColors.isDynamicColorAvailable()) {
             item {
 
-                val darkThemePreference = DarkThemePreference(
-                    darkThemeValue = settings.value?.darkThemeValue
-                        ?: DarkThemePreference.FOLLOW_SYSTEM,
-                    isHighContrastModeEnabled = settings.value?.isHighContrastMode == true
-                )
+                val isDynamicColorEnabled = LocalDynamicColorSwitch.current
 
-                val isDarkTheme = darkThemePreference.isDarkTheme(isSystemInDarkTheme)
-
-                PreferenceSwitchWithDivider(
-                    title = stringResource(id = R.string.dark_theme),
-                    icon = if (isDarkTheme)
-                        Icons.Rounded.DarkMode
-                    else Icons.Rounded.LightMode,
-                    isChecked = isDarkTheme,
-                    description = darkThemePreference.getDarkThemeDesc(),
-                    onChecked = {
-                        preferenceUtil.modifyDarkThemePreference(
-                            if (isDarkTheme)
-                                DarkThemePreference.OFF
-                            else DarkThemePreference.ON
-                        )
+                PreferenceSwitch(
+                    title = stringResource(id = R.string.dynamic_color),
+                    description = stringResource(id = R.string.dynamic_color_desc),
+                    icon = Icons.Rounded.Colorize,
+                    isChecked = isDynamicColorEnabled,
+                    onClick = {
+                        preferenceUtil.switchDynamicColor(enabled = !isDynamicColorEnabled)
                     },
-                    onClick = {  },
                 )
             }
-            item {
-                PreferenceItem(
-                    title = stringResource(R.string.language),
-                    icon = Icons.Rounded.Language,
-                    description = Locale.getDefault().toDisplayName(),
-                ) {
-                    navTotalController.navigate(Screens.Language.router)
-                }
-            }
+        }
+        item {
 
-            // Add predictive back gesture settings item(Android 14+)
-            if (android.os.Build.VERSION.SDK_INT >= 34) {
-                item {
-                    PreferenceSwitch(
-                        title = stringResource(id = R.string.predictive_back),
-                        description = stringResource(id = R.string.predictive_back_desc),
-                        icon = Icons.Outlined.Gesture,
-                        isChecked = settings.value?.predictiveBackEnabled ?: true,
-                        onClick = {
-                            preferenceUtil.setPredictiveBackEnabled(
-                                !(settings.value?.predictiveBackEnabled ?: true)
-                            )
-                        }
+            val darkThemePreference = DarkThemePreference(
+                darkThemeValue = settings.value?.darkThemeValue
+                    ?: DarkThemePreference.FOLLOW_SYSTEM,
+                isHighContrastModeEnabled = settings.value?.isHighContrastMode == true
+            )
+
+            val isDarkTheme = darkThemePreference.isDarkTheme(isSystemInDarkTheme)
+
+            PreferenceSwitchWithDivider(
+                title = stringResource(id = R.string.dark_theme),
+                icon = if (isDarkTheme)
+                    Icons.Rounded.DarkMode
+                else Icons.Rounded.LightMode,
+                isChecked = isDarkTheme,
+                description = darkThemePreference.getDarkThemeDesc(),
+                onChecked = {
+                    preferenceUtil.modifyDarkThemePreference(
+                        if (isDarkTheme)
+                            DarkThemePreference.OFF
+                        else DarkThemePreference.ON
                     )
-                }
+                },
+                onClick = { },
+            )
+        }
+        item {
+            PreferenceItem(
+                title = stringResource(R.string.language),
+                icon = Icons.Rounded.Language,
+                description = Locale.getDefault().toDisplayName(),
+            ) {
+                navTotalController.navigate(Screens.Language.router)
+            }
+        }
+
+        // Add predictive back gesture settings item(Android 14+)
+        if (android.os.Build.VERSION.SDK_INT >= 34) {
+            item {
+                PreferenceSwitch(
+                    title = stringResource(id = R.string.predictive_back),
+                    description = stringResource(id = R.string.predictive_back_desc),
+                    icon = Icons.Outlined.Gesture,
+                    isChecked = settings.value?.predictiveBackEnabled ?: true,
+                    onClick = {
+                        preferenceUtil.setPredictiveBackEnabled(
+                            !(settings.value?.predictiveBackEnabled ?: true)
+                        )
+                    }
+                )
             }
         }
     }

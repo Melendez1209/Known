@@ -33,16 +33,14 @@ import com.melendez.known.ui.components.LocalDynamicColorSwitch
 import com.melendez.known.ui.components.LocalPaletteStyleIndex
 import com.melendez.known.ui.components.LocalSeedColor
 import com.melendez.known.ui.components.animatedComposable
-import com.melendez.known.ui.screens.AboutScreen
 import com.melendez.known.ui.screens.Detail
 import com.melendez.known.ui.screens.Prophets
 import com.melendez.known.ui.screens.Screens
 import com.melendez.known.ui.screens.Signin
+import com.melendez.known.ui.screens.about.AboutScreen
+import com.melendez.known.ui.screens.about.Credits
 import com.melendez.known.ui.screens.add.DRP
 import com.melendez.known.ui.screens.add.Inputting
-import com.melendez.known.ui.screens.feedback.Bug
-import com.melendez.known.ui.screens.feedback.Feature
-import com.melendez.known.ui.screens.feedback.Feedback
 import com.melendez.known.ui.screens.main.MainScreen
 import com.melendez.known.ui.screens.settings.Appearance
 import com.melendez.known.ui.screens.settings.Dark
@@ -192,24 +190,6 @@ class MainActivity : ComponentActivity() {
                                     navTotalController = navTotalController
                                 )
                             }
-                            animatedComposable(Screens.Feedback.router) {
-                                Feedback(
-                                    widthSizeClass = widthSizeClass,
-                                    navTotalController = navTotalController
-                                )
-                            }
-                            animatedComposable(Screens.Bug.router) {
-                                Bug(
-                                    widthSizeClass = widthSizeClass,
-                                    navTotalController = navTotalController
-                                )
-                            }
-                            animatedComposable(Screens.Feature.router) {
-                                Feature(
-                                    widthSizeClass = widthSizeClass,
-                                    navTotalController = navTotalController
-                                )
-                            }
                             animatedComposable(Screens.Signin.router) {
                                 Signin(
                                     widthSizeClass = widthSizeClass,
@@ -221,6 +201,12 @@ class MainActivity : ComponentActivity() {
                             }
                             animatedComposable(Screens.Prophets.router) {
                                 Prophets(navTotalController = navTotalController)
+                            }
+                            animatedComposable(Screens.Credits.router) {
+                                Credits(
+                                    widthSizeClass = widthSizeClass,
+                                    navTotalController = navTotalController
+                                )
                             }
                         }
                     }

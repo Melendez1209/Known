@@ -130,7 +130,14 @@
     <string name="has_account">已有賬號？</string>
     <string name="or_continue_with">或透過以下方式繼續</string>
     <string name="google_sign_in">使用 Google 賬號登錄</string>
+    <string name="github_sign_in">使用 GitHub 帳號登入</string>
     <string name="email_sign_in">使用郵箱登錄</string>
     <string name="register_with_email">使用郵箱註冊</string>
     <string name="sign_out">退出登錄</string>
+    <string name="release_desc">查看更新日誌和最新版本</string>
+    <string name="release">最新版本</string>
+    <string name="github_issue">GitHub 議題</string>
+    <string name="github_issue_desc">提交錯誤報告或功能請求議題</string>
+    <string name="credits">鳴謝</string>
+    <string name="credits_desc">來源與自由軟體</string>
 </resources>
