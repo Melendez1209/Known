@@ -22,6 +22,9 @@ object FixedAccentColors {
 
     val onSecondaryFixed: Color
         @Composable get() = LocalFixedColorRoles.current.onSecondaryFixed
+
+    val tertiaryFixedDim: Color
+        @Composable get() = LocalFixedColorRoles.current.tertiaryFixedDim
 }
 
 

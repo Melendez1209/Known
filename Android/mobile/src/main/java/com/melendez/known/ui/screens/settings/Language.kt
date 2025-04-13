@@ -47,7 +47,7 @@ import com.melendez.known.ui.components.PreferenceSingleChoiceItem
 import com.melendez.known.ui.components.PreferenceSubtitle
 import com.melendez.known.ui.components.PreferencesHintCard
 import com.melendez.known.ui.components.SharedTopBar
-import com.melendez.known.ui.screens.weblate
+import com.melendez.known.ui.screens.about.weblate
 import com.melendez.known.util.LocaleLanguageCodeMap
 import com.melendez.known.util.toDisplayName
 import java.util.Locale
@@ -117,7 +117,7 @@ fun Language(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostCo
 
     Column {
         SharedTopBar(
-            title = stringResource(R.string.dark_theme),
+            title = stringResource(R.string.language),
             widthSizeClass = widthSizeClass,
             navTotalController = navTotalController,
             scrollBehavior = scrollBehavior
