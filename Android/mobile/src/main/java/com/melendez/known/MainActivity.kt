@@ -57,32 +57,26 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
 
     // Predictive back gesture callback reference
-    private val TAG = "MainActivity"
+    private val TAG = "Melendez"
     private var predictiveBackCallback: Any? = null
 
-    // 通知权限请求
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
     ) { isGranted: Boolean ->
         if (isGranted) {
-            // 可以显示通知
-            Log.d(TAG, "通知权限已授予")
+            Log.d(TAG, "Notification permission has been granted")
         } else {
-            // 通知权限被拒绝
-            Log.d(TAG, "通知权限被拒绝")
+            Log.d(TAG, "Notification permission denied")
         }
     }
 
     private fun askNotificationPermission() {
-        // 仅在 Android 13+ (API level 33) 需要请求通知权限
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
                 PackageManager.PERMISSION_GRANTED
             ) {
-                // 已经拥有权限
-                Log.d(TAG, "已经拥有通知权限")
+                Log.d(TAG, "Notification permission has been granted")
             } else {
-                // 请求权限
                 requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
             }
         }
@@ -94,16 +88,16 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         askNotificationPermission()
-        // 获取 FCM token
+        // Get FCM token
         FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
             if (!task.isSuccessful) {
                 Log.w(TAG, "获取 FCM 令牌失败", task.exception)
                 return@OnCompleteListener
             }
-            // 获取新令牌
+            // Get a new token
             val token = task.result
             Log.d(TAG, "FCM 令牌: $token")
-            // TODO: 将令牌发送到后端
+            // TODO: Send the token to the back-end server
         })
 
         // Initialise settings
