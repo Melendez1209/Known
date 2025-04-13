@@ -81,6 +81,8 @@ dependencies {
     implementation("com.google.firebase:firebase-auth-ktx:23.2.0")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("com.firebaseui:firebase-ui-auth:8.0.2")
+    implementation("com.google.firebase:firebase-messaging-ktx")
+    implementation("com.google.android.gms:play-services-ads:24.2.0")
 
     implementation("androidx.activity:activity-ktx:${activity}")
     implementation("androidx.activity:activity-compose:${activity}")
@@ -88,6 +90,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle")
+    implementation("androidx.lifecycle:lifecycle-process:$lifecycle")
 
     implementation("androidx.compose.ui:ui:$ui")
     implementation("androidx.compose.animation:animation:$ui")
