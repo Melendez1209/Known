@@ -57,12 +57,6 @@ class PreferenceUtil(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun initializeSettings() {
-        viewModelScope.launch {
-            repository.initializeSettings()
-        }
-    }
-
     // Forced synchronisation of initialisation settings
     fun forceInitializeSettingsSync() {
         // Execute synchronously in the main thread to ensure that the database has initial settings

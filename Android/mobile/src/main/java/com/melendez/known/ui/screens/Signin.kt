@@ -232,6 +232,25 @@ fun Signin(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostCont
                             Text(text = stringResource(R.string.google_sign_in))
                         }
 
+                        // GitHub sign-in button
+                        ElevatedButton(
+                            onClick = {
+                                viewModel.signInWithGitHub(context)
+                            },
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 16.dp, vertical = 8.dp),
+                            shape = RoundedCornerShape(8.dp)
+                        ) {
+                            Icon(
+                                painter = painterResource(id = R.drawable.outline_account_circle_24),
+                                contentDescription = "GitHub",
+                                modifier = Modifier
+                                    .padding(end = 8.dp)
+                            )
+                            Text(text = stringResource(R.string.github_sign_in))
+                        }
+
                         Spacer(modifier = Modifier.height(32.dp))
                     }
                 }

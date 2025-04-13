@@ -61,25 +61,28 @@ android {
 
 dependencies {
 
-    val activity = "1.11.0-alpha02"
-    val composeBom = "2025.03.01"
-    val ui = "1.8.0-rc02"
-    val material = "1.4.0-alpha11"
+    val activity = "1.11.0-beta01"
+    val composeBom = "2025.04.00"
+    val ui = "1.8.0-rc03"
+    val material = "1.4.0-alpha12"
     val accompanist = "0.36.0"
-    val lifecycle = "2.9.0-alpha13"
-    val room = "2.7.0-rc03"
+    val lifecycle = "2.9.0-beta01"
+    val room = "2.7.0"
 
-    implementation("androidx.core:core-ktx:1.16.0-rc01")
+    implementation("androidx.core:core-ktx:1.16.0")
     implementation("io.coil-kt:coil-compose:2.7.0")
     implementation("com.android.volley:volley:1.2.1")
     implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
     implementation("androidx.compose.material:material-icons-extended:1.7.8")
     implementation("com.google.android.material:material:1.13.0-alpha12")
-    implementation("androidx.navigation:navigation-compose:2.9.0-alpha09")
+    implementation("androidx.navigation:navigation-compose:2.9.0-beta01")
 
-    implementation(platform("com.google.firebase:firebase-bom:33.11.0"))
+    implementation(platform("com.google.firebase:firebase-bom:33.12.0"))
     implementation("com.google.firebase:firebase-auth-ktx:23.2.0")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
+    implementation("com.firebaseui:firebase-ui-auth:9.0.0")
+    implementation("com.google.firebase:firebase-messaging-ktx:24.1.1")
+    implementation("com.google.android.gms:play-services-ads:24.2.0")
 
     implementation("androidx.activity:activity-ktx:${activity}")
     implementation("androidx.activity:activity-compose:${activity}")
@@ -87,6 +90,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle")
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle")
+    implementation("androidx.lifecycle:lifecycle-process:$lifecycle")
 
     implementation("androidx.compose.ui:ui:$ui")
     implementation("androidx.compose.animation:animation:$ui")

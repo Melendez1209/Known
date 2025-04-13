@@ -1,11 +1,14 @@
 package com.melendez.known
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Surface
@@ -14,11 +17,14 @@ import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import com.melendez.known.colour.LocalTonalPalettes
 import com.melendez.known.colour.TonalPalettes.Companion.toTonalPalettes
 import com.melendez.known.ui.components.LocalActivity
@@ -51,12 +57,48 @@ import kotlinx.coroutines.launch
 class MainActivity : ComponentActivity() {
 
     // Predictive back gesture callback reference
+    private val TAG = "Melendez"
     private var predictiveBackCallback: Any? = null
+
+    private val requestPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            Log.d(TAG, "Notification permission has been granted")
+        } else {
+            Log.d(TAG, "Notification permission denied")
+        }
+    }
+
+    private fun askNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS) ==
+                PackageManager.PERMISSION_GRANTED
+            ) {
+                Log.d(TAG, "Notification permission has been granted")
+            } else {
+                requestPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
+            }
+        }
+    }
 
     @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
+        askNotificationPermission()
+        // Get FCM token
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w(TAG, "获取 FCM 令牌失败", task.exception)
+                return@OnCompleteListener
+            }
+            // Get a new token
+            val token = task.result
+            Log.d(TAG, "FCM 令牌: $token")
+            // TODO: Send the token to the back-end server
+        })
 
         // Initialise settings
         val preferenceUtil = PreferenceUtil(application)
@@ -191,7 +233,10 @@ class MainActivity : ComponentActivity() {
         if (Build.VERSION.SDK_INT >= 34 && predictiveBackCallback == null) {
             // Using OnBackInvokedDispatcher (Android 13+)
             try {
-                Log.d("Melendez", "Initializing predictive back gesture, SDK: ${Build.VERSION.SDK_INT}")
+                Log.d(
+                    "Melendez",
+                    "Initializing predictive back gesture, SDK: ${Build.VERSION.SDK_INT}"
+                )
                 @Suppress("NewApi")
                 val onBackInvokedDispatcher = onBackInvokedDispatcher
                 Log.d("Melendez", "Got onBackInvokedDispatcher: $onBackInvokedDispatcher")
@@ -199,7 +244,7 @@ class MainActivity : ComponentActivity() {
                 val onBackInvokedCallbackClass =
                     Class.forName("android.window.OnBackInvokedCallback")
                 Log.d("Melendez", "Found OnBackInvokedCallback class")
-                
+
                 val registerMethod = onBackInvokedDispatcher.javaClass.getMethod(
                     "registerOnBackInvokedCallback",
                     Int::class.java,
@@ -227,12 +272,18 @@ class MainActivity : ComponentActivity() {
 
                 Log.d("Melendez", "Predictive back gesture enabled successfully")
             } catch (e: Exception) {
-                Log.e("Melendez", "initPredictiveBackGesture: Exception: ${e.javaClass.simpleName}: ${e.message}")
+                Log.e(
+                    "Melendez",
+                    "initPredictiveBackGesture: Exception: ${e.javaClass.simpleName}: ${e.message}"
+                )
                 e.printStackTrace()
                 // When reflection fails, auto degrade to regular back
             }
         } else {
-            Log.d("Melendez", "Skipping predictive back initialization: SDK=${Build.VERSION.SDK_INT}, callback=${predictiveBackCallback != null}")
+            Log.d(
+                "Melendez",
+                "Skipping predictive back initialization: SDK=${Build.VERSION.SDK_INT}, callback=${predictiveBackCallback != null}"
+            )
         }
     }
 

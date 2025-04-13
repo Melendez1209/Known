@@ -130,6 +130,7 @@
     <string name="has_account">Already have an account?</string>
     <string name="or_continue_with">Or continue with</string>
     <string name="google_sign_in">Sign in with Google</string>
+    <string name="github_sign_in">Sign in with GitHub</string>
     <string name="email_sign_in">Sign in with Email</string>
     <string name="register_with_email">Register with Email</string>
     <string name="sign_out">Sign out</string>

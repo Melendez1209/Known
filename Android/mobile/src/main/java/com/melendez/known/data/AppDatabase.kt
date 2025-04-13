@@ -7,7 +7,7 @@ import androidx.room.RoomDatabase
 import com.melendez.known.data.dao.SettingsDao
 import com.melendez.known.data.entity.Settings
 
-@Database(entities = [Settings::class], version = 1)
+@Database(entities = [Settings::class], version = 1, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
     abstract fun settingsDao(): SettingsDao
 

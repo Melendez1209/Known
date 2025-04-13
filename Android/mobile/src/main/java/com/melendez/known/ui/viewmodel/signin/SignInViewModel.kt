@@ -14,6 +14,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.auth.OAuthProvider
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
@@ -52,15 +53,15 @@ class SignInViewModel : ViewModel() {
                 _errorMessage.value = null
 
                 if (email.value.isBlank() || password.value.isBlank()) {
-                    _errorMessage.value = "邮箱和密码不能为空"
+                    _errorMessage.value = "Email and password cannot be empty"
                     return@launch
                 }
 
                 auth.signInWithEmailAndPassword(email.value, password.value).await()
                 _isSuccessful.value = true
             } catch (e: Exception) {
-                Log.e("SignInViewModel", "登录失败", e)
-                _errorMessage.value = e.localizedMessage ?: "登录失败，请稍后再试"
+                Log.e("SignInViewModel", "Login Failed", e)
+                _errorMessage.value = e.localizedMessage ?: "Login failed, please try again later"
             } finally {
                 _isLoading.value = false
             }
@@ -74,15 +75,16 @@ class SignInViewModel : ViewModel() {
                 _errorMessage.value = null
 
                 if (email.value.isBlank() || password.value.isBlank()) {
-                    _errorMessage.value = "邮箱和密码不能为空"
+                    _errorMessage.value = "Email and password cannot be empty"
                     return@launch
                 }
 
                 auth.createUserWithEmailAndPassword(email.value, password.value).await()
                 _isSuccessful.value = true
             } catch (e: Exception) {
-                Log.e("SignInViewModel", "注册失败", e)
-                _errorMessage.value = e.localizedMessage ?: "注册失败，请稍后再试"
+                Log.e("SignInViewModel", "Registration Failed", e)
+                _errorMessage.value =
+                    e.localizedMessage ?: "Registration failed, please try again later"
             } finally {
                 _isLoading.value = false
             }
@@ -103,12 +105,51 @@ class SignInViewModel : ViewModel() {
                     auth.signInWithCredential(credential).await()
                     _isSuccessful.value = true
                 } else {
-                    _errorMessage.value = "Google登录失败，请稍后再试"
+                    _errorMessage.value = "Google login failed. Please try again later."
                 }
             } catch (e: Exception) {
-                Log.e("SignInViewModel", "Google登录失败", e)
-                _errorMessage.value = e.localizedMessage ?: "Google登录失败，请稍后再试"
+                Log.e("SignInViewModel", "Google login failed.", e)
+                _errorMessage.value =
+                    e.localizedMessage ?: "Google login failed. Please try again later."
             } finally {
+                _isLoading.value = false
+            }
+        }
+    }
+
+    fun signInWithGitHub(context: Context) {
+        val provider = OAuthProvider.newBuilder("github.com")
+        provider.addCustomParameter("login", "")
+
+        viewModelScope.launch {
+            try {
+                _isLoading.value = true
+                _errorMessage.value = null
+
+                val pendingResultTask = auth.pendingAuthResult
+                if (pendingResultTask != null) {
+                    pendingResultTask.await()
+                    _isSuccessful.value = true
+                } else {
+                    auth.startActivityForSignInWithProvider(
+                        context as android.app.Activity,
+                        provider.build()
+                    )
+                        .addOnSuccessListener {
+                            _isSuccessful.value = true
+                            _isLoading.value = false
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("SignInViewModel", "GitHub login failed", e)
+                            _errorMessage.value =
+                                e.localizedMessage ?: "GitHub login failed. Please try again later."
+                            _isLoading.value = false
+                        }
+                }
+            } catch (e: Exception) {
+                Log.e("SignInViewModel", "GitHub login failed", e)
+                _errorMessage.value =
+                    e.localizedMessage ?: "GitHub login failed. Please try again later."
                 _isLoading.value = false
             }
         }
