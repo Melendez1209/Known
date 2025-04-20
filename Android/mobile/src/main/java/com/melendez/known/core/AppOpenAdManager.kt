@@ -6,6 +6,7 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
@@ -19,7 +20,7 @@ import java.util.Date
  */
 class AppOpenAdManager(private val application: Application) : DefaultLifecycleObserver,
     Application.ActivityLifecycleCallbacks {
-    private val LOG_TAG = "AppOpenAdManager"
+    private val TAG = "AppOpenAdManager"
     private val AD_UNIT_ID = "ca-app-pub-6702369759910475/9508884421"
     private var appOpenAd: AppOpenAd? = null
     private var isLoadingAd = false
@@ -31,6 +32,13 @@ class AppOpenAdManager(private val application: Application) : DefaultLifecycleO
     init {
         application.registerActivityLifecycleCallbacks(this)
         ProcessLifecycleOwner.Companion.get().lifecycle.addObserver(this)
+    }
+
+    /**
+     * Show open ads when the app resumes to the frontend
+     */
+    override fun onResume(owner: LifecycleOwner) {
+        currentActivity?.let { showAdIfAvailable(it) }
     }
 
     /**
@@ -49,7 +57,7 @@ class AppOpenAdManager(private val application: Application) : DefaultLifecycleO
             object : AppOpenAd.AppOpenAdLoadCallback() {
 
                 override fun onAdLoaded(ad: AppOpenAd) {
-                    Log.d(LOG_TAG, "App Open广告加载成功")
+                    Log.d(TAG, "App Open广告加载成功")
                     appOpenAd = ad
                     isLoadingAd = false
                     loadTime = Date().time
@@ -57,7 +65,7 @@ class AppOpenAdManager(private val application: Application) : DefaultLifecycleO
                 }
 
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-                    Log.d(LOG_TAG, "App Open广告加载失败: ${loadAdError.message}")
+                    Log.d(TAG, "App Open广告加载失败: ${loadAdError.message}")
                     isLoadingAd = false
                 }
             }
@@ -86,21 +94,21 @@ class AppOpenAdManager(private val application: Application) : DefaultLifecycleO
     private fun setupFullScreenContentCallback() {
         fullScreenContentCallback = object : FullScreenContentCallback() {
             override fun onAdDismissedFullScreenContent() {
-                Log.d(LOG_TAG, "广告被关闭")
+                Log.d(TAG, "广告被关闭")
                 appOpenAd = null
                 isShowingAd = false
                 loadAd(application)
             }
 
             override fun onAdFailedToShowFullScreenContent(adError: AdError) {
-                Log.d(LOG_TAG, "广告展示失败: ${adError.message}")
+                Log.d(TAG, "广告展示失败: ${adError.message}")
                 appOpenAd = null
                 isShowingAd = false
                 loadAd(application)
             }
 
             override fun onAdShowedFullScreenContent() {
-                Log.d(LOG_TAG, "广告正在展示")
+                Log.d(TAG, "广告正在展示")
                 isShowingAd = true
             }
         }

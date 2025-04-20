@@ -25,12 +25,6 @@ import com.melendez.known.R
 fun Home() {
     Surface {
 
-        data class CarouselItem(
-            val id: Int,
-            @DrawableRes val drawableRes: Int,
-            @StringRes val contentDescriptionResId: Int,
-        )
-
         val items =
             listOf(
                 CarouselItem(0, R.drawable.sample0, R.string.sample),
@@ -38,6 +32,7 @@ fun Home() {
                 CarouselItem(2, R.drawable.sample2, R.string.sample),
                 CarouselItem(3, R.drawable.sample3, R.string.sample)
             )
+
         HorizontalMultiBrowseCarousel(
             state = rememberCarouselState { items.count() },
             preferredItemWidth = 260.dp,
@@ -63,3 +58,9 @@ fun Home() {
 fun Home_Preview() {
     Home()
 }
+
+data class CarouselItem(
+    val id: Int,
+    @DrawableRes val drawableRes: Int,
+    @StringRes val contentDescriptionResId: Int,
+)

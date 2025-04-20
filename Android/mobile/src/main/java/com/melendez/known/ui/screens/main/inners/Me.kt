@@ -1,12 +1,7 @@
 package com.melendez.known.ui.screens.main.inners
 
-import android.util.Log
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.PickVisualMediaRequest
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,6 +11,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.Logout
 import androidx.compose.material.icons.automirrored.rounded.NavigateNext
+import androidx.compose.material.icons.rounded.AccountCircle
 import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.HorizontalDivider
@@ -61,49 +57,38 @@ fun Me(navTotalController: NavHostController) {
                     if (isLoggedIn && userAvatar != null)
                         userAvatar
                     else
-                        UserManager.getDefaultAvatarResId()
+                        Icons.Rounded.AccountCircle
                 )
             }
 
             imageUrl =
-                if (isLoggedIn && userAvatar != null) userAvatar else UserManager.getDefaultAvatarResId()
+                if (isLoggedIn && userAvatar != null) userAvatar else Icons.Rounded.AccountCircle
 
-            val photoPicker =
-                rememberLauncherForActivityResult(contract = ActivityResultContracts.PickVisualMedia()) {
-                    if (it != null) {
-                        Log.d("Melendez", "Me: Url = $it")
-                        imageUrl = it
-                    } else {
-                        Log.d("Melendez", "Me: No media selected")
-                    }
-                }
-
-            AsyncImage(
-                model = ImageRequest.Builder(LocalContext.current).data(imageUrl)
-                    .crossfade(enable = true).build(),
-                contentDescription = stringResource(R.string.avatar),
-                modifier = Modifier
-                    .height(80.dp)
-                    .width(80.dp)
-                    .align(Alignment.CenterHorizontally)
-                    .padding(top = 6.dp)
-                    .clip(CircleShape)
-                    .combinedClickable(
-                        onClick = {
-                            if (!isLoggedIn) {
-                                navTotalController.navigate(Screens.Signin.router)
-                            }
-                        },
-                        onLongClick = {
-                            if (isLoggedIn) {
-                                photoPicker.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
-                            } else {
-                                navTotalController.navigate(Screens.Signin.router)
-                            }
-                        }
-                    ),
-                contentScale = ContentScale.Crop
-            )
+            if (isLoggedIn && userAvatar != null) {
+                AsyncImage(
+                    model = ImageRequest.Builder(LocalContext.current).data(imageUrl)
+                        .crossfade(enable = true).build(),
+                    contentDescription = stringResource(R.string.avatar),
+                    modifier = Modifier
+                        .height(80.dp)
+                        .width(80.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = 6.dp)
+                        .clip(CircleShape),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Icon(
+                    imageVector = Icons.Rounded.AccountCircle,
+                    contentDescription = stringResource(R.string.avatar),
+                    modifier = Modifier
+                        .height(80.dp)
+                        .width(80.dp)
+                        .align(Alignment.CenterHorizontally)
+                        .padding(top = 6.dp)
+                        .clickable { navTotalController.navigate(Screens.Signin.router) }
+                )
+            }
 
             Text(
                 text = if (isLoggedIn && !userName.isNullOrEmpty()) userName!! else stringResource(R.string.sign_in),
