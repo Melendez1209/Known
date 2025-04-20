@@ -24,6 +24,7 @@ import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Visibility
 import androidx.compose.material.icons.filled.VisibilityOff
+import androidx.compose.material.icons.rounded.AccountBox
 import androidx.compose.material.icons.rounded.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
@@ -52,7 +53,6 @@ import androidx.compose.ui.focus.FocusDirection
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalFocusManager
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
@@ -224,7 +224,7 @@ fun Signin(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostCont
                             shape = RoundedCornerShape(8.dp)
                         ) {
                             Icon(
-                                painter = painterResource(id = R.drawable.outline_account_circle_24),
+                                imageVector = Icons.Rounded.AccountBox,
                                 contentDescription = "Google",
                                 modifier = Modifier
                                     .padding(end = 8.dp)
@@ -243,7 +243,7 @@ fun Signin(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostCont
                             shape = RoundedCornerShape(8.dp)
                         ) {
                             Icon(
-                                painter = painterResource(id = R.drawable.outline_account_circle_24),
+                                imageVector = Icons.Rounded.AccountBox,
                                 contentDescription = "GitHub",
                                 modifier = Modifier
                                     .padding(end = 8.dp)

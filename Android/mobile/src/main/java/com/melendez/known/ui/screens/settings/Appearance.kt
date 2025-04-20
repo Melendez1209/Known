@@ -231,7 +231,7 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
                         else DarkThemePreference.ON
                     )
                 },
-                onClick = { },
+                onClick = { navTotalController.navigate(Screens.Dark.router) },
             )
         }
         item {

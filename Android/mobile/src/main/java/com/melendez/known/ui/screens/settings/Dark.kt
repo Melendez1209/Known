@@ -1,7 +1,7 @@
 package com.melendez.known.ui.screens.settings
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Contrast
@@ -52,7 +52,7 @@ fun Dark_Content(modifier: Modifier) {
     val isHighContrastModeEnabled = darkThemePreference.isHighContrastModeEnabled
     val preferenceUtil: PreferenceUtil = viewModel()
 
-    Surface(modifier.fillMaxSize()) {
+    Surface {
         LazyColumn(modifier = modifier) {
             item {
                 PreferenceSingleChoiceItem(
@@ -81,14 +81,11 @@ fun Dark_Content(modifier: Modifier) {
             item { PreferenceSubtitle(text = stringResource(R.string.additional_settings)) }
             item {
                 PreferenceSwitchVariant(
+                    enabled = darkThemePreference.isDarkTheme(isSystemInDarkTheme()),
                     title = stringResource(R.string.high_contrast),
                     icon = Icons.Outlined.Contrast,
                     isChecked = isHighContrastModeEnabled,
-                    onClick = {
-                        preferenceUtil.modifyDarkThemePreference(
-                            isHighContrastModeEnabled = !isHighContrastModeEnabled
-                        )
-                    }
+                    onClick = { preferenceUtil.modifyDarkThemePreference(isHighContrastModeEnabled = !isHighContrastModeEnabled) }
                 )
             }
         }

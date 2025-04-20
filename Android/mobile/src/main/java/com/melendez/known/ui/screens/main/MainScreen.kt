@@ -3,7 +3,6 @@ package com.melendez.known.ui.screens.main
 import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Delete
@@ -76,7 +75,6 @@ fun MainScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHost
     }
 }
 
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Main_Compact(
     navTotalController: NavHostController,
@@ -170,7 +168,6 @@ fun Main_Compact(
         }
     ) { paddings ->
         NavHost(
-            modifier = Modifier.padding(top = paddings.calculateTopPadding()),
             navController = navMainController,
             startDestination = Screens.Home.router
         ) {
@@ -275,13 +272,10 @@ fun Main_Medium(
                 }
             ) { paddings ->
                 NavHost(
-                    modifier = Modifier.padding(top = paddings.calculateTopPadding()),
                     navController = navMainController,
                     startDestination = Screens.Home.router
                 ) {
-                    composable(Screens.Home.router) {
-                        Home()
-                    }
+                    composable(Screens.Home.router) { Home() }
                     composable(Screens.History.router) {
                         History(
                             navTotalController = navTotalController,
@@ -384,9 +378,8 @@ fun Main_Expanded(
                         )
                     }
                 }
-            ) { paddings ->
+            ) {
                 NavHost(
-                    modifier = Modifier.padding(top = paddings.calculateTopPadding()),
                     navController = navMainController,
                     startDestination = Screens.Home.router
                 ) {

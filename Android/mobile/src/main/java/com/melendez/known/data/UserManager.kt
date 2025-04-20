@@ -44,12 +44,4 @@ object UserManager {
     fun signOut() {
         auth.signOut()
     }
-
-    /**
-     * Get the current user's default avatar resource ID
-     * @return Default avatar resource ID
-     */
-    fun getDefaultAvatarResId(): Int {
-        return com.melendez.known.R.drawable.outline_account_circle_24
-    }
 } 
