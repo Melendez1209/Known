@@ -275,9 +275,7 @@ fun Main_Medium(
                     navController = navMainController,
                     startDestination = Screens.Home.router
                 ) {
-                    composable(Screens.Home.router) {
-                        Home()
-                    }
+                    composable(Screens.Home.router) { Home() }
                     composable(Screens.History.router) {
                         History(
                             navTotalController = navTotalController,
