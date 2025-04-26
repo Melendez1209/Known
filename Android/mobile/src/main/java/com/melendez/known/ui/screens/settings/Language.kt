@@ -40,6 +40,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.LocaleListCompat
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
@@ -47,10 +48,12 @@ import com.melendez.known.ui.components.PreferenceSingleChoiceItem
 import com.melendez.known.ui.components.PreferenceSubtitle
 import com.melendez.known.ui.components.PreferencesHintCard
 import com.melendez.known.ui.components.SharedTopBar
-import com.melendez.known.ui.screens.about.weblate
 import com.melendez.known.util.LocaleLanguageCodeMap
+import com.melendez.known.util.PreferenceUtil
 import com.melendez.known.util.toDisplayName
 import java.util.Locale
+
+const val WEBLATE = "https://weblate.org/zh-hans/"
 
 @SuppressLint("QueryPermissionsNeeded")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -58,6 +61,7 @@ import java.util.Locale
 fun Language(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
 
     val context = LocalContext.current
+    val preferenceUtil: PreferenceUtil = viewModel()
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
@@ -132,7 +136,14 @@ fun Language(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostCo
                     context.startActivity(intent)
                 }
             },
-            selectedLocale = selectedLocale
+            selectedLocale = selectedLocale,
+            onLanguageSelected = { locale ->
+                if (locale == null) {
+                    preferenceUtil.updateLanguage("")
+                } else {
+                    preferenceUtil.updateLanguage(locale.toLanguageTag())
+                }
+            }
         )
     }
 }
@@ -159,7 +170,7 @@ fun Language_Content(
                     description = stringResource(R.string.translate_desc),
                     icon = Icons.Outlined.Translate,
                 ) {
-                    uriHandler.openUri(weblate)
+                    uriHandler.openUri(WEBLATE)
                 }
             }
 

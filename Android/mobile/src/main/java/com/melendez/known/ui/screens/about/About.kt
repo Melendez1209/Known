@@ -38,11 +38,16 @@ import com.melendez.known.ui.components.PreferenceItem
 import com.melendez.known.ui.components.SharedTopBar
 import com.melendez.known.ui.screens.Screens
 
-const val weblate = "https://hosted.weblate.org/engage/"
+object AboutUrls {
+    const val DONATE = "https://bmc.link/markmelendez"
+    const val README = "https://github.com/Melendez1209/Known/blob/main/README.md"
+    const val RELEASES = "https://github.com/Melendez1209/Known/releases"
+    const val ISSUES = "https://github.com/Melendez1209/Known/issues"
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AboutScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
+fun About(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
 
     Column {
@@ -52,7 +57,7 @@ fun AboutScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHos
             navTotalController = navTotalController,
             scrollBehavior = scrollBehavior
         )
-        About_Content(
+        AboutContent(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
             navTotalController = navTotalController
         )
@@ -60,52 +65,14 @@ fun AboutScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHos
 }
 
 @Composable
-fun About_Content(modifier: Modifier, navTotalController: NavHostController) {
-
+fun AboutContent(modifier: Modifier = Modifier, navTotalController: NavHostController) {
     val context = LocalContext.current
-    var showingDialog by remember { mutableStateOf(false) }
+    var showDonateDialog by remember { mutableStateOf(false) }
 
-    if (showingDialog) {
-        AlertDialog(
-            onDismissRequest = {
-                showingDialog = false
-            },
-            confirmButton = {
-                Button(
-                    onClick = {
-                        val intent = Intent(
-                            Intent.ACTION_VIEW,
-                            "https://bmc.link/markmelendez".toUri()
-                        )
-                        context.startActivity(intent)
-                    },
-                    modifier = Modifier.padding(4.dp)
-                ) {
-                    Text(stringResource(R.string.confirm))
-                }
-            },
-            dismissButton = {
-                OutlinedButton(
-                    onClick = {
-                        showingDialog = false
-                    },
-                    modifier = Modifier.padding(4.dp)
-                ) {
-                    Text(stringResource(R.string.cancel))
-                }
-            },
-            icon = {
-                Icon(
-                    imageVector = Icons.Rounded.Warning,
-                    contentDescription = stringResource(R.string.attention)
-                )
-            },
-            title = {
-                Text(text = stringResource(R.string.attention))
-            },
-            text = {
-                Text(text = stringResource(R.string.disclaimer))
-            }
+    if (showDonateDialog) {
+        DonateDialog(
+            onDismiss = { showDonateDialog = false },
+            onConfirm = { openUrl(AboutUrls.DONATE, context) }
         )
     }
 
@@ -113,38 +80,77 @@ fun About_Content(modifier: Modifier, navTotalController: NavHostController) {
         item {
             PreferenceItem(
                 title = stringResource(R.string.readme),
-                icon = Icons.Rounded.Description,
+                icon = Icons.Rounded.Description
             ) {
-                openUrl(
-                    url = "https://github.com/Melendez1209/Known/blob/main/README.md",
-                    context = context
-                )
+                openUrl(AboutUrls.README, context)
             }
         }
+
         item {
             PreferenceItem(
                 title = stringResource(R.string.release),
                 description = stringResource(R.string.release_desc),
-                icon = Icons.Rounded.NewReleases,
-            ) { openUrl("https://github.com/Melendez1209/Known/releases", context = context) }
+                icon = Icons.Rounded.NewReleases
+            ) {
+                openUrl(AboutUrls.RELEASES, context)
+            }
         }
+
         item {
             PreferenceItem(
                 title = stringResource(R.string.github_issue),
                 description = stringResource(R.string.github_issue_desc),
-                icon = Icons.AutoMirrored.Outlined.ContactSupport,
-            ) { openUrl(url = "https://github.com/Melendez1209/Known/issues", context = context) }
+                icon = Icons.AutoMirrored.Outlined.ContactSupport
+            ) {
+                openUrl(AboutUrls.ISSUES, context)
+            }
         }
+
         item {
             PreferenceItem(
                 title = stringResource(R.string.credits),
                 description = stringResource(R.string.credits_desc),
-                icon = Icons.Outlined.AutoAwesome,
+                icon = Icons.Outlined.AutoAwesome
             ) {
                 navTotalController.navigate(Screens.Credits.router)
             }
         }
     }
+}
+
+@Composable
+private fun DonateDialog(onDismiss: () -> Unit, onConfirm: () -> Unit) {
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        confirmButton = {
+            Button(
+                onClick = onConfirm,
+                modifier = Modifier.padding(4.dp)
+            ) {
+                Text(stringResource(R.string.confirm))
+            }
+        },
+        dismissButton = {
+            OutlinedButton(
+                onClick = onDismiss,
+                modifier = Modifier.padding(4.dp)
+            ) {
+                Text(stringResource(R.string.cancel))
+            }
+        },
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.Warning,
+                contentDescription = stringResource(R.string.attention)
+            )
+        },
+        title = {
+            Text(text = stringResource(R.string.attention))
+        },
+        text = {
+            Text(text = stringResource(R.string.disclaimer))
+        }
+    )
 }
 
 fun openUrl(url: String, context: Context) {
@@ -154,14 +160,14 @@ fun openUrl(url: String, context: Context) {
 
 @Preview(device = "id:pixel_9_pro")
 @Composable
-fun About_Content_Preview() {
-    About_Content(modifier = Modifier, navTotalController = rememberNavController())
+private fun AboutContentPreview() {
+    AboutContent(navTotalController = rememberNavController())
 }
 
 @Preview(device = "spec:parent=pixel_9_pro")
 @Composable
-fun AboutScreen_Preview() {
-    AboutScreen(
+private fun AboutScreenPreview() {
+    About(
         widthSizeClass = WindowWidthSizeClass.Compact,
         navTotalController = rememberNavController()
     )

@@ -141,4 +141,7 @@
     <string name="github_issue_desc">提交错误报告或改进建议</string>
     <string name="credits">致谢</string>
     <string name="credits_desc">资源与开源软件</string>
+    <string name="general_settings">常规</string>
+    <string name="general_settings_desc">學生狀況與教育模式</string>
+    <string name="display_settings">深色主題、動態色彩、語言</string>
 </resources>
