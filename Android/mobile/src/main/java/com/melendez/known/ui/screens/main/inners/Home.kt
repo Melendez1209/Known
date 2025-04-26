@@ -5,11 +5,11 @@ import androidx.annotation.StringRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.asPaddingValues
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.systemBars
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
@@ -37,13 +37,12 @@ fun Home() {
                 CarouselItem(2, R.drawable.sample2, R.string.sample),
                 CarouselItem(3, R.drawable.sample3, R.string.sample)
             )
-        
-        Column {
-            Spacer(
-                modifier = Modifier.height(
-                    WindowInsets.systemBars.asPaddingValues().calculateTopPadding()
-                )
+
+        Column(
+            modifier = Modifier.padding(
+                top = WindowInsets.systemBars.asPaddingValues().calculateTopPadding()
             )
+        ) {
             HorizontalMultiBrowseCarousel(
                 state = rememberCarouselState { items.count() },
                 preferredItemWidth = 260.dp,
