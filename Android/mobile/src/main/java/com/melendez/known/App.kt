@@ -4,7 +4,7 @@ import android.app.Application
 import com.google.android.gms.ads.MobileAds
 import com.melendez.known.core.AppOpenAdManager
 
-class KnownApplication : Application() {
+class App : Application() {
     lateinit var appOpenAdManager: AppOpenAdManager
         private set
 

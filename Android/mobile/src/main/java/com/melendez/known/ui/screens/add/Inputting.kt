@@ -24,6 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.OutlinedButton
@@ -153,6 +154,7 @@ private fun Inputting_Compact(
     examName: String,
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    var isUploading by remember { mutableStateOf(false) }
     Column {
         CenterAlignedTopAppBar(
             title = {
@@ -172,7 +174,7 @@ private fun Inputting_Compact(
                 }
             },
             actions = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { isUploading = !isUploading }) {
                     Icon(
                         imageVector = Icons.Rounded.Done,
                         contentDescription = stringResource(R.string.done)
@@ -181,6 +183,9 @@ private fun Inputting_Compact(
             },
             scrollBehavior = scrollBehavior
         )
+        if (isUploading) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+        }
         Inputting_Content(
             modifier = Modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -197,6 +202,7 @@ private fun Inputting_Medium(
     examName: String
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    var isUploading by remember { mutableStateOf(false) }
     Column {
         MediumTopAppBar(
             title = {
@@ -216,7 +222,7 @@ private fun Inputting_Medium(
                 }
             },
             actions = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { isUploading = !isUploading }) {
                     Icon(
                         imageVector = Icons.Rounded.Done,
                         contentDescription = stringResource(R.string.done)
@@ -225,6 +231,9 @@ private fun Inputting_Medium(
             },
             scrollBehavior = scrollBehavior
         )
+        if (isUploading) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+        }
         Inputting_Content(
             modifier = Modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -241,6 +250,7 @@ private fun Inputting_Expanded(
     examName: String
 ) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    var isUploading by remember { mutableStateOf(false) }
     Column {
         LargeTopAppBar(
             title = {
@@ -260,7 +270,7 @@ private fun Inputting_Expanded(
                 }
             },
             actions = {
-                IconButton(onClick = { /*TODO*/ }) {
+                IconButton(onClick = { isUploading = !isUploading }) {
                     Icon(
                         imageVector = Icons.Rounded.Done,
                         contentDescription = stringResource(R.string.done)
@@ -269,6 +279,9 @@ private fun Inputting_Expanded(
             },
             scrollBehavior = scrollBehavior
         )
+        if (isUploading) {
+            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+        }
         Inputting_Content(
             modifier = Modifier
                 .nestedScroll(scrollBehavior.nestedScrollConnection)
@@ -334,7 +347,7 @@ private fun Subject_Card(subject: String, check: Boolean = true, isChecked: Bool
         }
     }
 
-    Card {
+    Card(modifier = Modifier.padding(vertical = 4.dp)) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()

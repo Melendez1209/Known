@@ -39,7 +39,9 @@ class PreferenceUtil(application: Application) : AndroidViewModel(application) {
         isHighContrastModeEnabled: Boolean = false
     ) {
         viewModelScope.launch {
-            repository.updateDarkMode(darkThemeValue)
+            if (darkThemeValue != DarkThemePreference.FOLLOW_SYSTEM) {
+                repository.updateDarkMode(darkThemeValue)
+            }
             repository.updateHighContrastMode(isHighContrastModeEnabled)
         }
     }
@@ -54,6 +56,12 @@ class PreferenceUtil(application: Application) : AndroidViewModel(application) {
         viewModelScope.launch {
             repository.updateThemeColor(color)
             repository.updatePaletteStyle(paletteStyle)
+        }
+    }
+
+    fun updateLanguage(language: String) {
+        viewModelScope.launch {
+            repository.updateLanguage(language)
         }
     }
 

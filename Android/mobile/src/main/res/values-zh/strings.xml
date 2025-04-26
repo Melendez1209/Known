@@ -140,4 +140,7 @@
     <string name="github_issue_desc">提交錯誤報告或功能請求議題</string>
     <string name="credits">鳴謝</string>
     <string name="credits_desc">來源與自由軟體</string>
+    <string name="general_settings">一般</string>
+    <string name="general_settings_desc">学生状况与教育模式</string>
+    <string name="display_settings">深色主题、动态色彩、语言</string>
 </resources>

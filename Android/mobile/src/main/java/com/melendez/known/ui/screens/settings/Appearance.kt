@@ -90,7 +90,6 @@ private val ColorList =
 @Composable
 fun Appearance(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
-
     Column {
         SharedTopBar(
             title = stringResource(R.string.look_and_feel),

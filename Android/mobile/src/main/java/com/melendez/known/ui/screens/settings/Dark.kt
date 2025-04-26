@@ -81,7 +81,7 @@ fun Dark_Content(modifier: Modifier) {
             item { PreferenceSubtitle(text = stringResource(R.string.additional_settings)) }
             item {
                 PreferenceSwitchVariant(
-                    enabled = darkThemePreference.isDarkTheme(isSystemInDarkTheme()),
+                    enabled = darkThemePreference.isDarkTheme(isSystemInDarkTheme = isSystemInDarkTheme()),
                     title = stringResource(R.string.high_contrast),
                     icon = Icons.Outlined.Contrast,
                     isChecked = isHighContrastModeEnabled,

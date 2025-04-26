@@ -33,6 +33,10 @@ class SettingsRepository(private val settingsDao: SettingsDao) {
         settingsDao.updatePredictiveBack(enabled)
     }
 
+    suspend fun updateLanguage(language: String) {
+        settingsDao.updateLanguage(language)
+    }
+
     suspend fun initializeSettings() {
         // Check if the setting already exists
         val currentSettings = settingsDao.getSettingsSync()

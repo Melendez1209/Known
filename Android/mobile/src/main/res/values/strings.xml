@@ -141,4 +141,7 @@
     <string name="github_issue_desc">Submit an issue for bug report or feature request</string>
     <string name="credits">Credits</string>
     <string name="credits_desc">Credits and libre software</string>
+    <string name="general_settings">General</string>
+    <string name="general_settings_desc">Student status, Education model</string>
+    <string name="display_settings">Dark theme, dynamic color, languages</string>
 </resources>

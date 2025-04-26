@@ -37,7 +37,7 @@ import com.melendez.known.ui.screens.Detail
 import com.melendez.known.ui.screens.Prophets
 import com.melendez.known.ui.screens.Screens
 import com.melendez.known.ui.screens.Signin
-import com.melendez.known.ui.screens.about.AboutScreen
+import com.melendez.known.ui.screens.about.About
 import com.melendez.known.ui.screens.about.Credits
 import com.melendez.known.ui.screens.add.DRP
 import com.melendez.known.ui.screens.add.Inputting
@@ -45,6 +45,7 @@ import com.melendez.known.ui.screens.main.MainScreen
 import com.melendez.known.ui.screens.settings.Appearance
 import com.melendez.known.ui.screens.settings.Dark
 import com.melendez.known.ui.screens.settings.Language
+import com.melendez.known.ui.screens.settings.Settings
 import com.melendez.known.ui.theme.DEFAULT_SEED_COLOR
 import com.melendez.known.ui.theme.KnownTheme
 import com.melendez.known.util.DarkThemePreference
@@ -160,8 +161,14 @@ class MainActivity : ComponentActivity() {
                                     navTotalController = navTotalController
                                 )
                             }
-                            animatedComposable(Screens.Settings.router) {
+                            animatedComposable(Screens.Appearance.router) {
                                 Appearance(
+                                    widthSizeClass = widthSizeClass,
+                                    navTotalController = navTotalController
+                                )
+                            }
+                            animatedComposable(Screens.Settings.router) {
+                                Settings(
                                     widthSizeClass = widthSizeClass,
                                     navTotalController = navTotalController
                                 )
@@ -186,7 +193,7 @@ class MainActivity : ComponentActivity() {
                                 )
                             }
                             animatedComposable(Screens.About.router) {
-                                AboutScreen(
+                                About(
                                     widthSizeClass = widthSizeClass,
                                     navTotalController = navTotalController
                                 )
