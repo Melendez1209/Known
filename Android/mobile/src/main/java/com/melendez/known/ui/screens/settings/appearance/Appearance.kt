@@ -1,6 +1,7 @@
-package com.melendez.known.ui.screens.settings
+package com.melendez.known.ui.screens.settings.appearance
 
 import android.annotation.SuppressLint
+import android.os.Build
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
@@ -244,7 +245,7 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
         }
 
         // Add predictive back gesture settings item(Android 14+)
-        if (android.os.Build.VERSION.SDK_INT >= 34) {
+        if (Build.VERSION.SDK_INT >= 34) {
             item {
                 PreferenceSwitch(
                     title = stringResource(id = R.string.predictive_back),

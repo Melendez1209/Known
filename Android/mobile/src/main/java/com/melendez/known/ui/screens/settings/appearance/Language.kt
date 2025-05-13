@@ -1,4 +1,4 @@
-package com.melendez.known.ui.screens.settings
+package com.melendez.known.ui.screens.settings.appearance
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -19,6 +19,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.outlined.ArrowForwardIos
 import androidx.compose.material.icons.outlined.Translate
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -216,7 +217,7 @@ fun Language_Content(
 
             if (isSystemLocaleSettingsAvailable) {
                 item {
-                    androidx.compose.material3.HorizontalDivider()
+                    HorizontalDivider()
                     Surface(
                         modifier =
                             Modifier.clickable(onClick = onNavigateToSystemLocaleSettings)

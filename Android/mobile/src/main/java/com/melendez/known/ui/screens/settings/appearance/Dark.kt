@@ -1,4 +1,4 @@
-package com.melendez.known.ui.screens.settings
+package com.melendez.known.ui.screens.settings.appearance
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Column

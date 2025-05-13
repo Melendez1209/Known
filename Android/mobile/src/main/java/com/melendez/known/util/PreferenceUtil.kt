@@ -64,6 +64,12 @@ class PreferenceUtil(application: Application) : AndroidViewModel(application) {
             repository.updateLanguage(language)
         }
     }
+    
+    fun setFirstLogin(isFirstLogin: Boolean) {
+        viewModelScope.launch {
+            repository.updateFirstLogin(isFirstLogin)
+        }
+    }
 
     // Forced synchronisation of initialisation settings
     fun forceInitializeSettingsSync() {

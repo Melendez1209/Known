@@ -36,6 +36,10 @@ class SettingsRepository(private val settingsDao: SettingsDao) {
     suspend fun updateLanguage(language: String) {
         settingsDao.updateLanguage(language)
     }
+    
+    suspend fun updateFirstLogin(isFirstLogin: Boolean) {
+        settingsDao.updateFirstLogin(isFirstLogin)
+    }
 
     suspend fun initializeSettings() {
         // Check if the setting already exists
@@ -50,7 +54,8 @@ class SettingsRepository(private val settingsDao: SettingsDao) {
                 selectedLanguage = "",
                 themeColor = DEFAULT_SEED_COLOR,
                 paletteStyleIndex = 0,
-                predictiveBackEnabled = true
+                predictiveBackEnabled = true,
+                isFirstLogin = true
             )
             settingsDao.updateSettings(defaultSettings)
         }

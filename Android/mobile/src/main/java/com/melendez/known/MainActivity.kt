@@ -34,6 +34,7 @@ import com.melendez.known.ui.components.LocalPaletteStyleIndex
 import com.melendez.known.ui.components.LocalSeedColor
 import com.melendez.known.ui.components.animatedComposable
 import com.melendez.known.ui.screens.Detail
+import com.melendez.known.ui.screens.Onboarding
 import com.melendez.known.ui.screens.Prophets
 import com.melendez.known.ui.screens.Screens
 import com.melendez.known.ui.screens.Signin
@@ -42,10 +43,10 @@ import com.melendez.known.ui.screens.about.Credits
 import com.melendez.known.ui.screens.add.DRP
 import com.melendez.known.ui.screens.add.Inputting
 import com.melendez.known.ui.screens.main.MainScreen
-import com.melendez.known.ui.screens.settings.Appearance
-import com.melendez.known.ui.screens.settings.Dark
-import com.melendez.known.ui.screens.settings.Language
 import com.melendez.known.ui.screens.settings.Settings
+import com.melendez.known.ui.screens.settings.appearance.Appearance
+import com.melendez.known.ui.screens.settings.appearance.Dark
+import com.melendez.known.ui.screens.settings.appearance.Language
 import com.melendez.known.ui.theme.DEFAULT_SEED_COLOR
 import com.melendez.known.ui.theme.KnownTheme
 import com.melendez.known.util.DarkThemePreference
@@ -153,8 +154,12 @@ class MainActivity : ComponentActivity() {
                     Surface(modifier = Modifier.fillMaxSize()) {
                         NavHost(
                             navController = navTotalController,
-                            startDestination = Screens.Main.router
+                            startDestination = if (settings?.isFirstLogin ?: true)
+                                Screens.Guide.router else Screens.Main.router
                         ) {
+                            animatedComposable(Screens.Guide.router) {
+                                Onboarding(navTotalController = navTotalController)
+                            }
                             animatedComposable(Screens.Main.router) {
                                 MainScreen(
                                     widthSizeClass = widthSizeClass,

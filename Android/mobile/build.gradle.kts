@@ -107,6 +107,7 @@ dependencies {
     implementation("androidx.compose.material3:material3-window-size-class:$material")
 
     implementation("com.google.accompanist:accompanist-swiperefresh:$accompanist")
+    implementation("com.google.accompanist:accompanist-pager:$accompanist")
     implementation("com.google.accompanist:accompanist-pager-indicators:${accompanist}")
 
     implementation(platform("androidx.compose:compose-bom:$composeBom"))

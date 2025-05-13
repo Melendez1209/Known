@@ -15,5 +15,7 @@ data class Settings(
     val themeColor: Int = 0,
     val paletteStyleIndex: Int = 0,
     // Predictive back gesture settings
-    val predictiveBackEnabled: Boolean = true
+    val predictiveBackEnabled: Boolean = true,
+    // First login tracking
+    val isFirstLogin: Boolean = true
 ) 

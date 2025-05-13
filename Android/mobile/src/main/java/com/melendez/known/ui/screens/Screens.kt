@@ -13,4 +13,5 @@ sealed class Screens(val router: String) {
     data object Detail : Screens("Detail")
     data object Prophets : Screens("Prophets")
     data object Credits : Screens("Credits")
+    data object Guide : Screens("Guide")
 }
