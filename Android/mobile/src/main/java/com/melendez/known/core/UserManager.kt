@@ -1,4 +1,4 @@
-package com.melendez.known.data
+package com.melendez.known.core
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
@@ -44,4 +44,4 @@ object UserManager {
     fun signOut() {
         auth.signOut()
     }
-} 
+}

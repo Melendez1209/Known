@@ -4,6 +4,7 @@ import android.app.Activity
 import android.app.Application
 import android.content.Context
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
@@ -13,6 +14,7 @@ import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.FullScreenContentCallback
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.appopen.AppOpenAd
+import com.melendez.known.util.AppStartupManager
 import java.util.Date
 
 /**
@@ -36,9 +38,27 @@ class AppOpenAdManager(private val application: Application) : DefaultLifecycleO
 
     /**
      * Show open ads when the app resumes to the frontend
+     * Only if all components are ready
      */
     override fun onResume(owner: LifecycleOwner) {
-        currentActivity?.let { showAdIfAvailable(it) }
+        if (!AppStartupManager.isSafeToDisplayAds()) {
+            Log.d(TAG, "Not all components ready, skipping ad on resume")
+            return
+        }
+
+        // Avoid showing ad immediately on app cold start
+        currentActivity?.let { activity ->
+            if (activity.javaClass.simpleName == "MainActivity") {
+                // Additional delay for MainActivity to ensure UI is fully loaded
+                Handler(android.os.Looper.getMainLooper()).postDelayed({
+                    if (!isShowingAd && !activity.isFinishing && AppStartupManager.isSafeToDisplayAds()) {
+                        showAdIfAvailable(activity)
+                    }
+                }, 1000) // 1 second delay for MainActivity
+            } else {
+                showAdIfAvailable(activity)
+            }
+        }
     }
 
     /**
@@ -115,12 +135,20 @@ class AppOpenAdManager(private val application: Application) : DefaultLifecycleO
     }
 
     /**
-     * Show the Ad
+     * Show the Ad - only if all components are ready
      */
     fun showAdIfAvailable(activity: Activity) {
+        // Check if all components are ready before showing ad
+        if (!AppStartupManager.isSafeToDisplayAds()) {
+            Log.d(TAG, "Not safe to display ads yet, postponing ad display")
+            return
+        }
+
         if (isShowingAd || !isAdAvailable() || activity.isFinishing) {
             return
         }
+
+        Log.d(TAG, "Showing app open ad")
         appOpenAd?.fullScreenContentCallback = fullScreenContentCallback
         appOpenAd?.show(activity)
     }

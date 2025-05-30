@@ -1,5 +1,10 @@
 package com.melendez.known.ui.screens
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.widget.Toast
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -44,20 +49,23 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.melendez.known.R
+import com.melendez.known.core.getCityName
 import com.melendez.known.util.PreferenceUtil
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun Onboarding(
+fun Guide(
     navTotalController: NavHostController
 ) {
     var selectedIdentity by remember { mutableIntStateOf(R.string.student) }
@@ -272,6 +280,31 @@ fun IdentitySelection(onIdentitySelected: (Int) -> Unit) {
 @Composable
 fun RegionSelection(onRegionSelected: (String) -> Unit) {
     var region by remember { mutableStateOf("") }
+    val context = LocalContext.current
+
+    // 权限请求启动器
+    val requestPermissionLauncher = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            // 权限已授予，获取位置信息
+            try {
+                val cityName = getCityName(context)
+                if (cityName.isNotEmpty()) {
+                    region = cityName
+                    onRegionSelected(cityName)
+                } else {
+                    Toast.makeText(context, "未能获取到位置信息", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                // 处理其他异常
+                Toast.makeText(context, "获取位置信息失败：${e.message}", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            // 用户拒绝了权限请求
+            Toast.makeText(context, "无法获取位置信息：权限被拒绝", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     Card(
         modifier = Modifier
@@ -305,7 +338,42 @@ fun RegionSelection(onRegionSelected: (String) -> Unit) {
             Spacer(modifier = Modifier.height(16.dp))
 
             OutlinedButton(
-                onClick = { /* 模拟定位功能，实际情况需要实现位置权限请求和获取 */ },
+                onClick = {
+                    // 检查是否拥有位置权限
+                    when {
+                        ContextCompat.checkSelfPermission(
+                            context,
+                            Manifest.permission.ACCESS_COARSE_LOCATION
+                        ) == PackageManager.PERMISSION_GRANTED -> {
+                            // 已有权限，直接获取位置
+                            try {
+                                val cityName = getCityName(context)
+                                if (cityName.isNotEmpty()) {
+                                    region = cityName
+                                    onRegionSelected(cityName)
+                                } else {
+                                    Toast.makeText(
+                                        context,
+                                        "未能获取到位置信息",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                            } catch (e: Exception) {
+                                // 处理异常
+                                Toast.makeText(
+                                    context,
+                                    "获取位置信息失败：${e.message}",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+
+                        else -> {
+                            // 请求权限
+                            requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+                        }
+                    }
+                },
                 modifier = Modifier.fillMaxWidth()
             ) {
                 Icon(
