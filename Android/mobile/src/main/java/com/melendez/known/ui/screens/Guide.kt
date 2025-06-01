@@ -59,8 +59,8 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import com.melendez.known.R
-import com.melendez.known.core.getCityName
 import com.melendez.known.util.PreferenceUtil
+import com.melendez.known.util.getCityName
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)

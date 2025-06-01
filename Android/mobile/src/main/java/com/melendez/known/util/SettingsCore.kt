@@ -1,4 +1,4 @@
-package com.melendez.known.core
+package com.melendez.known.util
 
 import android.Manifest
 import android.content.Context

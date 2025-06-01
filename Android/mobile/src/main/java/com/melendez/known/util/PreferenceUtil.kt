@@ -10,10 +10,8 @@ import com.melendez.known.colour.PaletteStyle
 import com.melendez.known.data.AppDatabase
 import com.melendez.known.data.entity.Settings
 import com.melendez.known.data.repository.SettingsRepository
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 const val STYLE_TONAL_SPOT = 0
 const val STYLE_MONOCHROME = 4
@@ -70,19 +68,6 @@ class PreferenceUtil(application: Application) : AndroidViewModel(application) {
     fun setFirstLogin(isFirstLogin: Boolean) {
         viewModelScope.launch {
             repository.updateFirstLogin(isFirstLogin)
-        }
-    }
-
-    // 强制初始化设置，但移到IO线程
-    fun forceInitializeSettingsSync() {
-        viewModelScope.launch {
-            try {
-                withContext(Dispatchers.IO) {
-                    repository.initializeSettings()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-            }
         }
     }
 

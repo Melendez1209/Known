@@ -15,12 +15,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -50,23 +48,12 @@ import com.melendez.known.ui.screens.settings.appearance.Dark
 import com.melendez.known.ui.screens.settings.appearance.Language
 import com.melendez.known.ui.theme.DEFAULT_SEED_COLOR
 import com.melendez.known.ui.theme.KnownTheme
-import com.melendez.known.util.AppStartupManager
 import com.melendez.known.util.DarkThemePreference
 import com.melendez.known.util.PreferenceUtil
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 class MainActivity : ComponentActivity() {
-
-    // Predictive back gesture callback reference
     private val TAG = "Melendez"
-    private var predictiveBackCallback: Any? = null
-    
-    // Flag to indicate UI is fully loaded
-    private var isUIFullyLoaded = false
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -109,23 +96,6 @@ class MainActivity : ComponentActivity() {
             // TODO: Send the token to the back-end server
         })
 
-        // Listen for setting changes and update predictive back gesture accordingly
-        lifecycleScope.launch {
-            try {
-                val preferenceUtil = PreferenceUtil(application)
-                preferenceUtil.settings.collect { settings ->
-                    val isPredictiveBackEnabled = settings?.predictiveBackEnabled ?: true
-//                    if (isPredictiveBackEnabled) {
-//                        initPredictiveBackGesture()
-//                    } else {
-//                        disablePredictiveBackGesture()
-//                    }
-                }
-            } catch (e: Exception) {
-                Log.e(TAG, "监听设置变化时出错: ${e.message}", e)
-            }
-        }
-
         setContent {
             val navTotalController = rememberNavController()
             val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
@@ -135,29 +105,6 @@ class MainActivity : ComponentActivity() {
             // Collect settings and update loading state
             val settings =
                 viewModelPreferenceUtil.settings.collectAsStateWithLifecycle(initialValue = null).value
-
-            // Improved loading logic that checks both database readiness and settings availability
-            LaunchedEffect(Unit) {
-                withContext(Dispatchers.IO) {
-                    // First check if database is ready from App class
-                    val app = application as App
-                    var attempts = 0
-                    val maxAttempts = 30 // 3 seconds with 100ms intervals
-
-                    while (!app.isDatabaseReady() && attempts < maxAttempts) {
-                        delay(100)
-                        attempts++
-                    }
-
-                    if (app.isDatabaseReady()) {
-                        Log.d(TAG, "Database is ready, waiting for settings to load")
-                        // Database is ready, now wait a bit more for settings to be available
-                        delay(500) // Additional buffer for settings to propagate
-                    } else {
-                        Log.w(TAG, "Database readiness check timed out")
-                    }
-                }
-            }
 
             val isSystemInDarkTheme = isSystemInDarkTheme()
             // Current dark theme settings that should be used
@@ -264,95 +211,6 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-            }
-        }
-        
-        // Mark UI as fully loaded after content is set
-        isUIFullyLoaded = true
-        Log.d(TAG, "MainActivity UI fully loaded")
-        
-        // Notify startup manager that main UI is ready
-        AppStartupManager.markMainUIReady()
-    }
-
-    private fun initPredictiveBackGesture() {
-        if (Build.VERSION.SDK_INT >= 34 && predictiveBackCallback == null) {
-            // Using OnBackInvokedDispatcher (Android 13+)
-            try {
-                Log.d(
-                    "Melendez",
-                    "Initializing predictive back gesture, SDK: ${Build.VERSION.SDK_INT}"
-                )
-                @Suppress("NewApi")
-                val onBackInvokedDispatcher = onBackInvokedDispatcher
-                Log.d("Melendez", "Got onBackInvokedDispatcher: $onBackInvokedDispatcher")
-
-                val onBackInvokedCallbackClass =
-                    Class.forName("android.window.OnBackInvokedCallback")
-                Log.d("Melendez", "Found OnBackInvokedCallback class")
-
-                val registerMethod = onBackInvokedDispatcher.javaClass.getMethod(
-                    "registerOnBackInvokedCallback",
-                    Int::class.java,
-                    onBackInvokedCallbackClass
-                )
-                Log.d("Melendez", "Found register method: $registerMethod")
-
-                // Create a callback instance
-                val callback = java.lang.reflect.Proxy.newProxyInstance(
-                    onBackInvokedCallbackClass.classLoader,
-                    arrayOf(onBackInvokedCallbackClass)
-                ) { _, _, _ ->
-                    // Trigger standard back operation
-                    Log.d("Melendez", "Callback triggered, executing onBackPressed")
-                    onBackPressedDispatcher.onBackPressed()
-                    null
-                }
-                Log.d("Melendez", "Created callback proxy: $callback")
-
-                // Register callback using reflection
-                registerMethod.invoke(onBackInvokedDispatcher, 0, callback)
-
-                // Save the callback reference so that you can unregister it later
-                predictiveBackCallback = callback
-
-                Log.d("Melendez", "Predictive back gesture enabled successfully")
-            } catch (e: Exception) {
-                Log.e(
-                    "Melendez",
-                    "initPredictiveBackGesture: Exception: ${e.javaClass.simpleName}: ${e.message}"
-                )
-                e.printStackTrace()
-                // When reflection fails, auto degrade to regular back
-            }
-        } else {
-            Log.d(
-                "Melendez",
-                "Skipping predictive back initialization: SDK=${Build.VERSION.SDK_INT}, callback=${predictiveBackCallback != null}"
-            )
-        }
-    }
-
-    private fun disablePredictiveBackGesture() {
-        if (Build.VERSION.SDK_INT >= 34 && predictiveBackCallback != null) {
-            try {
-                @Suppress("NewApi")
-                val onBackInvokedDispatcher = onBackInvokedDispatcher
-
-                val onBackInvokedCallbackClass =
-                    Class.forName("android.window.OnBackInvokedCallback")
-                val unregisterMethod = onBackInvokedDispatcher.javaClass.getMethod(
-                    "unregisterOnBackInvokedCallback",
-                    onBackInvokedCallbackClass
-                )
-
-                // Unregister the callback
-                unregisterMethod.invoke(onBackInvokedDispatcher, predictiveBackCallback)
-                predictiveBackCallback = null
-
-                Log.d("Melendez", "Predictive back gesture disabled")
-            } catch (e: Exception) {
-                Log.e("Melendez", "disablePredictiveBackGesture: Exception:$e")
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.melendez.known.core
+package com.melendez.known.util
 
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
