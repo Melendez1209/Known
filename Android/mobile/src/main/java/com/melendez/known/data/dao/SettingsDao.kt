@@ -39,4 +39,8 @@ interface SettingsDao {
     // Predictive back gesture related queries
     @Query("UPDATE settings SET predictiveBackEnabled = :enabled WHERE id = 1")
     suspend fun updatePredictiveBack(enabled: Boolean)
+    
+    // First login tracking
+    @Query("UPDATE settings SET isFirstLogin = :isFirstLogin WHERE id = 1")
+    suspend fun updateFirstLogin(isFirstLogin: Boolean)
 } 

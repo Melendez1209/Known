@@ -1,4 +1,4 @@
-package com.melendez.known.core
+package com.melendez.known.util
 
 import android.app.Activity
 import android.app.Application
@@ -6,7 +6,6 @@ import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.DefaultLifecycleObserver
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ProcessLifecycleOwner
 import com.google.android.gms.ads.AdError
 import com.google.android.gms.ads.AdRequest
@@ -32,13 +31,6 @@ class AppOpenAdManager(private val application: Application) : DefaultLifecycleO
     init {
         application.registerActivityLifecycleCallbacks(this)
         ProcessLifecycleOwner.Companion.get().lifecycle.addObserver(this)
-    }
-
-    /**
-     * Show open ads when the app resumes to the frontend
-     */
-    override fun onResume(owner: LifecycleOwner) {
-        currentActivity?.let { showAdIfAvailable(it) }
     }
 
     /**
@@ -112,17 +104,6 @@ class AppOpenAdManager(private val application: Application) : DefaultLifecycleO
                 isShowingAd = true
             }
         }
-    }
-
-    /**
-     * Show the Ad
-     */
-    fun showAdIfAvailable(activity: Activity) {
-        if (isShowingAd || !isAdAvailable() || activity.isFinishing) {
-            return
-        }
-        appOpenAd?.fullScreenContentCallback = fullScreenContentCallback
-        appOpenAd?.show(activity)
     }
 
     override fun onActivityCreated(activity: Activity, savedInstanceState: Bundle?) {}

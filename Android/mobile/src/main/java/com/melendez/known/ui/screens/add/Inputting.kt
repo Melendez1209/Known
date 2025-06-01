@@ -391,7 +391,13 @@ private fun Subject_Card(subject: String, check: Boolean = true, isChecked: Bool
                 value = full,
                 onValueChange = {
                     if (it.isEmpty() || it.matches(NUMBER_PATTERN)) {
-                        full = it
+                        val isRemovingDecimalFive = mark.endsWith(".5") && it.endsWith(".")
+                        val newValue = if (isRemovingDecimalFive) {
+                            it.dropLast(1)
+                        } else {
+                            processScoreInput(it)
+                        }
+                        mark = newValue
                     }
                 },
                 label = stringResource(R.string.full_mark),
@@ -407,7 +413,13 @@ private fun Subject_Card(subject: String, check: Boolean = true, isChecked: Bool
                 value = mark,
                 onValueChange = {
                     if (it.isEmpty() || it.matches(NUMBER_PATTERN)) {
-                        mark = processScoreInput(it)
+                        val isRemovingDecimalFive = mark.endsWith(".5") && it.endsWith(".")
+                        val newValue = if (isRemovingDecimalFive) {
+                            it.dropLast(1)
+                        } else {
+                            processScoreInput(it)
+                        }
+                        mark = newValue
                     }
                 },
                 label = stringResource(R.string.mark),

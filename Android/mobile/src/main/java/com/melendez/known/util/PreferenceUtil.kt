@@ -25,7 +25,7 @@ val paletteStyles = listOf(
 )
 
 class PreferenceUtil(application: Application) : AndroidViewModel(application) {
-    private val repository: SettingsRepository
+    val repository: SettingsRepository
     val settings: Flow<Settings?>
 
     init {
@@ -64,14 +64,10 @@ class PreferenceUtil(application: Application) : AndroidViewModel(application) {
             repository.updateLanguage(language)
         }
     }
-
-    // Forced synchronisation of initialisation settings
-    fun forceInitializeSettingsSync() {
-        // Execute synchronously in the main thread to ensure that the database has initial settings
-        try {
-            kotlinx.coroutines.runBlocking { repository.initializeSettings() }
-        } catch (e: Exception) {
-            e.printStackTrace()
+    
+    fun setFirstLogin(isFirstLogin: Boolean) {
+        viewModelScope.launch {
+            repository.updateFirstLogin(isFirstLogin)
         }
     }
 

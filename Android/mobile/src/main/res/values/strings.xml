@@ -144,4 +144,19 @@
     <string name="general_settings">General</string>
     <string name="general_settings_desc">Student status, Education model</string>
     <string name="display_settings">Dark theme, dynamic color, languages</string>
+    <string name="onboarding">引导</string>
+    <string name="onboarding_welcome">欢迎使用 Known</string>
+    <string name="onboarding_description">请告诉我们一些基本信息以获得更好的体验</string>
+    <string name="onboarding_identity">您的身份是？</string>
+    <string name="student">学生</string>
+    <string name="teacher">老师</string>
+    <string name="parent">家长</string>
+    <string name="onboarding_region">您所在的地区</string>
+    <string name="use_location">使用定位</string>
+    <string name="onboarding_subjects">选择您关注的学科</string>
+    <string name="physics">物理</string>
+    <string name="chemistry">化学</string>
+    <string name="history_subject">历史</string>
+    <string name="skip">跳过</string>
+    <string name="get_started">开始使用</string>
 </resources>

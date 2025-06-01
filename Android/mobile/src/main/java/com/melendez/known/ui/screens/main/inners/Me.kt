@@ -47,8 +47,8 @@ import androidx.navigation.compose.rememberNavController
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.melendez.known.R
-import com.melendez.known.data.UserManager
 import com.melendez.known.ui.screens.Screens
+import com.melendez.known.util.UserManager
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable

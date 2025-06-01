@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
@@ -34,6 +33,7 @@ import com.melendez.known.ui.components.LocalPaletteStyleIndex
 import com.melendez.known.ui.components.LocalSeedColor
 import com.melendez.known.ui.components.animatedComposable
 import com.melendez.known.ui.screens.Detail
+import com.melendez.known.ui.screens.Guide
 import com.melendez.known.ui.screens.Prophets
 import com.melendez.known.ui.screens.Screens
 import com.melendez.known.ui.screens.Signin
@@ -42,22 +42,18 @@ import com.melendez.known.ui.screens.about.Credits
 import com.melendez.known.ui.screens.add.DRP
 import com.melendez.known.ui.screens.add.Inputting
 import com.melendez.known.ui.screens.main.MainScreen
-import com.melendez.known.ui.screens.settings.Appearance
-import com.melendez.known.ui.screens.settings.Dark
-import com.melendez.known.ui.screens.settings.Language
 import com.melendez.known.ui.screens.settings.Settings
+import com.melendez.known.ui.screens.settings.appearance.Appearance
+import com.melendez.known.ui.screens.settings.appearance.Dark
+import com.melendez.known.ui.screens.settings.appearance.Language
 import com.melendez.known.ui.theme.DEFAULT_SEED_COLOR
 import com.melendez.known.ui.theme.KnownTheme
 import com.melendez.known.util.DarkThemePreference
 import com.melendez.known.util.PreferenceUtil
-import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 class MainActivity : ComponentActivity() {
-
-    // Predictive back gesture callback reference
     private val TAG = "Melendez"
-    private var predictiveBackCallback: Any? = null
 
     private val requestPermissionLauncher = registerForActivityResult(
         ActivityResultContracts.RequestPermission()
@@ -100,30 +96,16 @@ class MainActivity : ComponentActivity() {
             // TODO: Send the token to the back-end server
         })
 
-        // Initialise settings
-        val preferenceUtil = PreferenceUtil(application)
-        preferenceUtil.forceInitializeSettingsSync()
-
-        // Listen for setting changes and update predictive back gesture accordingly
-        lifecycleScope.launch {
-            preferenceUtil.settings.collect { settings ->
-                val isPredictiveBackEnabled = settings?.predictiveBackEnabled ?: true
-                if (isPredictiveBackEnabled) {
-                    initPredictiveBackGesture()
-                } else {
-                    disablePredictiveBackGesture()
-                }
-            }
-        }
-
         setContent {
-
             val navTotalController = rememberNavController()
             val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
             val viewModelPreferenceUtil: PreferenceUtil = viewModel()
-            // Collecting the current settings from the database
+
+
+            // Collect settings and update loading state
             val settings =
                 viewModelPreferenceUtil.settings.collectAsStateWithLifecycle(initialValue = null).value
+
             val isSystemInDarkTheme = isSystemInDarkTheme()
             // Current dark theme settings that should be used
             val darkThemePreference = settings?.let {
@@ -151,10 +133,20 @@ class MainActivity : ComponentActivity() {
                     isHighContrastModeEnabled = darkThemePreference.isHighContrastModeEnabled
                 ) {
                     Surface(modifier = Modifier.fillMaxSize()) {
+
+                        val startDestination = when {
+                            settings == null -> Screens.Main.router
+                            settings.isFirstLogin -> Screens.Guide.router
+                            else -> Screens.Main.router
+                        }
+
                         NavHost(
                             navController = navTotalController,
-                            startDestination = Screens.Main.router
+                            startDestination = startDestination
                         ) {
+                            animatedComposable(Screens.Guide.router) {
+                                Guide(navTotalController = navTotalController)
+                            }
                             animatedComposable(Screens.Main.router) {
                                 MainScreen(
                                     widthSizeClass = widthSizeClass,
@@ -219,88 +211,6 @@ class MainActivity : ComponentActivity() {
                         }
                     }
                 }
-            }
-        }
-    }
-
-    private fun initPredictiveBackGesture() {
-        if (Build.VERSION.SDK_INT >= 34 && predictiveBackCallback == null) {
-            // Using OnBackInvokedDispatcher (Android 13+)
-            try {
-                Log.d(
-                    "Melendez",
-                    "Initializing predictive back gesture, SDK: ${Build.VERSION.SDK_INT}"
-                )
-                @Suppress("NewApi")
-                val onBackInvokedDispatcher = onBackInvokedDispatcher
-                Log.d("Melendez", "Got onBackInvokedDispatcher: $onBackInvokedDispatcher")
-
-                val onBackInvokedCallbackClass =
-                    Class.forName("android.window.OnBackInvokedCallback")
-                Log.d("Melendez", "Found OnBackInvokedCallback class")
-
-                val registerMethod = onBackInvokedDispatcher.javaClass.getMethod(
-                    "registerOnBackInvokedCallback",
-                    Int::class.java,
-                    onBackInvokedCallbackClass
-                )
-                Log.d("Melendez", "Found register method: $registerMethod")
-
-                // Create a callback instance
-                val callback = java.lang.reflect.Proxy.newProxyInstance(
-                    onBackInvokedCallbackClass.classLoader,
-                    arrayOf(onBackInvokedCallbackClass)
-                ) { _, _, _ ->
-                    // Trigger standard back operation
-                    Log.d("Melendez", "Callback triggered, executing onBackPressed")
-                    onBackPressedDispatcher.onBackPressed()
-                    null
-                }
-                Log.d("Melendez", "Created callback proxy: $callback")
-
-                // Register callback using reflection
-                registerMethod.invoke(onBackInvokedDispatcher, 0, callback)
-
-                // Save the callback reference so that you can unregister it later
-                predictiveBackCallback = callback
-
-                Log.d("Melendez", "Predictive back gesture enabled successfully")
-            } catch (e: Exception) {
-                Log.e(
-                    "Melendez",
-                    "initPredictiveBackGesture: Exception: ${e.javaClass.simpleName}: ${e.message}"
-                )
-                e.printStackTrace()
-                // When reflection fails, auto degrade to regular back
-            }
-        } else {
-            Log.d(
-                "Melendez",
-                "Skipping predictive back initialization: SDK=${Build.VERSION.SDK_INT}, callback=${predictiveBackCallback != null}"
-            )
-        }
-    }
-
-    private fun disablePredictiveBackGesture() {
-        if (Build.VERSION.SDK_INT >= 34 && predictiveBackCallback != null) {
-            try {
-                @Suppress("NewApi")
-                val onBackInvokedDispatcher = onBackInvokedDispatcher
-
-                val onBackInvokedCallbackClass =
-                    Class.forName("android.window.OnBackInvokedCallback")
-                val unregisterMethod = onBackInvokedDispatcher.javaClass.getMethod(
-                    "unregisterOnBackInvokedCallback",
-                    onBackInvokedCallbackClass
-                )
-
-                // Unregister the callback
-                unregisterMethod.invoke(onBackInvokedDispatcher, predictiveBackCallback)
-                predictiveBackCallback = null
-
-                Log.d("Melendez", "Predictive back gesture disabled")
-            } catch (e: Exception) {
-                Log.e("Melendez", "disablePredictiveBackGesture: Exception:$e")
             }
         }
     }
