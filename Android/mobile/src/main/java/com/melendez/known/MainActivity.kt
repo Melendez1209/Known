@@ -115,11 +115,11 @@ class MainActivity : ComponentActivity() {
                 val preferenceUtil = PreferenceUtil(application)
                 preferenceUtil.settings.collect { settings ->
                     val isPredictiveBackEnabled = settings?.predictiveBackEnabled ?: true
-                    if (isPredictiveBackEnabled) {
-                        initPredictiveBackGesture()
-                    } else {
-                        disablePredictiveBackGesture()
-                    }
+//                    if (isPredictiveBackEnabled) {
+//                        initPredictiveBackGesture()
+//                    } else {
+//                        disablePredictiveBackGesture()
+//                    }
                 }
             } catch (e: Exception) {
                 Log.e(TAG, "监听设置变化时出错: ${e.message}", e)
