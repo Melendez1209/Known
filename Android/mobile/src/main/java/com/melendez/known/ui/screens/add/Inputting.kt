@@ -34,7 +34,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -54,6 +53,8 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
+import com.melendez.known.ui.components.LocalScreenType
+import com.melendez.known.util.ScreenType
 import kotlin.math.roundToInt
 
 private const val DEFAULT_FULL_MARK = "150"
@@ -61,9 +62,10 @@ private const val HALF_POINT = "5"
 private val NUMBER_PATTERN = Regex("^\\d*\\.?\\d*$")
 
 @Composable
-fun Inputting(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
+fun Inputting(navTotalController: NavHostController) {
     var showingDialog by remember { mutableStateOf(false) }
     var examName by rememberSaveable { mutableStateOf("") }
+    val screenType = LocalScreenType.current
 
     if (showingDialog) {
         ExamNameDialog(
@@ -73,26 +75,20 @@ fun Inputting(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostC
         )
     }
 
-    when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> Inputting_Compact(
+    when (screenType) {
+        ScreenType.Compact -> Inputting_Compact(
             navTotalController = navTotalController,
             onShowingChange = { showingDialog = it },
             examName = examName
         )
 
-        WindowWidthSizeClass.Medium -> Inputting_Medium(
+        ScreenType.Medium -> Inputting_Medium(
             navTotalController = navTotalController,
             onShowingChange = { showingDialog = it },
             examName = examName
         )
 
-        WindowWidthSizeClass.Expanded -> Inputting_Expanded(
-            navTotalController = navTotalController,
-            onShowingChange = { showingDialog = it },
-            examName = examName
-        )
-
-        else -> Inputting_Compact(
+        ScreenType.Expanded -> Inputting_Expanded(
             navTotalController = navTotalController,
             onShowingChange = { showingDialog = it },
             examName = examName
@@ -512,8 +508,5 @@ private fun Subject_Card_Preview() {
 @Preview(device = "id:pixel_9_pro")
 @Composable
 private fun Inputting_Preview() {
-    Inputting(
-        widthSizeClass = WindowWidthSizeClass.Compact,
-        navTotalController = rememberNavController()
-    )
+    Inputting(navTotalController = rememberNavController())
 }

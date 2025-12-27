@@ -1,6 +1,5 @@
 package com.melendez.known.ui.screens.main.inners
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,7 +18,6 @@ import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material.icons.rounded.Settings
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -44,13 +42,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
-import coil.compose.AsyncImage
-import coil.request.ImageRequest
+import coil3.compose.AsyncImage
+import coil3.request.ImageRequest
+import coil3.request.crossfade
 import com.melendez.known.R
 import com.melendez.known.ui.screens.Screens
 import com.melendez.known.util.UserManager
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Me(navTotalController: NavHostController) {
     val isLoggedIn by UserManager.isLoggedIn.collectAsState()
@@ -110,7 +108,6 @@ fun Me_Preview() {
     Me(navTotalController = rememberNavController())
 }
 
-@OptIn(ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun AccountCard(isLoggedIn: Boolean, navTotalController: NavHostController) {
 

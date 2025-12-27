@@ -39,7 +39,6 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -59,24 +58,28 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.melendez.known.R
+import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.components.SharedTopBar
 import com.melendez.known.ui.viewmodel.signin.SignInViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Signin(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
+fun Signin(navTotalController: NavHostController) {
+
     val viewModel: SignInViewModel = viewModel()
     val isLoading by viewModel.isLoading.collectAsState()
     val isSuccessful by viewModel.isSuccessful.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()
     val context = LocalContext.current
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val screenType = LocalScreenType.current
 
     // Whether the registration mode is active
     var isRegisterMode by remember { mutableStateOf(false) }
@@ -120,7 +123,7 @@ fun Signin(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostCont
     ) {
         SharedTopBar(
             title = stringResource(if (isRegisterMode) R.string.sign_up else R.string.sign_in),
-            widthSizeClass = widthSizeClass,
+            screenType = screenType,
             navTotalController = navTotalController,
             scrollBehavior = scrollBehavior
         )
@@ -370,11 +373,9 @@ fun LoginForm(
     }
 }
 
-@Preview
+@PreviewScreenSizes
+@Preview(device = "id:pixel_9_pro")
 @Composable
 fun SigninPreview() {
-    Signin(
-        widthSizeClass = WindowWidthSizeClass.Compact,
-        navTotalController = rememberNavController()
-    )
+    Signin(navTotalController = rememberNavController())
 }

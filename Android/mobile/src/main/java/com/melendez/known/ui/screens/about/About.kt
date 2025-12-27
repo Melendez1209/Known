@@ -18,7 +18,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,6 +33,7 @@ import androidx.core.net.toUri
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
+import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.components.PreferenceItem
 import com.melendez.known.ui.components.SharedTopBar
 import com.melendez.known.ui.screens.Screens
@@ -47,13 +47,15 @@ object AboutUrls {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun About(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
+fun About(navTotalController: NavHostController) {
+
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val screenType = LocalScreenType.current
 
     Column {
         SharedTopBar(
             title = stringResource(R.string.about),
-            widthSizeClass = widthSizeClass,
+            screenType = screenType,
             navTotalController = navTotalController,
             scrollBehavior = scrollBehavior
         )
@@ -167,8 +169,5 @@ private fun AboutContentPreview() {
 @Preview(device = "spec:parent=pixel_9_pro")
 @Composable
 private fun AboutScreenPreview() {
-    About(
-        widthSizeClass = WindowWidthSizeClass.Compact,
-        navTotalController = rememberNavController()
-    )
+    About(navTotalController = rememberNavController())
 }

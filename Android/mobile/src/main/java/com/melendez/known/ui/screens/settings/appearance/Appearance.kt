@@ -33,7 +33,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.getValue
@@ -66,6 +65,7 @@ import com.melendez.known.colour.a2
 import com.melendez.known.colour.a3
 import com.melendez.known.ui.components.LocalDynamicColorSwitch
 import com.melendez.known.ui.components.LocalPaletteStyleIndex
+import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.components.LocalSeedColor
 import com.melendez.known.ui.components.PreferenceItem
 import com.melendez.known.ui.components.PreferenceSwitch
@@ -89,12 +89,13 @@ private val ColorList =
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Appearance(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
+fun Appearance(navTotalController: NavHostController) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val screenType = LocalScreenType.current
     Column {
         SharedTopBar(
             title = stringResource(R.string.look_and_feel),
-            widthSizeClass = widthSizeClass,
+            screenType = screenType,
             navTotalController = navTotalController,
             scrollBehavior = scrollBehavior
         )
@@ -369,7 +370,6 @@ fun RowScope.ColorButtonImpl(
 @Composable
 fun Settings_Preview() {
     Appearance(
-        widthSizeClass = WindowWidthSizeClass.Compact,
         navTotalController = rememberNavController()
     )
 }

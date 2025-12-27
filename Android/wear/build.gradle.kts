@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.melendez.known"
-    compileSdk = 35
+    compileSdk = 36
 
     defaultConfig {
         applicationId = "com.melendez.known"
@@ -33,9 +33,6 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
-    kotlinOptions {
-        jvmTarget = "1.8"
-    }
     buildFeatures {
         compose = true
     }
@@ -50,31 +47,24 @@ android {
 }
 
 dependencies {
+    implementation(libs.play.services.wearable)
+    implementation(platform(libs.compose.bom))
+    implementation(libs.activity.compose)
+    implementation(libs.core.splashscreen)
+    implementation(libs.ui)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.material.icons.extended)
+    implementation(libs.compose.material)
+    implementation(libs.compose.foundation)
+    implementation(libs.tiles)
+    implementation(libs.tiles.material)
+    implementation(libs.horologist.compose.tools)
+    implementation(libs.horologist.tiles)
+    implementation(libs.watchface.complications.data.source.ktx)
 
-    val composeBom = "2024.06.00"
-    val compose = "1.4.0-beta03"
-    val ui = "1.7.0-beta04"
-    val material = "1.4.0-alpha05"
-    val horologist = "0.6.22"
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.ui.test.junit4)
 
-    implementation("com.google.android.gms:play-services-wearable:18.2.0")
-    implementation(platform("androidx.compose:compose-bom:$composeBom"))
-    implementation("androidx.activity:activity-compose:1.9.0")
-    implementation("androidx.core:core-splashscreen:1.2.0-alpha01")
-    implementation("androidx.compose.ui:ui:$ui")
-    implementation("androidx.compose.ui:ui-tooling-preview:$ui")
-    implementation("androidx.compose.material:material-icons-extended:$ui")
-    implementation("androidx.wear.compose:compose-material:$compose")
-    implementation("androidx.wear.compose:compose-foundation:$compose")
-    implementation("androidx.wear.tiles:tiles:$material")
-    implementation("androidx.wear.tiles:tiles-material:$material")
-    implementation("com.google.android.horologist:horologist-compose-tools:$horologist")
-    implementation("com.google.android.horologist:horologist-tiles:$horologist")
-    implementation("androidx.wear.watchface:watchface-complications-data-source-ktx:1.3.0-alpha03")
-
-    androidTestImplementation(platform("androidx.compose:compose-bom:$composeBom"))
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
-
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
 }

@@ -1,7 +1,6 @@
 package com.melendez.known.ui.screens.about
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -10,7 +9,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -27,6 +25,7 @@ import com.junkfood.seal.ui.svg.drawablevectors.coder
 import com.melendez.known.R
 import com.melendez.known.svg.DynamicColorImageVectors
 import com.melendez.known.ui.components.CreditItem
+import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.components.SharedTopBar
 
 data class Dependency(
@@ -39,13 +38,15 @@ const val Apache = "Apache License 2.0"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Credits(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
+fun Credits(navTotalController: NavHostController) {
+
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val screenType = LocalScreenType.current
 
     Column {
         SharedTopBar(
             title = stringResource(R.string.credits),
-            widthSizeClass = widthSizeClass,
+            screenType = screenType,
             navTotalController = navTotalController,
             scrollBehavior = scrollBehavior
         )
@@ -226,5 +227,5 @@ private fun Credits_Content(modifier: Modifier = Modifier) {
 @Preview(device = "id:pixel_9_pro")
 @Composable
 private fun Credits_Preview() {
-    Credits(WindowWidthSizeClass.Compact, rememberNavController())
+    Credits(rememberNavController())
 }

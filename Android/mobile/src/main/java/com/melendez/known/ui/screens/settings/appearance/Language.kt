@@ -25,7 +25,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -45,6 +44,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
+import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.components.PreferenceSingleChoiceItem
 import com.melendez.known.ui.components.PreferenceSubtitle
 import com.melendez.known.ui.components.PreferencesHintCard
@@ -59,12 +59,13 @@ const val WEBLATE = "https://weblate.org/zh-hans/"
 @SuppressLint("QueryPermissionsNeeded")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Language(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
+fun Language(navTotalController: NavHostController) {
 
     val context = LocalContext.current
     val preferenceUtil: PreferenceUtil = viewModel()
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val screenType = LocalScreenType.current
 
     val preferredLocales = remember {
         val defaultLocaleListCompat = LocaleListCompat.getDefault()
@@ -123,7 +124,7 @@ fun Language(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostCo
     Column {
         SharedTopBar(
             title = stringResource(R.string.language),
-            widthSizeClass = widthSizeClass,
+            screenType = screenType,
             navTotalController = navTotalController,
             scrollBehavior = scrollBehavior
         )
@@ -265,8 +266,5 @@ fun Language_Content(
 @Preview(device = "id:pixel_9_pro")
 @Composable
 fun Language_Preview() {
-    Language(
-        widthSizeClass = WindowWidthSizeClass.Compact,
-        navTotalController = rememberNavController()
-    )
+    Language(navTotalController = rememberNavController())
 }
