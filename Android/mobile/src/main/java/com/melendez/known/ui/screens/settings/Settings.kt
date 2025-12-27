@@ -7,7 +7,6 @@ import androidx.compose.material.icons.rounded.Palette
 import androidx.compose.material.icons.rounded.SettingsApplications
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -16,18 +15,22 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
+import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.components.SettingItem
 import com.melendez.known.ui.components.SharedTopBar
 import com.melendez.known.ui.screens.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Settings(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
+fun Settings(navTotalController: NavHostController) {
+
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val screenType = LocalScreenType.current
+
     Column {
         SharedTopBar(
             title = stringResource(R.string.settings),
-            widthSizeClass = widthSizeClass,
+            screenType = screenType,
             navTotalController = navTotalController,
             scrollBehavior = scrollBehavior
         )
@@ -66,8 +69,5 @@ private fun SettingsContent(modifier: Modifier, navTotalController: NavHostContr
 @Preview(device = "id:pixel_9_pro")
 @Composable
 private fun SettingsPreview() {
-    Settings(
-        widthSizeClass = WindowWidthSizeClass.Compact,
-        navTotalController = rememberNavController()
-    )
+    Settings(navTotalController = rememberNavController())
 }

@@ -38,19 +38,12 @@ android {
             isShrinkResources = false
         }
     }
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
     buildFeatures {
         compose = true
         buildConfig = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.0"
+        kotlinCompilerExtensionVersion = "1.5.15"
     }
     packaging {
         resources {
@@ -59,67 +52,60 @@ android {
     }
 }
 
+kotlin {
+    jvmToolchain(17)
+}
+
 dependencies {
 
-    val activity = "1.11.0-rc01"
-    val composeBom = "2025.04.01"
-    val ui = "1.9.0-alpha01"
-    val material = "1.4.0-alpha13"
-    val accompanist = "0.36.0"
-    val lifecycle = "2.9.0-rc01"
-    val room = "2.7.1"
+    implementation(libs.core.ktx)
+    implementation(libs.coil.compose)
+    implementation(libs.volley)
+    implementation(libs.generativeai)
+    implementation(libs.material.icons.extended)
+    implementation(libs.material)
+    implementation(libs.navigation.compose)
 
-    implementation("androidx.core:core-ktx:1.16.0")
-    implementation("io.coil-kt:coil-compose:2.7.0")
-    implementation("com.android.volley:volley:1.2.1")
-    implementation("com.google.ai.client.generativeai:generativeai:0.9.0")
-    implementation("androidx.compose.material:material-icons-extended:1.7.8")
-    implementation("com.google.android.material:material:1.13.0-alpha13")
-    implementation("androidx.navigation:navigation-compose:2.9.0-rc01")
+    implementation(libs.firebase.auth.ktx)
+    implementation(libs.firebase.firestore)
+    implementation(libs.firebase.messaging.ktx)
+    implementation(libs.firebase.analytics)
+    implementation(libs.play.services.auth)
+    implementation(libs.firebase.ui.auth)
+    implementation(libs.play.services.ads)
 
-    implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
-    implementation("com.google.firebase:firebase-auth-ktx:23.2.0")
-    implementation("com.google.android.gms:play-services-auth:21.3.0")
-    implementation("com.firebaseui:firebase-ui-auth:9.0.0")
-    implementation("com.google.firebase:firebase-firestore:25.1.4")
-    implementation("com.google.firebase:firebase-messaging-ktx:24.1.1")
-    implementation("com.google.android.gms:play-services-ads:24.2.0")
-    implementation("com.google.firebase:firebase-analytics:22.4.0")
+    implementation(libs.activity.ktx)
+    implementation(libs.activity.compose)
 
-    implementation("androidx.activity:activity-ktx:${activity}")
-    implementation("androidx.activity:activity-compose:${activity}")
+    implementation(libs.lifecycle.viewmodel.compose)
+    implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.lifecycle.process)
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:$lifecycle")
-    implementation("androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle")
-    implementation("androidx.lifecycle:lifecycle-runtime-compose:$lifecycle")
-    implementation("androidx.lifecycle:lifecycle-process:$lifecycle")
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 
-    implementation("androidx.compose.ui:ui:$ui")
-    implementation("androidx.compose.animation:animation:$ui")
-    implementation("androidx.compose.ui:ui-graphics:$ui")
-    implementation("androidx.compose.ui:ui-tooling-preview:$ui")
-    implementation("androidx.compose.runtime:runtime-livedata:$ui")
+    implementation(libs.accompanist.swiperefresh)
+    implementation(libs.accompanist.pager)
+    implementation(libs.accompanist.pager.indicators)
 
-    implementation("androidx.room:room-runtime:$room")
-    implementation("androidx.room:room-ktx:$room")
-    ksp("androidx.room:room-compiler:$room")
+    implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.animation)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.runtime.livedata)
+    implementation(libs.material3)
+    implementation(libs.material3.window.size.class1)
 
-    implementation("androidx.compose.material3:material3:$material")
-    implementation("androidx.compose.material3:material3-window-size-class:$material")
+    androidTestImplementation(libs.ui.test.junit4)
+    androidTestImplementation(platform(libs.compose.bom))
+    androidTestImplementation(libs.junit)
+    androidTestImplementation(libs.espresso.core)
 
-    implementation("com.google.accompanist:accompanist-swiperefresh:$accompanist")
-    implementation("com.google.accompanist:accompanist-pager:$accompanist")
-    implementation("com.google.accompanist:accompanist-pager-indicators:${accompanist}")
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
 
-    implementation(platform("androidx.compose:compose-bom:$composeBom"))
-
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:$ui")
-    androidTestImplementation(platform("androidx.compose:compose-bom:$composeBom"))
-    androidTestImplementation("androidx.test.ext:junit:1.2.0-alpha03")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.6.0-alpha03")
-
-    debugImplementation("androidx.compose.ui:ui-tooling:$ui")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:$ui")
-
-    testImplementation("junit:junit:4.13.2")
+    testImplementation(libs.junit.jupiter.api)
 }

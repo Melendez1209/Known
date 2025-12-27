@@ -1,0 +1,94 @@
+[versions]
+accompanist = "0.36.0"
+activity = "1.12.2"
+androidxComposeUi = "ui-test-junit4"
+androidxComposeUiX2 = "ui-test-manifest"
+animation = "1.10.0"
+coilCompose = "3.3.0"
+compose = "1.5.6"
+composeBom = "2025.12.01"
+composeUi = "ui-tooling"
+coreKtx = "1.17.0"
+coreSplashscreen = "1.2.0"
+espressoCore = "3.7.0"
+firebaseAnalytics = "23.0.0"
+firebaseAuthKtx = "23.2.1"
+firebaseFirestore = "26.0.2"
+firebaseMessagingKtx = "24.1.2"
+firebaseUiAuth = "10.0.0-beta01"
+generativeai = "0.9.0"
+googleServices = "4.4.4"
+horologist = "0.7.15"
+junit = "1.3.0"
+junitJupiterApi = "6.0.1"
+lifecycle = "2.10.0"
+material = "1.14.0-alpha08"
+material3 = "1.4.0"
+materialIconsExtended = "1.7.8"
+navigationCompose = "2.9.6"
+playServicesAds = "24.9.0"
+playServicesAuth = "21.4.0"
+playServicesWearable = "19.0.0"
+room = "2.8.4"
+runtimeLivedata = "1.10.0"
+tiles = "1.5.0"
+ui = "1.10.0"
+volley = "1.2.1"
+watchfaceComplicationsDataSourceKtx = "1.3.0-beta01"
+
+[libraries]
+accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
+accompanist-pager-indicators = { group = "com.google.accompanist", name = "accompanist-pager-indicators", version.ref = "accompanist" }
+accompanist-swiperefresh = { group = "com.google.accompanist", name = "accompanist-swiperefresh", version.ref = "accompanist" }
+activity-compose = { group = "androidx.activity", name = "activity-compose", version.ref = "activity" }
+activity-ktx = { group = "androidx.activity", name = "activity-ktx", version.ref = "activity" }
+animation = { group = "androidx.compose.animation", name = "animation", version.ref = "animation" }
+coil-compose = { group = "io.coil-kt.coil3", name = "coil-compose", version.ref = "coilCompose" }
+compose-bom = { group = "androidx.compose", name = "compose-bom", version.ref = "composeBom" }
+compose-foundation = { group = "androidx.wear.compose", name = "compose-foundation", version.ref = "compose" }
+compose-material = { group = "androidx.wear.compose", name = "compose-material", version.ref = "compose" }
+core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+core-splashscreen = { group = "androidx.core", name = "core-splashscreen", version.ref = "coreSplashscreen" }
+espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+firebase-analytics = { group = "com.google.firebase", name = "firebase-analytics", version.ref = "firebaseAnalytics" }
+firebase-auth-ktx = { group = "com.google.firebase", name = "firebase-auth-ktx", version.ref = "firebaseAuthKtx" }
+firebase-firestore = { group = "com.google.firebase", name = "firebase-firestore", version.ref = "firebaseFirestore" }
+firebase-messaging-ktx = { group = "com.google.firebase", name = "firebase-messaging-ktx", version.ref = "firebaseMessagingKtx" }
+firebase-ui-auth = { group = "com.firebaseui", name = "firebase-ui-auth", version.ref = "firebaseUiAuth" }
+generativeai = { group = "com.google.ai.client.generativeai", name = "generativeai", version.ref = "generativeai" }
+google-services = { group = "com.google.gms", name = "google-services", version.ref = "googleServices" }
+horologist-compose-tools = { group = "com.google.android.horologist", name = "horologist-compose-tools", version.ref = "horologist" }
+horologist-tiles = { group = "com.google.android.horologist", name = "horologist-tiles", version.ref = "horologist" }
+junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
+junit-jupiter-api = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junitJupiterApi" }
+lifecycle-process = { group = "androidx.lifecycle", name = "lifecycle-process", version.ref = "lifecycle" }
+lifecycle-runtime-compose = { group = "androidx.lifecycle", name = "lifecycle-runtime-compose", version.ref = "lifecycle" }
+lifecycle-runtime-ktx = { group = "androidx.lifecycle", name = "lifecycle-runtime-ktx", version.ref = "lifecycle" }
+lifecycle-viewmodel-compose = { group = "androidx.lifecycle", name = "lifecycle-viewmodel-compose", version.ref = "lifecycle" }
+material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+material-icons-extended = { group = "androidx.compose.material", name = "material-icons-extended", version.ref = "materialIconsExtended" }
+material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3" }
+material3-window-size-class1 = { group = "androidx.compose.material3", name = "material3-window-size-class", version.ref = "material3" }
+navigation-compose = { group = "androidx.navigation", name = "navigation-compose", version.ref = "navigationCompose" }
+play-services-ads = { group = "com.google.android.gms", name = "play-services-ads", version.ref = "playServicesAds" }
+play-services-auth = { group = "com.google.android.gms", name = "play-services-auth", version.ref = "playServicesAuth" }
+play-services-wearable = { group = "com.google.android.gms", name = "play-services-wearable", version.ref = "playServicesWearable" }
+room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
+room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
+runtime-livedata = { group = "androidx.compose.runtime", name = "runtime-livedata", version.ref = "runtimeLivedata" }
+tiles = { group = "androidx.wear.tiles", name = "tiles", version.ref = "tiles" }
+tiles-material = { group = "androidx.wear.tiles", name = "tiles-material", version.ref = "tiles" }
+ui = { group = "androidx.compose.ui", name = "ui", version.ref = "ui" }
+ui-graphics = { group = "androidx.compose.ui", name = "ui-graphics", version.ref = "ui" }
+ui-test-junit4 = { group = "androidx.compose.ui", name = "ui-test-junit4", version.ref = "ui" }
+ui-test-manifest = { group = "androidx.compose.ui", name = "ui-test-manifest", version.ref = "ui" }
+ui-tooling = { group = "androidx.compose.ui", name = "ui-tooling", version.ref = "ui" }
+ui-tooling-preview = { group = "androidx.compose.ui", name = "ui-tooling-preview", version.ref = "ui" }
+volley = { group = "com.android.volley", name = "volley", version.ref = "volley" }
+watchface-complications-data-source-ktx = { group = "androidx.wear.watchface", name = "watchface-complications-data-source-ktx", version.ref = "watchfaceComplicationsDataSourceKtx" }
+
+[plugins]
+androidx-compose-ui = { id = "androidx.compose.ui", version.ref = "composeUi" }
+androidx-compose-uiX2 = { id = "androidx.compose.ui", version.ref = "androidxComposeUiX2" }
+compose-ui = { id = "androidx.compose.ui", version.ref = "androidxComposeUi" }

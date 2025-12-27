@@ -14,17 +14,17 @@ import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
+import com.melendez.known.util.ScreenType
 
 @Composable
 fun SharedTopBar(
-    widthSizeClass: WindowWidthSizeClass,
+    screenType: ScreenType,
     navTotalController: NavHostController,
     title: String,
     scrollBehavior: TopAppBarScrollBehavior? = null,
@@ -43,7 +43,7 @@ fun SharedTopBar(
         }
     }
 
-    if (widthSizeClass == WindowWidthSizeClass.Medium) {
+    if (screenType == ScreenType.Medium) {
         MediumTopAppBar(
             title = { Text(text = title) },
             navigationIcon = {
@@ -78,7 +78,7 @@ fun SharedTopBar(
 @Composable
 fun MediumTopBar_Preview() {
     SharedTopBar(
-        widthSizeClass = WindowWidthSizeClass.Medium,
+        screenType = ScreenType.Medium,
         navTotalController = rememberNavController(),
         title = "Title",
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
@@ -89,7 +89,7 @@ fun MediumTopBar_Preview() {
 @Composable
 fun LargeTopBar_Preview() {
     SharedTopBar(
-        widthSizeClass = WindowWidthSizeClass.Compact,
+        screenType = ScreenType.Compact,
         navTotalController = rememberNavController(),
         title = "Title",
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()

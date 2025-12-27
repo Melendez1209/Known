@@ -8,7 +8,6 @@ import androidx.compose.material.icons.outlined.Contrast
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
@@ -19,6 +18,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
 import com.melendez.known.ui.components.LocalDarkTheme
+import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.components.PreferenceSingleChoiceItem
 import com.melendez.known.ui.components.PreferenceSubtitle
 import com.melendez.known.ui.components.PreferenceSwitchVariant
@@ -30,14 +30,15 @@ import com.melendez.known.util.PreferenceUtil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Dark(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
+fun Dark(navTotalController: NavHostController) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val screenType = LocalScreenType.current
 
     Column {
         SharedTopBar(
             title = stringResource(R.string.dark_theme),
-            widthSizeClass = widthSizeClass,
+            screenType = screenType,
             navTotalController = navTotalController,
             scrollBehavior = scrollBehavior
         )
@@ -95,8 +96,5 @@ fun Dark_Content(modifier: Modifier) {
 @Preview(device = "id:pixel_9_pro")
 @Composable
 fun Dark_Preview() {
-    Dark(
-        widthSizeClass = WindowWidthSizeClass.Compact,
-        navTotalController = rememberNavController()
-    )
+    Dark(navTotalController = rememberNavController())
 }

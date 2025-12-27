@@ -30,6 +30,7 @@ import com.melendez.known.ui.components.LocalActivity
 import com.melendez.known.ui.components.LocalDarkTheme
 import com.melendez.known.ui.components.LocalDynamicColorSwitch
 import com.melendez.known.ui.components.LocalPaletteStyleIndex
+import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.components.LocalSeedColor
 import com.melendez.known.ui.components.animatedComposable
 import com.melendez.known.ui.screens.Detail
@@ -50,6 +51,7 @@ import com.melendez.known.ui.theme.DEFAULT_SEED_COLOR
 import com.melendez.known.ui.theme.KnownTheme
 import com.melendez.known.util.DarkThemePreference
 import com.melendez.known.util.PreferenceUtil
+import com.melendez.known.util.getUnifiedSizeClass
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)
 class MainActivity : ComponentActivity() {
@@ -98,7 +100,11 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             val navTotalController = rememberNavController()
-            val widthSizeClass = calculateWindowSizeClass(this).widthSizeClass
+            val windowSizeClass = calculateWindowSizeClass(this)
+            val screenType = getUnifiedSizeClass(
+                windowHeightSizeClass = windowSizeClass.heightSizeClass,
+                windowWidthSizeClass = windowSizeClass.widthSizeClass
+            )
             val viewModelPreferenceUtil: PreferenceUtil = viewModel()
 
 
@@ -123,6 +129,7 @@ class MainActivity : ComponentActivity() {
                 LocalSeedColor provides (settings?.themeColor ?: DEFAULT_SEED_COLOR),
                 LocalDynamicColorSwitch provides (settings?.isDynamicColorEnabled ?: false),
                 LocalPaletteStyleIndex provides (settings?.paletteStyleIndex ?: 0),
+                LocalScreenType provides screenType,
                 LocalTonalPalettes provides if (settings?.themeColor != null && settings.themeColor != 0)
                     Color(settings.themeColor).toTonalPalettes()
                 else
@@ -148,53 +155,29 @@ class MainActivity : ComponentActivity() {
                                 Guide(navTotalController = navTotalController)
                             }
                             animatedComposable(Screens.Main.router) {
-                                MainScreen(
-                                    widthSizeClass = widthSizeClass,
-                                    navTotalController = navTotalController
-                                )
+                                MainScreen(navTotalController = navTotalController)
                             }
                             animatedComposable(Screens.Appearance.router) {
-                                Appearance(
-                                    widthSizeClass = widthSizeClass,
-                                    navTotalController = navTotalController
-                                )
+                                Appearance(navTotalController = navTotalController)
                             }
                             animatedComposable(Screens.Settings.router) {
-                                Settings(
-                                    widthSizeClass = widthSizeClass,
-                                    navTotalController = navTotalController
-                                )
+                                Settings(navTotalController = navTotalController)
                             }
                             animatedComposable(Screens.Dark.router) {
-                                Dark(
-                                    widthSizeClass = widthSizeClass,
-                                    navTotalController = navTotalController
-                                )
+                                Dark(navTotalController = navTotalController)
                             }
                             animatedComposable(Screens.Language.router) {
-                                Language(
-                                    widthSizeClass = widthSizeClass,
-                                    navTotalController = navTotalController
-                                )
+                                Language(navTotalController = navTotalController)
                             }
                             animatedComposable(Screens.DRP.router) { DRP(navTotalController = navTotalController) }
                             animatedComposable(Screens.Inputting.router) {
-                                Inputting(
-                                    widthSizeClass = widthSizeClass,
-                                    navTotalController = navTotalController
-                                )
+                                Inputting(navTotalController = navTotalController)
                             }
                             animatedComposable(Screens.About.router) {
-                                About(
-                                    widthSizeClass = widthSizeClass,
-                                    navTotalController = navTotalController
-                                )
+                                About(navTotalController = navTotalController)
                             }
                             animatedComposable(Screens.Signin.router) {
-                                Signin(
-                                    widthSizeClass = widthSizeClass,
-                                    navTotalController = navTotalController
-                                )
+                                Signin(navTotalController = navTotalController)
                             }
                             animatedComposable(Screens.Detail.router) {
                                 Detail(navTotalController = navTotalController)
@@ -203,10 +186,7 @@ class MainActivity : ComponentActivity() {
                                 Prophets(navTotalController = navTotalController)
                             }
                             animatedComposable(Screens.Credits.router) {
-                                Credits(
-                                    widthSizeClass = widthSizeClass,
-                                    navTotalController = navTotalController
-                                )
+                                Credits(navTotalController = navTotalController)
                             }
                         }
                     }

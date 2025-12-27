@@ -26,7 +26,6 @@ import androidx.compose.material3.PermanentNavigationDrawer
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -36,6 +35,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -44,30 +44,33 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
+import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.screens.main.inners.History
 import com.melendez.known.ui.screens.main.inners.Home
 import com.melendez.known.ui.screens.main.inners.Me
+import com.melendez.known.util.ScreenType
 
 @Composable
-fun MainScreen(widthSizeClass: WindowWidthSizeClass, navTotalController: NavHostController) {
+fun MainScreen(navTotalController: NavHostController) {
 
+    val screenType = LocalScreenType.current
     val navMainController = rememberNavController()
     val screens = listOf(Screens.Home, Screens.History, Screens.Me)
 
-    when (widthSizeClass) {
-        WindowWidthSizeClass.Compact -> Main_Compact(
+    when (screenType) {
+        ScreenType.Compact -> Main_Compact(
             navTotalController = navTotalController,
             navMainController = navMainController,
             screens = screens
         )
 
-        WindowWidthSizeClass.Medium -> Main_Medium(
+        ScreenType.Medium -> Main_Medium(
             navTotalController = navTotalController,
             navMainController = navMainController,
             screens = screens
         )
 
-        WindowWidthSizeClass.Expanded -> Main_Expanded(
+        ScreenType.Expanded -> Main_Expanded(
             navTotalController = navTotalController,
             navMainController = navMainController,
             screens = screens
@@ -270,7 +273,7 @@ fun Main_Medium(
                         )
                     }
                 }
-            ) { paddings ->
+            ) {
                 NavHost(
                     navController = navMainController,
                     startDestination = Screens.Home.router
@@ -398,11 +401,11 @@ fun Main_Expanded(
     }
 }
 
+@PreviewScreenSizes
 @Preview(device = "id:pixel_9_pro")
 @Composable
 fun MainScreen_Preview() {
     MainScreen(
-        widthSizeClass = WindowWidthSizeClass.Compact,
         navTotalController = rememberNavController()
     )
 }
