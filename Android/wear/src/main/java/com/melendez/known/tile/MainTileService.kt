@@ -1,71 +1,65 @@
 package com.melendez.known.tile
 
 import android.content.Context
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.wear.compose.material.TimeText
-import androidx.wear.protolayout.ColorBuilders.argb
-import androidx.wear.protolayout.LayoutElementBuilders
-import androidx.wear.protolayout.ResourceBuilders
+import androidx.wear.protolayout.ResourceBuilders.Resources
 import androidx.wear.protolayout.TimelineBuilders
-import androidx.wear.protolayout.material.Colors
-import androidx.wear.protolayout.material.Text
-import androidx.wear.protolayout.material.Typography
-import androidx.wear.protolayout.material.layouts.PrimaryLayout
+import androidx.wear.protolayout.material3.Typography.BODY_LARGE
+import androidx.wear.protolayout.material3.materialScope
+import androidx.wear.protolayout.material3.primaryLayout
+import androidx.wear.protolayout.material3.text
+import androidx.wear.protolayout.types.layoutString
 import androidx.wear.tiles.RequestBuilders
+import androidx.wear.tiles.RequestBuilders.ResourcesRequest
 import androidx.wear.tiles.TileBuilders
-import com.google.android.horologist.annotations.ExperimentalHorologistApi
-import com.google.android.horologist.compose.tools.LayoutRootPreview
-import com.google.android.horologist.compose.tools.buildDeviceParameters
-import com.google.android.horologist.tiles.SuspendingTileService
+import androidx.wear.tiles.TileService
+import androidx.wear.tiles.tooling.preview.Preview
+import androidx.wear.tiles.tooling.preview.TilePreviewData
+import androidx.wear.tooling.preview.devices.WearDevices
+import com.google.common.util.concurrent.Futures
+import com.google.common.util.concurrent.ListenableFuture
+import com.melendez.known.R
 
 private const val RESOURCES_VERSION = "0"
 
-/**
- * Skeleton for a tile with no images.
- */
-@OptIn(ExperimentalHorologistApi::class)
-class MainTileService : SuspendingTileService() {
+class MainTileService : TileService() {
+    override fun onTileRequest(requestParams: RequestBuilders.TileRequest): ListenableFuture<TileBuilders.Tile> =
+        Futures.immediateFuture(tile(requestParams, this))
 
-    override suspend fun resourcesRequest(
-        requestParams: RequestBuilders.ResourcesRequest
-    ): ResourceBuilders.Resources {
-        return ResourceBuilders.Resources.Builder().setVersion(RESOURCES_VERSION).build()
-    }
-
-    override suspend fun tileRequest(
-        requestParams: RequestBuilders.TileRequest
-    ): TileBuilders.Tile {
-        val singleTileTimeline = TimelineBuilders.Timeline.Builder().addTimelineEntry(
-            TimelineBuilders.TimelineEntry.Builder().setLayout(
-                LayoutElementBuilders.Layout.Builder().setRoot(tileLayout(this)).build()
-            ).build()
-        ).build()
-
-        return TileBuilders.Tile.Builder().setResourcesVersion(RESOURCES_VERSION)
-            .setTileTimeline(singleTileTimeline).build()
-    }
+    override fun onTileResourcesRequest(requestParams: ResourcesRequest): ListenableFuture<Resources> =
+        Futures.immediateFuture(resources(requestParams))
 }
 
-private fun tileLayout(context: Context): LayoutElementBuilders.LayoutElement {
-    return PrimaryLayout.Builder(buildDeviceParameters(context.resources))
-        .setContent(
-            Text.Builder(context, "Hello World!")
-                .setColor(argb(Colors.DEFAULT.onSurface))
-                .setTypography(Typography.TYPOGRAPHY_CAPTION1)
-                .build()
-        ).build()
+private fun resources(requestParams: ResourcesRequest): Resources {
+    return Resources.Builder()
+        .setVersion(RESOURCES_VERSION)
+        .build()
 }
 
-@Preview(
-    device = "id:wearos_large_round",
-    showSystemUi = true,
-    backgroundColor = 0xff000000,
-    showBackground = true
-)
-@Composable
-fun TilePreview() {
-    LayoutRootPreview(root = tileLayout(LocalContext.current))
-    TimeText()
+private fun tile(
+    requestParams: RequestBuilders.TileRequest,
+    context: Context,
+): TileBuilders.Tile {
+    return TileBuilders.Tile.Builder()
+        .setResourcesVersion(RESOURCES_VERSION)
+        .setTileTimeline(
+            TimelineBuilders.Timeline.fromLayoutElement(
+                materialScope(context, requestParams.deviceConfiguration) {
+                    primaryLayout(
+                        mainSlot = {
+                            text(
+                                context.getString(R.string.hello_world, "Tile").layoutString,
+                                typography = BODY_LARGE
+                            )
+                        }
+                    )
+                }
+            )
+        )
+        .build()
+}
+
+@Preview(device = WearDevices.SMALL_ROUND)
+@Preview(device = WearDevices.LARGE_ROUND)
+fun tilePreview(context: Context) = TilePreviewData(::resources) {
+    tile(it, context)
 }

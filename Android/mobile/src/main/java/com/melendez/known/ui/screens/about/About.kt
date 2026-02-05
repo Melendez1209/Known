@@ -30,12 +30,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.net.toUri
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
 import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.components.PreferenceItem
 import com.melendez.known.ui.components.SharedTopBar
+import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
 
 object AboutUrls {
@@ -47,7 +46,7 @@ object AboutUrls {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun About(navTotalController: NavHostController) {
+fun About(navigator: Navigator) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val screenType = LocalScreenType.current
@@ -56,18 +55,18 @@ fun About(navTotalController: NavHostController) {
         SharedTopBar(
             title = stringResource(R.string.about),
             screenType = screenType,
-            navTotalController = navTotalController,
+            navController = navigator,
             scrollBehavior = scrollBehavior
         )
         AboutContent(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            navTotalController = navTotalController
+            navigator = navigator
         )
     }
 }
 
 @Composable
-fun AboutContent(modifier: Modifier = Modifier, navTotalController: NavHostController) {
+fun AboutContent(modifier: Modifier = Modifier, navigator: Navigator) {
     val context = LocalContext.current
     var showDonateDialog by remember { mutableStateOf(false) }
 
@@ -114,7 +113,7 @@ fun AboutContent(modifier: Modifier = Modifier, navTotalController: NavHostContr
                 description = stringResource(R.string.credits_desc),
                 icon = Icons.Outlined.AutoAwesome
             ) {
-                navTotalController.navigate(Screens.Credits.router)
+                navigator.navigate(Screens.Credits)
             }
         }
     }
@@ -163,11 +162,25 @@ fun openUrl(url: String, context: Context) {
 @Preview(device = "id:pixel_9_pro")
 @Composable
 private fun AboutContentPreview() {
-    AboutContent(navTotalController = rememberNavController())
+    val navigationState = remember {
+        com.melendez.known.ui.navigation.NavigationState(
+            startRoute = Screens.Main,
+            topLevelRoute = mutableStateOf(Screens.Main),
+            backStacks = emptyMap()
+        )
+    }
+    AboutContent(navigator = Navigator(navigationState))
 }
 
 @Preview(device = "spec:parent=pixel_9_pro")
 @Composable
 private fun AboutScreenPreview() {
-    About(navTotalController = rememberNavController())
+    val navigationState = remember {
+        com.melendez.known.ui.navigation.NavigationState(
+            startRoute = Screens.Main,
+            topLevelRoute = mutableStateOf(Screens.Main),
+            backStacks = emptyMap()
+        )
+    }
+    About(navigator = Navigator(navigationState))
 }

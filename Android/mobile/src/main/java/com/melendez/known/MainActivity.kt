@@ -15,13 +15,17 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.key
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.scene.DialogSceneStrategy
+import androidx.navigation3.ui.NavDisplay
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.messaging.FirebaseMessaging
 import com.melendez.known.colour.LocalTonalPalettes
@@ -32,7 +36,9 @@ import com.melendez.known.ui.components.LocalDynamicColorSwitch
 import com.melendez.known.ui.components.LocalPaletteStyleIndex
 import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.components.LocalSeedColor
-import com.melendez.known.ui.components.animatedComposable
+import com.melendez.known.ui.navigation.Navigator
+import com.melendez.known.ui.navigation.rememberNavigationState
+import com.melendez.known.ui.navigation.toEntries
 import com.melendez.known.ui.screens.Detail
 import com.melendez.known.ui.screens.Guide
 import com.melendez.known.ui.screens.Prophets
@@ -99,7 +105,6 @@ class MainActivity : ComponentActivity() {
         })
 
         setContent {
-            val navTotalController = rememberNavController()
             val windowSizeClass = calculateWindowSizeClass(this)
             val screenType = getUnifiedSizeClass(
                 windowHeightSizeClass = windowSizeClass.heightSizeClass,
@@ -141,52 +146,77 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Surface(modifier = Modifier.fillMaxSize()) {
 
-                        val startDestination = when {
-                            settings == null -> Screens.Main.router
-                            settings.isFirstLogin -> Screens.Guide.router
-                            else -> Screens.Main.router
-                        }
+                        if (settings != null) {
+                            key(settings.isFirstLogin) {
+                                val startDestination = if (settings.isFirstLogin) {
+                                    Screens.Guide
+                                } else {
+                                    Screens.Main
+                                }
 
-                        NavHost(
-                            navController = navTotalController,
-                            startDestination = startDestination
-                        ) {
-                            animatedComposable(Screens.Guide.router) {
-                                Guide(navTotalController = navTotalController)
-                            }
-                            animatedComposable(Screens.Main.router) {
-                                MainScreen(navTotalController = navTotalController)
-                            }
-                            animatedComposable(Screens.Appearance.router) {
-                                Appearance(navTotalController = navTotalController)
-                            }
-                            animatedComposable(Screens.Settings.router) {
-                                Settings(navTotalController = navTotalController)
-                            }
-                            animatedComposable(Screens.Dark.router) {
-                                Dark(navTotalController = navTotalController)
-                            }
-                            animatedComposable(Screens.Language.router) {
-                                Language(navTotalController = navTotalController)
-                            }
-                            animatedComposable(Screens.DRP.router) { DRP(navTotalController = navTotalController) }
-                            animatedComposable(Screens.Inputting.router) {
-                                Inputting(navTotalController = navTotalController)
-                            }
-                            animatedComposable(Screens.About.router) {
-                                About(navTotalController = navTotalController)
-                            }
-                            animatedComposable(Screens.Signin.router) {
-                                Signin(navTotalController = navTotalController)
-                            }
-                            animatedComposable(Screens.Detail.router) {
-                                Detail(navTotalController = navTotalController)
-                            }
-                            animatedComposable(Screens.Prophets.router) {
-                                Prophets(navTotalController = navTotalController)
-                            }
-                            animatedComposable(Screens.Credits.router) {
-                                Credits(navTotalController = navTotalController)
+                                val navigationState = rememberNavigationState(
+                                    startRoute = startDestination,
+                                    topLevelRoutes = setOf(
+                                        Screens.Main,
+                                        Screens.Settings,
+                                        Screens.Appearance,
+                                        Screens.Dark,
+                                        Screens.Language,
+                                        Screens.DRP,
+                                        Screens.Inputting,
+                                        Screens.About,
+                                        Screens.Signin,
+                                        Screens.Detail,
+                                        Screens.Prophets,
+                                        Screens.Credits,
+                                        Screens.Guide
+                                    )
+                                )
+                                val navigator = remember { Navigator(navigationState) }
+                                val entryProvider = entryProvider<NavKey> {
+                                    entry<Screens.Guide> {
+                                        Guide(navigator = navigator)
+                                    }
+                                    entry<Screens.Main> {
+                                        MainScreen(navigator = navigator)
+                                    }
+                                    entry<Screens.Appearance> {
+                                        Appearance(navigator = navigator)
+                                    }
+                                    entry<Screens.Settings> {
+                                        Settings(navigator = navigator)
+                                    }
+                                    entry<Screens.Dark> {
+                                        Dark(navigator = navigator)
+                                    }
+                                    entry<Screens.Language> {
+                                        Language(navigator = navigator)
+                                    }
+                                    entry<Screens.DRP> { DRP(navigator = navigator) }
+                                    entry<Screens.Inputting> {
+                                        Inputting(navigator = navigator)
+                                    }
+                                    entry<Screens.About> {
+                                        About(navigator = navigator)
+                                    }
+                                    entry<Screens.Signin> {
+                                        Signin(navigator = navigator)
+                                    }
+                                    entry<Screens.Detail> {
+                                        Detail(navigator = navigator)
+                                    }
+                                    entry<Screens.Prophets> {
+                                        Prophets(navigator = navigator)
+                                    }
+                                    entry<Screens.Credits> {
+                                        Credits(navigator = navigator)
+                                    }
+                                }
+                                NavDisplay(
+                                    entries = navigationState.toEntries(entryProvider),
+                                    onBack = { navigator.goBack() },
+                                    sceneStrategy = remember { DialogSceneStrategy() }
+                                )
                             }
                         }
                     }

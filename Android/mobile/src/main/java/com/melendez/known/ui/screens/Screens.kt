@@ -1,17 +1,34 @@
 package com.melendez.known.ui.screens
 
-sealed class Screens(val router: String) {
-    data object Main : Screens("MainScreen")
-    data object Settings : Screens("Settings")
-    data object Appearance : Screens("Appearance")
-    data object Dark : Screens("Dark")
-    data object Language : Screens("Language")
-    data object DRP : Screens("DateRangePicker")
-    data object Inputting : Screens("Inputting")
-    data object About : Screens("About")
-    data object Signin : Screens("Signin")
-    data object Detail : Screens("Detail")
-    data object Prophets : Screens("Prophets")
-    data object Credits : Screens("Credits")
-    data object Guide : Screens("Guide")
+import androidx.navigation3.runtime.NavKey
+import kotlinx.serialization.Serializable
+
+@Serializable
+sealed class Screens : NavKey {
+    @Serializable
+    data object Main : Screens()
+    @Serializable
+    data object Settings : Screens()
+    @Serializable
+    data object Appearance : Screens()
+    @Serializable
+    data object Dark : Screens()
+    @Serializable
+    data object Language : Screens()
+    @Serializable
+    data object DRP : Screens()
+    @Serializable
+    data object Inputting : Screens()
+    @Serializable
+    data object About : Screens()
+    @Serializable
+    data object Signin : Screens()
+    @Serializable
+    data object Detail : Screens()
+    @Serializable
+    data object Prophets : Screens()
+    @Serializable
+    data object Credits : Screens()
+    @Serializable
+    data object Guide : Screens()
 }

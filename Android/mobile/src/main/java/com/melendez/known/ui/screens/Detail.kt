@@ -40,15 +40,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
 import com.melendez.known.ui.components.Tip
+import com.melendez.known.ui.navigation.Navigator
 
 @OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun Detail(navTotalController: NavHostController) {
+fun Detail(navigator: Navigator) {
 
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.StartActivityForResult(),
@@ -65,7 +64,7 @@ fun Detail(navTotalController: NavHostController) {
             TopAppBar(
                 title = { Text(text = stringResource(id = R.string.exam)) },
                 navigationIcon = {
-                    IconButton(onClick = { navTotalController.popBackStack() }) {
+                    IconButton(onClick = { navigator.goBack() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(id = R.string.back)
@@ -96,7 +95,7 @@ fun Detail(navTotalController: NavHostController) {
                         }
                     }
                     Tip(text = stringResource(R.string.edit)) {
-                        IconButton(onClick = { navTotalController.navigate(Screens.DRP.router) }) {
+                        IconButton(onClick = { navigator.navigate(Screens.DRP) }) {
                             Icon(
                                 imageVector = Icons.Rounded.Edit,
                                 contentDescription = stringResource(R.string.edit)
@@ -131,7 +130,7 @@ fun Detail(navTotalController: NavHostController) {
                 scrollBehavior = scrollBehavior,
                 floatingActionButton = {
                     FloatingActionButton(
-                        onClick = { navTotalController.navigate(Screens.Prophets.router) },
+                        onClick = { navigator.navigate(Screens.Prophets) },
                         elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
                     ) {
                         Icon(
@@ -190,5 +189,12 @@ fun Detail(navTotalController: NavHostController) {
 @Preview(device = "id:pixel_9_pro")
 @Composable
 fun Detail_Preview() {
-    Detail(navTotalController = rememberNavController())
+    val navigationState = remember {
+        com.melendez.known.ui.navigation.NavigationState(
+            startRoute = Screens.Main,
+            topLevelRoute = mutableStateOf(Screens.Main),
+            backStacks = emptyMap()
+        )
+    }
+    Detail(navigator = Navigator(navigationState))
 }

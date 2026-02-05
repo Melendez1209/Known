@@ -1,9 +1,9 @@
 plugins {
     id("com.android.application")
-    id("org.jetbrains.kotlin.android")
     id("com.google.gms.google-services")
     id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.devtools.ksp")
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.0"
 }
 android {
     namespace = "com.melendez.known"
@@ -64,7 +64,6 @@ dependencies {
     implementation(libs.generativeai)
     implementation(libs.material.icons.extended)
     implementation(libs.material)
-    implementation(libs.navigation.compose)
 
     implementation(libs.firebase.auth.ktx)
     implementation(libs.firebase.firestore)
@@ -81,6 +80,9 @@ dependencies {
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.lifecycle.process)
+    implementation(libs.androidx.navigation3.ui)
+    implementation(libs.androidx.navigation3.runtime)
+    implementation(libs.androidx.lifecycle.viewmodel.navigation3)
 
     implementation(libs.room.runtime)
     implementation(libs.room.ktx)
@@ -107,5 +109,5 @@ dependencies {
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
 
-    testImplementation(libs.junit.jupiter.api)
+    testImplementation(libs.junit)
 }

@@ -15,17 +15,18 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
+import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.util.ScreenType
 
 @Composable
 fun SharedTopBar(
     screenType: ScreenType,
-    navTotalController: NavHostController,
+    navController: Navigator,
     title: String,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     actions: @Composable RowScope.() -> Unit = {}
@@ -39,7 +40,7 @@ fun SharedTopBar(
             activity.onBackPressedDispatcher.onBackPressed()
         } else {
             // Traditional back operation
-            navTotalController.popBackStack()
+            navController.goBack()
         }
     }
 
@@ -79,7 +80,7 @@ fun SharedTopBar(
 fun MediumTopBar_Preview() {
     SharedTopBar(
         screenType = ScreenType.Medium,
-        navTotalController = rememberNavController(),
+        navController = Navigator(remember { com.melendez.known.ui.navigation.NavigationState(com.melendez.known.ui.screens.Screens.Main, mutableStateOf(com.melendez.known.ui.screens.Screens.Main), emptyMap()) }),
         title = "Title",
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     )
@@ -90,7 +91,7 @@ fun MediumTopBar_Preview() {
 fun LargeTopBar_Preview() {
     SharedTopBar(
         screenType = ScreenType.Compact,
-        navTotalController = rememberNavController(),
+        navController = Navigator(remember { com.melendez.known.ui.navigation.NavigationState(com.melendez.known.ui.screens.Screens.Main, mutableStateOf(com.melendez.known.ui.screens.Screens.Main), emptyMap()) }),
         title = "Title",
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     )

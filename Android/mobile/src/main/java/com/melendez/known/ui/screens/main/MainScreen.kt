@@ -34,60 +34,64 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewScreenSizes
-import androidx.navigation.NavDestination.Companion.hierarchy
-import androidx.navigation.NavGraph.Companion.findStartDestination
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.NavHost
-import androidx.navigation.compose.composable
-import androidx.navigation.compose.currentBackStackEntryAsState
-import androidx.navigation.compose.rememberNavController
+import androidx.navigation3.runtime.NavKey
+import androidx.navigation3.runtime.entryProvider
+import androidx.navigation3.ui.NavDisplay
 import com.melendez.known.R
 import com.melendez.known.ui.components.LocalScreenType
+import com.melendez.known.ui.navigation.Navigator
+import com.melendez.known.ui.navigation.rememberNavigationState
+import com.melendez.known.ui.navigation.toEntries
 import com.melendez.known.ui.screens.main.inners.History
 import com.melendez.known.ui.screens.main.inners.Home
 import com.melendez.known.ui.screens.main.inners.Me
 import com.melendez.known.util.ScreenType
 
 @Composable
-fun MainScreen(navTotalController: NavHostController) {
+fun MainScreen(navigator: Navigator) {
 
     val screenType = LocalScreenType.current
-    val navMainController = rememberNavController()
     val screens = listOf(Screens.Home, Screens.History, Screens.Me)
+
+    val navigationState = rememberNavigationState(
+        startRoute = Screens.Home,
+        topLevelRoutes = screens.toSet()
+    )
+    val innerNavigator = remember { Navigator(navigationState) }
 
     when (screenType) {
         ScreenType.Compact -> Main_Compact(
-            navTotalController = navTotalController,
-            navMainController = navMainController,
-            screens = screens
+            navigator = navigator,
+            innerNavigator = innerNavigator,
+            screens = screens,
+            navigationState = navigationState
         )
 
         ScreenType.Medium -> Main_Medium(
-            navTotalController = navTotalController,
-            navMainController = navMainController,
-            screens = screens
+            navigator = navigator,
+            innerNavigator = innerNavigator,
+            screens = screens,
+            navigationState = navigationState
         )
 
         ScreenType.Expanded -> Main_Expanded(
-            navTotalController = navTotalController,
-            navMainController = navMainController,
-            screens = screens
+            navigator = navigator,
+            innerNavigator = innerNavigator,
+            screens = screens,
+            navigationState = navigationState
         )
     }
 }
 
 @Composable
 fun Main_Compact(
-    navTotalController: NavHostController,
-    navMainController: NavHostController,
-    screens: List<Screens>
+    navigator: Navigator,
+    innerNavigator: Navigator,
+    screens: List<Screens>,
+    navigationState: com.melendez.known.ui.navigation.NavigationState
 ) {
 
     var isEditing by rememberSaveable { mutableStateOf(false) }
-    val navBackStackEntry by navMainController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
 
     Scaffold(
         bottomBar = {
@@ -95,21 +99,13 @@ fun Main_Compact(
                 if (!isEditing) {
                     screens.forEach { screen ->
                         NavigationBarItem(
-                            selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
+                            selected = screen == navigationState.topLevelRoute,
                             onClick = {
-                                navMainController.navigate(screen.router) {
-                                    popUpTo(navMainController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }// Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
-                                    launchSingleTop =
-                                        true//Avoid multiple copies of the same destination when reelecting the same item
-                                    restoreState =
-                                        true // Restore state when reelecting a previously selected item
-                                }
+                                innerNavigator.navigate(screen)
                             },
                             icon = {
                                 Icon(
-                                    imageVector = if (currentDestination?.hierarchy?.any { it.route == screen.router } == true) screen.iconSelected else screen.iconUnelected,
+                                    imageVector = if (screen == navigationState.topLevelRoute) screen.iconSelected else screen.iconUnelected,
                                     contentDescription = stringResource(screen.resourceId)
                                 )
                             },
@@ -137,7 +133,7 @@ fun Main_Compact(
                                     contentDescription = stringResource(R.string.print)
                                 )
                             }
-                            IconButton(onClick = { navTotalController.navigate(com.melendez.known.ui.screens.Screens.DRP.router) }) {
+                            IconButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP) }) {
                                 Icon(
                                     imageVector = Icons.Rounded.Edit,
                                     contentDescription = stringResource(R.string.edit)
@@ -162,7 +158,7 @@ fun Main_Compact(
                 }
             }
         }, floatingActionButton = {
-            FloatingActionButton(onClick = { navTotalController.navigate(com.melendez.known.ui.screens.Screens.DRP.router) }) {
+            FloatingActionButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP) }) {
                 Icon(
                     imageVector = Icons.Rounded.Add,
                     contentDescription = stringResource(R.string.add)
@@ -170,56 +166,47 @@ fun Main_Compact(
             }
         }
     ) { paddings ->
-        NavHost(
-            navController = navMainController,
-            startDestination = Screens.Home.router
-        ) {
-            composable(Screens.Home.router) { Home() }
-            composable(Screens.History.router) {
+        val entryProvider = entryProvider<NavKey> {
+            entry<Screens.Home> { Home() }
+            entry<Screens.History> {
                 History(
                     paddingValues = paddings,
-                    navTotalController = navTotalController,
+                    navigator = navigator,
                     onEditingChange = { isEditing = it })
             }
-            composable(Screens.Me.router) { Me(navTotalController) }
+            entry<Screens.Me> { Me(navigator) }
         }
+        NavDisplay(
+            entries = navigationState.toEntries(entryProvider),
+            onBack = { innerNavigator.goBack() }
+        )
     }
 }
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Main_Medium(
-    navTotalController: NavHostController,
-    navMainController: NavHostController,
-    screens: List<Screens>
+    navigator: Navigator,
+    innerNavigator: Navigator,
+    screens: List<Screens>,
+    navigationState: com.melendez.known.ui.navigation.NavigationState
 ) {
 
     var isEditing by rememberSaveable { mutableStateOf(false) }
-    val navBackStackEntry by navMainController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
 
     Surface(modifier = Modifier.fillMaxSize()) {
         Row {
             NavigationRail {
                 screens.forEach { screen ->
                     NavigationRailItem(
-                        selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
+                        selected = screen == navigationState.topLevelRoute,
                         onClick = {
-                            navMainController.navigate(screen.router) {
-                                // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
-                                popUpTo(navMainController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop =
-                                    true//Avoid multiple copies of the same destination when reelecting the same item
-                                restoreState =
-                                    true// Restore state when reelecting a previously selected item
-                            }
+                            innerNavigator.navigate(screen)
                             isEditing = false
                         },
                         icon = {
                             Icon(
-                                imageVector = if (currentDestination?.hierarchy?.any { it.route == screen.router } == true) screen.iconSelected else screen.iconUnelected,
+                                imageVector = if (screen == navigationState.topLevelRoute) screen.iconSelected else screen.iconUnelected,
                                 contentDescription = stringResource(screen.resourceId)
                             )
                         }, label = {
@@ -249,7 +236,7 @@ fun Main_Medium(
                                         contentDescription = stringResource(R.string.print)
                                     )
                                 }
-                                IconButton(onClick = { navTotalController.navigate(com.melendez.known.ui.screens.Screens.DRP.router) }) {
+                                IconButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP) }) {
                                     Icon(
                                         imageVector = Icons.Rounded.Edit,
                                         contentDescription = stringResource(R.string.edit)
@@ -266,7 +253,7 @@ fun Main_Medium(
                     }
                 },
                 floatingActionButton = {
-                    LargeFloatingActionButton(onClick = { navTotalController.navigate(com.melendez.known.ui.screens.Screens.DRP.router) }) {
+                    LargeFloatingActionButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP) }) {
                         Icon(
                             imageVector = Icons.Rounded.Add,
                             contentDescription = stringResource(R.string.add)
@@ -274,18 +261,19 @@ fun Main_Medium(
                     }
                 }
             ) {
-                NavHost(
-                    navController = navMainController,
-                    startDestination = Screens.Home.router
-                ) {
-                    composable(Screens.Home.router) { Home() }
-                    composable(Screens.History.router) {
+                val entryProvider = entryProvider<NavKey> {
+                    entry<Screens.Home> { Home() }
+                    entry<Screens.History> {
                         History(
-                            navTotalController = navTotalController,
+                            navigator = navigator,
                             onEditingChange = { isEditing = it })
                     }
-                    composable(Screens.Me.router) { Me(navTotalController) }
+                    entry<Screens.Me> { Me(navigator) }
                 }
+                NavDisplay(
+                    entries = navigationState.toEntries(entryProvider),
+                    onBack = { innerNavigator.goBack() }
+                )
             }
         }
     }
@@ -294,14 +282,13 @@ fun Main_Medium(
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun Main_Expanded(
-    navTotalController: NavHostController,
-    navMainController: NavHostController,
-    screens: List<Screens>
+    navigator: Navigator,
+    innerNavigator: Navigator,
+    screens: List<Screens>,
+    navigationState: com.melendez.known.ui.navigation.NavigationState
 ) {
 
     var isEditing by rememberSaveable { mutableStateOf(false) }
-    val navBackStackEntry by navMainController.currentBackStackEntryAsState()
-    val currentDestination = navBackStackEntry?.destination
 
     Surface(modifier = Modifier.fillMaxSize()) {
         PermanentNavigationDrawer(
@@ -310,25 +297,16 @@ fun Main_Expanded(
                     screens.forEach { screen ->
                         NavigationDrawerItem(
                             label = { Text(text = stringResource(screen.resourceId)) },
-                            selected = currentDestination?.hierarchy?.any { it.route == screen.router } == true,
+                            selected = screen == navigationState.topLevelRoute,
                             onClick = {
-                                navMainController.navigate(screen.router) {
-                                    // Pop up to the start destination of the graph to avoid building up a large stack of destinations on the back stack as users select items
-                                    popUpTo(navMainController.graph.findStartDestination().id) {
-                                        saveState = true
-                                    }
-                                    launchSingleTop =
-                                        true//Avoid multiple copies of the same destination when reelecting the same item
-                                    restoreState =
-                                        true // Restore state when reelecting a previously selected item
-                                }
+                                innerNavigator.navigate(screen)
                                 if (screen.router != Screens.History.router) {
                                     isEditing = false
                                 }
                             },
                             icon = {
                                 Icon(
-                                    imageVector = if (currentDestination?.hierarchy?.any { it.route == screen.router } == true) screen.iconSelected else screen.iconUnelected,
+                                    imageVector = if (screen == navigationState.topLevelRoute) screen.iconSelected else screen.iconUnelected,
                                     contentDescription = stringResource(screen.resourceId)
                                 )
                             }
@@ -357,7 +335,7 @@ fun Main_Expanded(
                                         contentDescription = stringResource(R.string.print)
                                     )
                                 }
-                                IconButton(onClick = { navTotalController.navigate(com.melendez.known.ui.screens.Screens.DRP.router) }) {
+                                IconButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP) }) {
                                     Icon(
                                         imageVector = Icons.Rounded.Edit,
                                         contentDescription = stringResource(R.string.edit)
@@ -374,7 +352,7 @@ fun Main_Expanded(
                     }
                 },
                 floatingActionButton = {
-                    LargeFloatingActionButton(onClick = { navTotalController.navigate(com.melendez.known.ui.screens.Screens.DRP.router) }) {
+                    LargeFloatingActionButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP) }) {
                         Icon(
                             imageVector = Icons.Rounded.Add,
                             contentDescription = stringResource(R.string.add)
@@ -382,30 +360,22 @@ fun Main_Expanded(
                     }
                 }
             ) {
-                NavHost(
-                    navController = navMainController,
-                    startDestination = Screens.Home.router
-                ) {
-                    composable(Screens.Home.router) {
+                val entryProvider = entryProvider<NavKey> {
+                    entry<Screens.Home> {
                         Home()
                     }
-                    composable(Screens.History.router) {
+                    entry<Screens.History> {
                         History(
-                            navTotalController = navTotalController,
+                            navigator = navigator,
                             onEditingChange = { isEditing = it })
                     }
-                    composable(Screens.Me.router) { Me(navTotalController) }
+                    entry<Screens.Me> { Me(navigator) }
                 }
+                NavDisplay(
+                    entries = navigationState.toEntries(entryProvider),
+                    onBack = { innerNavigator.goBack() }
+                )
             }
         }
     }
-}
-
-@PreviewScreenSizes
-@Preview(device = "id:pixel_9_pro")
-@Composable
-fun MainScreen_Preview() {
-    MainScreen(
-        navTotalController = rememberNavController()
-    )
 }

@@ -1,22 +1,20 @@
 plugins {
-    id("com.android.application")
-    id("org.jetbrains.kotlin.android")
+    alias(libs.plugins.android.application)
     id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
     namespace = "com.melendez.known"
-    compileSdk = 36
+    compileSdk {
+        version = release(36)
+    }
 
     defaultConfig {
         applicationId = "com.melendez.known"
-        minSdk = 28
-        targetSdk = 35
+        minSdk = 30
+        targetSdk = 36
         versionCode = 1
         versionName = "1.0"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
 
     }
 
@@ -30,41 +28,37 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
+    useLibrary("wear-sdk")
     buildFeatures {
         compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.5.1"
-    }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
     }
 }
 
 dependencies {
     implementation(libs.play.services.wearable)
     implementation(platform(libs.compose.bom))
+    implementation(libs.ui)
+    implementation(libs.ui.graphics)
+    implementation(libs.ui.tooling.preview)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.compose.foundation)
+    implementation(libs.androidx.compose.ui.tooling)
+    implementation(libs.androidx.wear.tooling.preview)
     implementation(libs.activity.compose)
     implementation(libs.core.splashscreen)
-    implementation(libs.ui)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.material.icons.extended)
-    implementation(libs.compose.material)
-    implementation(libs.compose.foundation)
     implementation(libs.tiles)
-    implementation(libs.tiles.material)
-    implementation(libs.horologist.compose.tools)
-    implementation(libs.horologist.tiles)
+    implementation(libs.androidx.protolayout)
+    implementation(libs.androidx.protolayout.material3)
+    implementation(libs.guava)
+    implementation(libs.androidx.tiles.tooling.preview)
     implementation(libs.watchface.complications.data.source.ktx)
-
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
-
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+    debugImplementation(libs.androidx.tiles.renderer)
+    debugImplementation(libs.androidx.tiles.tooling)
 }
