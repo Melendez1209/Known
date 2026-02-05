@@ -15,6 +15,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.windowsizeclass.ExperimentalMaterial3WindowSizeClassApi
 import androidx.compose.material3.windowsizeclass.calculateWindowSizeClass
 import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.key
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -145,75 +146,79 @@ class MainActivity : ComponentActivity() {
                 ) {
                     Surface(modifier = Modifier.fillMaxSize()) {
 
-                        val startDestination = when {
-                            settings == null -> Screens.Main
-                            settings.isFirstLogin -> Screens.Guide
-                            else -> Screens.Main
-                        }
+                        if (settings != null) {
+                            key(settings.isFirstLogin) {
+                                val startDestination = if (settings.isFirstLogin) {
+                                    Screens.Guide
+                                } else {
+                                    Screens.Main
+                                }
 
-                        val navigationState = rememberNavigationState(
-                            startRoute = startDestination,
-                            topLevelRoutes = setOf(
-                                Screens.Main,
-                                Screens.Settings,
-                                Screens.Appearance,
-                                Screens.Dark,
-                                Screens.Language,
-                                Screens.DRP,
-                                Screens.Inputting,
-                                Screens.About,
-                                Screens.Signin,
-                                Screens.Detail,
-                                Screens.Prophets,
-                                Screens.Credits,
-                                Screens.Guide
-                            )
-                        )
-                        val navigator = remember { Navigator(navigationState) }
-                        val entryProvider = entryProvider<NavKey> {
-                            entry<Screens.Guide> {
-                                Guide(navigator = navigator)
-                            }
-                            entry<Screens.Main> {
-                                MainScreen(navigator = navigator)
-                            }
-                            entry<Screens.Appearance> {
-                                Appearance(navigator = navigator)
-                            }
-                            entry<Screens.Settings> {
-                                Settings(navigator = navigator)
-                            }
-                            entry<Screens.Dark> {
-                                Dark(navigator = navigator)
-                            }
-                            entry<Screens.Language> {
-                                Language(navigator = navigator)
-                            }
-                            entry<Screens.DRP> { DRP(navigator = navigator) }
-                            entry<Screens.Inputting> {
-                                Inputting(navigator = navigator)
-                            }
-                            entry<Screens.About> {
-                                About(navigator = navigator)
-                            }
-                            entry<Screens.Signin> {
-                                Signin(navigator = navigator)
-                            }
-                            entry<Screens.Detail> {
-                                Detail(navigator = navigator)
-                            }
-                            entry<Screens.Prophets> {
-                                Prophets(navigator = navigator)
-                            }
-                            entry<Screens.Credits> {
-                                Credits(navigator = navigator)
+                                val navigationState = rememberNavigationState(
+                                    startRoute = startDestination,
+                                    topLevelRoutes = setOf(
+                                        Screens.Main,
+                                        Screens.Settings,
+                                        Screens.Appearance,
+                                        Screens.Dark,
+                                        Screens.Language,
+                                        Screens.DRP,
+                                        Screens.Inputting,
+                                        Screens.About,
+                                        Screens.Signin,
+                                        Screens.Detail,
+                                        Screens.Prophets,
+                                        Screens.Credits,
+                                        Screens.Guide
+                                    )
+                                )
+                                val navigator = remember { Navigator(navigationState) }
+                                val entryProvider = entryProvider<NavKey> {
+                                    entry<Screens.Guide> {
+                                        Guide(navigator = navigator)
+                                    }
+                                    entry<Screens.Main> {
+                                        MainScreen(navigator = navigator)
+                                    }
+                                    entry<Screens.Appearance> {
+                                        Appearance(navigator = navigator)
+                                    }
+                                    entry<Screens.Settings> {
+                                        Settings(navigator = navigator)
+                                    }
+                                    entry<Screens.Dark> {
+                                        Dark(navigator = navigator)
+                                    }
+                                    entry<Screens.Language> {
+                                        Language(navigator = navigator)
+                                    }
+                                    entry<Screens.DRP> { DRP(navigator = navigator) }
+                                    entry<Screens.Inputting> {
+                                        Inputting(navigator = navigator)
+                                    }
+                                    entry<Screens.About> {
+                                        About(navigator = navigator)
+                                    }
+                                    entry<Screens.Signin> {
+                                        Signin(navigator = navigator)
+                                    }
+                                    entry<Screens.Detail> {
+                                        Detail(navigator = navigator)
+                                    }
+                                    entry<Screens.Prophets> {
+                                        Prophets(navigator = navigator)
+                                    }
+                                    entry<Screens.Credits> {
+                                        Credits(navigator = navigator)
+                                    }
+                                }
+                                NavDisplay(
+                                    entries = navigationState.toEntries(entryProvider),
+                                    onBack = { navigator.goBack() },
+                                    sceneStrategy = remember { DialogSceneStrategy() }
+                                )
                             }
                         }
-                        NavDisplay(
-                            entries = navigationState.toEntries(entryProvider),
-                            onBack = { navigator.goBack() },
-                            sceneStrategy = remember { DialogSceneStrategy() }
-                        )
                     }
                 }
             }
