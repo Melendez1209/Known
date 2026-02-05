@@ -61,17 +61,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewScreenSizes
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.melendez.known.R
 import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.components.SharedTopBar
+import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.viewmodel.signin.SignInViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Signin(navTotalController: NavHostController) {
+fun Signin(navigator: Navigator) {
 
     val viewModel: SignInViewModel = viewModel()
     val isLoading by viewModel.isLoading.collectAsState()
@@ -106,7 +105,7 @@ fun Signin(navTotalController: NavHostController) {
                 if (isRegisterMode) "Registration successful" else "Login successful",
                 Toast.LENGTH_SHORT
             ).show()
-            navTotalController.popBackStack()
+            navigator.goBack()
         }
     }
 
@@ -124,7 +123,7 @@ fun Signin(navTotalController: NavHostController) {
         SharedTopBar(
             title = stringResource(if (isRegisterMode) R.string.sign_up else R.string.sign_in),
             screenType = screenType,
-            navTotalController = navTotalController,
+            navController = navigator,
             scrollBehavior = scrollBehavior
         )
 
@@ -377,5 +376,12 @@ fun LoginForm(
 @Preview(device = "id:pixel_9_pro")
 @Composable
 fun SigninPreview() {
-    Signin(navTotalController = rememberNavController())
+    val navigationState = remember {
+        com.melendez.known.ui.navigation.NavigationState(
+            startRoute = Screens.Main,
+            topLevelRoute = mutableStateOf(Screens.Main),
+            backStacks = emptyMap()
+        )
+    }
+    Signin(navigator = Navigator(navigationState))
 }

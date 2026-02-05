@@ -50,10 +50,10 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
 import com.melendez.known.ui.components.LocalScreenType
+import com.melendez.known.ui.navigation.Navigator
+import com.melendez.known.ui.screens.Screens
 import com.melendez.known.util.ScreenType
 import kotlin.math.roundToInt
 
@@ -62,7 +62,7 @@ private const val HALF_POINT = "5"
 private val NUMBER_PATTERN = Regex("^\\d*\\.?\\d*$")
 
 @Composable
-fun Inputting(navTotalController: NavHostController) {
+fun Inputting(navigator: Navigator) {
     var showingDialog by remember { mutableStateOf(false) }
     var examName by rememberSaveable { mutableStateOf("") }
     val screenType = LocalScreenType.current
@@ -77,19 +77,19 @@ fun Inputting(navTotalController: NavHostController) {
 
     when (screenType) {
         ScreenType.Compact -> Inputting_Compact(
-            navTotalController = navTotalController,
+            navigator = navigator,
             onShowingChange = { showingDialog = it },
             examName = examName
         )
 
         ScreenType.Medium -> Inputting_Medium(
-            navTotalController = navTotalController,
+            navigator = navigator,
             onShowingChange = { showingDialog = it },
             examName = examName
         )
 
         ScreenType.Expanded -> Inputting_Expanded(
-            navTotalController = navTotalController,
+            navigator = navigator,
             onShowingChange = { showingDialog = it },
             examName = examName
         )
@@ -145,7 +145,7 @@ private fun ExamNameDialog(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Inputting_Compact(
-    navTotalController: NavHostController,
+    navigator: Navigator,
     onShowingChange: (Boolean) -> Unit,
     examName: String,
 ) {
@@ -162,7 +162,7 @@ private fun Inputting_Compact(
                 }
             },
             navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
+                IconButton(onClick = { navigator.goBack() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                         contentDescription = stringResource(R.string.back)
@@ -193,7 +193,7 @@ private fun Inputting_Compact(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Inputting_Medium(
-    navTotalController: NavHostController,
+    navigator: Navigator,
     onShowingChange: (Boolean) -> Unit,
     examName: String
 ) {
@@ -210,7 +210,7 @@ private fun Inputting_Medium(
                 }
             },
             navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
+                IconButton(onClick = { navigator.goBack() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                         contentDescription = stringResource(R.string.back)
@@ -241,7 +241,7 @@ private fun Inputting_Medium(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun Inputting_Expanded(
-    navTotalController: NavHostController,
+    navigator: Navigator,
     onShowingChange: (Boolean) -> Unit,
     examName: String
 ) {
@@ -258,7 +258,7 @@ private fun Inputting_Expanded(
                 }
             },
             navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
+                IconButton(onClick = { navigator.goBack() }) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                         contentDescription = stringResource(R.string.back)
@@ -508,5 +508,12 @@ private fun Subject_Card_Preview() {
 @Preview(device = "id:pixel_9_pro")
 @Composable
 private fun Inputting_Preview() {
-    Inputting(navTotalController = rememberNavController())
+    val navigationState = remember {
+        com.melendez.known.ui.navigation.NavigationState(
+            startRoute = Screens.Main,
+            topLevelRoute = mutableStateOf(Screens.Main),
+            backStacks = emptyMap()
+        )
+    }
+    Inputting(navigator = Navigator(navigationState))
 }

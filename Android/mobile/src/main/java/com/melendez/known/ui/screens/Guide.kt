@@ -57,8 +57,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
 import com.melendez.known.R
+import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.util.PreferenceUtil
 import com.melendez.known.util.getCityName
 import kotlinx.coroutines.launch
@@ -66,7 +66,7 @@ import kotlinx.coroutines.launch
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun Guide(
-    navTotalController: NavHostController
+    navigator: Navigator
 ) {
     var selectedIdentity by remember { mutableIntStateOf(R.string.student) }
     var region by remember { mutableStateOf("") }
@@ -141,9 +141,7 @@ fun Guide(
                         // 跳过引导，设置isFirstLogin为false
                         preferenceUtil.setFirstLogin(false)
                         // Skip the entire onboarding
-                        navTotalController.navigate(Screens.Main.router) {
-                            popUpTo(Screens.Guide.router) { inclusive = true }
-                        }
+                        navigator.navigate(Screens.Main)
                     }
                 }
             ) {
@@ -164,9 +162,7 @@ fun Guide(
                         // 完成引导，设置isFirstLogin为false
                         preferenceUtil.setFirstLogin(false)
                         // Navigate to main screen
-                        navTotalController.navigate(Screens.Main.router) {
-                            popUpTo(Screens.Guide.router) { inclusive = true }
-                        }
+                        navigator.navigate(Screens.Main)
                     }
                 }
             ) {
@@ -461,4 +457,4 @@ fun SubjectSelection(selectedSubjects: androidx.compose.runtime.MutableState<Set
             }
         }
     }
-} 
+}

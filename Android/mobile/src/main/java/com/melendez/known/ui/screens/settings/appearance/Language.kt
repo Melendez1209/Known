@@ -41,14 +41,14 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.os.LocaleListCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
 import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.components.PreferenceSingleChoiceItem
 import com.melendez.known.ui.components.PreferenceSubtitle
 import com.melendez.known.ui.components.PreferencesHintCard
 import com.melendez.known.ui.components.SharedTopBar
+import com.melendez.known.ui.navigation.Navigator
+import com.melendez.known.ui.screens.Screens
 import com.melendez.known.util.LocaleLanguageCodeMap
 import com.melendez.known.util.PreferenceUtil
 import com.melendez.known.util.toDisplayName
@@ -59,7 +59,7 @@ const val WEBLATE = "https://weblate.org/zh-hans/"
 @SuppressLint("QueryPermissionsNeeded")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Language(navTotalController: NavHostController) {
+fun Language(navigator: Navigator) {
 
     val context = LocalContext.current
     val preferenceUtil: PreferenceUtil = viewModel()
@@ -125,7 +125,7 @@ fun Language(navTotalController: NavHostController) {
         SharedTopBar(
             title = stringResource(R.string.language),
             screenType = screenType,
-            navTotalController = navTotalController,
+            navController = navigator,
             scrollBehavior = scrollBehavior
         )
         Language_Content(
@@ -266,5 +266,12 @@ fun Language_Content(
 @Preview(device = "id:pixel_9_pro")
 @Composable
 fun Language_Preview() {
-    Language(navTotalController = rememberNavController())
+    val navigationState = remember {
+        com.melendez.known.ui.navigation.NavigationState(
+            startRoute = Screens.Main,
+            topLevelRoute = mutableStateOf(Screens.Main),
+            backStacks = emptyMap()
+        )
+    }
+    Language(navigator = Navigator(navigationState))
 }

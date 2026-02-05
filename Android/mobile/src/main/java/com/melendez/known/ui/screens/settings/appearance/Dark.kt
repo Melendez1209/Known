@@ -9,13 +9,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
 import com.melendez.known.ui.components.LocalDarkTheme
 import com.melendez.known.ui.components.LocalScreenType
@@ -23,6 +23,8 @@ import com.melendez.known.ui.components.PreferenceSingleChoiceItem
 import com.melendez.known.ui.components.PreferenceSubtitle
 import com.melendez.known.ui.components.PreferenceSwitchVariant
 import com.melendez.known.ui.components.SharedTopBar
+import com.melendez.known.ui.navigation.Navigator
+import com.melendez.known.ui.screens.Screens
 import com.melendez.known.util.DarkThemePreference.Companion.FOLLOW_SYSTEM
 import com.melendez.known.util.DarkThemePreference.Companion.OFF
 import com.melendez.known.util.DarkThemePreference.Companion.ON
@@ -30,7 +32,7 @@ import com.melendez.known.util.PreferenceUtil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Dark(navTotalController: NavHostController) {
+fun Dark(navigator: Navigator) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val screenType = LocalScreenType.current
@@ -39,7 +41,7 @@ fun Dark(navTotalController: NavHostController) {
         SharedTopBar(
             title = stringResource(R.string.dark_theme),
             screenType = screenType,
-            navTotalController = navTotalController,
+            navController = navigator,
             scrollBehavior = scrollBehavior
         )
         Dark_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
@@ -96,5 +98,12 @@ fun Dark_Content(modifier: Modifier) {
 @Preview(device = "id:pixel_9_pro")
 @Composable
 fun Dark_Preview() {
-    Dark(navTotalController = rememberNavController())
+    val navigationState = remember {
+        com.melendez.known.ui.navigation.NavigationState(
+            startRoute = Screens.Main,
+            topLevelRoute = mutableStateOf(Screens.Main),
+            backStacks = emptyMap()
+        )
+    }
+    Dark(navigator = Navigator(navigationState))
 }

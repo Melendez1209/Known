@@ -10,6 +10,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
@@ -19,14 +21,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.clearAndSetSemantics
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.junkfood.seal.ui.svg.drawablevectors.coder
 import com.melendez.known.R
 import com.melendez.known.svg.DynamicColorImageVectors
 import com.melendez.known.ui.components.CreditItem
 import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.components.SharedTopBar
+import com.melendez.known.ui.navigation.Navigator
+import com.melendez.known.ui.screens.Screens
 
 data class Dependency(
     val title: String,
@@ -38,7 +40,7 @@ const val Apache = "Apache License 2.0"
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Credits(navTotalController: NavHostController) {
+fun Credits(navigator: Navigator) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val screenType = LocalScreenType.current
@@ -47,7 +49,7 @@ fun Credits(navTotalController: NavHostController) {
         SharedTopBar(
             title = stringResource(R.string.credits),
             screenType = screenType,
-            navTotalController = navTotalController,
+            navController = navigator,
             scrollBehavior = scrollBehavior
         )
         Credits_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
@@ -227,5 +229,12 @@ private fun Credits_Content(modifier: Modifier = Modifier) {
 @Preview(device = "id:pixel_9_pro")
 @Composable
 private fun Credits_Preview() {
-    Credits(rememberNavController())
+    val navigationState = remember {
+        com.melendez.known.ui.navigation.NavigationState(
+            startRoute = Screens.Main,
+            topLevelRoute = mutableStateOf(Screens.Main),
+            backStacks = emptyMap()
+        )
+    }
+    Credits(navigator = Navigator(navigationState))
 }

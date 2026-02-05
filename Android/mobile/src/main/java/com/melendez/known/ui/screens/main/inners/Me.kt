@@ -40,17 +40,16 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import coil3.compose.AsyncImage
 import coil3.request.ImageRequest
 import coil3.request.crossfade
 import com.melendez.known.R
+import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
 import com.melendez.known.util.UserManager
 
 @Composable
-fun Me(navTotalController: NavHostController) {
+fun Me(navigator: Navigator) {
     val isLoggedIn by UserManager.isLoggedIn.collectAsState()
 
     Surface {
@@ -59,11 +58,11 @@ fun Me(navTotalController: NavHostController) {
                 top = WindowInsets.systemBars.asPaddingValues().calculateTopPadding()
             )
         ) {
-            AccountCard(isLoggedIn = isLoggedIn, navTotalController = navTotalController)
+            AccountCard(isLoggedIn = isLoggedIn, navigator = navigator)
             ListItem(
                 headlineContent = { Text(text = stringResource(id = R.string.settings)) },
                 modifier = Modifier
-                    .clickable { navTotalController.navigate(Screens.Settings.router) }
+                    .clickable { navigator.navigate(Screens.Settings) }
                     .fillMaxWidth(),
                 leadingContent = {
                     Icon(
@@ -83,7 +82,7 @@ fun Me(navTotalController: NavHostController) {
             ListItem(
                 headlineContent = { Text(text = stringResource(R.string.about)) },
                 modifier = Modifier
-                    .clickable { navTotalController.navigate(Screens.About.router) }
+                    .clickable { navigator.navigate(Screens.About) }
                     .fillMaxWidth(),
                 leadingContent = {
                     Icon(
@@ -105,11 +104,18 @@ fun Me(navTotalController: NavHostController) {
 @Preview(device = "id:pixel_9_pro")
 @Composable
 fun Me_Preview() {
-    Me(navTotalController = rememberNavController())
+    val navigationState = remember {
+        com.melendez.known.ui.navigation.NavigationState(
+            startRoute = Screens.Main,
+            topLevelRoute = mutableStateOf(Screens.Main),
+            backStacks = emptyMap()
+        )
+    }
+    Me(navigator = Navigator(navigationState))
 }
 
 @Composable
-fun AccountCard(isLoggedIn: Boolean, navTotalController: NavHostController) {
+fun AccountCard(isLoggedIn: Boolean, navigator: Navigator) {
 
     // Get user information
     val userAvatar by UserManager.userAvatar.collectAsState()
@@ -122,7 +128,7 @@ fun AccountCard(isLoggedIn: Boolean, navTotalController: NavHostController) {
             .padding(horizontal = 16.dp)
             .clickable {
                 if (!isLoggedIn) {
-                    navTotalController.navigate(Screens.Signin.router)
+                    navigator.navigate(Screens.Signin)
                 }
             },
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)

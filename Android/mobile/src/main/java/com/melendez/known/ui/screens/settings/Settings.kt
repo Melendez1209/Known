@@ -8,21 +8,22 @@ import androidx.compose.material.icons.rounded.SettingsApplications
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
 import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.components.SettingItem
 import com.melendez.known.ui.components.SharedTopBar
+import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Settings(navTotalController: NavHostController) {
+fun Settings(navigator: Navigator) {
 
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val screenType = LocalScreenType.current
@@ -31,19 +32,19 @@ fun Settings(navTotalController: NavHostController) {
         SharedTopBar(
             title = stringResource(R.string.settings),
             screenType = screenType,
-            navTotalController = navTotalController,
+            navController = navigator,
             scrollBehavior = scrollBehavior
         )
         SettingsContent(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            navTotalController = navTotalController
+            navigator = navigator
         )
     }
 }
 
 
 @Composable
-private fun SettingsContent(modifier: Modifier, navTotalController: NavHostController) {
+private fun SettingsContent(modifier: Modifier, navigator: Navigator) {
     LazyColumn(modifier = modifier) {
         item {
             SettingItem(
@@ -60,7 +61,7 @@ private fun SettingsContent(modifier: Modifier, navTotalController: NavHostContr
                 description = stringResource(id = R.string.display_settings),
                 icon = Icons.Rounded.Palette,
             ) {
-                navTotalController.navigate(Screens.Appearance.router)
+                navigator.navigate(Screens.Appearance)
             }
         }
     }
@@ -69,5 +70,12 @@ private fun SettingsContent(modifier: Modifier, navTotalController: NavHostContr
 @Preview(device = "id:pixel_9_pro")
 @Composable
 private fun SettingsPreview() {
-    Settings(navTotalController = rememberNavController())
+    val navigationState = remember {
+        com.melendez.known.ui.navigation.NavigationState(
+            startRoute = Screens.Main,
+            topLevelRoute = mutableStateOf(Screens.Main),
+            backStacks = emptyMap()
+        )
+    }
+    Settings(navigator = Navigator(navigationState))
 }

@@ -51,8 +51,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.pager.HorizontalPagerIndicator
 import com.google.android.material.color.DynamicColors
 import com.melendez.known.R
@@ -71,6 +69,7 @@ import com.melendez.known.ui.components.PreferenceItem
 import com.melendez.known.ui.components.PreferenceSwitch
 import com.melendez.known.ui.components.PreferenceSwitchWithDivider
 import com.melendez.known.ui.components.SharedTopBar
+import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
 import com.melendez.known.ui.theme.DEFAULT_SEED_COLOR
 import com.melendez.known.util.DarkThemePreference
@@ -89,19 +88,19 @@ private val ColorList =
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Appearance(navTotalController: NavHostController) {
+fun Appearance(navigator: Navigator) {
     val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     val screenType = LocalScreenType.current
     Column {
         SharedTopBar(
             title = stringResource(R.string.look_and_feel),
             screenType = screenType,
-            navTotalController = navTotalController,
+            navController = navigator,
             scrollBehavior = scrollBehavior
         )
         Appearance_Content(
             modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
-            navTotalController = navTotalController
+            navigator = navigator
         )
     }
 }
@@ -109,7 +108,7 @@ fun Appearance(navTotalController: NavHostController) {
 @Suppress("DEPRECATION")
 @SuppressLint("MissingPermission", "MutableCollectionMutableState", "MemberExtensionConflict")
 @Composable
-fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController) {
+fun Appearance_Content(modifier: Modifier, navigator: Navigator) {
     val preferenceUtil: PreferenceUtil = viewModel()
     val settings = preferenceUtil.settings.collectAsStateWithLifecycle(initialValue = null)
     val isSystemInDarkTheme = isSystemInDarkTheme()
@@ -232,7 +231,7 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
                         else DarkThemePreference.ON
                     )
                 },
-                onClick = { navTotalController.navigate(Screens.Dark.router) },
+                onClick = { navigator.navigate(Screens.Dark) },
             )
         }
         item {
@@ -241,7 +240,7 @@ fun Appearance_Content(modifier: Modifier, navTotalController: NavHostController
                 icon = Icons.Rounded.Language,
                 description = Locale.getDefault().toDisplayName(),
             ) {
-                navTotalController.navigate(Screens.Language.router)
+                navigator.navigate(Screens.Language)
             }
         }
 
@@ -369,7 +368,14 @@ fun RowScope.ColorButtonImpl(
 @Preview(device = "id:pixel_9_pro")
 @Composable
 fun Settings_Preview() {
+    val navigationState = remember {
+        com.melendez.known.ui.navigation.NavigationState(
+            startRoute = Screens.Main,
+            topLevelRoute = mutableStateOf(Screens.Main),
+            backStacks = emptyMap()
+        )
+    }
     Appearance(
-        navTotalController = rememberNavController()
+        navigator = Navigator(navigationState)
     )
 }

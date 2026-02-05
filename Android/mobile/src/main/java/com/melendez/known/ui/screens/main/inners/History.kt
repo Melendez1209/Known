@@ -51,9 +51,8 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
+import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
 
 @SuppressLint("MemberExtensionConflict")
@@ -65,7 +64,7 @@ import com.melendez.known.ui.screens.Screens
 @Composable
 fun History(
     paddingValues: PaddingValues? = null,
-    navTotalController: NavHostController,
+    navigator: Navigator,
     onEditingChange: (Boolean) -> Unit
 ) {
     val checkboxes = remember { mutableStateListOf(false, false, false) }
@@ -245,7 +244,7 @@ fun History(
                                         modifier = Modifier
                                             .combinedClickable(
                                                 onClick = {
-                                                    navTotalController.navigate(Screens.Detail.router)
+                                                    navigator.navigate(Screens.Detail)
                                                 }, onLongClick = {
                                                     if (!isEditing) {
                                                         checkboxes[index] = true
@@ -312,7 +311,7 @@ fun History(
                     modifier = Modifier.padding(vertical = 3.dp)
                 )
                 TextButton(
-                    onClick = { navTotalController.navigate(Screens.DRP.router) },
+                    onClick = { navigator.navigate(Screens.DRP) },
                     modifier = Modifier.padding(vertical = 3.dp)
                 ) {
                     Text(text = stringResource(id = R.string.add))
@@ -325,5 +324,12 @@ fun History(
 @Preview(device = "id:pixel_9_pro")
 @Composable
 fun History_Preview() {
-    History(navTotalController = rememberNavController(), onEditingChange = {})
+    val navigationState = remember {
+        com.melendez.known.ui.navigation.NavigationState(
+            startRoute = Screens.Main,
+            topLevelRoute = mutableStateOf(Screens.Main),
+            backStacks = emptyMap()
+        )
+    }
+    History(navigator = Navigator(navigationState), onEditingChange = {})
 }
