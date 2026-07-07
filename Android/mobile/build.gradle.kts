@@ -3,18 +3,18 @@ plugins {
     id("com.google.gms.google-services")
     id("org.jetbrains.kotlin.plugin.compose")
     id("com.google.devtools.ksp")
-    id("org.jetbrains.kotlin.plugin.serialization") version "2.3.0"
+    id("org.jetbrains.kotlin.plugin.serialization") version "2.4.0"
 }
 android {
     namespace = "com.melendez.known"
-    compileSdk = 36
+    compileSdk = 37
 
     defaultConfig {
         applicationId = "com.melendez.known"
         minSdk = 29
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0.12"
+        versionName = "1.0.13"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

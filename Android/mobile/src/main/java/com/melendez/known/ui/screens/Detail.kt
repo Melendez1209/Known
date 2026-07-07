@@ -1,27 +1,19 @@
 package com.melendez.known.ui.screens
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material.icons.automirrored.rounded.Chat
-import androidx.compose.material.icons.rounded.Delete
-import androidx.compose.material.icons.rounded.Edit
-import androidx.compose.material.icons.rounded.Favorite
-import androidx.compose.material.icons.rounded.FavoriteBorder
-import androidx.compose.material.icons.rounded.Print
-import androidx.compose.material.icons.rounded.Share
-import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.BottomAppBarDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FloatingActionButton
-import androidx.compose.material3.FloatingActionButtonDefaults
+import androidx.compose.material3.FloatingToolbarDefaults.floatingToolbarVerticalNestedScroll
+import androidx.compose.material3.HorizontalFloatingToolbar
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
@@ -35,13 +27,15 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import com.melendez.known.R
-import com.melendez.known.ui.components.Tip
+import com.melendez.known.ui.navigation.NavigationState
 import com.melendez.known.ui.navigation.Navigator
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -56,6 +50,7 @@ fun Detail(navigator: Navigator) {
 
     var isFavorite by remember { mutableStateOf(false) }
     val behaviorTop = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    var expanded by rememberSaveable { mutableStateOf(true) }
     val scrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
 
     Scaffold(
@@ -73,75 +68,8 @@ fun Detail(navigator: Navigator) {
                 },
                 scrollBehavior = behaviorTop
             )
-        },
-        bottomBar = {
-            BottomAppBar(
-                actions = {
-                    Tip(text = stringResource(R.string.share)) {
-                        IconButton(onClick = {
-                            val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                                type = "text/plain"
-                                putExtra(
-                                    Intent.EXTRA_TEXT,
-                                    "Known"
-                                )//TODO: replace Known with detail info
-                            }
-                            launcher.launch(shareIntent)
-                        }) {
-                            Icon(
-                                imageVector = Icons.Rounded.Share,
-                                contentDescription = stringResource(R.string.share)
-                            )
-                        }
-                    }
-                    Tip(text = stringResource(R.string.edit)) {
-                        IconButton(onClick = { navigator.navigate(Screens.DRP) }) {
-                            Icon(
-                                imageVector = Icons.Rounded.Edit,
-                                contentDescription = stringResource(R.string.edit)
-                            )
-                        }
-                    }
-                    Tip(text = stringResource(R.string.add_favourite)) {
-                        IconButton(onClick = { isFavorite = !isFavorite }) {
-                            Icon(
-                                imageVector = if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite,
-                                contentDescription = stringResource(R.string.add_favourite)
-                            )
-                        }
-                    }
-                    Tip(text = stringResource(R.string.delete)) {
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(
-                                imageVector = Icons.Rounded.Delete,
-                                contentDescription = stringResource(R.string.delete)
-                            )
-                        }
-                    }
-                    Tip(text = stringResource(R.string.print)) {
-                        IconButton(onClick = { /*TODO*/ }) {
-                            Icon(
-                                imageVector = Icons.Rounded.Print,
-                                contentDescription = stringResource(R.string.print)
-                            )
-                        }
-                    }
-                },
-                scrollBehavior = scrollBehavior,
-                floatingActionButton = {
-                    FloatingActionButton(
-                        onClick = { navigator.navigate(Screens.Prophets) },
-                        elevation = FloatingActionButtonDefaults.bottomAppBarFabElevation()
-                    ) {
-                        Icon(
-                            imageVector = Icons.AutoMirrored.Rounded.Chat,
-                            contentDescription = stringResource(R.string.ai_analyse)
-                        )
-                    }
-                }
-            )
         }
-    ) {
+    ) { innerPadding ->
         val courseList = listOf(
             stringResource(R.string.all),
             stringResource(id = R.string.chinese),
@@ -157,29 +85,41 @@ fun Detail(navigator: Navigator) {
         )
         var course by remember { mutableIntStateOf(0) }
 
-        Column {
-            SecondaryScrollableTabRow(
-                selectedTabIndex = course,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(top = it.calculateTopPadding())
+        Box(Modifier.padding(innerPadding)) {
+
+
+            HorizontalFloatingToolbar(
+                modifier = Modifier.align(Alignment.BottomCenter),
+                expanded = expanded
             ) {
-                courseList.forEachIndexed { index, title ->
-                    Tab(
-                        selected = course == index,
-                        onClick = { course = index },
-                        text = { Text(text = title) }
-                    )
-                }
+
             }
-            LazyColumn(
+            Column(
                 modifier = Modifier
-                    .padding(bottom = it.calculateBottomPadding())
                     .fillMaxWidth()
-                    .nestedScroll(behaviorTop.nestedScrollConnection)
+                    .padding(top = innerPadding.calculateTopPadding())
             ) {
-                items(50) { count ->
-                    Text(text = "$count")
+                SecondaryScrollableTabRow(selectedTabIndex = course) {
+                    courseList.forEachIndexed { index, title ->
+                        Tab(
+                            selected = course == index,
+                            onClick = { course = index },
+                            text = { Text(text = title) }
+                        )
+                    }
+                }
+                LazyColumn(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .nestedScroll(behaviorTop.nestedScrollConnection)
+                        .floatingToolbarVerticalNestedScroll(
+                            expanded = expanded,
+                            onExpand = { expanded = true },
+                            onCollapse = { expanded = false })
+                ) {
+                    items(100) { count ->
+                        Text(text = "$count")
+                    }
                 }
             }
         }
@@ -190,7 +130,7 @@ fun Detail(navigator: Navigator) {
 @Composable
 fun Detail_Preview() {
     val navigationState = remember {
-        com.melendez.known.ui.navigation.NavigationState(
+        NavigationState(
             startRoute = Screens.Main,
             topLevelRoute = mutableStateOf(Screens.Main),
             backStacks = emptyMap()

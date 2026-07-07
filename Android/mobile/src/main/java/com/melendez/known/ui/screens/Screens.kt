@@ -6,29 +6,41 @@ import kotlinx.serialization.Serializable
 @Serializable
 sealed class Screens : NavKey {
     @Serializable
-    data object Main : Screens()
+    data object Main : NavKey
+
     @Serializable
-    data object Settings : Screens()
+    data object Settings : NavKey
+
     @Serializable
-    data object Appearance : Screens()
+    data object Appearance : NavKey
+
     @Serializable
-    data object Dark : Screens()
+    data object Dark : NavKey
+
     @Serializable
-    data object Language : Screens()
+    data object Language : NavKey
+
     @Serializable
-    data object DRP : Screens()
+    data object DRP : NavKey
+
     @Serializable
-    data object Inputting : Screens()
+    data object Inputting : NavKey
+
     @Serializable
-    data object About : Screens()
+    data object About : NavKey
+
     @Serializable
-    data object Signin : Screens()
+    data object Signin : NavKey
+
     @Serializable
-    data object Detail : Screens()
+    data object Detail : NavKey
+
     @Serializable
-    data object Prophets : Screens()
+    data object Prophets : NavKey
+
     @Serializable
-    data object Credits : Screens()
+    data object Credits : NavKey
+
     @Serializable
-    data object Guide : Screens()
+    data object Guide : NavKey
 }

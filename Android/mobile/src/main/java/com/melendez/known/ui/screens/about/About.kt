@@ -34,6 +34,7 @@ import com.melendez.known.R
 import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.components.PreferenceItem
 import com.melendez.known.ui.components.SharedTopBar
+import com.melendez.known.ui.navigation.NavigationState
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
 
@@ -163,7 +164,7 @@ fun openUrl(url: String, context: Context) {
 @Composable
 private fun AboutContentPreview() {
     val navigationState = remember {
-        com.melendez.known.ui.navigation.NavigationState(
+        NavigationState(
             startRoute = Screens.Main,
             topLevelRoute = mutableStateOf(Screens.Main),
             backStacks = emptyMap()
@@ -176,7 +177,7 @@ private fun AboutContentPreview() {
 @Composable
 private fun AboutScreenPreview() {
     val navigationState = remember {
-        com.melendez.known.ui.navigation.NavigationState(
+        NavigationState(
             startRoute = Screens.Main,
             topLevelRoute = mutableStateOf(Screens.Main),
             backStacks = emptyMap()
