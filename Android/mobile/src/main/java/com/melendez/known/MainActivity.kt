@@ -148,14 +148,13 @@ class MainActivity : ComponentActivity() {
 
                         if (settings != null) {
                             key(settings.isFirstLogin) {
-                                val startDestination = if (settings.isFirstLogin) {
-                                    Screens.Guide
-                                } else {
-                                    Screens.Main
-                                }
-
                                 val navigationState = rememberNavigationState(
-                                    startRoute = startDestination,
+                                    startRoute =
+                                        if (settings.isFirstLogin) {
+                                            Screens.Guide
+                                        } else {
+                                            Screens.Main
+                                        },
                                     topLevelRoutes = setOf(
                                         Screens.Main,
                                         Screens.Settings,
@@ -215,7 +214,7 @@ class MainActivity : ComponentActivity() {
                                 NavDisplay(
                                     entries = navigationState.toEntries(entryProvider),
                                     onBack = { navigator.goBack() },
-                                    sceneStrategy = remember { DialogSceneStrategy() }
+                                    sceneStrategies = remember { listOf(DialogSceneStrategy()) }
                                 )
                             }
                         }
