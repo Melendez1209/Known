@@ -143,4 +143,6 @@
     <string name="general_settings">General</string>
     <string name="general_settings_desc">Student status, Education model</string>
     <string name="display_settings">Dark theme, dynamic color, languages</string>
+    <string name="expanded">Expanded</string>
+    <string name="collapsed">Collapsed</string>
 </resources>

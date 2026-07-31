@@ -24,7 +24,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.LargeTopAppBar
-import androidx.compose.material3.LinearProgressIndicator
+import androidx.compose.material3.LinearWavyProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.OutlinedButton
@@ -180,7 +180,7 @@ private fun Inputting_Compact(
             scrollBehavior = scrollBehavior
         )
         if (isUploading) {
-            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            LinearWavyProgressIndicator(modifier = Modifier.fillMaxWidth())
         }
         Inputting_Content(
             modifier = Modifier
@@ -228,7 +228,7 @@ private fun Inputting_Medium(
             scrollBehavior = scrollBehavior
         )
         if (isUploading) {
-            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            LinearWavyProgressIndicator(modifier = Modifier.fillMaxWidth())
         }
         Inputting_Content(
             modifier = Modifier
@@ -276,7 +276,7 @@ private fun Inputting_Expanded(
             scrollBehavior = scrollBehavior
         )
         if (isUploading) {
-            LinearProgressIndicator(modifier = Modifier.fillMaxWidth())
+            LinearWavyProgressIndicator(modifier = Modifier.fillMaxWidth())
         }
         Inputting_Content(
             modifier = Modifier

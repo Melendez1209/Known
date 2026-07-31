@@ -143,4 +143,6 @@
     <string name="general_settings">一般</string>
     <string name="general_settings_desc">学生状况与教育模式</string>
     <string name="display_settings">深色主题、动态色彩、语言</string>
+    <string name="expanded">Expanded</string>
+    <string name="collapsed">Collapsed</string>
 </resources>
