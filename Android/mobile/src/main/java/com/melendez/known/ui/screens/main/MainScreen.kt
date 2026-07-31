@@ -2,6 +2,8 @@ package com.melendez.known.ui.screens.main
 
 import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
+import androidx.compose.animation.Crossfade
+import androidx.compose.animation.core.tween
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -45,14 +47,10 @@ import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.semantics.stateDescription
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.navigation3.runtime.NavKey
-import androidx.navigation3.runtime.entryProvider
-import androidx.navigation3.ui.NavDisplay
 import com.melendez.known.R
 import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.navigation.rememberNavigationState
-import com.melendez.known.ui.navigation.toEntries
 import com.melendez.known.ui.screens.main.inners.History
 import com.melendez.known.ui.screens.main.inners.Home
 import com.melendez.known.ui.screens.main.inners.Me
@@ -185,20 +183,22 @@ fun Main_Compact(
             }
         }
     ) { paddings ->
-        val entryProvider = entryProvider<NavKey> {
-            entry<Screens.Home> { Home() }
-            entry<Screens.History> {
-                History(
+        Crossfade(
+            targetState = navigationState.topLevelRoute,
+            animationSpec = tween(durationMillis = 300),
+            label = "InnerTabTransition"
+        ) { screen ->
+            when (screen) {
+                Screens.Home -> Home()
+                Screens.History -> History(
                     paddingValues = paddings,
                     navigator = navigator,
-                    onEditingChange = { isEditing = it })
+                    onEditingChange = { isEditing = it }
+                )
+
+                Screens.Me -> Me(navigator)
             }
-            entry<Screens.Me> { Me(navigator) }
         }
-        NavDisplay(
-            entries = navigationState.toEntries(entryProvider),
-            onBack = { innerNavigator.goBack() }
-        )
     }
 }
 
@@ -309,19 +309,21 @@ fun Main_Medium(
                     }
                 }
             ) {
-                val entryProvider = entryProvider<NavKey> {
-                    entry<Screens.Home> { Home() }
-                    entry<Screens.History> {
-                        History(
+                Crossfade(
+                    targetState = navigationState.topLevelRoute,
+                    animationSpec = tween(durationMillis = 300),
+                    label = "InnerTabTransition"
+                ) { screen ->
+                    when (screen) {
+                        Screens.Home -> Home()
+                        Screens.History -> History(
                             navigator = navigator,
-                            onEditingChange = { isEditing = it })
+                            onEditingChange = { isEditing = it }
+                        )
+
+                        Screens.Me -> Me(navigator)
                     }
-                    entry<Screens.Me> { Me(navigator) }
                 }
-                NavDisplay(
-                    entries = navigationState.toEntries(entryProvider),
-                    onBack = { innerNavigator.goBack() }
-                )
             }
         }
     }
@@ -408,21 +410,21 @@ fun Main_Expanded(
                     }
                 }
             ) {
-                val entryProvider = entryProvider<NavKey> {
-                    entry<Screens.Home> {
-                        Home()
-                    }
-                    entry<Screens.History> {
-                        History(
+                Crossfade(
+                    targetState = navigationState.topLevelRoute,
+                    animationSpec = tween(durationMillis = 300),
+                    label = "InnerTabTransition"
+                ) { screen ->
+                    when (screen) {
+                        Screens.Home -> Home()
+                        Screens.History -> History(
                             navigator = navigator,
-                            onEditingChange = { isEditing = it })
+                            onEditingChange = { isEditing = it }
+                        )
+
+                        Screens.Me -> Me(navigator)
                     }
-                    entry<Screens.Me> { Me(navigator) }
                 }
-                NavDisplay(
-                    entries = navigationState.toEntries(entryProvider),
-                    onBack = { innerNavigator.goBack() }
-                )
             }
         }
     }
