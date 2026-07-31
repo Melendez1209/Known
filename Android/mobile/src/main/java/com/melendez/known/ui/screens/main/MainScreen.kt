@@ -71,7 +71,12 @@ fun MainScreen(navigator: Navigator) {
     )
     val innerNavigator = remember { Navigator(navigationState) }
 
-    BackHandler { navigator.goBack() }
+    BackHandler(
+        enabled = navigator.state.topLevelRoute == com.melendez.known.ui.screens.Screens.Main
+                && navigationState.topLevelRoute != Screens.Home
+    ) {
+        innerNavigator.navigate(Screens.Home)
+    }
 
     when (screenType) {
         ScreenType.Compact -> Main_Compact(
