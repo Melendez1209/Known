@@ -673,7 +673,7 @@ section {
     opacity: 0;
     transform: translateX(120px);
     transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
-                transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+    transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .timeline-item.slide-in {

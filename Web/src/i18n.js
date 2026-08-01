@@ -17,13 +17,14 @@ const LANGUAGE_MAPPINGS = {
   'zh-hk': 'zh-tw',
   'zh-tw': 'zh-tw',
   'en-gb': 'en-GB',
-  'en-us': 'en'
+  'en-us': 'en',
 };
 
 function changeLanguage(lang) {
   const normalizedLang = lang.toLowerCase();
-  const supportedLang = LANGUAGE_MAPPINGS[normalizedLang] || 
-                       (translations[normalizedLang] ? normalizedLang : 'en');
+  const supportedLang =
+    LANGUAGE_MAPPINGS[normalizedLang] ||
+    (translations[normalizedLang] ? normalizedLang : 'en');
 
   document.documentElement.setAttribute('lang', supportedLang);
   document.querySelectorAll('[data-i18n]').forEach((element) => {
@@ -54,10 +55,10 @@ detectColorScheme();
 
 // Add language switcher
 const languageOptions = {
-  'zh': '简体中文',
+  zh: '简体中文',
   'zh-tw': '繁體中文',
-  'en': 'English (US)',
-  'en-GB': 'English (UK)'
+  en: 'English (US)',
+  'en-GB': 'English (UK)',
 };
 
 function createLanguageSwitcher() {
@@ -68,13 +69,16 @@ function createLanguageSwitcher() {
   }
 
   // 为每个语言按钮添加点击事件
-  document.querySelectorAll('.lang-dropdown button').forEach(button => {
+  document.querySelectorAll('.lang-dropdown button').forEach((button) => {
     const lang = button.getAttribute('data-lang');
     button.addEventListener('click', () => {
       changeLanguage(lang);
       // 更新选中状态
-      document.querySelectorAll('.lang-dropdown button').forEach(btn => {
-        btn.setAttribute('data-selected', btn.getAttribute('data-lang') === lang);
+      document.querySelectorAll('.lang-dropdown button').forEach((btn) => {
+        btn.setAttribute(
+          'data-selected',
+          btn.getAttribute('data-lang') === lang,
+        );
       });
     });
   });
