@@ -1,167 +1,189 @@
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Known</title>
-    <link rel="icon" type="image/png" href="assets/media/Logo.png">
-    <link rel="stylesheet" href="css/index.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <script>
-        // Check system theme and user preferences
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
-        const savedTheme = localStorage.getItem('theme');
-
-        // Set initial theme
-        if (savedTheme) {
-            document.documentElement.setAttribute('data-theme', savedTheme);
-        } else {
-            document.documentElement.setAttribute('data-theme', prefersDark.matches ? 'dark' : 'light');
-        }
-    </script>
-    <script src="src/script.js" defer></script>
-    <script src="src/main.js" type="module"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Known</title>
+  <link rel="icon" type="image/png" href="assets/media/Logo.png">
+  <link rel="stylesheet" href="css/index.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <script>
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const savedTheme = localStorage.getItem('theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    } else {
+      document.documentElement.setAttribute('data-theme', prefersDark.matches ? 'dark' : 'light');
+    }
+  </script>
+  <script src="src/script.js" defer></script>
+  <script src="src/main.js" type="module"></script>
 </head>
 <body>
 <header>
-    <nav>
-        <div class="logo">
-            <img src="assets/media/Logo.png" alt="Known Logo">
+  <nav>
+    <div class="logo">
+      <img src="assets/media/Logo.png" alt="Known Logo">
+    </div>
+    <ul>
+      <li><a href="#home" data-i18n="nav.home" class="nav-link active">Home</a></li>
+      <li><a href="#features" data-i18n="nav.features" class="nav-link">Features</a></li>
+      <li><a href="#download" data-i18n="nav.download" class="nav-link">Download</a></li>
+      <li><a href="#changelog" data-i18n="nav.changelog" class="nav-link">Changelog</a></li>
+      <li><a href="#about" data-i18n="nav.about" class="nav-link">About</a></li>
+      <li class="theme-selector">
+        <button class="theme-toggle">
+          <i class="fas fa-sun light-icon"></i>
+          <i class="fas fa-moon dark-icon"></i>
+          <i class="fas fa-desktop system-icon"></i>
+        </button>
+        <div class="theme-dropdown">
+          <button data-theme="light">
+            <i class="fas fa-sun"></i>
+            <span data-i18n="theme.light">Light Mode</span>
+          </button>
+          <button data-theme="dark" class="theme-toggle">
+            <i class="fas fa-moon"></i>
+            <span data-i18n="theme.dark">Dark Mode</span>
+          </button>
+          <button data-theme="system">
+            <i class="fas fa-desktop"></i>
+            <span data-i18n="theme.system">Follow System</span>
+          </button>
         </div>
-        <ul>
-            <li><a href="#home" data-i18n="nav.home">Home</a></li>
-            <li><a href="#features" data-i18n="nav.features">Features</a></li>
-            <li><a href="#download" data-i18n="nav.download">Download</a></li>
-            <li><a href="#about" data-i18n="nav.about">About</a></li>
-            <li class="theme-selector">
-                <button class="theme-toggle">
-                    <i class="fas fa-sun light-icon"></i>
-                    <i class="fas fa-moon dark-icon"></i>
-                    <i class="fas fa-desktop system-icon"></i>
-                </button>
-                <div class="theme-dropdown">
-                    <button data-theme="light">
-                        <i class="fas fa-sun"></i>
-                        <span data-i18n="theme.light">Light Mode</span>
-                    </button>
-                    <button data-theme="dark" class="theme-toggle">
-                        <i class="fas fa-moon"></i>
-                        <span data-i18n="theme.dark">Dark Mode</span>
-                    </button>
-                    <button data-theme="system">
-                        <i class="fas fa-desktop"></i>
-                        <span data-i18n="theme.system">Follow System</span>
-                    </button>
-                </div>
-            </li>
-            <li class="lang-selector">
-                <button class="lang-toggle">
-                    <i class="fas fa-globe"></i>
-                </button>
-                <div class="lang-dropdown">
-                    <button data-lang="zh" data-selected="true">
-                        <span>简体中文</span>
-                    </button>
-                    <button data-lang="zh-tw">
-                        <span>繁體中文</span>
-                    </button>
-                    <button data-lang="en">
-                        <span>English (US)</span>
-                    </button>
-                    <button data-lang="en-GB">
-                        <span>English (UK)</span>
-                    </button>
-                </div>
-            </li>
-        </ul>
-    </nav>
+      </li>
+      <li class="lang-selector">
+        <button class="lang-toggle">
+          <i class="fas fa-globe"></i>
+        </button>
+        <div class="lang-dropdown">
+          <button data-lang="zh" data-selected="true">
+            <span>简体中文</span>
+          </button>
+          <button data-lang="zh-tw">
+            <span>繁體中文</span>
+          </button>
+          <button data-lang="en">
+            <span>English (US)</span>
+          </button>
+          <button data-lang="en-GB">
+            <span>English (UK)</span>
+          </button>
+        </div>
+      </li>
+    </ul>
+  </nav>
 </header>
 
 <main>
-    <section id="home" class="hero">
-        <h1 data-i18n="hero.title">Known</h1>
-        <p class="subtitle" data-i18n="hero.subtitle">Your Intelligent Learning Assistant</p>
-        <div class="cta-buttons">
-            <a href="#download" class="cta-primary" data-i18n="hero.download">Download Now</a>
-            <a href="#features" class="cta-secondary" data-i18n="hero.learnMore">Learn More</a>
+  <section id="home" class="hero">
+    <div class="particles" id="particles"></div>
+    <div class="hero-content">
+      <h1 data-i18n="hero.title">Known</h1>
+      <p class="subtitle" data-i18n="hero.subtitle">Your Intelligent Learning Assistant</p>
+      <div class="cta-buttons">
+        <a href="#download" class="cta-primary" data-i18n="hero.download">Download Now</a>
+        <a href="#features" class="cta-secondary" data-i18n="hero.learnMore">Learn More</a>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <div class="mouse">
+        <div class="wheel"></div>
+      </div>
+      <span>Scroll Down</span>
+    </div>
+  </section>
+
+  <section id="features">
+    <h2 data-i18n="features.title" class="scroll-reveal">Key Features</h2>
+    <div class="features-grid">
+      <div class="feature-card scroll-reveal" data-delay="0">
+        <div class="feature-icon">
+          <i class="fas fa-chart-line"></i>
         </div>
-    </section>
-
-    <section id="features">
-        <h2 data-i18n="features.title">Key Features</h2>
-        <div class="features-grid">
-            <div class="feature-card">
-                <i class="fas fa-chart-line"
-                   style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h3 data-i18n="features.analysis">Grade Analysis</h3>
-                <p data-i18n="features.analysis.desc">Intelligent analysis of test scores and tracking of learning
-                    progress.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-trophy"
-                   style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h3 data-i18n="features.motivation">Learning Motivation</h3>
-                <p data-i18n="features.motivation.desc">Personalized incentive system for more motivated learning.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-chart-pie"
-                   style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h3 data-i18n="features.statistics">Data Statistics</h3>
-                <p data-i18n="features.statistics.desc">Intuitive learning visualization for clear demonstration of
-                    learning outcomes.</p>
-            </div>
-            <div class="feature-card">
-                <i class="fas fa-lightbulb"
-                   style="color: var(--primary-color); font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h3 data-i18n="features.planning">Intelligent Planning</h3>
-                <p data-i18n="features.planning.desc">AI-based study plan development to rationalize scheduling.</p>
-            </div>
+        <h3 data-i18n="features.analysis">Grade Analysis</h3>
+        <p data-i18n="features.analysis.desc">Intelligent analysis of test scores and tracking of learning progress.</p>
+      </div>
+      <div class="feature-card scroll-reveal" data-delay="100">
+        <div class="feature-icon">
+          <i class="fas fa-trophy"></i>
         </div>
-    </section>
-
-    <section id="download">
-        <h2 data-i18n="download.title">Download App</h2>
-        <div class="download-options">
-            <a href="#" class="download-button android">
-                <img src="https://developer.android.google.cn/static/images/logos/android.svg?hl=zh-cn" alt="Android"
-                     class="platform-icon">
-                <span>Android</span>
-                <span class="version-text">v1.0.0</span>
-            </a>
-            <a href="#" class="download-button harmony">
-                <img src="https://ts4.cn.mm.bing.net/th?id=ODLS.3c17df29-83d4-4042-820e-4b42e82c1f01&w=32&h=32&qlt=90&pcl=fffffa&o=6&pid=1.2"
-                     alt="HarmonyOS" class="platform-icon">
-                <span>HarmonyOS</span>
-                <span class="version-text">v1.0.0</span>
-            </a>
+        <h3 data-i18n="features.motivation">Learning Motivation</h3>
+        <p data-i18n="features.motivation.desc">Personalized incentive system for more motivated learning.</p>
+      </div>
+      <div class="feature-card scroll-reveal" data-delay="200">
+        <div class="feature-icon">
+          <i class="fas fa-chart-pie"></i>
         </div>
-    </section>
-
-    <section id="Open Source">
-        <h2 data-i18n="opensource.title">Open Source</h2>
-        <div class="open-source-link">
-            <a href="https://github.com/Melendez1209/Known" target="_blank">
-                <i class="fab fa-github"></i>
-                <span>GitHub</span>
-            </a>
-            <a href="https://gitee.com/geng-yiming-1209/Known" target="_blank">
-                <i class="fab fa-git-alt"></i>
-                <span>Gitee</span>
-            </a>
+        <h3 data-i18n="features.statistics">Data Statistics</h3>
+        <p data-i18n="features.statistics.desc">Intuitive learning visualization for clear demonstration of learning
+          outcomes.</p>
+      </div>
+      <div class="feature-card scroll-reveal" data-delay="300">
+        <div class="feature-icon">
+          <i class="fas fa-lightbulb"></i>
         </div>
-    </section>
+        <h3 data-i18n="features.planning">Intelligent Planning</h3>
+        <p data-i18n="features.planning.desc">AI-based study plan development to rationalize scheduling.</p>
+      </div>
+    </div>
+  </section>
 
-    <section id="about">
-        <h2 data-i18n="about.title">About Known</h2>
-        <p data-i18n="about.description">Known is an app developed by a junior high school student (now a senior in high
-            school) in Beijing to help students better analyze their test scores and stay motivated. We hope Known can
-            be your right hand on your study journey.</p>
-    </section>
+  <section id="download">
+    <h2 data-i18n="download.title" class="scroll-reveal">Download App</h2>
+    <div class="download-options">
+      <a href="#" class="download-button android scroll-reveal" data-delay="0">
+        <img src="https://developer.android.google.cn/static/images/logos/android.svg?hl=zh-cn" alt="Android"
+             class="platform-icon">
+        <span>Android</span>
+        <span class="version-text">v1.0.0</span>
+      </a>
+      <a href="#" class="download-button harmony scroll-reveal" data-delay="150">
+        <img
+          src="https://ts4.cn.mm.bing.net/th?id=ODLS.3c17df29-83d4-4042-820e-4b42e82c1f01&w=32&h=32&qlt=90&pcl=fffffa&o=6&pid=1.2"
+          alt="HarmonyOS" class="platform-icon">
+        <span>HarmonyOS</span>
+        <span class="version-text">v1.0.0</span>
+      </a>
+    </div>
+  </section>
 
+  <section id="Open Source">
+    <h2 data-i18n="opensource.title" class="scroll-reveal">Open Source</h2>
+    <div class="open-source-link scroll-reveal" data-delay="100">
+      <a href="https://github.com/Melendez1209/Known" target="_blank">
+        <i class="fab fa-github"></i>
+        <span>GitHub</span>
+      </a>
+      <a href="https://gitee.com/geng-yiming-1209/Known" target="_blank">
+        <i class="fab fa-git-alt"></i>
+        <span>Gitee</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="changelog">
+    <h2 data-i18n="changelog.title" class="scroll-reveal">Changelog</h2>
+    <div class="timeline" id="changelog-timeline">
+      <div class="timeline-line" id="changelog-line"></div>
+      <div class="changelog-loading">
+        <i class="fas fa-spinner fa-spin"></i>
+        <span data-i18n="changelog.loading">Loading changelog...</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2 data-i18n="about.title" class="scroll-reveal">About Known</h2>
+    <p data-i18n="about.description" class="scroll-reveal" data-delay="100">Known is an app developed by a junior high
+      school student (now a senior in high
+      school) in Beijing to help students better analyze their test scores and stay motivated. We hope Known can
+      be your right hand on your study journey.</p>
+  </section>
 </main>
 
 <footer>
-    <p>&copy; 2024 Known. <span data-i18n="footer.copyright">Open-sourced under MIT License.</span></p>
+  <p>&copy; 2024 Known. <span data-i18n="footer.copyright">Open-sourced under MIT License.</span></p>
 </footer>
 
 <script src="src/i18n.js"></script>

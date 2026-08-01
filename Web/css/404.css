@@ -142,7 +142,7 @@ body {
         flex-direction: column;
         gap: 0.8rem;
     }
-    
+
     .back-home,
     .refresh-btn {
         width: 100%;

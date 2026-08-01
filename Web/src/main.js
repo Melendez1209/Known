@@ -1,5 +1,4 @@
 //TIP With Search Everywhere, you can find any action, file, or symbol in your project. Press <shortcut actionId="Shift"/> <shortcut actionId="Shift"/>, type in <b>terminal</b>, and press <shortcut actionId="EditorEnter"/>. Then run <shortcut raw="npm run dev"/> in the terminal and click the link in its output to open the app in the browser.
-import locales from './utils/locales.js';
 
 export function setupCounter(element) {
   //TIP Try <shortcut actionId="GotoDeclaration"/> on <shortcut raw="counter"/> to see its usages. You can also use this shortcut to jump to a declaration – try it on <shortcut raw="counter"/> on line 13.
@@ -39,24 +38,24 @@ setupCounter(document.getElementById('counter-value'));
 //TIP There's much more in WebStorm to help you be more productive. Press <shortcut actionId="Shift"/> <shortcut actionId="Shift"/> and search for <b>Learn WebStorm</b> to open our learning hub with more things for you to try.
 
 document.addEventListener('DOMContentLoaded', () => {
-    // 主题切换相关的代码可以保留
-    const themeToggle = document.querySelector('.theme-toggle');
-    const themeDropdown = document.querySelector('.theme-dropdown');
-    
-    if (themeToggle && themeDropdown) {
-        themeToggle.addEventListener('click', () => {
-            themeDropdown.classList.toggle('show');
-        });
+  // 主题切换相关的代码可以保留
+  const themeToggle = document.querySelector('.theme-toggle');
+  const themeDropdown = document.querySelector('.theme-dropdown');
 
-        themeDropdown.addEventListener('click', (e) => {
-            const button = e.target.closest('button');
-            if (!button) return;
-            
-            const newTheme = button.getAttribute('data-theme');
-            if (newTheme) {
-                document.documentElement.setAttribute('data-theme', newTheme);
-                localStorage.setItem('theme', newTheme);
-            }
-        });
-    }
+  if (themeToggle && themeDropdown) {
+    themeToggle.addEventListener('click', () => {
+      themeDropdown.classList.toggle('show');
+    });
+
+    themeDropdown.addEventListener('click', (e) => {
+      const button = e.target.closest('button');
+      if (!button) return;
+
+      const newTheme = button.getAttribute('data-theme');
+      if (newTheme) {
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+      }
+    });
+  }
 });
