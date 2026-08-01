@@ -351,6 +351,30 @@ document.addEventListener('DOMContentLoaded', () => {
         container.querySelectorAll('.scroll-reveal').forEach((el) => {
             revealObserver.observe(el);
         });
+
+        // Size the timeline line to span all items
+        updateTimelineLine();
+        container.addEventListener('scroll', updateTimelineLine);
+        window.addEventListener('resize', updateTimelineLine);
+    }
+
+    function updateTimelineLine() {
+        const timeline = document.getElementById('changelog-timeline');
+        const line = document.getElementById('changelog-line');
+        if (!timeline || !line) return;
+
+        const items = timeline.querySelectorAll('.timeline-item');
+        if (items.length === 0) return;
+
+        const first = items[0].getBoundingClientRect();
+        const last = items[items.length - 1].getBoundingClientRect();
+        const timelineRect = timeline.getBoundingClientRect();
+
+        const left = first.left + first.width / 2 - timelineRect.left + timeline.scrollLeft;
+        const right = last.left + last.width / 2 - timelineRect.left + timeline.scrollLeft;
+
+        line.style.left = left + 'px';
+        line.style.width = (right - left) + 'px';
     }
 
     function escapeHtml(str) {
