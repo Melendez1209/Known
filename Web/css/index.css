@@ -626,67 +626,82 @@ section {
 #changelog h2 {
     text-align: center;
     font-size: 2.8rem;
-    margin-bottom: 3rem;
+    margin-bottom: 1.5rem;
     background: linear-gradient(135deg, var(--primary-color), var(--gradient-secondary));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
 }
 
+.timeline-dots {
+    display: flex;
+    gap: 1.2rem;
+    padding: 0 10%;
+    margin-bottom: 0.8rem;
+    position: relative;
+}
+
+.timeline-dots::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), var(--gradient-secondary));
+    border-radius: 1px;
+    transform: translateY(-50%);
+    opacity: 0.3;
+}
+
+.timeline-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid var(--primary-color);
+    background: transparent;
+    flex-shrink: 0;
+    position: relative;
+    z-index: 1;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    align-self: center;
+}
+
+.timeline-dot:hover,
+.timeline-dot.active {
+    background: var(--primary-color);
+    box-shadow: 0 0 10px rgba(165, 75, 207, 0.5);
+    transform: scale(1.3);
+}
+
 .timeline {
     display: flex;
-    gap: 1.5rem;
+    gap: 1.2rem;
     overflow-x: auto;
     overflow-y: hidden;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    padding: 1.5rem 10% 2rem;
+    padding: 0 10% 2rem;
     position: relative;
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary-color) transparent;
     cursor: grab;
+    scrollbar-width: none;
 }
 
 .timeline::-webkit-scrollbar {
-    height: 6px;
-}
-
-.timeline::-webkit-scrollbar-track {
-    background: transparent;
-}
-
-.timeline::-webkit-scrollbar-thumb {
-    background: var(--primary-color);
-    border-radius: 3px;
-}
-
-.timeline::after {
-    content: '';
-    position: absolute;
-    bottom: 0;
-    left: 10%;
-    right: 10%;
-    height: 3px;
-    background: linear-gradient(90deg, var(--primary-color), var(--gradient-secondary));
-    border-radius: 2px;
-    opacity: 0.4;
+    display: none;
 }
 
 .timeline-item {
-    flex: 0 0 300px;
+    flex: 0 0 200px;
     scroll-snap-align: center;
     position: relative;
-    z-index: 1;
-}
-
-.timeline-dot {
-    display: none;
 }
 
 .timeline-content {
     background: var(--card-background);
-    padding: 1.5rem;
-    border-radius: 16px;
+    padding: 1.2rem;
+    border-radius: 14px;
     box-shadow: 0 4px 20px var(--shadow-color);
     transition: all 0.3s ease;
     height: 100%;
@@ -1062,15 +1077,19 @@ footer {
     }
 
     .timeline {
-        padding: 1.5rem 5% 2rem;
+        padding: 0 5% 2rem;
+    }
+
+    .timeline-dots {
+        padding: 0 5%;
     }
 
     .timeline-item {
-        flex: 0 0 260px;
+        flex: 0 0 240px;
     }
 
     .timeline-content {
-        padding: 1.2rem;
+        padding: 1rem;
     }
 
     section {

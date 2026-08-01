@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===== Changelog: Fetch from GitHub =====
     const GITHUB_REPO = 'Melendez1209/Known';
     const GITHUB_API = `https://api.github.com/repos/${GITHUB_REPO}`;
-    const MAX_ITEMS = 3;
+    const MAX_ITEMS = 6;
 
     async function fetchChangelog() {
         const timeline = document.getElementById('changelog-timeline');
@@ -282,6 +282,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             if (items.length === 0) {
+                const dotsContainer = document.getElementById('changelog-dots');
+                if (dotsContainer) dotsContainer.innerHTML = '';
                 timeline.innerHTML = `<p class="changelog-empty" data-i18n="changelog.empty">No changelog available yet.</p>`;
                 return;
             }
@@ -289,23 +291,35 @@ document.addEventListener('DOMContentLoaded', () => {
             renderTimeline(timeline, items);
         } catch (err) {
             console.error('Failed to load changelog:', err);
+            const dotsContainer = document.getElementById('changelog-dots');
+            if (dotsContainer) dotsContainer.innerHTML = '';
             timeline.innerHTML = `<p class="changelog-empty" data-i18n="changelog.error">Failed to load changelog.</p>`;
         }
     }
 
     function renderTimeline(container, items) {
         container.innerHTML = '';
+        const dotsContainer = document.getElementById('changelog-dots');
+        dotsContainer.innerHTML = '';
+
         items.forEach((item, index) => {
+            // Create dot
+            const dot = document.createElement('div');
+            dot.className = 'timeline-dot';
+            dot.dataset.index = String(index);
+            dotsContainer.appendChild(dot);
+
+            // Create card
             const div = document.createElement('div');
             div.className = 'timeline-item scroll-reveal';
-            div.dataset.delay = String(index * 100);
+            div.dataset.index = String(index);
+            div.dataset.delay = String(index * 80);
 
             const bodyHtml = item.body
                 ? `<div class="timeline-body">${escapeHtml(item.body).replace(/\n/g, '<br>')}</div>`
                 : '';
 
             div.innerHTML = `
-                <div class="timeline-dot"></div>
                 <div class="timeline-content">
                     <div class="timeline-header">
                         <span class="timeline-version">${escapeHtml(item.version)}</span>
@@ -320,6 +334,51 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
             `;
             container.appendChild(div);
+
+            // Dot hover -> highlight card
+            dot.addEventListener('mouseenter', () => {
+                dot.classList.add('active');
+                div.querySelector('.timeline-content').style.borderColor = 'var(--primary-color)';
+            });
+            dot.addEventListener('mouseleave', () => {
+                dot.classList.remove('active');
+                div.querySelector('.timeline-content').style.borderColor = 'transparent';
+            });
+            dot.addEventListener('click', () => {
+                div.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+            });
+
+            // Card hover -> highlight dot
+            div.addEventListener('mouseenter', () => {
+                dot.classList.add('active');
+            });
+            div.addEventListener('mouseleave', () => {
+                dot.classList.remove('active');
+            });
+        });
+
+        // Sync scroll position -> active dot
+        container.addEventListener('scroll', () => {
+            const items = container.querySelectorAll('.timeline-item');
+            const dots = dotsContainer.querySelectorAll('.timeline-dot');
+            const containerRect = container.getBoundingClientRect();
+            const center = containerRect.left + containerRect.width / 2;
+
+            let closestIdx = 0;
+            let closestDist = Infinity;
+            items.forEach((item, i) => {
+                const rect = item.getBoundingClientRect();
+                const itemCenter = rect.left + rect.width / 2;
+                const dist = Math.abs(itemCenter - center);
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closestIdx = i;
+                }
+            });
+
+            dots.forEach((d, i) => {
+                d.classList.toggle('active', i === closestIdx);
+            });
         });
 
         // Re-observe new scroll-reveal elements
