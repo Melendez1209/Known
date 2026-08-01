@@ -633,22 +633,6 @@ section {
     background-clip: text;
 }
 
-.timeline-wrapper {
-    position: relative;
-    padding-top: 8px;
-}
-
-.timeline-line {
-    position: absolute;
-    top: 14px;
-    height: 2px;
-    background: linear-gradient(90deg, var(--primary-color), var(--gradient-secondary));
-    border-radius: 1px;
-    opacity: 0.3;
-    z-index: 0;
-    pointer-events: none;
-}
-
 .timeline {
     display: flex;
     gap: 0;
@@ -656,7 +640,7 @@ section {
     overflow-y: visible;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
-    padding: 0 calc(50vw - 256px) 2rem;
+    padding: 10px calc(50vw - 256px) 2rem;
     position: relative;
     cursor: grab;
     scrollbar-width: none;
@@ -664,6 +648,17 @@ section {
 
 .timeline::-webkit-scrollbar {
     display: none;
+}
+
+.timeline-line {
+    position: absolute;
+    top: 16px;
+    height: 2px;
+    background: linear-gradient(90deg, var(--primary-color), var(--gradient-secondary));
+    border-radius: 1px;
+    opacity: 0.3;
+    z-index: 0;
+    pointer-events: none;
 }
 
 .timeline-item {

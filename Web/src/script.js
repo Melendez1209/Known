@@ -354,7 +354,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Size the timeline line to span all items
         updateTimelineLine();
-        container.addEventListener('scroll', updateTimelineLine);
         window.addEventListener('resize', updateTimelineLine);
     }
 
@@ -366,15 +365,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const items = timeline.querySelectorAll('.timeline-item');
         if (items.length === 0) return;
 
-        const first = items[0].getBoundingClientRect();
-        const last = items[items.length - 1].getBoundingClientRect();
-        const timelineRect = timeline.getBoundingClientRect();
+        // Use offsetLeft relative to the timeline container for scrollable content coords
+        const firstDot = items[0].querySelector('.timeline-dot');
+        const lastDot = items[items.length - 1].querySelector('.timeline-dot');
 
-        const left = first.left + first.width / 2 - timelineRect.left + timeline.scrollLeft;
-        const right = last.left + last.width / 2 - timelineRect.left + timeline.scrollLeft;
+        const firstCenter = firstDot.offsetLeft + firstDot.offsetWidth / 2;
+        const lastCenter = lastDot.offsetLeft + lastDot.offsetWidth / 2;
 
-        line.style.left = left + 'px';
-        line.style.width = (right - left) + 'px';
+        line.style.left = firstCenter + 'px';
+        line.style.width = (lastCenter - firstCenter) + 'px';
     }
 
     function escapeHtml(str) {
