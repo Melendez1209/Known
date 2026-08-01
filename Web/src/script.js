@@ -334,4 +334,41 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     fetchChangelog();
+
+    // ===== Timeline Drag-to-Scroll =====
+    function initTimelineDrag() {
+        const timeline = document.querySelector('.timeline');
+        if (!timeline) return;
+
+        let isDown = false;
+        let startX;
+        let scrollLeft;
+
+        timeline.addEventListener('mousedown', (e) => {
+            isDown = true;
+            timeline.style.cursor = 'grabbing';
+            startX = e.pageX - timeline.offsetLeft;
+            scrollLeft = timeline.scrollLeft;
+        });
+
+        timeline.addEventListener('mouseleave', () => {
+            isDown = false;
+            timeline.style.cursor = '';
+        });
+
+        timeline.addEventListener('mouseup', () => {
+            isDown = false;
+            timeline.style.cursor = '';
+        });
+
+        timeline.addEventListener('mousemove', (e) => {
+            if (!isDown) return;
+            e.preventDefault();
+            const x = e.pageX - timeline.offsetLeft;
+            const walk = (x - startX) * 1.5;
+            timeline.scrollLeft = scrollLeft - walk;
+        });
+    }
+
+    initTimelineDrag();
 });

@@ -636,31 +636,45 @@ section {
 .timeline {
     display: flex;
     gap: 1.5rem;
-    justify-content: center;
-    align-items: stretch;
+    overflow-x: auto;
+    overflow-y: hidden;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    padding: 1.5rem 10% 2rem;
     position: relative;
-    max-width: 1100px;
-    margin: 0 auto;
-    padding: 1rem 0;
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary-color) transparent;
+    cursor: grab;
 }
 
-.timeline::before {
+.timeline::-webkit-scrollbar {
+    height: 6px;
+}
+
+.timeline::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.timeline::-webkit-scrollbar-thumb {
+    background: var(--primary-color);
+    border-radius: 3px;
+}
+
+.timeline::after {
     content: '';
     position: absolute;
-    top: 50%;
-    left: 5%;
-    right: 5%;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
     height: 3px;
     background: linear-gradient(90deg, var(--primary-color), var(--gradient-secondary));
     border-radius: 2px;
-    transform: translateY(-50%);
-    z-index: 0;
+    opacity: 0.4;
 }
 
 .timeline-item {
-    flex: 1;
-    min-width: 0;
-    max-width: 320px;
+    flex: 0 0 300px;
+    scroll-snap-align: center;
     position: relative;
     z-index: 1;
 }
@@ -678,7 +692,9 @@ section {
     height: 100%;
     display: flex;
     flex-direction: column;
-    border-top: 3px solid transparent;
+    border-bottom: 3px solid transparent;
+    word-break: break-word;
+    overflow: hidden;
 }
 
 .timeline-content::before {
@@ -688,7 +704,7 @@ section {
 .timeline-item:hover .timeline-content {
     transform: translateY(-6px);
     box-shadow: 0 12px 40px var(--shadow-color-hover);
-    border-top-color: var(--primary-color);
+    border-bottom-color: var(--primary-color);
 }
 
 .timeline-header {
@@ -750,6 +766,10 @@ section {
     line-height: 1.7;
     font-size: 0.95rem;
     white-space: pre-line;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
 }
 
 .timeline-link {
@@ -1042,27 +1062,15 @@ footer {
     }
 
     .timeline {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .timeline::before {
-        top: 5%;
-        bottom: 5%;
-        left: 50%;
-        right: auto;
-        width: 3px;
-        height: auto;
-        transform: translateX(-50%);
+        padding: 1.5rem 5% 2rem;
     }
 
     .timeline-item {
-        max-width: 400px;
-        width: 100%;
+        flex: 0 0 260px;
     }
 
     .timeline-content {
-        padding: 1.2rem 1.5rem;
+        padding: 1.2rem;
     }
 
     section {
