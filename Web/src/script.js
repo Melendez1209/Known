@@ -228,4 +228,110 @@ document.addEventListener('DOMContentLoaded', () => {
     // Initial calls
     updateActiveNav();
     updateNavStyle();
+
+    // ===== Changelog: Fetch from GitHub =====
+    const GITHUB_REPO = 'Melendez1209/Known';
+    const GITHUB_API = `https://api.github.com/repos/${GITHUB_REPO}`;
+    const MAX_COMMITS = 10;
+
+    async function fetchChangelog() {
+        const timeline = document.getElementById('changelog-timeline');
+        if (!timeline) return;
+
+        try {
+            let items = [];
+
+            // Try releases first
+            const releasesRes = await fetch(`${GITHUB_API}/releases?per_page=10`);
+            if (releasesRes.ok) {
+                const releases = await releasesRes.json();
+                if (releases.length > 0) {
+                    items = releases.map((r) => ({
+                        version: r.tag_name,
+                        title: r.name || r.tag_name,
+                        date: new Date(r.published_at).toLocaleDateString('zh-CN', {
+                            year: 'numeric',
+                            month: '2-digit',
+                        }),
+                        body: r.body || '',
+                        url: r.html_url,
+                        isRelease: true,
+                    }));
+                }
+            }
+
+            // Fallback to commits if no releases
+            if (items.length === 0) {
+                const commitsRes = await fetch(
+                    `${GITHUB_API}/commits?sha=main&per_page=${MAX_COMMITS}`
+                );
+                if (commitsRes.ok) {
+                    const commits = await commitsRes.json();
+                    items = commits.map((c) => ({
+                        version: c.sha.slice(0, 7),
+                        title: c.commit.message.split('\n')[0],
+                        date: new Date(c.commit.author.date).toLocaleDateString('zh-CN', {
+                            year: 'numeric',
+                            month: '2-digit',
+                        }),
+                        body: c.commit.message.split('\n').slice(1).join('\n').trim(),
+                        url: c.html_url,
+                        isRelease: false,
+                    }));
+                }
+            }
+
+            if (items.length === 0) {
+                timeline.innerHTML = `<p class="changelog-empty" data-i18n="changelog.empty">No changelog available yet.</p>`;
+                return;
+            }
+
+            renderTimeline(timeline, items);
+        } catch (err) {
+            console.error('Failed to load changelog:', err);
+            timeline.innerHTML = `<p class="changelog-empty" data-i18n="changelog.error">Failed to load changelog.</p>`;
+        }
+    }
+
+    function renderTimeline(container, items) {
+        container.innerHTML = '';
+        items.forEach((item, index) => {
+            const div = document.createElement('div');
+            div.className = 'timeline-item scroll-reveal';
+            div.dataset.delay = String(index * 100);
+
+            const bodyHtml = item.body
+                ? `<div class="timeline-body">${escapeHtml(item.body).replace(/\n/g, '<br>')}</div>`
+                : '';
+
+            div.innerHTML = `
+                <div class="timeline-dot"></div>
+                <div class="timeline-content">
+                    <div class="timeline-header">
+                        <span class="timeline-version">${escapeHtml(item.version)}</span>
+                        <span class="timeline-date">${escapeHtml(item.date)}</span>
+                    </div>
+                    <h3>${escapeHtml(item.title)}</h3>
+                    ${bodyHtml}
+                    <a href="${escapeHtml(item.url)}" target="_blank" class="timeline-link">
+                        <i class="fab fa-github"></i>
+                        ${item.isRelease ? 'View Release' : 'View Commit'}
+                    </a>
+                </div>
+            `;
+            container.appendChild(div);
+        });
+
+        // Re-observe new scroll-reveal elements
+        container.querySelectorAll('.scroll-reveal').forEach((el) => {
+            revealObserver.observe(el);
+        });
+    }
+
+    function escapeHtml(str) {
+        const map = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#039;' };
+        return String(str).replace(/[&<>"']/g, (c) => map[c]);
+    }
+
+    fetchChangelog();
 });
