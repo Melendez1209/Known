@@ -232,7 +232,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // ===== Changelog: Fetch from GitHub =====
     const GITHUB_REPO = 'Melendez1209/Known';
     const GITHUB_API = `https://api.github.com/repos/${GITHUB_REPO}`;
-    const MAX_COMMITS = 10;
+    const MAX_ITEMS = 3;
 
     async function fetchChangelog() {
         const timeline = document.getElementById('changelog-timeline');
@@ -242,11 +242,11 @@ document.addEventListener('DOMContentLoaded', () => {
             let items = [];
 
             // Try releases first
-            const releasesRes = await fetch(`${GITHUB_API}/releases?per_page=10`);
+            const releasesRes = await fetch(`${GITHUB_API}/releases?per_page=${MAX_ITEMS}`);
             if (releasesRes.ok) {
                 const releases = await releasesRes.json();
                 if (releases.length > 0) {
-                    items = releases.map((r) => ({
+                    items = releases.slice(0, MAX_ITEMS).map((r) => ({
                         version: r.tag_name,
                         title: r.name || r.tag_name,
                         date: new Date(r.published_at).toLocaleDateString('zh-CN', {
@@ -263,11 +263,11 @@ document.addEventListener('DOMContentLoaded', () => {
             // Fallback to commits if no releases
             if (items.length === 0) {
                 const commitsRes = await fetch(
-                    `${GITHUB_API}/commits?sha=main&per_page=${MAX_COMMITS}`
+                    `${GITHUB_API}/commits?sha=main&per_page=${MAX_ITEMS}`
                 );
                 if (commitsRes.ok) {
                     const commits = await commitsRes.json();
-                    items = commits.map((c) => ({
+                    items = commits.slice(0, MAX_ITEMS).map((c) => ({
                         version: c.sha.slice(0, 7),
                         title: c.commit.message.split('\n')[0],
                         date: new Date(c.commit.author.date).toLocaleDateString('zh-CN', {
