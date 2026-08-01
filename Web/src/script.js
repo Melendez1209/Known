@@ -298,9 +298,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
         items.forEach((item, index) => {
             const div = document.createElement('div');
-            div.className = 'timeline-item scroll-reveal';
+            div.className = 'timeline-item';
             div.dataset.index = String(index);
-            div.dataset.delay = String(index * 80);
+            div.style.transitionDelay = (index * 120) + 'ms';
 
             const bodyHtml = item.body
                 ? `<div class="timeline-body">${escapeHtml(item.body).replace(/\n/g, '<br>')}</div>`
@@ -347,10 +347,22 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         });
 
-        // Re-observe new scroll-reveal elements
-        container.querySelectorAll('.scroll-reveal').forEach((el) => {
-            revealObserver.observe(el);
-        });
+        // Observe changelog section for slide-in animation
+        const sectionObserver = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        container.querySelectorAll('.timeline-item').forEach((el) => {
+                            el.classList.add('slide-in');
+                        });
+                        sectionObserver.unobserve(entry.target);
+                    }
+                });
+            },
+            { threshold: 0.2 }
+        );
+        const changelogSection = document.getElementById('changelog');
+        if (changelogSection) sectionObserver.observe(changelogSection);
 
         // Size the timeline line to span all items
         updateTimelineLine();
