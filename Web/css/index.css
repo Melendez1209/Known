@@ -33,6 +33,7 @@
 
 html {
     scroll-behavior: smooth;
+    scroll-snap-type: y mandatory;
 }
 
 body {
@@ -169,13 +170,15 @@ nav a.active {
 }
 
 /* ===== Main Content ===== */
-main {
-    margin-top: 60px;
-}
-
-section {
+main section {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
     padding: 5rem 10%;
     position: relative;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
 }
 
 /* ===== Hero Section ===== */
@@ -517,12 +520,41 @@ section {
     background-clip: text;
 }
 
+.download-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(2rem, 5vw, 4rem);
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.download-content {
+    flex: 1 1 320px;
+    max-width: 440px;
+    text-align: left;
+}
+
+.download-art {
+    flex: 1 1 320px;
+    max-width: 460px;
+    min-width: 280px;
+}
+
+.download-art svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
 .download-options {
     display: flex;
     gap: 2rem;
-    justify-content: center;
+    justify-content: flex-start;
     flex-wrap: wrap;
-    margin: 3rem 0;
+    margin: 2rem 0 0;
 }
 
 .download-button {
@@ -590,18 +622,20 @@ section {
 
 .download-button .version-text {
     position: absolute;
-    left: 50%;
-    transform: translateX(-50%);
-    top: calc(50% - 0.5em - 0.5em);
-    font-size: 0.9rem;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
     opacity: 0;
+    transform: translateY(10px);
     transition: all 0.3s ease;
     color: white;
 }
 
 .download-button:hover .version-text {
-    top: calc(50% - 0.5em);
     opacity: 1;
+    transform: translateY(0);
 }
 
 .download-button:hover span:not(.version-text) {
@@ -609,10 +643,48 @@ section {
 }
 
 /* ===== Open Source Section ===== */
+.open-source-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: clamp(2rem, 5vw, 4rem);
+    width: 100%;
+    max-width: 1000px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+}
+
+.open-source-content {
+    flex: 1 1 320px;
+    max-width: 440px;
+    text-align: left;
+}
+
+.open-source-content h2 {
+    font-size: 2.8rem;
+    margin-bottom: 1.5rem;
+    background: linear-gradient(135deg, var(--primary-color), var(--gradient-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.open-source-art {
+    flex: 1 1 320px;
+    max-width: 460px;
+    min-width: 280px;
+}
+
+.open-source-art svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
 .open-source-link {
     display: flex;
     gap: 1.5rem;
-    justify-content: center;
+    justify-content: flex-start;
     margin-top: 2rem;
 }
 
@@ -1045,6 +1117,20 @@ footer {
         gap: 1rem;
     }
 
+    .download-container {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .download-content {
+        max-width: none;
+        text-align: center;
+    }
+
+    .download-art {
+        max-width: 340px;
+    }
+
     .download-button {
         width: 100%;
         max-width: 300px;
@@ -1063,6 +1149,24 @@ footer {
         padding: 1rem;
     }
 
+    .open-source-container {
+        flex-direction: column;
+        gap: 2rem;
+    }
+
+    .open-source-content {
+        max-width: none;
+        text-align: center;
+    }
+
+    .open-source-link {
+        justify-content: center;
+    }
+
+    .open-source-art {
+        max-width: 380px;
+    }
+
     section {
         padding: 3rem 5%;
     }
@@ -1070,6 +1174,7 @@ footer {
     #features h2,
     #download h2,
     #changelog h2,
+    .open-source-content h2,
     #about h2 {
         font-size: 2rem;
     }

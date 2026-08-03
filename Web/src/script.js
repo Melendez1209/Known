@@ -105,6 +105,19 @@ document.addEventListener('DOMContentLoaded', () => {
   }
   createParticles();
 
+  // ===== SVG Illustrations (loaded inline to inherit theme variables) =====
+  document.querySelectorAll('[data-svg]').forEach((container) => {
+    fetch(container.dataset.svg)
+      .then((res) => {
+        if (!res.ok) throw new Error(`Failed to load ${container.dataset.svg}`);
+        return res.text();
+      })
+      .then((svgText) => {
+        container.innerHTML = svgText;
+      })
+      .catch((err) => console.error('Failed to load SVG:', err));
+  });
+
   // ===== Scroll Reveal (Intersection Observer) =====
   const revealElements = document.querySelectorAll('.scroll-reveal');
 
@@ -186,9 +199,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const targetId = link.getAttribute('href');
       const targetSection = document.querySelector(targetId);
       if (targetSection) {
-        const offsetTop = targetSection.offsetTop - 60;
         window.scrollTo({
-          top: offsetTop,
+          top: targetSection.offsetTop,
           behavior: 'smooth',
         });
       }
@@ -202,9 +214,8 @@ document.addEventListener('DOMContentLoaded', () => {
       const targetId = btn.getAttribute('href');
       const targetSection = document.querySelector(targetId);
       if (targetSection) {
-        const offsetTop = targetSection.offsetTop - 60;
         window.scrollTo({
-          top: offsetTop,
+          top: targetSection.offsetTop,
           behavior: 'smooth',
         });
       }
@@ -364,7 +375,7 @@ document.addEventListener('DOMContentLoaded', () => {
             }
           });
         },
-        { threshold: 0.15 }
+        { threshold: 0.15 },
       );
       sectionObserver.observe(changelogSection);
     }

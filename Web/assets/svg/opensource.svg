@@ -1,0 +1,81 @@
+<svg viewBox="0 0 460 380" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Open source collaboration illustration">
+  <defs>
+    <linearGradient id="os-main" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="var(--primary-color)"/>
+      <stop offset="1" stop-color="var(--gradient-secondary)"/>
+    </linearGradient>
+    <linearGradient id="os-green" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#2EB872"/>
+      <stop offset="1" stop-color="#006E2B"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="42" cy="52" r="72" fill="var(--primary-color)" opacity="0.06"/>
+  <circle cx="428" cy="330" r="92" fill="var(--gradient-secondary)" opacity="0.08"/>
+  <circle cx="428" cy="52" r="40" fill="var(--secondary-color)" opacity="0.05"/>
+
+  <circle cx="70" cy="160" r="4" fill="var(--primary-color)" opacity="0.35"/>
+  <circle cx="392" cy="200" r="5" fill="var(--gradient-secondary)" opacity="0.4"/>
+  <circle cx="240" cy="58" r="3" fill="var(--secondary-color)" opacity="0.4"/>
+  <circle cx="150" cy="338" r="4" fill="var(--primary-color)" opacity="0.3"/>
+  <circle cx="330" cy="330" r="3" fill="var(--secondary-color)" opacity="0.35"/>
+
+  <path d="M95 318 V264" stroke="var(--primary-color)" stroke-width="5" stroke-linecap="round"
+        opacity="0.55"/>
+  <path d="M95 264 C95 246 73 248 73 230 V216" stroke="var(--secondary-color)" stroke-width="5"
+        stroke-linecap="round" opacity="0.6"/>
+  <path d="M95 264 C95 246 117 248 117 230 V216" stroke="var(--gradient-secondary)" stroke-width="5"
+        stroke-linecap="round" opacity="0.6"/>
+  <circle cx="73" cy="216" r="9" fill="var(--card-background)" stroke="var(--secondary-color)"
+          stroke-width="5"/>
+  <circle cx="117" cy="216" r="9" fill="var(--card-background)" stroke="var(--gradient-secondary)"
+          stroke-width="5"/>
+  <circle cx="95" cy="318" r="9" fill="var(--card-background)" stroke="var(--primary-color)"
+          stroke-width="5"/>
+
+  <g>
+    <rect x="150" y="88" width="220" height="204" rx="16" fill="var(--card-background)"
+          stroke="var(--border-color)" stroke-width="2"/>
+    <line x1="150" y1="122" x2="370" y2="122" stroke="var(--border-color)" stroke-width="1.5"/>
+    <circle cx="172" cy="104" r="6.5" fill="#FF5F57"/>
+    <circle cx="193" cy="104" r="6.5" fill="#FEBC2E"/>
+    <circle cx="214" cy="104" r="6.5" fill="#28C840"/>
+    <text x="240" y="109" font-family="ui-monospace, monospace" font-size="12" fill="var(--text-color)"
+          opacity="0.65">&lt;/&gt; opensource.js</text>
+    <text x="172" y="150" font-family="ui-monospace, monospace" font-size="12"
+          fill="var(--secondary-color)" opacity="0.85">// free for everyone</text>
+    <rect x="172" y="168" width="150" height="10" rx="5" fill="var(--border-color)" opacity="0.55"/>
+    <rect x="172" y="188" width="120" height="10" rx="5" fill="var(--border-color)" opacity="0.55"/>
+    <rect x="192" y="208" width="96" height="10" rx="5" fill="var(--primary-color)" opacity="0.4"/>
+    <rect x="192" y="228" width="134" height="10" rx="5" fill="var(--gradient-secondary)" opacity="0.45"/>
+    <rect x="172" y="248" width="70" height="10" rx="5" fill="var(--secondary-color)" opacity="0.5"/>
+    <rect x="172" y="268" width="140" height="10" rx="5" fill="var(--border-color)" opacity="0.4"/>
+  </g>
+
+  <g>
+    <circle cx="56" cy="86" r="24" fill="var(--card-background)" stroke="var(--border-color)"
+            stroke-width="2"/>
+    <g transform="translate(47,77) scale(0.75)">
+      <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+            fill="url(#os-main)"/>
+    </g>
+  </g>
+
+  <g>
+    <circle cx="404" cy="86" r="24" fill="var(--card-background)" stroke="var(--border-color)"
+            stroke-width="2"/>
+    <g transform="translate(395,77) scale(0.75)">
+      <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"
+            fill="url(#os-green)"/>
+    </g>
+  </g>
+
+  <g>
+    <circle cx="404" cy="300" r="24" fill="var(--card-background)" stroke="var(--border-color)"
+            stroke-width="2"/>
+    <g transform="translate(395,291) scale(0.75)">
+      <path d="M6 2a3 3 0 0 1 3 3c0 1.11-.6 2.08-1.5 2.6v8.8A3.003 3.003 0 0 1 9 22a3 3 0 0 1-3-3c0-.57.16-1.1.43-1.56V9.6A3.01 3.01 0 0 1 6 2zm0 2a1 1 0 1 0 0 2 1 1 0 0 0 0-2zm9 1a3 3 0 0 1 3 3c0 .57-.16 1.1-.43 1.56V19a1 1 0 0 1-2 0V8.56A3.01 3.01 0 0 1 15 5zm0 2a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"
+            fill="var(--primary-color)"/>
+    </g>
+  </g>
+</svg>
