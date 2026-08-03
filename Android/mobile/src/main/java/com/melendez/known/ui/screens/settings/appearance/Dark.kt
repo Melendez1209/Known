@@ -1,0 +1,109 @@
+package com.melendez.known.ui.screens.settings.appearance
+
+import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Contrast
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Surface
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.melendez.known.R
+import com.melendez.known.ui.components.LocalDarkTheme
+import com.melendez.known.ui.components.LocalScreenType
+import com.melendez.known.ui.components.PreferenceSingleChoiceItem
+import com.melendez.known.ui.components.PreferenceSubtitle
+import com.melendez.known.ui.components.PreferenceSwitchVariant
+import com.melendez.known.ui.components.SharedTopBar
+import com.melendez.known.ui.navigation.Navigator
+import com.melendez.known.ui.screens.Screens
+import com.melendez.known.util.DarkThemePreference.Companion.FOLLOW_SYSTEM
+import com.melendez.known.util.DarkThemePreference.Companion.OFF
+import com.melendez.known.util.DarkThemePreference.Companion.ON
+import com.melendez.known.util.PreferenceUtil
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun Dark(navigator: Navigator) {
+
+    val scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
+    val screenType = LocalScreenType.current
+
+    Column {
+        SharedTopBar(
+            title = stringResource(R.string.dark_theme),
+            screenType = screenType,
+            navController = navigator,
+            scrollBehavior = scrollBehavior
+        )
+        Dark_Content(modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection))
+    }
+}
+
+@Composable
+fun Dark_Content(modifier: Modifier) {
+
+    val darkThemePreference = LocalDarkTheme.current
+    val isHighContrastModeEnabled = darkThemePreference.isHighContrastModeEnabled
+    val preferenceUtil: PreferenceUtil = viewModel()
+
+    Surface {
+        LazyColumn(modifier = modifier) {
+            item {
+                PreferenceSingleChoiceItem(
+                    text = stringResource(R.string.follow_system),
+                    selected = darkThemePreference.darkThemeValue == FOLLOW_SYSTEM,
+                ) {
+                    preferenceUtil.modifyDarkThemePreference(FOLLOW_SYSTEM)
+                }
+            }
+            item {
+                PreferenceSingleChoiceItem(
+                    text = stringResource(R.string.on),
+                    selected = darkThemePreference.darkThemeValue == ON,
+                ) {
+                    preferenceUtil.modifyDarkThemePreference(ON)
+                }
+            }
+            item {
+                PreferenceSingleChoiceItem(
+                    text = stringResource(R.string.off),
+                    selected = darkThemePreference.darkThemeValue == OFF,
+                ) {
+                    preferenceUtil.modifyDarkThemePreference(OFF)
+                }
+            }
+            item { PreferenceSubtitle(text = stringResource(R.string.additional_settings)) }
+            item {
+                PreferenceSwitchVariant(
+                    enabled = darkThemePreference.isDarkTheme(isSystemInDarkTheme = isSystemInDarkTheme()),
+                    title = stringResource(R.string.high_contrast),
+                    icon = Icons.Outlined.Contrast,
+                    isChecked = isHighContrastModeEnabled,
+                    onClick = { preferenceUtil.modifyDarkThemePreference(isHighContrastModeEnabled = !isHighContrastModeEnabled) }
+                )
+            }
+        }
+    }
+}
+
+@Preview(device = "id:pixel_9_pro")
+@Composable
+fun Dark_Preview() {
+    val navigationState = remember {
+        com.melendez.known.ui.navigation.NavigationState(
+            startRoute = Screens.Main,
+            topLevelRoute = mutableStateOf(Screens.Main),
+            backStacks = emptyMap()
+        )
+    }
+    Dark(navigator = Navigator(navigationState))
+}

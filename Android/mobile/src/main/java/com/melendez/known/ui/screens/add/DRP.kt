@@ -29,14 +29,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
+import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DRP(navTotalController: NavHostController) {
+fun DRP(navigator: Navigator) {
 
     val state = rememberDateRangePickerState()
 
@@ -52,7 +51,7 @@ fun DRP(navTotalController: NavHostController) {
                     onClick = {
                         showingDialog = false
                         //TODO: Save incomplete content
-                        navTotalController.popBackStack()
+                        navigator.goBack()
                     }
                 ) {
                     Text(stringResource(R.string.reserve))
@@ -62,7 +61,7 @@ fun DRP(navTotalController: NavHostController) {
                 OutlinedButton(
                     onClick = {
                         showingDialog = false
-                        navTotalController.popBackStack()
+                        navigator.goBack()
                     }
                 ) {
                     Text(stringResource(R.string.discard))
@@ -91,7 +90,7 @@ fun DRP(navTotalController: NavHostController) {
                 navigationIcon = {
                     IconButton(onClick = {
                         if (state.selectedStartDateMillis != null) showingDialog = true
-                        else navTotalController.popBackStack()
+                        else navigator.goBack()
                     }) {
                         Icon(
                             imageVector = if (state.selectedStartDateMillis != null) Icons.Rounded.Close else Icons.AutoMirrored.Rounded.ArrowBack,
@@ -106,7 +105,7 @@ fun DRP(navTotalController: NavHostController) {
                                 "Melendez",
                                 "DRP: ${state.selectedStartDateMillis!!..state.selectedEndDateMillis!!}"
                             )
-                            navTotalController.navigate(Screens.Inputting.router)
+                            navigator.navigate(Screens.Inputting)
                         },
                         enabled = state.selectedEndDateMillis != null
                     ) {
@@ -128,12 +127,19 @@ fun DRP(navTotalController: NavHostController) {
     }
     BackHandler {
         if (state.selectedStartDateMillis != null) showingDialog = true
-        else navTotalController.popBackStack()
+        else navigator.goBack()
     }
 }
 
 @Preview(device = "id:pixel_9_pro")
 @Composable
 fun DRP_preview() {
-    DRP(navTotalController = rememberNavController())
+    val navigationState = remember {
+        com.melendez.known.ui.navigation.NavigationState(
+            startRoute = Screens.Main,
+            topLevelRoute = mutableStateOf(Screens.Main),
+            backStacks = emptyMap()
+        )
+    }
+    DRP(navigator = Navigator(navigationState))
 }

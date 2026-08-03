@@ -1,5 +1,6 @@
 package com.melendez.known.ui.screens
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -35,8 +36,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.google.ai.client.generativeai.GenerativeModel
 import com.google.ai.client.generativeai.type.BlockThreshold
 import com.google.ai.client.generativeai.type.HarmCategory
@@ -44,18 +43,20 @@ import com.google.ai.client.generativeai.type.SafetySetting
 import com.google.ai.client.generativeai.type.generationConfig
 import com.melendez.known.BuildConfig
 import com.melendez.known.R
+import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.viewmodel.prophets.ProphetsUiState
 import com.melendez.known.ui.viewmodel.prophets.ProphetsViewModel
 
+@SuppressLint("ViewModelConstructorInComposable")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Prophets(navTotalController: NavHostController) {
+fun Prophets(navigator: Navigator) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text(text = stringResource(R.string.prophets)) },
                 navigationIcon = {
-                    IconButton(onClick = { navTotalController.popBackStack() }) {
+                    IconButton(onClick = { navigator.goBack() }) {
                         Icon(
                             imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                             contentDescription = stringResource(id = R.string.back)
@@ -189,5 +190,12 @@ fun ChatArea(
 @Preview(device = "id:pixel_9_pro")
 @Composable
 fun Prophets_Preview() {
-    Prophets(navTotalController = rememberNavController())
+    val navigationState = remember {
+        com.melendez.known.ui.navigation.NavigationState(
+            startRoute = Screens.Main,
+            topLevelRoute = mutableStateOf(Screens.Main),
+            backStacks = emptyMap()
+        )
+    }
+    Prophets(navigator = Navigator(navigationState))
 }

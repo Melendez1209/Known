@@ -1,7 +1,6 @@
 /* While this template provides a good starting point for using Wear Compose, you can always
- * take a look at https://github.com/android/wear-os-samples/tree/main/ComposeStarter and
- * https://github.com/android/wear-os-samples/tree/main/ComposeAdvanced to find the most up to date
- * changes to the libraries and their usages.
+ * take a look at https://github.com/android/wear-os-samples/tree/main/ComposeStarter to find the
+ * most up to date changes to the libraries and their usages.
  */
 
 package com.melendez.known.presentation
@@ -9,94 +8,92 @@ package com.melendez.known.presentation
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.rounded.History
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.wear.compose.material.Chip
-import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.MaterialTheme
-import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TimeText
+import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
+import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
+import androidx.wear.compose.material3.AppScaffold
+import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.ButtonDefaults
+import androidx.wear.compose.material3.EdgeButton
+import androidx.wear.compose.material3.ListHeader
+import androidx.wear.compose.material3.MaterialTheme
+import androidx.wear.compose.material3.ScreenScaffold
+import androidx.wear.compose.material3.SurfaceTransformation
+import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.lazy.rememberTransformationSpec
+import androidx.wear.compose.material3.lazy.transformedHeight
+import androidx.wear.compose.ui.tooling.preview.WearPreviewDevices
+import androidx.wear.compose.ui.tooling.preview.WearPreviewFontScales
 import com.melendez.known.R
 import com.melendez.known.presentation.theme.KnownTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
-
         super.onCreate(savedInstanceState)
-
-        setTheme(android.R.style.Theme_DeviceDefault)
-
         setContent {
-            WearApp()
+            WearApp("Android")
         }
     }
 }
 
 @Composable
-fun WearApp() {
-
-    val listState = rememberRes
-
+fun WearApp(greetingName: String) {
     KnownTheme {
-        Box {
-            TimeText()
-            LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(MaterialTheme.colors.background),
-                contentPadding = PaddingValues(
-                    top = 32.dp,
-                    start = 8.dp,
-                    end = 8.dp,
-                    bottom = 32.dp
-                ),
-                verticalArrangement = Arrangement.Center,
-                state = listState
-        ) {
-                items(3) {
-                    Chip(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(bottom = 8.dp),
-                        onClick = {},
-                        label = { Text(stringResource(R.string.history), maxLines = 1) },
-                        icon = {
-                            Icon(
-                                imageVector = Icons.Rounded.History,
-                                "History",
-                                modifier = Modifier
-                                    .size(24.dp)
-                                    .wrapContentSize(align = Alignment.Center)
-                            )
+        AppScaffold {
+            val listState = rememberTransformingLazyColumnState()
+            val transformationSpec = rememberTransformationSpec()
+            ScreenScaffold(
+                scrollState = listState,
+                edgeButton = {
+                    EdgeButton(
+                        onClick = { /*TODO*/ },
+                        colors =
+                            ButtonDefaults.buttonColors(
+                                containerColor = MaterialTheme.colorScheme.secondaryContainer,
+                                contentColor = MaterialTheme.colorScheme.onSecondaryContainer,
+                            ),
+                    ) {
+                        Text("More")
+                    }
+                },
+            ) { contentPadding -> // ScreenScaffold provides default padding; adjust as needed
+                TransformingLazyColumn(contentPadding = contentPadding, state = listState) {
+                    item {
+                        ListHeader(
+                            modifier =
+                                Modifier.fillMaxWidth().transformedHeight(this, transformationSpec),
+                            transformation = SurfaceTransformation(transformationSpec),
+                        ) {
+                            Text(text = stringResource(R.string.hello_world, greetingName))
                         }
-                    )
+                    }
+                    item {
+                        Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
+                            Text("Button A")
+                        }
+                    }
+                    item {
+                        Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
+                            Text("Button B")
+                        }
+                    }
+                    item {
+                        Button(onClick = { /*TODO*/ }, modifier = Modifier.fillMaxWidth()) {
+                            Text("Button C")
+                        }
+                    }
                 }
             }
         }
     }
-
 }
 
-@Preview(device = "id:wearos_large_round", showSystemUi = true)
+@WearPreviewDevices
+@WearPreviewFontScales
 @Composable
 fun DefaultPreview() {
-    WearApp()
+    WearApp("Preview Android")
 }
