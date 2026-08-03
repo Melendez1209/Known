@@ -9,6 +9,7 @@
     "nav.download": "下载",
     "nav.changelog": "更新日志",
     "nav.about": "关于",
+    "nav.openSource": "开源地址",
     "theme.light": "浅色模式",
     "theme.dark": "深色模式",
     "theme.system": "跟随系统",
@@ -58,6 +59,7 @@
     "nav.download": "下載",
     "nav.changelog": "更新日誌",
     "nav.about": "關於",
+    "nav.openSource": "開源地址",
     "theme.light": "淺色模式",
     "theme.dark": "深色模式",
     "theme.system": "跟隨系統",
@@ -107,6 +109,7 @@
     "nav.download": "Download",
     "nav.changelog": "Changelog",
     "nav.about": "About",
+    "nav.openSource": "Open Source",
     "theme.light": "Light Mode",
     "theme.dark": "Dark Mode",
     "theme.system": "Follow System",
@@ -156,6 +159,7 @@
     "nav.download": "Download",
     "nav.changelog": "Changelog",
     "nav.about": "About",
+    "nav.openSource": "Open Source",
     "theme.light": "Light Mode",
     "theme.dark": "Dark Mode",
     "theme.system": "Follow System",
@@ -195,4 +199,4 @@
     "about.description": "Known is an app developed by a middle school student (now a freshman in high school) in Beijing to help students better analyse their test scores and stay motivated. We hope Known can be your right-hand man on your way to learning.",
     "footer.copyright": "Open-sourced under MIT License."
   }
-} 
+}

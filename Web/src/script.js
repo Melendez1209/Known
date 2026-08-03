@@ -175,6 +175,123 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  // ===== Floating Logo: Fly to About description =====
+  const aboutSection = document.getElementById('about');
+  const aboutLogoColumn =
+    aboutSection && aboutSection.querySelector('.about-logo-column');
+  const aboutContent =
+    aboutSection && aboutSection.querySelector('.about-content');
+  const logo = document.querySelector('.logo');
+  const LOGO_FLY_DURATION = 600;
+  let logoFlying = false;
+  let logoTrackReady = false;
+
+  function isAboutActive() {
+    if (!aboutSection) return false;
+    const scrollY = window.scrollY + 100;
+    const top = aboutSection.offsetTop;
+    return scrollY >= top && scrollY < top + aboutSection.offsetHeight;
+  }
+
+  function aboutTargetViewport() {
+    const colRect = aboutLogoColumn.getBoundingClientRect();
+    const contentRect = aboutContent.getBoundingClientRect();
+    return {
+      left: colRect.left + colRect.width / 2 - logo.offsetWidth / 2,
+      top: contentRect.top + contentRect.height / 2 - logo.offsetHeight / 2,
+    };
+  }
+
+  function logoSlotViewport() {
+    const navRect = nav.getBoundingClientRect();
+    const padLeft = parseFloat(getComputedStyle(nav).paddingLeft) || 0;
+    return {
+      left: navRect.left + padLeft,
+      top: navRect.top + (navRect.height - logo.offsetHeight) / 2,
+    };
+  }
+
+  function cancelLogoAnimations() {
+    logo.getAnimations().forEach((anim) => anim.cancel());
+  }
+
+  function flyLogoToAbout() {
+    if (!logo || logoFlying) return;
+    cancelLogoAnimations();
+    logoFlying = true;
+    logoTrackReady = false;
+    nav.classList.add('about-active');
+    document.body.appendChild(logo);
+    logo.classList.add('logo-fixed');
+    logo.classList.add('logo-about-large');
+    const slot = logoSlotViewport();
+    const target = aboutTargetViewport();
+    logo.style.left = slot.left + 'px';
+    logo.style.top = slot.top + 'px';
+    const anim = logo.animate(
+      [
+        { left: slot.left + 'px', top: slot.top + 'px' },
+        { left: target.left + 'px', top: target.top + 'px' },
+      ],
+      {
+        duration: LOGO_FLY_DURATION,
+        easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+        fill: 'both',
+      },
+    );
+    anim.onfinish = () => {
+      anim.cancel();
+      logoTrackReady = true;
+      logo.style.left = target.left + 'px';
+      logo.style.top = target.top + 'px';
+    };
+  }
+
+  function flyLogoBack() {
+    if (!logo || !logoFlying) return;
+    cancelLogoAnimations();
+    logoFlying = false;
+    logoTrackReady = false;
+    logo.classList.remove('logo-about-large');
+    const currentLeft = parseFloat(logo.style.left) || 0;
+    const currentTop = parseFloat(logo.style.top) || 0;
+    const slot = logoSlotViewport();
+    const anim = logo.animate(
+      [
+        { left: currentLeft + 'px', top: currentTop + 'px' },
+        { left: slot.left + 'px', top: slot.top + 'px' },
+      ],
+      {
+        duration: LOGO_FLY_DURATION,
+        easing: 'cubic-bezier(0.16, 1, 0.3, 1)',
+        fill: 'both',
+      },
+    );
+    anim.onfinish = () => {
+      anim.cancel();
+      nav.prepend(logo);
+      nav.classList.remove('about-active');
+      logo.classList.remove('logo-fixed');
+      logo.style.left = '';
+      logo.style.top = '';
+    };
+  }
+
+  function updateAboutLogo() {
+    if (!aboutSection || !aboutLogoColumn || !aboutContent || !logo) return;
+    if (isAboutActive()) {
+      if (!logoFlying) {
+        flyLogoToAbout();
+      } else if (logoTrackReady) {
+        const target = aboutTargetViewport();
+        logo.style.left = target.left + 'px';
+        logo.style.top = target.top + 'px';
+      }
+    } else if (logoFlying) {
+      flyLogoBack();
+    }
+  }
+
   // ===== Parallax Effect for Hero =====
   const hero = document.querySelector('.hero');
 
@@ -231,6 +348,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateActiveNav();
         updateNavStyle();
         updateParallax();
+        updateAboutLogo();
         ticking = false;
       });
       ticking = true;
@@ -240,6 +358,17 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial calls
   updateActiveNav();
   updateNavStyle();
+  updateAboutLogo();
+
+  window.addEventListener('resize', () => {
+    if (logoFlying) {
+      cancelLogoAnimations();
+      logoTrackReady = true;
+      const target = aboutTargetViewport();
+      logo.style.left = target.left + 'px';
+      logo.style.top = target.top + 'px';
+    }
+  });
 
   // ===== Changelog: Fetch from GitHub =====
   const GITHUB_REPO = 'Melendez1209/Known';
