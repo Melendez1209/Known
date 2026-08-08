@@ -13,10 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.material.hct
+package io.material.hct.material.hct
 
-import io.material.utils.ColorUtils
-import io.material.utils.MathUtils
+import io.material.hct.material.utils.ColorUtils
+import io.material.hct.material.utils.MathUtils
+import kotlin.math.PI
+import kotlin.math.cbrt
 import kotlin.math.exp
 import kotlin.math.max
 import kotlin.math.pow
@@ -110,7 +112,7 @@ class ViewingConditions
             val k = 1.0 / (5.0 * adaptingLuminance + 1.0)
             val k4 = k * k * k * k
             val k4F = 1.0 - k4
-            val fl = k4 * adaptingLuminance + 0.1 * k4F * k4F * kotlin.math.cbrt(5.0 * adaptingLuminance)
+            val fl = k4 * adaptingLuminance + 0.1 * k4F * k4F * cbrt(5.0 * adaptingLuminance)
             val n = ColorUtils.yFromLstar(backgroundLstar) / whitePoint[1]
             val z = 1.48 + sqrt(n)
             val nbb = 0.725 / n.pow(0.2)
@@ -148,7 +150,7 @@ class ViewingConditions
         fun defaultWithBackgroundLstar(lstar: Double): ViewingConditions {
             return make(
                 ColorUtils.whitePointD65(),
-                200.0 / kotlin.math.PI * ColorUtils.yFromLstar(50.0) / 100f,
+                200.0 / PI * ColorUtils.yFromLstar(50.0) / 100f,
                 lstar,
                 2.0,
                 false

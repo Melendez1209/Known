@@ -25,9 +25,9 @@ val paletteStyles = listOf(
 )
 
 class PreferenceUtil(application: Application) : AndroidViewModel(application) {
-    private val repository: SettingsRepository
+    val repository: SettingsRepository
     val settings: Flow<Settings?>
-    
+
     init {
         val settingsDao = AppDatabase.getDatabase(application).settingsDao()
         repository = SettingsRepository(settingsDao)
@@ -39,7 +39,9 @@ class PreferenceUtil(application: Application) : AndroidViewModel(application) {
         isHighContrastModeEnabled: Boolean = false
     ) {
         viewModelScope.launch {
-            repository.updateDarkMode(darkThemeValue)
+            if (darkThemeValue != DarkThemePreference.FOLLOW_SYSTEM) {
+                repository.updateDarkMode(darkThemeValue)
+            }
             repository.updateHighContrastMode(isHighContrastModeEnabled)
         }
     }
@@ -57,13 +59,24 @@ class PreferenceUtil(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun initializeSettings() {
+    fun updateLanguage(language: String) {
         viewModelScope.launch {
-            repository.initializeSettings()
+            repository.updateLanguage(language)
+        }
+    }
+    
+    fun setFirstLogin(isFirstLogin: Boolean) {
+        viewModelScope.launch {
+            repository.updateFirstLogin(isFirstLogin)
         }
     }
 
-    // 其他设置方法...
+    // Predictive back gesture settings method
+    fun setPredictiveBackEnabled(enabled: Boolean) {
+        viewModelScope.launch {
+            repository.updatePredictiveBack(enabled)
+        }
+    }
 }
 
 data class DarkThemePreference(

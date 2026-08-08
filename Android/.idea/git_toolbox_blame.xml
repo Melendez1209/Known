@@ -4,8 +4,8 @@
     <option name="showEditorInlineBlameOverride">
       <BoolValueOverride>
         <option name="enabled" value="true" />
+        <option name="value" value="true" />
       </BoolValueOverride>
     </option>
-    <option name="version" value="2" />
   </component>
 </project>

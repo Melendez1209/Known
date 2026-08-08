@@ -13,9 +13,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package io.material.hct
+package io.material.hct.material.hct
 
-import io.material.utils.ColorUtils
+import io.material.hct.material.utils.ColorUtils
 
 /**
  * A color system built using CAM16 hue and chroma, and L* from L*a*b*.
@@ -84,42 +84,6 @@ class Hct private constructor(argb: Int) {
      */
     fun setTone(newTone: Double) {
         setInternalState(HctSolver.solveToInt(hue, chroma, newTone))
-    }
-
-    /**
-     * Translate a color into different ViewingConditions.
-     *
-     *
-     * Colors change appearance. They look different with lights on versus off, the same color, as
-     * in hex code, on white looks different when on black. This is called color relativity, most
-     * famously explicated by Josef Albers in Interaction of Color.
-     *
-     *
-     * In color science, color appearance models can account for this and calculate the appearance
-     * of a color in different settings. HCT is based on CAM16, a color appearance model, and uses it
-     * to make these calculations.
-     *
-     *
-     * See ViewingConditions.make for parameters affecting color appearance.
-     */
-    fun inViewingConditions(vc: ViewingConditions): Hct {
-        // 1. Use CAM16 to find XYZ coordinates of color in specified VC.
-        val cam16: Cam16 = Cam16.Companion.fromInt(toInt())
-        val viewedInVc = cam16.xyzInViewingConditions(vc, null)
-
-        // 2. Create CAM16 of those XYZ coordinates in default VC.
-        val recastInVc: Cam16 = Cam16.Companion.fromXyzInViewingConditions(
-            viewedInVc[0], viewedInVc[1], viewedInVc[2], ViewingConditions.Companion.DEFAULT
-        )
-
-        // 3. Create HCT from:
-        // - CAM16 using default VC with XYZ coordinates in specified VC.
-        // - L* converted from Y in XYZ coordinates in specified VC.
-        return from(
-            recastInVc.hue, recastInVc.chroma, ColorUtils.lstarFromY(
-                viewedInVc[1]
-            )
-        )
     }
 
     private fun setInternalState(argb: Int) {

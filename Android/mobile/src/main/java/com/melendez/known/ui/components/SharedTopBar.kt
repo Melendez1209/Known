@@ -2,6 +2,7 @@
 
 package com.melendez.known.ui.components
 
+import android.os.Build
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
@@ -13,28 +14,41 @@ import androidx.compose.material3.MediumTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
-import androidx.compose.material3.windowsizeclass.WindowWidthSizeClass
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavHostController
-import androidx.navigation.compose.rememberNavController
 import com.melendez.known.R
-
+import com.melendez.known.ui.navigation.Navigator
+import com.melendez.known.util.ScreenType
 
 @Composable
 fun SharedTopBar(
-    widthSizeClass: WindowWidthSizeClass,
-    navTotalController: NavHostController,
+    screenType: ScreenType,
+    navController: Navigator,
     title: String,
     scrollBehavior: TopAppBarScrollBehavior? = null,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
-    if (widthSizeClass == WindowWidthSizeClass.Medium) {
+    val activity = LocalActivity.current
+    val supportsPredictiveBack = Build.VERSION.SDK_INT >= 34
+
+    val onBackPressed: () -> Unit = {
+        if (supportsPredictiveBack && activity != null) {
+            // Using predictive back API
+            activity.onBackPressedDispatcher.onBackPressed()
+        } else {
+            // Traditional back operation
+            navController.goBack()
+        }
+    }
+
+    if (screenType == ScreenType.Medium) {
         MediumTopAppBar(
             title = { Text(text = title) },
             navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
+                IconButton(onClick = onBackPressed) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                         contentDescription = stringResource(R.string.back)
@@ -48,7 +62,7 @@ fun SharedTopBar(
         LargeTopAppBar(
             title = { Text(text = title) },
             navigationIcon = {
-                IconButton(onClick = { navTotalController.popBackStack() }) {
+                IconButton(onClick = onBackPressed) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Rounded.ArrowBack,
                         contentDescription = stringResource(R.string.back)
@@ -65,8 +79,8 @@ fun SharedTopBar(
 @Composable
 fun MediumTopBar_Preview() {
     SharedTopBar(
-        widthSizeClass = WindowWidthSizeClass.Medium,
-        navTotalController = rememberNavController(),
+        screenType = ScreenType.Medium,
+        navController = Navigator(remember { com.melendez.known.ui.navigation.NavigationState(com.melendez.known.ui.screens.Screens.Main, mutableStateOf(com.melendez.known.ui.screens.Screens.Main), emptyMap()) }),
         title = "Title",
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     )
@@ -76,8 +90,8 @@ fun MediumTopBar_Preview() {
 @Composable
 fun LargeTopBar_Preview() {
     SharedTopBar(
-        widthSizeClass = WindowWidthSizeClass.Compact,
-        navTotalController = rememberNavController(),
+        screenType = ScreenType.Compact,
+        navController = Navigator(remember { com.melendez.known.ui.navigation.NavigationState(com.melendez.known.ui.screens.Screens.Main, mutableStateOf(com.melendez.known.ui.screens.Screens.Main), emptyMap()) }),
         title = "Title",
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     )
