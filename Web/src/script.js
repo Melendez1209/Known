@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', () => {
   // ===== Theme System =====
-  const themeDropdown = document.querySelector('.theme-dropdown');
-
   function getSystemTheme() {
     return window.matchMedia('(prefers-color-scheme: dark)').matches
       ? 'dark'
@@ -17,44 +15,54 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateThemeIcon(theme) {
-    const darkIcon = document.querySelector('.dark-icon');
-    const lightIcon = document.querySelector('.light-icon');
-    const systemIcon = document.querySelector('.system-icon');
+    document.querySelectorAll('.theme-selector').forEach((selector) => {
+      const icons = {
+        dark: selector.querySelector('.dark-icon'),
+        light: selector.querySelector('.light-icon'),
+        system: selector.querySelector('.system-icon'),
+      };
 
-    darkIcon.style.display = 'none';
-    lightIcon.style.display = 'none';
-    systemIcon.style.display = 'none';
-
-    if (theme === 'system') {
-      systemIcon.style.display = 'inline-block';
-    } else if (theme === 'dark') {
-      darkIcon.style.display = 'inline-block';
-    } else {
-      lightIcon.style.display = 'inline-block';
-    }
+      if (theme === 'system') {
+        icons.system.style.display = 'inline-block';
+        icons.dark.style.display = 'none';
+        icons.light.style.display = 'none';
+      } else if (theme === 'dark') {
+        icons.dark.style.display = 'inline-block';
+        icons.light.style.display = 'none';
+        icons.system.style.display = 'none';
+      } else {
+        icons.light.style.display = 'inline-block';
+        icons.dark.style.display = 'none';
+        icons.system.style.display = 'none';
+      }
+    });
   }
 
   function updateSelectedTheme(theme) {
-    document.querySelectorAll('.theme-dropdown button').forEach((btn) => {
-      btn.removeAttribute('data-selected');
+    document.querySelectorAll('.theme-dropdown').forEach((dropdown) => {
+      dropdown.querySelectorAll('button').forEach((btn) => {
+        btn.removeAttribute('data-selected');
+      });
+      const selectedButton = dropdown.querySelector(
+        `button[data-theme="${theme}"]`,
+      );
+      if (selectedButton) {
+        selectedButton.setAttribute('data-selected', 'true');
+      }
     });
-    const selectedButton = document.querySelector(
-      `.theme-dropdown button[data-theme="${theme}"]`,
-    );
-    if (selectedButton) {
-      selectedButton.setAttribute('data-selected', 'true');
-    }
   }
 
   const savedTheme = localStorage.getItem('theme') || 'system';
   applyTheme(savedTheme);
 
-  themeDropdown.addEventListener('click', (e) => {
-    const button = e.target.closest('button');
-    if (!button) return;
-    const theme = button.dataset.theme;
-    localStorage.setItem('theme', theme);
-    applyTheme(theme);
+  document.querySelectorAll('.theme-dropdown').forEach((dropdown) => {
+    dropdown.addEventListener('click', (e) => {
+      const button = e.target.closest('button');
+      if (!button) return;
+      const theme = button.dataset.theme;
+      localStorage.setItem('theme', theme);
+      applyTheme(theme);
+    });
   });
 
   window
@@ -68,21 +76,55 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
   // ===== Language Selection =====
-  const langDropdown = document.querySelector('.lang-dropdown');
   const savedLang = localStorage.getItem('lang') || 'zh';
   updateSelectedLang(savedLang);
 
   function updateSelectedLang(lang) {
-    document.querySelectorAll('.lang-dropdown button').forEach((btn) => {
-      btn.removeAttribute('data-selected');
+    document.querySelectorAll('.lang-dropdown').forEach((dropdown) => {
+      dropdown.querySelectorAll('button').forEach((btn) => {
+        btn.removeAttribute('data-selected');
+      });
+      const selectedButton = dropdown.querySelector(
+        `button[data-lang="${lang}"]`,
+      );
+      if (selectedButton) {
+        selectedButton.setAttribute('data-selected', 'true');
+      }
     });
-    const selectedButton = document.querySelector(
-      `.lang-dropdown button[data-lang="${lang}"]`,
-    );
-    if (selectedButton) {
-      selectedButton.setAttribute('data-selected', 'true');
-    }
   }
+
+  // ===== Dropdown Toggle (touch-friendly) =====
+  function closeAllDropdowns() {
+    document
+      .querySelectorAll('.theme-dropdown, .lang-dropdown')
+      .forEach((dropdown) => dropdown.classList.remove('show'));
+  }
+
+  document.querySelectorAll('.theme-toggle').forEach((toggle) => {
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const dropdown = toggle
+        .closest('.theme-selector')
+        .querySelector('.theme-dropdown');
+      const wasOpen = dropdown.classList.contains('show');
+      closeAllDropdowns();
+      if (!wasOpen) dropdown.classList.add('show');
+    });
+  });
+
+  document.querySelectorAll('.lang-toggle').forEach((toggle) => {
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const dropdown = toggle
+        .closest('.lang-selector')
+        .querySelector('.lang-dropdown');
+      const wasOpen = dropdown.classList.contains('show');
+      closeAllDropdowns();
+      if (!wasOpen) dropdown.classList.add('show');
+    });
+  });
+
+  document.addEventListener('click', closeAllDropdowns);
 
   // ===== Particle System =====
   function createParticles() {
@@ -166,6 +208,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // ===== Nav Shadow on Scroll =====
   const nav = document.querySelector('nav');
+  const navIndicator = document.querySelector('.nav-indicator');
 
   function updateNavStyle() {
     if (window.scrollY > 50) {
@@ -173,6 +216,22 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       nav.classList.remove('scrolled');
     }
+  }
+
+  // ===== Sliding Nav Indicator =====
+  function updateNavIndicator() {
+    if (!navIndicator || !nav) return;
+    const activeLink = document.querySelector('nav ul .nav-link.active');
+    if (!activeLink) {
+      navIndicator.style.opacity = '0';
+      return;
+    }
+    const navRect = nav.getBoundingClientRect();
+    const linkRect = activeLink.getBoundingClientRect();
+    navIndicator.style.opacity = '1';
+    navIndicator.style.left = linkRect.left - navRect.left + 'px';
+    navIndicator.style.top = linkRect.bottom - navRect.top + 6 + 'px';
+    navIndicator.style.width = linkRect.width + 'px';
   }
 
   // ===== Floating Logo: Fly to About description =====
@@ -185,6 +244,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const LOGO_FLY_DURATION = 600;
   let logoFlying = false;
   let logoTrackReady = false;
+  const isNarrowScreen = () => window.matchMedia('(max-width: 768px)').matches;
 
   function isAboutActive() {
     if (!aboutSection) return false;
@@ -255,7 +315,22 @@ document.addEventListener('DOMContentLoaded', () => {
     logo.classList.remove('logo-about-large');
     const currentLeft = parseFloat(logo.style.left) || 0;
     const currentTop = parseFloat(logo.style.top) || 0;
-    const slot = logoSlotViewport();
+    // Measure the target (expanded) nav slot without a visual flash
+    const prevTransition = nav.style.transition;
+    nav.style.transition = 'none';
+    nav.classList.remove('about-active');
+    const expandedNavRect = nav.getBoundingClientRect();
+    nav.classList.add('about-active');
+    nav.getBoundingClientRect(); // re-layout at shrunk size so the expand transition can replay
+    nav.style.transition = prevTransition;
+    const padLeft = parseFloat(getComputedStyle(nav).paddingLeft) || 0;
+    const slot = {
+      left: expandedNavRect.left + padLeft,
+      top:
+        expandedNavRect.top + (expandedNavRect.height - logo.offsetHeight) / 2,
+    };
+    // Expand the bar while the logo flies back
+    nav.classList.remove('about-active');
     const anim = logo.animate(
       [
         { left: currentLeft + 'px', top: currentTop + 'px' },
@@ -270,7 +345,6 @@ document.addEventListener('DOMContentLoaded', () => {
     anim.onfinish = () => {
       anim.cancel();
       nav.prepend(logo);
-      nav.classList.remove('about-active');
       logo.classList.remove('logo-fixed');
       logo.style.left = '';
       logo.style.top = '';
@@ -279,6 +353,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function updateAboutLogo() {
     if (!aboutSection || !aboutLogoColumn || !aboutContent || !logo) return;
+    // Logo lives statically in the About section on narrow screens
+    if (isNarrowScreen()) return;
     if (isAboutActive()) {
       if (!logoFlying) {
         flyLogoToAbout();
@@ -347,6 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
       window.requestAnimationFrame(() => {
         updateActiveNav();
         updateNavStyle();
+        updateNavIndicator();
         updateParallax();
         updateAboutLogo();
         ticking = false;
@@ -358,9 +435,11 @@ document.addEventListener('DOMContentLoaded', () => {
   // Initial calls
   updateActiveNav();
   updateNavStyle();
+  updateNavIndicator();
   updateAboutLogo();
 
   window.addEventListener('resize', () => {
+    updateNavIndicator();
     if (logoFlying) {
       cancelLogoAnimations();
       logoTrackReady = true;

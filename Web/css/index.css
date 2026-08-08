@@ -106,6 +106,7 @@ nav.about-active ul {
     align-items: center;
     gap: 0.5rem;
     height: 100%;
+    margin-left: auto;
 }
 
 nav ul {
@@ -138,24 +139,26 @@ nav a {
     transition: color 0.3s ease;
 }
 
-nav a::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 2px;
-    background: var(--primary-color);
-    transition: width 0.3s ease;
-}
-
-nav a:hover::after,
-nav a.active::after {
-    width: 100%;
+nav a:hover {
+    color: var(--primary-color);
 }
 
 nav a.active {
     color: var(--primary-color);
+}
+
+.nav-indicator {
+    position: absolute;
+    height: 3px;
+    border-radius: 999px;
+    background: var(--primary-color);
+    left: 0;
+    top: 0;
+    width: 0;
+    pointer-events: none;
+    transition: left 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    top 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    width 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .theme-toggle,
@@ -1040,6 +1043,13 @@ main section {
     justify-content: center;
 }
 
+.about-logo {
+    display: none;
+    max-width: 260px;
+    width: 100%;
+    height: auto;
+}
+
 .about-content {
     flex: 1 1 320px;
     max-width: 440px;
@@ -1079,12 +1089,35 @@ footer {
     scroll-snap-align: end;
 }
 
+.footer-controls {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.footer-controls .theme-selector {
+    height: auto;
+}
+
+.footer-controls .lang-selector {
+    height: auto;
+}
+
 /* ===== Theme Selector ===== */
 .theme-selector {
     position: relative;
 }
 
 .theme-selector:hover .theme-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0) scale(1);
+}
+
+.theme-dropdown.show,
+.lang-dropdown.show {
     opacity: 1;
     visibility: visible;
     transform: translateY(0) scale(1);
@@ -1210,11 +1243,19 @@ footer {
 /* ===== Responsive ===== */
 @media (max-width: 768px) {
     nav {
-        width: calc(100% - 1rem);
+        display: none;
     }
 
-    nav ul {
+    .nav-indicator {
         display: none;
+    }
+
+    .about-logo {
+        display: block;
+    }
+
+    .footer-controls {
+        display: flex;
     }
 
     .hero h1 {
