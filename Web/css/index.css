@@ -11,6 +11,8 @@
     --background-rgb: 248, 245, 251;
     --text-rgb: 44, 62, 80;
     --border-color: #ddd;
+    --inverted-primary: #5ab430;
+    --inverted-accent: #387519;
 }
 
 [data-theme='dark'] {
@@ -140,7 +142,7 @@ nav a {
 }
 
 nav a:hover {
-    color: var(--primary-color);
+    color: var(--inverted-primary);
 }
 
 nav a.active {
@@ -170,6 +172,7 @@ nav a.active {
     width: 2.5rem;
     padding: 0;
     font-size: 1.1rem;
+    border-radius: 42%;
 }
 
 .theme-dropdown,
@@ -394,6 +397,7 @@ main section {
 .cta-primary:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+    color: var(--inverted-primary);
 }
 
 .cta-secondary {
@@ -403,9 +407,10 @@ main section {
 }
 
 .cta-secondary:hover {
-    background: rgba(255, 255, 255, 0.15);
+    background: var(--inverted-primary);
     transform: translateY(-3px);
-    border-color: white;
+    border-color: var(--inverted-primary);
+    color: #fff;
 }
 
 /* ===== Scroll Reveal System ===== */
@@ -650,8 +655,8 @@ main section {
     height: 100%;
     background: linear-gradient(
             135deg,
-            var(--primary-color),
-            var(--gradient-secondary)
+            var(--inverted-primary),
+            var(--inverted-accent)
     );
     opacity: 0;
     transition: opacity 0.4s ease;
@@ -665,7 +670,7 @@ main section {
 .download-button:hover {
     transform: translateY(-5px) scale(1.02);
     box-shadow: 0 12px 40px rgba(165, 75, 207, 0.3);
-    border-color: var(--primary-color);
+    border-color: var(--inverted-primary);
     color: white;
 }
 
@@ -780,7 +785,7 @@ main section {
 .open-source-link a:hover {
     transform: translateY(-3px);
     box-shadow: 0 8px 30px var(--shadow-color-hover);
-    color: var(--primary-color);
+    color: var(--inverted-primary);
 }
 
 .open-source-link a i {
@@ -979,15 +984,17 @@ main section {
     align-items: center;
     gap: 0.4rem;
     margin-top: 0.8rem;
+    padding: 0.5rem 0.9rem;
     color: var(--primary-color);
     text-decoration: none;
     font-size: 0.9rem;
     font-weight: 500;
     transition: all 0.3s ease;
+    align-self: flex-start;
 }
 
 .timeline-link:hover {
-    color: var(--gradient-secondary);
+    color: var(--inverted-primary);
     transform: translateX(3px);
 }
 
@@ -1144,7 +1151,7 @@ footer {
 
 .theme-dropdown button:hover,
 .lang-dropdown button:hover {
-    background: var(--shadow-color);
+    background: var(--inverted-primary);
 }
 
 .theme-dropdown button i {
@@ -1158,26 +1165,11 @@ footer {
     flex-shrink: 0;
 }
 
-.lang-dropdown button::before {
-    content: '';
-    width: 1.2rem;
-    text-align: center;
-    line-height: 1;
-    flex-shrink: 0;
-}
-
 .theme-dropdown button[data-selected='true'],
 .lang-dropdown button[data-selected='true'] {
     color: var(--primary-color);
     background: var(--shadow-color);
     font-weight: 600;
-}
-
-.lang-dropdown button[data-selected='true']::before {
-    content: '\f00c';
-    font-family: 'Font Awesome 6 Free', serif;
-    font-weight: 900;
-    color: var(--primary-color);
 }
 
 .theme-toggle {
@@ -1191,7 +1183,7 @@ footer {
 }
 
 .theme-toggle:hover {
-    color: var(--primary-color);
+    color: var(--inverted-primary);
 }
 
 .system-icon {
@@ -1237,7 +1229,7 @@ footer {
 }
 
 .lang-toggle:hover {
-    color: var(--primary-color);
+    color: var(--inverted-primary);
 }
 
 /* ===== Responsive ===== */
@@ -1364,3 +1356,7 @@ footer {
 #language-selector {
     display: none;
 }
+
+/* ===== Custom Cursor =====
+Shared styles live in css/cursor.css (loaded by index.html and 404.html).
+*/
