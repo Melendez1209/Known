@@ -6,6 +6,7 @@
   <title>Known</title>
   <link rel="icon" type="image/png" href="assets/media/Logo.png" />
   <link rel="stylesheet" href="css/index.css" />
+  <link rel="stylesheet" href="css/cursor.css" />
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
@@ -23,6 +24,7 @@
     }
   </script>
   <script src="src/script.js" defer></script>
+  <script src="src/cursor.js" defer></script>
   <script src="src/main.js" type="module"></script>
 </head>
 <body>
@@ -51,6 +53,7 @@
         <a href="#about" data-i18n="nav.about" class="nav-link">About</a>
       </li>
     </ul>
+    <div class="nav-indicator" aria-hidden="true"></div>
     <div class="nav-controls">
       <div class="theme-selector">
         <button class="theme-toggle">
@@ -74,9 +77,7 @@
         </div>
       </div>
       <div class="lang-selector">
-        <button class="lang-toggle">
-          <i class="fas fa-globe"></i>
-        </button>
+        <button class="lang-toggle"><i class="fas fa-globe"></i></button>
         <div class="lang-dropdown">
           <button data-lang="zh" data-selected="true">
             <span>简体中文</span>
@@ -249,7 +250,13 @@
 
   <section id="about">
     <div class="about-container">
-      <div class="about-logo-column"></div>
+      <div class="about-logo-column">
+        <img
+          src="assets/media/Logo.png"
+          alt="Known Logo"
+          class="about-logo"
+        />
+      </div>
       <div class="about-content">
         <h2 data-i18n="about.title" class="scroll-reveal">About Known</h2>
         <p
@@ -268,6 +275,46 @@
 </main>
 
 <footer>
+  <div class="footer-controls">
+    <div class="theme-selector">
+      <button class="theme-toggle">
+        <i class="fas fa-sun light-icon"></i>
+        <i class="fas fa-moon dark-icon"></i>
+        <i class="fas fa-desktop system-icon"></i>
+      </button>
+      <div class="theme-dropdown">
+        <button data-theme="light">
+          <i class="fas fa-sun"></i>
+          <span data-i18n="theme.light">Light Mode</span>
+        </button>
+        <button data-theme="dark">
+          <i class="fas fa-moon"></i>
+          <span data-i18n="theme.dark">Dark Mode</span>
+        </button>
+        <button data-theme="system">
+          <i class="fas fa-desktop"></i>
+          <span data-i18n="theme.system">Follow System</span>
+        </button>
+      </div>
+    </div>
+    <div class="lang-selector">
+      <button class="lang-toggle"><i class="fas fa-globe"></i></button>
+      <div class="lang-dropdown">
+        <button data-lang="zh" data-selected="true">
+          <span>简体中文</span>
+        </button>
+        <button data-lang="zh-tw">
+          <span>繁體中文</span>
+        </button>
+        <button data-lang="en">
+          <span>English (US)</span>
+        </button>
+        <button data-lang="en-GB">
+          <span>English (UK)</span>
+        </button>
+      </div>
+    </div>
+  </div>
   <p>
     &copy; 2024 Known.
     <span data-i18n="footer.copyright"

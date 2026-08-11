@@ -1,27 +1,219 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en-US">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>404</title>
-  <link rel="icon" type="image/png" href="assets/media/Logo.png">
-  <link rel="stylesheet" href="css/404.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>404 - Known</title>
+  <link rel="icon" type="image/png" href="assets/media/Logo.png" />
+  <link rel="stylesheet" href="css/404.css" />
+  <link rel="stylesheet" href="css/cursor.css" />
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+  />
+  <script>
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)');
+    const savedTheme = localStorage.getItem('theme');
+    document.documentElement.setAttribute(
+      'data-theme',
+      savedTheme || (prefersDark.matches ? 'dark' : 'light')
+    );
+    document.documentElement.setAttribute(
+      'data-theme-setting',
+      savedTheme || 'system'
+    );
+  </script>
 </head>
 <body>
-<div class="error-container">
-  <div class="error-logo">
-    <img src="assets/media/Logo.png" alt="Known Logo">
-  </div>
-  <div class="error-content">
-    <h1>404</h1>
-    <h2 data-i18n="error.heading">Not Found</h2>
-    <p data-i18n="error.message">Sorry, The page you visited may have been removed.</p>
-    <div class="button-group">
-      <a href="index.html" class="back-home" data-i18n="error.home">Back to Home</a>
-      <button class="refresh-btn" onclick="window.location.reload()" data-i18n="error.refresh">Refresh</button>
+<div class="error-page">
+  <div class="particles" id="particles" aria-hidden="true"></div>
+
+  <div class="controls">
+    <div class="theme-selector">
+      <button class="theme-toggle" type="button">
+        <i class="fas fa-sun light-icon"></i>
+        <i class="fas fa-moon dark-icon"></i>
+        <i class="fas fa-desktop system-icon"></i>
+      </button>
+      <div class="theme-dropdown">
+        <button data-theme="light">
+          <i class="fas fa-sun"></i>
+          <span data-i18n="theme.light">Light Mode</span>
+        </button>
+        <button data-theme="dark">
+          <i class="fas fa-moon"></i>
+          <span data-i18n="theme.dark">Dark Mode</span>
+        </button>
+        <button data-theme="system">
+          <i class="fas fa-desktop"></i>
+          <span data-i18n="theme.system">Follow System</span>
+        </button>
+      </div>
+    </div>
+    <div class="lang-selector">
+      <button class="lang-toggle" type="button">
+        <i class="fas fa-globe"></i>
+      </button>
+      <div class="lang-dropdown">
+        <button data-lang="zh"><span>简体中文</span></button>
+        <button data-lang="zh-tw"><span>繁體中文</span></button>
+        <button data-lang="en"><span>English (US)</span></button>
+        <button data-lang="en-GB"><span>English (UK)</span></button>
+      </div>
     </div>
   </div>
+
+  <div class="error-layout">
+    <div class="error-logo">
+      <img src="assets/media/Logo.png" alt="Known Logo" />
+    </div>
+    <div class="error-content">
+      <h1 class="error-code" aria-label="404">404</h1>
+      <h2 data-i18n="error.heading">Not Found</h2>
+      <p data-i18n="error.message">
+        Sorry, the page you visited may have been removed.
+      </p>
+      <div class="button-group">
+        <a href="index.html" class="back-home" data-i18n="error.home">
+          Back to Home
+        </a>
+        <button
+          type="button"
+          class="refresh-btn"
+          onclick="window.location.reload()"
+          data-i18n="error.refresh"
+        >
+          Refresh
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <p class="page-footer">
+    &copy; 2024 Known.
+    <span data-i18n="footer.copyright"
+    >Open-sourced under MIT License.</span
+    >
+  </p>
 </div>
+
 <script src="src/i18n.js"></script>
+<script>
+  // ===== Particles =====
+  const particlesContainer = document.getElementById('particles');
+  if (particlesContainer) {
+    const count = window.innerWidth < 768 ? 10 : 20;
+    for (let i = 0; i < count; i++) {
+      const particle = document.createElement('div');
+      particle.classList.add('particle');
+      const size = Math.random() * 14 + 6;
+      particle.style.width = size + 'px';
+      particle.style.height = size + 'px';
+      particle.style.left = Math.random() * 100 + '%';
+      particle.style.animationDuration = Math.random() * 10 + 10 + 's';
+      particle.style.animationDelay = Math.random() * 10 + 's';
+      particlesContainer.appendChild(particle);
+    }
+  }
+
+  // ===== Theme =====
+  function getSystemTheme() {
+    return window.matchMedia('(prefers-color-scheme: dark)').matches
+      ? 'dark'
+      : 'light';
+  }
+
+  function updateThemeIcons(theme) {
+    document.querySelectorAll('.theme-selector').forEach((selector) => {
+      const icons = {
+        light: selector.querySelector('.light-icon'),
+        dark: selector.querySelector('.dark-icon'),
+        system: selector.querySelector('.system-icon')
+      };
+      icons.light.style.display =
+        theme === 'light' ? 'inline-block' : 'none';
+      icons.dark.style.display = theme === 'dark' ? 'inline-block' : 'none';
+      icons.system.style.display =
+        theme === 'system' ? 'inline-block' : 'none';
+    });
+  }
+
+  function updateSelectedTheme(theme) {
+    document.querySelectorAll('.theme-dropdown button').forEach((btn) => {
+      btn.setAttribute('data-selected', btn.dataset.theme === theme);
+    });
+  }
+
+  function updateSelectedLang(lang) {
+    document.querySelectorAll('.lang-dropdown button').forEach((btn) => {
+      btn.setAttribute('data-selected', btn.dataset.lang === lang);
+    });
+  }
+
+  function applyTheme(theme) {
+    const actualTheme = theme === 'system' ? getSystemTheme() : theme;
+    document.documentElement.setAttribute('data-theme', actualTheme);
+    document.documentElement.setAttribute('data-theme-setting', theme);
+    updateThemeIcons(theme);
+    updateSelectedTheme(theme);
+  }
+
+  applyTheme(localStorage.getItem('theme') || 'system');
+  updateSelectedLang(localStorage.getItem('lang') || 'zh');
+
+  function closeAllDropdowns() {
+    document
+      .querySelectorAll('.theme-dropdown, .lang-dropdown')
+      .forEach((dropdown) => dropdown.classList.remove('show'));
+  }
+
+  document.querySelectorAll('.theme-toggle').forEach((toggle) => {
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const dropdown = toggle
+        .closest('.theme-selector')
+        .querySelector('.theme-dropdown');
+      const wasOpen = dropdown.classList.contains('show');
+      closeAllDropdowns();
+      if (!wasOpen) dropdown.classList.add('show');
+    });
+  });
+
+  document.querySelectorAll('.lang-toggle').forEach((toggle) => {
+    toggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const dropdown = toggle
+        .closest('.lang-selector')
+        .querySelector('.lang-dropdown');
+      const wasOpen = dropdown.classList.contains('show');
+      closeAllDropdowns();
+      if (!wasOpen) dropdown.classList.add('show');
+    });
+  });
+
+  document.addEventListener('click', closeAllDropdowns);
+
+  document.querySelectorAll('.theme-dropdown').forEach((dropdown) => {
+    dropdown.addEventListener('click', (e) => {
+      const button = e.target.closest('button');
+      if (!button) return;
+      const theme = button.dataset.theme;
+      localStorage.setItem('theme', theme);
+      applyTheme(theme);
+    });
+  });
+
+  document.querySelectorAll('.lang-dropdown').forEach((dropdown) => {
+    dropdown.addEventListener('click', (e) => {
+      const button = e.target.closest('button');
+      if (!button) return;
+      const lang = button.dataset.lang;
+      localStorage.setItem('lang', lang);
+      changeLanguage(lang);
+      updateSelectedLang(lang);
+    });
+  });
+</script>
+<script src="src/cursor.js"></script>
 </body>
-</html> 
+</html>
