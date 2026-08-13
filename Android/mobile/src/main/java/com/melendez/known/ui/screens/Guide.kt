@@ -1,10 +1,5 @@
 package com.melendez.known.ui.screens
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -26,17 +21,12 @@ import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -49,18 +39,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.melendez.known.R
+import com.melendez.known.ui.components.RegionField
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.util.PreferenceUtil
-import com.melendez.known.util.getCityName
+import com.melendez.known.util.identityResourceToConstant
+import com.melendez.known.util.subjectResourceToKey
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -138,9 +128,14 @@ fun Guide(
                             pagerState.animateScrollToPage(pagerState.currentPage - 1)
                         }
                     } else {
-                        // 跳过引导，设置isFirstLogin为false
+                        // Skip the welcome screen and set  `isFirstLogin` to `false`
                         preferenceUtil.setFirstLogin(false)
-                        // Skip the entire onboarding
+                        persistOnboarding(
+                            preferenceUtil,
+                            selectedIdentity,
+                            region,
+                            selectedSubjects.value
+                        )
                         navigator.navigate(Screens.Main)
                     }
                 }
@@ -159,9 +154,14 @@ fun Guide(
                             pagerState.animateScrollToPage(pagerState.currentPage + 1)
                         }
                     } else {
-                        // 完成引导，设置isFirstLogin为false
+                        //  Complete the onboarding process and set `isFirstLogin` to `false`
                         preferenceUtil.setFirstLogin(false)
-                        // Navigate to main screen
+                        persistOnboarding(
+                            preferenceUtil,
+                            selectedIdentity,
+                            region,
+                            selectedSubjects.value
+                        )
                         navigator.navigate(Screens.Main)
                     }
                 }
@@ -207,18 +207,13 @@ fun PagerIndicator(
 
 @Composable
 fun IdentitySelection(onIdentitySelected: (Int) -> Unit) {
-    // 保存资源ID列表
     val identityOptions = listOf(
         R.string.student,
         R.string.teacher,
         R.string.parent
     )
-
-    // 保存选中的资源ID
-    var selectedOptionId by remember { mutableIntStateOf(identityOptions[0]) }
-
-    // 用于显示的字符串列表
-    val radioOptions = identityOptions.map { stringResource(it) }
+    var selectedOptionId by remember { mutableIntStateOf(identityOptions[0]) }//Save the selected resource ID
+    val radioOptions = identityOptions.map { stringResource(it) }//List of strings to be displayed
 
     Card(
         modifier = Modifier
@@ -276,31 +271,6 @@ fun IdentitySelection(onIdentitySelected: (Int) -> Unit) {
 @Composable
 fun RegionSelection(onRegionSelected: (String) -> Unit) {
     var region by remember { mutableStateOf("") }
-    val context = LocalContext.current
-
-    // 权限请求启动器
-    val requestPermissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            // 权限已授予，获取位置信息
-            try {
-                val cityName = getCityName(context)
-                if (cityName.isNotEmpty()) {
-                    region = cityName
-                    onRegionSelected(cityName)
-                } else {
-                    Toast.makeText(context, "未能获取到位置信息", Toast.LENGTH_SHORT).show()
-                }
-            } catch (e: Exception) {
-                // 处理其他异常
-                Toast.makeText(context, "获取位置信息失败：${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            // 用户拒绝了权限请求
-            Toast.makeText(context, "无法获取位置信息：权限被拒绝", Toast.LENGTH_SHORT).show()
-        }
-    }
 
     Card(
         modifier = Modifier
@@ -321,66 +291,13 @@ fun RegionSelection(onRegionSelected: (String) -> Unit) {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            OutlinedTextField(
+            RegionField(
                 value = region,
                 onValueChange = {
                     region = it
                     onRegionSelected(it)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text(stringResource(R.string.district)) }
+                }
             )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedButton(
-                onClick = {
-                    // 检查是否拥有位置权限
-                    when {
-                        ContextCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                        ) == PackageManager.PERMISSION_GRANTED -> {
-                            // 已有权限，直接获取位置
-                            try {
-                                val cityName = getCityName(context)
-                                if (cityName.isNotEmpty()) {
-                                    region = cityName
-                                    onRegionSelected(cityName)
-                                } else {
-                                    Toast.makeText(
-                                        context,
-                                        "未能获取到位置信息",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            } catch (e: Exception) {
-                                // 处理异常
-                                Toast.makeText(
-                                    context,
-                                    "获取位置信息失败：${e.message}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-
-                        else -> {
-                            // 请求权限
-                            requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
-                        }
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Icon(
-                    imageVector = Icons.Default.LocationOn,
-                    contentDescription = null
-                )
-                Text(
-                    text = stringResource(R.string.use_location),
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }
         }
     }
 }
@@ -388,7 +305,7 @@ fun RegionSelection(onRegionSelected: (String) -> Unit) {
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SubjectSelection(selectedSubjects: androidx.compose.runtime.MutableState<Set<Int>>) {
-    // 保存资源ID列表
+
     val subjectIds = listOf(
         R.string.physics,
         R.string.chemistry,
@@ -398,8 +315,6 @@ fun SubjectSelection(selectedSubjects: androidx.compose.runtime.MutableState<Set
         R.string.geography,
         R.string.pe
     )
-
-    // 用于显示的字符串列表
     val subjectTexts = subjectIds.map { stringResource(it) }
 
     Card(
@@ -457,4 +372,17 @@ fun SubjectSelection(selectedSubjects: androidx.compose.runtime.MutableState<Set
             }
         }
     }
+}
+
+private fun persistOnboarding(
+    preferenceUtil: PreferenceUtil,
+    identityResourceId: Int,
+    region: String,
+    selectedSubjectResourceIds: Set<Int>
+) {
+    preferenceUtil.updateIdentity(identityResourceToConstant(identityResourceId))
+    preferenceUtil.updateRegion(region)
+    preferenceUtil.updateSelectedSubjects(
+        selectedSubjectResourceIds.map { subjectResourceToKey(it) }.toSet()
+    )
 }

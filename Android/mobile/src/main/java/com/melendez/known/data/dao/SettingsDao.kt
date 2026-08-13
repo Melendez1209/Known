@@ -20,27 +20,36 @@ interface SettingsDao {
 
     @Query("UPDATE settings SET darkThemeValue = :darkThemeValue WHERE id = 1")
     suspend fun updateDarkMode(darkThemeValue: Int)
-    
+
     @Query("UPDATE settings SET isHighContrastMode = :isHighContrast WHERE id = 1")
     suspend fun updateHighContrastMode(isHighContrast: Boolean)
-    
+
     @Query("UPDATE settings SET isDynamicColorEnabled = :isDynamicColor WHERE id = 1")
     suspend fun updateDynamicColor(isDynamicColor: Boolean)
-    
+
     @Query("UPDATE settings SET selectedLanguage = :language WHERE id = 1")
     suspend fun updateLanguage(language: String)
-    
+
     @Query("UPDATE settings SET themeColor = :color WHERE id = 1")
     suspend fun updateThemeColor(color: Int)
-    
+
     @Query("UPDATE settings SET paletteStyleIndex = :index WHERE id = 1")
     suspend fun updatePaletteStyle(index: Int)
-    
+
     // Predictive back gesture related queries
     @Query("UPDATE settings SET predictiveBackEnabled = :enabled WHERE id = 1")
     suspend fun updatePredictiveBack(enabled: Boolean)
-    
+
     // First login tracking
     @Query("UPDATE settings SET isFirstLogin = :isFirstLogin WHERE id = 1")
     suspend fun updateFirstLogin(isFirstLogin: Boolean)
+
+    @Query("UPDATE settings SET identity = :identity WHERE id = 1")
+    suspend fun updateIdentity(identity: Int)
+
+    @Query("UPDATE settings SET region = :region WHERE id = 1")
+    suspend fun updateRegion(region: String)
+
+    @Query("UPDATE settings SET selectedSubjects = :subjects WHERE id = 1")
+    suspend fun updateSelectedSubjects(subjects: String)
 } 

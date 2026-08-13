@@ -3,6 +3,7 @@ package com.melendez.known.util
 import android.Manifest
 import android.content.Context
 import android.location.Geocoder
+import android.location.Location
 import android.location.LocationManager
 import android.util.Log
 import androidx.annotation.RequiresPermission
@@ -30,11 +31,20 @@ fun getCityName(context: Context): String {
     val locationManager = getSystemService(context, LocationManager::class.java)
     // Get the device's last known location
     val location = locationManager?.getLastKnownLocation(LocationManager.NETWORK_PROVIDER)
-    // Create an instance of Geocoder
-    val geocoder = Geocoder(context)
-    // Get the city address information
-    val addresses = location?.let { geocoder.getFromLocation(it.latitude, it.longitude, 1) }
-    val city = addresses?.get(0)?.locality ?: ""
+    // Reverse geocode the location into a city name
+    val city = location?.let { getCityNameFromGeocoder(Geocoder(context), it) } ?: ""
     Log.d("Melendez", "getCityName: city:$city")
     return city
+}
+
+/**
+ * Reverse geocodes the given [location] and extracts the city name from the nearest address.
+ *
+ * @param geocoder The [Geocoder] used to translate coordinates into an address.
+ * @param location The device location to reverse geocode.
+ * @return The name of the city as a [String], or an empty string if it cannot be determined.
+ */
+internal fun getCityNameFromGeocoder(geocoder: Geocoder, location: Location): String {
+    val addresses = geocoder.getFromLocation(location.latitude, location.longitude, 1)
+    return addresses?.getOrNull(0)?.locality ?: ""
 }

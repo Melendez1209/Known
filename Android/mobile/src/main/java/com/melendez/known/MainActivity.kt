@@ -49,6 +49,7 @@ import com.melendez.known.ui.screens.about.Credits
 import com.melendez.known.ui.screens.add.DRP
 import com.melendez.known.ui.screens.add.Inputting
 import com.melendez.known.ui.screens.main.MainScreen
+import com.melendez.known.ui.screens.settings.General
 import com.melendez.known.ui.screens.settings.Settings
 import com.melendez.known.ui.screens.settings.appearance.Appearance
 import com.melendez.known.ui.screens.settings.appearance.Dark
@@ -158,6 +159,7 @@ class MainActivity : ComponentActivity() {
                                     topLevelRoutes = setOf(
                                         Screens.Main,
                                         Screens.Settings,
+                                        Screens.General,
                                         Screens.Appearance,
                                         Screens.Dark,
                                         Screens.Language,
@@ -184,6 +186,9 @@ class MainActivity : ComponentActivity() {
                                     }
                                     entry<Screens.Settings> {
                                         Settings(navigator = navigator)
+                                    }
+                                    entry<Screens.General> {
+                                        General(navigator = navigator)
                                     }
                                     entry<Screens.Dark> {
                                         Dark(navigator = navigator)

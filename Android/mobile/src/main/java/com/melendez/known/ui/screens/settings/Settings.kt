@@ -52,7 +52,7 @@ private fun SettingsContent(modifier: Modifier, navigator: Navigator) {
                 description = stringResource(id = R.string.general_settings_desc),
                 icon = Icons.Rounded.SettingsApplications,
             ) {
-                TODO("General Settings")
+                navigator.navigate(Screens.General)
             }
         }
         item {

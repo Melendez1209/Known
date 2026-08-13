@@ -14,8 +14,10 @@ data class Settings(
     val selectedLanguage: String = "",
     val themeColor: Int = 0,
     val paletteStyleIndex: Int = 0,
-    // Predictive back gesture settings
     val predictiveBackEnabled: Boolean = true,
-    // First login tracking
-    val isFirstLogin: Boolean = true
+    val isFirstLogin: Boolean = true,
+    // Onboarding / general settings
+    val identity: Int = 0,
+    val region: String = "",
+    val selectedSubjects: String = ""
 ) 

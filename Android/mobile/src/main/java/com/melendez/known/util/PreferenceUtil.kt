@@ -24,6 +24,55 @@ val paletteStyles = listOf(
     PaletteStyle.Monochrome,
 )
 
+object Identity {
+    const val NONE = 0
+    const val STUDENT = 1
+    const val TEACHER = 2
+    const val PARENT = 3
+}
+
+val subjectKeys = listOf(
+    "physics",
+    "chemistry",
+    "biology",
+    "political",
+    "history",
+    "geography",
+    "pe"
+)
+
+fun identityResourceToConstant(resourceId: Int): Int = when (resourceId) {
+    R.string.student -> Identity.STUDENT
+    R.string.teacher -> Identity.TEACHER
+    R.string.parent -> Identity.PARENT
+    else -> Identity.NONE
+}
+
+fun subjectKeyToStringResource(key: String): Int = when (key) {
+    "physics" -> R.string.physics
+    "chemistry" -> R.string.chemistry
+    "biology" -> R.string.biology
+    "political" -> R.string.political
+    "history" -> R.string.history_subject
+    "geography" -> R.string.geography
+    else -> R.string.pe
+}
+
+fun subjectResourceToKey(resourceId: Int): String = when (resourceId) {
+    R.string.physics -> "physics"
+    R.string.chemistry -> "chemistry"
+    R.string.biology -> "biology"
+    R.string.political -> "political"
+    R.string.history_subject -> "history"
+    R.string.geography -> "geography"
+    else -> "pe"
+}
+
+fun String.toSubjectKeySet(): Set<String> =
+    if (isEmpty()) emptySet() else split(',').filter { it.isNotEmpty() }.toSet()
+
+fun Set<String>.toSubjectString(): String = joinToString(",")
+
 class PreferenceUtil(application: Application) : AndroidViewModel(application) {
     val repository: SettingsRepository
     val settings: Flow<Settings?>
@@ -64,7 +113,7 @@ class PreferenceUtil(application: Application) : AndroidViewModel(application) {
             repository.updateLanguage(language)
         }
     }
-    
+
     fun setFirstLogin(isFirstLogin: Boolean) {
         viewModelScope.launch {
             repository.updateFirstLogin(isFirstLogin)
@@ -75,6 +124,24 @@ class PreferenceUtil(application: Application) : AndroidViewModel(application) {
     fun setPredictiveBackEnabled(enabled: Boolean) {
         viewModelScope.launch {
             repository.updatePredictiveBack(enabled)
+        }
+    }
+
+    fun updateIdentity(identity: Int) {
+        viewModelScope.launch {
+            repository.updateIdentity(identity)
+        }
+    }
+
+    fun updateRegion(region: String) {
+        viewModelScope.launch {
+            repository.updateRegion(region)
+        }
+    }
+
+    fun updateSelectedSubjects(subjects: Set<String>) {
+        viewModelScope.launch {
+            repository.updateSelectedSubjects(subjects.toSubjectString())
         }
     }
 }
