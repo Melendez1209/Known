@@ -58,16 +58,6 @@ fun subjectKeyToStringResource(key: String): Int = when (key) {
     else -> R.string.pe
 }
 
-fun subjectResourceToKey(resourceId: Int): String = when (resourceId) {
-    R.string.physics -> "physics"
-    R.string.chemistry -> "chemistry"
-    R.string.biology -> "biology"
-    R.string.political -> "political"
-    R.string.history_subject -> "history"
-    R.string.geography -> "geography"
-    else -> "pe"
-}
-
 fun String.toSubjectKeySet(): Set<String> =
     if (isEmpty()) emptySet() else split(',').filter { it.isNotEmpty() }.toSet()
 

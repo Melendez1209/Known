@@ -1,4 +1,4 @@
-package com.melendez.known.ui.components
+package com.melendez.known.ui.components.generalsets
 
 import android.Manifest
 import android.content.pm.PackageManager
