@@ -3,6 +3,7 @@ package com.melendez.known.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.saveable.rememberSerializable
@@ -36,11 +37,14 @@ fun rememberNavigationState(
 
     val backStacks = topLevelRoutes.associateWith { key -> rememberNavBackStack(key) }
 
+    val routeHistory = remember { mutableStateListOf<NavKey>() }
+
     return remember(startRoute, topLevelRoutes) {
         NavigationState(
             startRoute = startRoute,
             topLevelRoute = topLevelRoute,
-            backStacks = backStacks
+            backStacks = backStacks,
+            routeHistory = routeHistory
         )
     }
 }
@@ -55,14 +59,18 @@ fun rememberNavigationState(
 class NavigationState(
     val startRoute: NavKey,
     topLevelRoute: MutableState<NavKey>,
-    val backStacks: Map<NavKey, NavBackStack<NavKey>>
+    val backStacks: Map<NavKey, NavBackStack<NavKey>>,
+    val routeHistory: SnapshotStateList<NavKey> = mutableStateListOf()
 ) {
     var topLevelRoute: NavKey by topLevelRoute
     val stacksInUse: List<NavKey>
-        get() = if (topLevelRoute == startRoute) {
-            listOf(startRoute)
-        } else {
-            listOf(startRoute, topLevelRoute)
+        get() {
+            val result = mutableListOf(startRoute)
+            for (route in routeHistory) {
+                if (route !in result) result.add(route)
+            }
+            if (topLevelRoute !in result) result.add(topLevelRoute)
+            return result
         }
 }
 

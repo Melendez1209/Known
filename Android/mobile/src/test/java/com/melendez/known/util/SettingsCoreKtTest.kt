@@ -1,113 +1,174 @@
 package com.melendez.known.util
 
+import android.content.Context
+import android.location.Address
+import android.location.Geocoder
+import android.location.Location
+import android.location.LocationManager
+import android.util.Log
+import androidx.core.content.ContextCompat
+import org.junit.Assert.assertEquals
+import org.junit.Assert.assertThrows
 import org.junit.Test
+import org.mockito.Mockito
+import java.io.IOException
 
+@Suppress("DEPRECATION")
 class SettingsCoreKtTest {
+
+    /**
+     * Resolves [Context] system services to the given [locationManager] and swallows [Log] calls
+     * while running [block].
+     */
+    private fun <T> withLocationService(
+        context: Context,
+        locationManager: LocationManager?,
+        block: () -> T
+    ): T {
+        val log = Mockito.mockStatic(Log::class.java)
+        val contextCompat = Mockito.mockStatic(ContextCompat::class.java)
+        try {
+            log.`when`<Int> { Log.d(Mockito.anyString(), Mockito.anyString()) }.thenReturn(0)
+            contextCompat.`when`<LocationManager?> {
+                ContextCompat.getSystemService(context, LocationManager::class.java)
+            }.thenReturn(locationManager)
+            return block()
+        } finally {
+            contextCompat.close()
+            log.close()
+        }
+    }
+
+    private fun mockLocation(latitude: Double, longitude: Double): Location {
+        val location = Mockito.mock(Location::class.java)
+        Mockito.`when`(location.latitude).thenReturn(latitude)
+        Mockito.`when`(location.longitude).thenReturn(longitude)
+        return location
+    }
+
+    private fun mockAddress(locality: String?): Address {
+        val address = Mockito.mock(Address::class.java)
+        Mockito.`when`(address.locality).thenReturn(locality)
+        return address
+    }
+
+    private fun mockGeocoder(
+        latitude: Double,
+        longitude: Double,
+        response: List<Address>?
+    ): Geocoder {
+        val geocoder = Mockito.mock(Geocoder::class.java)
+        Mockito.`when`(geocoder.getFromLocation(latitude, longitude, 1)).thenReturn(response)
+        return geocoder
+    }
+
+    // --- getCityName: end-to-end ---
 
     @Test
     fun `Successful city retrieval`() {
-        // Given location permissions are granted and the device has a valid last known location,
-        // and the Geocoder successfully returns an address with a locality,
-        // then the function should return the correct city name.
-        // TODO implement test
+        val context = Mockito.mock(Context::class.java)
+        val locationManager = Mockito.mock(LocationManager::class.java)
+        val location = mockLocation(31.2304, 121.4737)
+        Mockito.`when`(locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
+            .thenReturn(location)
+
+        Mockito.mockConstruction(Geocoder::class.java) { geocoder, _ ->
+            val address = mockAddress("Shanghai")
+            Mockito.`when`(geocoder.getFromLocation(31.2304, 121.4737, 1))
+                .thenReturn(listOf(address))
+        }.use {
+            withLocationService(context, locationManager) {
+                assertEquals("Shanghai", getCityName(context))
+            }
+        }
     }
 
     @Test
     fun `No location permissions granted`() {
-        // Given the app does not have ACCESS_FINE_LOCATION or ACCESS_COARSE_LOCATION permission,
-        // then the function should throw a SecurityException. [1, 5, 9]
-        // TODO implement test
+        val context = Mockito.mock(Context::class.java)
+        val locationManager = Mockito.mock(LocationManager::class.java)
+        Mockito.`when`(locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
+            .thenThrow(SecurityException("location permission denied"))
+
+        withLocationService(context, locationManager) {
+            assertThrows(SecurityException::class.java) { getCityName(context) }
+        }
     }
 
     @Test
     fun `LocationManager returns null`() {
-        // Given the getSystemService for LocationManager returns null,
-        // then the function should handle the null pointer exception gracefully and return an empty string.
-        // TODO implement test
+        val context = Mockito.mock(Context::class.java)
+        withLocationService(context, null) {
+            assertEquals("", getCityName(context))
+        }
     }
 
     @Test
     fun `getLastKnownLocation returns null`() {
-        // Given location permissions are granted but getLastKnownLocation returns null (e.g., location is off, or it's a new/reset device),
-        // then the function should return an empty string. [2, 12, 25, 36]
-        // TODO implement test
+        val context = Mockito.mock(Context::class.java)
+        val locationManager = Mockito.mock(LocationManager::class.java)
+        Mockito.`when`(locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER))
+            .thenReturn(null)
+
+        withLocationService(context, locationManager) {
+            assertEquals("", getCityName(context))
+        }
     }
+
+    // --- getCityNameFromGeocoder: reverse geocoding ---
 
     @Test
     fun `Geocoder returns no addresses`() {
-        // Given a valid location is available, but the Geocoder's getFromLocation returns an empty list or null,
-        // then the function should handle the IndexOutOfBoundsException gracefully and return an empty string. [7, 17, 33]
-        // TODO implement test
+        assertEquals(
+            "",
+            getCityNameFromGeocoder(mockGeocoder(1.0, 2.0, emptyList()), mockLocation(1.0, 2.0))
+        )
+        assertEquals(
+            "",
+            getCityNameFromGeocoder(mockGeocoder(1.0, 2.0, null), mockLocation(1.0, 2.0))
+        )
     }
 
     @Test
     fun `Address locality is null`() {
-        // Given the Geocoder returns an address, but the locality field is null,
-        // then the function should return an empty string. [6, 13, 15]
-        // TODO implement test
+        val geocoder = Mockito.mock(Geocoder::class.java)
+        val address = mockAddress(null)
+        Mockito.`when`(geocoder.getFromLocation(1.0, 2.0, 1)).thenReturn(listOf(address))
+        assertEquals("", getCityNameFromGeocoder(geocoder, mockLocation(1.0, 2.0)))
     }
 
     @Test
     fun `Address locality is an empty string`() {
-        // Given the Geocoder returns an address where the locality is an empty string,
-        // then the function should return an empty string.
-        // TODO implement test
+        val geocoder = Mockito.mock(Geocoder::class.java)
+        val address = mockAddress("")
+        Mockito.`when`(geocoder.getFromLocation(1.0, 2.0, 1)).thenReturn(listOf(address))
+        assertEquals("", getCityNameFromGeocoder(geocoder, mockLocation(1.0, 2.0)))
     }
 
     @Test
     fun `Geocoder throws IOException`() {
-        // Given a valid location, but the Geocoder service is unavailable and throws an IOException,
-        // then the function should be tested for how it handles this unhandled exception. [11, 19, 40, 44]
-        // TODO implement test
+        val geocoder = Mockito.mock(Geocoder::class.java)
+        Mockito.`when`(geocoder.getFromLocation(1.0, 2.0, 1))
+            .thenThrow(IOException("geocoder backend unavailable"))
+        assertThrows(IOException::class.java) {
+            getCityNameFromGeocoder(geocoder, mockLocation(1.0, 2.0))
+        }
     }
 
     @Test
-    fun `Location at 0 latitude  0 longitude`() {
-        // Given getLastKnownLocation returns a location with latitude 0.0 and longitude 0.0 (a common default/error value),
-        // test what city (if any) is returned. [2]
-        // TODO implement test
+    fun `Location at 0 latitude 0 longitude`() {
+        val geocoder = Mockito.mock(Geocoder::class.java)
+        val address = mockAddress("Null Island")
+        Mockito.`when`(geocoder.getFromLocation(0.0, 0.0, 1)).thenReturn(listOf(address))
+        assertEquals("Null Island", getCityNameFromGeocoder(geocoder, mockLocation(0.0, 0.0)))
+        Mockito.verify(geocoder).getFromLocation(0.0, 0.0, 1)
     }
 
     @Test
     fun `Location in a remote area`() {
-        // Given a location in a remote area (e.g., ocean, desert) where no locality exists,
-        // the function should return an empty string.
-        // TODO implement test
+        val geocoder = Mockito.mock(Geocoder::class.java)
+        val address = mockAddress(null)
+        Mockito.`when`(geocoder.getFromLocation(1.0, 2.0, 1)).thenReturn(listOf(address))
+        assertEquals("", getCityNameFromGeocoder(geocoder, mockLocation(1.0, 2.0)))
     }
-
-    @Test
-    fun `ACCESS FINE LOCATION permission only`() {
-        // Given only the ACCESS_FINE_LOCATION permission is granted,
-        // the function should execute successfully and return a city name.
-        // TODO implement test
-    }
-
-    @Test
-    fun `ACCESS COARSE LOCATION permission only`() {
-        // Given only the ACCESS_COARSE_LOCATION permission is granted,
-        // the function should execute successfully and return a city name. [4]
-        // TODO implement test
-    }
-
-    @Test
-    fun `Geocoder backend service not present`() {
-        // On devices or emulators without Google Play Services, the Geocoder backend might be missing.
-        // Test the function's behavior, which may result in an empty list or an exception. [28]
-        // TODO implement test
-    }
-
-    @Test
-    fun `Context is null`() {
-        // Although not directly possible with non-nullable Context parameter in Kotlin, test the scenario where a null context might be passed from Java code,
-        // expecting a NullPointerException.
-        // TODO implement test
-    }
-
-    @Test
-    fun `Concurrent function calls`() {
-        // Test the behavior of the function when called multiple times in quick succession from different threads
-        // to check for any potential race conditions or thread safety issues.
-        // TODO implement test
-    }
-
 }

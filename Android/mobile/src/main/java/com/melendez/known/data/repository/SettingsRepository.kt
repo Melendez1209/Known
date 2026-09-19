@@ -49,4 +49,16 @@ class SettingsRepository(private val settingsDao: SettingsDao) {
     suspend fun updateFirstLogin(isFirstLogin: Boolean) {
         settingsDao.updateFirstLogin(isFirstLogin)
     }
+
+    suspend fun updateIdentity(identity: Int) {
+        settingsDao.updateIdentity(identity)
+    }
+
+    suspend fun updateRegion(region: String) {
+        settingsDao.updateRegion(region)
+    }
+
+    suspend fun updateSelectedSubjects(subjects: String) {
+        settingsDao.updateSelectedSubjects(subjects)
+    }
 }

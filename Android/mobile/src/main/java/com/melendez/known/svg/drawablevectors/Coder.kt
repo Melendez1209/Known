@@ -1,4 +1,4 @@
-package com.junkfood.seal.ui.svg.drawablevectors
+package com.melendez.known.svg.drawablevectors
 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
