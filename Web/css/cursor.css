@@ -1,0 +1,58 @@
+/* ===== Custom Cursor ===== */
+html.custom-cursor,
+html.custom-cursor * {
+    cursor: none;
+}
+
+.cursor-dot {
+    --cursor-size: 24px;
+    --cursor-offset-x: 12px;
+    --cursor-offset-y: 12px;
+    --cursor-x: -100px;
+    --cursor-y: -100px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    width: var(--cursor-size);
+    height: var(--cursor-size);
+    border-radius: 420px;
+    background: #fff;
+    border: 1px solid var(--text-color);
+    mix-blend-mode: exclusion;
+    pointer-events: none;
+    will-change: transform;
+    transform: translate3d(
+            calc(var(--cursor-x) - var(--cursor-offset-x)),
+            calc(var(--cursor-y) - var(--cursor-offset-y)),
+            0
+    );
+}
+
+.cursor-dot.is-hover {
+    --cursor-size: 40px;
+    --cursor-offset-x: 20px;
+    --cursor-offset-y: 20px;
+}
+
+.cursor-dot.is-fill {
+    border-color: rgba(0, 0, 0, 0);
+}
+
+.cursor-dot.is-away {
+    opacity: 0;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .cursor-dot {
+        transition: width 0.15s ease-in, height 0.15s ease-in,
+        border-radius 0.15s ease-in, opacity 0.1s ease-in;
+    }
+
+    .cursor-dot.is-fill {
+        transition: top 0.2s cubic-bezier(0, 0.1, 0.1, 1),
+        left 0.25s cubic-bezier(0, 0.1, 0.1, 1),
+        width 0.15s ease-in-out, height 0.2s ease-in-out,
+        border-radius 0.15s ease-in, opacity 0.1s ease-in;
+    }
+}
