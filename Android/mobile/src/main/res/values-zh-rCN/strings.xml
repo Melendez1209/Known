@@ -118,4 +118,7 @@
     <string name="physics">物理</string>
     <string name="chemistry">化学</string>
     <string name="history_subject">历史</string>
+    <string name="clear_cache">清除缓存</string>
+    <string name="clear_cache_desc">清除缓存数据以释放空间（%1$s）</string>
+    <string name="cache_freed">缓存已清除。已释放 %1$s。</string>
 </resources>

@@ -117,4 +117,7 @@
     <string name="identity">Identity</string>
     <string name="region">Region</string>
     <string name="subjects">Subjects</string>
+    <string name="clear_cache">Clear cache</string>
+    <string name="clear_cache_desc">Clear cached data to free up space (%1$s)</string>
+    <string name="cache_freed">Cache cleared. Freed %1$s.</string>
 </resources>

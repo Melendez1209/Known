@@ -3,7 +3,6 @@ package com.melendez.known.ui.components
 import android.annotation.SuppressLint
 import android.content.res.Configuration
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.LocalIndication
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -75,7 +74,6 @@ private val PreferenceTitleVariant: TextStyle
 private val PreferenceTitle
     @Composable get() = MaterialTheme.typography.titleMedium
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PreferenceItem(
     title: String,
@@ -183,7 +181,6 @@ fun PreferenceItemPreview() {
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun PreferenceItemVariant(
     modifier: Modifier = Modifier,
@@ -784,7 +781,6 @@ fun CreditItem(
 }
 
 @SuppressLint("MemberExtensionConflict")
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 @Preview
 fun TemplateItem(
@@ -923,19 +919,25 @@ fun PreferenceInfoPreview() {
 fun SettingItem(title: String, description: String, icon: ImageVector?, onClick: () -> Unit) {
     Surface(modifier = Modifier.clickable { onClick() }) {
         Row(
-            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp, vertical = 20.dp),
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 16.dp, vertical = 20.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             icon?.let {
                 Icon(
                     imageVector = icon,
                     contentDescription = null,
-                    modifier = Modifier.padding(end = 16.dp).size(24.dp),
+                    modifier = Modifier
+                        .padding(end = 16.dp)
+                        .size(24.dp),
                     tint = MaterialTheme.colorScheme.primary,
                 )
             }
             Column(
-                modifier = Modifier.weight(1f).padding(start = if (icon == null) 12.dp else 0.dp)
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(start = if (icon == null) 12.dp else 0.dp)
             ) {
                 Text(
                     text = title,

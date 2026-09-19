@@ -117,4 +117,7 @@
     <string name="physics">物理</string>
     <string name="chemistry">化學</string>
     <string name="history_subject">歷史</string>
+    <string name="clear_cache">清除快取</string>
+    <string name="clear_cache_desc">清除快取資料以釋放空間（%1$s）</string>
+    <string name="cache_freed">快取已清除。已釋放 %1$s。</string>
 </resources>
