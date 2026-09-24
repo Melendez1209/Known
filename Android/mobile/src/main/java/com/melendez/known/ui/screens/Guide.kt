@@ -1,10 +1,5 @@
 package com.melendez.known.ui.screens
 
-import android.Manifest
-import android.content.pm.PackageManager
-import android.widget.Toast
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -21,23 +16,13 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.selection.selectable
-import androidx.compose.foundation.selection.selectableGroup
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.FilterChip
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.RadioButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
@@ -49,18 +34,18 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.semantics.Role
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.melendez.known.R
+import com.melendez.known.ui.components.generalsets.IdentitySelector
+import com.melendez.known.ui.components.generalsets.RegionField
+import com.melendez.known.ui.components.generalsets.SubjectSelector
 import com.melendez.known.ui.navigation.Navigator
+import com.melendez.known.util.Identity
 import com.melendez.known.util.PreferenceUtil
-import com.melendez.known.util.getCityName
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -68,9 +53,9 @@ import kotlinx.coroutines.launch
 fun Guide(
     navigator: Navigator
 ) {
-    var selectedIdentity by remember { mutableIntStateOf(R.string.student) }
+    var selectedIdentity by remember { mutableIntStateOf(Identity.STUDENT) }
     var region by remember { mutableStateOf("") }
-    val selectedSubjects = remember { mutableStateOf(setOf<Int>()) }
+    val selectedSubjects = remember { mutableStateOf(setOf<String>()) }
     val preferenceUtil: PreferenceUtil = viewModel()
 
     val pagerState = rememberPagerState { 3 }
@@ -106,9 +91,12 @@ fun Guide(
             modifier = Modifier.weight(1f)
         ) { page ->
             when (page) {
-                0 -> IdentitySelection { identity ->
-                    selectedIdentity = identity
-                }
+                0 -> IdentitySelection(
+                    selected = selectedIdentity,
+                    onIdentitySelected = { identity ->
+                        selectedIdentity = identity
+                    }
+                )
 
                 1 -> RegionSelection { selectedRegion ->
                     region = selectedRegion
@@ -138,9 +126,14 @@ fun Guide(
                             pagerState.animateScrollToPage(pagerState.currentPage - 1)
                         }
                     } else {
-                        // 跳过引导，设置isFirstLogin为false
+                        // Skip the welcome screen and set  `isFirstLogin` to `false`
                         preferenceUtil.setFirstLogin(false)
-                        // Skip the entire onboarding
+                        persistOnboarding(
+                            preferenceUtil,
+                            selectedIdentity,
+                            region,
+                            selectedSubjects.value
+                        )
                         navigator.navigate(Screens.Main)
                     }
                 }
@@ -159,9 +152,14 @@ fun Guide(
                             pagerState.animateScrollToPage(pagerState.currentPage + 1)
                         }
                     } else {
-                        // 完成引导，设置isFirstLogin为false
+                        //  Complete the onboarding process and set `isFirstLogin` to `false`
                         preferenceUtil.setFirstLogin(false)
-                        // Navigate to main screen
+                        persistOnboarding(
+                            preferenceUtil,
+                            selectedIdentity,
+                            region,
+                            selectedSubjects.value
+                        )
                         navigator.navigate(Screens.Main)
                     }
                 }
@@ -206,20 +204,10 @@ fun PagerIndicator(
 }
 
 @Composable
-fun IdentitySelection(onIdentitySelected: (Int) -> Unit) {
-    // 保存资源ID列表
-    val identityOptions = listOf(
-        R.string.student,
-        R.string.teacher,
-        R.string.parent
-    )
-
-    // 保存选中的资源ID
-    var selectedOptionId by remember { mutableIntStateOf(identityOptions[0]) }
-
-    // 用于显示的字符串列表
-    val radioOptions = identityOptions.map { stringResource(it) }
-
+fun IdentitySelection(
+    selected: Int,
+    onIdentitySelected: (Int) -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -239,36 +227,10 @@ fun IdentitySelection(onIdentitySelected: (Int) -> Unit) {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            Column(Modifier.selectableGroup()) {
-                identityOptions.forEachIndexed { index, resourceId ->
-                    val text = radioOptions[index]
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(56.dp)
-                            .selectable(
-                                selected = (resourceId == selectedOptionId),
-                                onClick = {
-                                    selectedOptionId = resourceId
-                                    onIdentitySelected(resourceId)
-                                },
-                                role = Role.RadioButton
-                            )
-                            .padding(horizontal = 16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        RadioButton(
-                            selected = (resourceId == selectedOptionId),
-                            onClick = null // null because we're handling the click on the Row
-                        )
-                        Text(
-                            text = text,
-                            style = MaterialTheme.typography.bodyLarge,
-                            modifier = Modifier.padding(start = 16.dp)
-                        )
-                    }
-                }
-            }
+            IdentitySelector(
+                selected = selected,
+                onSelect = onIdentitySelected
+            )
         }
     }
 }
@@ -276,31 +238,6 @@ fun IdentitySelection(onIdentitySelected: (Int) -> Unit) {
 @Composable
 fun RegionSelection(onRegionSelected: (String) -> Unit) {
     var region by remember { mutableStateOf("") }
-    val context = LocalContext.current
-
-    // 权限请求启动器
-    val requestPermissionLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.RequestPermission()
-    ) { isGranted: Boolean ->
-        if (isGranted) {
-            // 权限已授予，获取位置信息
-            try {
-                val cityName = getCityName(context)
-                if (cityName.isNotEmpty()) {
-                    region = cityName
-                    onRegionSelected(cityName)
-                } else {
-                    Toast.makeText(context, "未能获取到位置信息", Toast.LENGTH_SHORT).show()
-                }
-            } catch (e: Exception) {
-                // 处理其他异常
-                Toast.makeText(context, "获取位置信息失败：${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        } else {
-            // 用户拒绝了权限请求
-            Toast.makeText(context, "无法获取位置信息：权限被拒绝", Toast.LENGTH_SHORT).show()
-        }
-    }
 
     Card(
         modifier = Modifier
@@ -321,87 +258,19 @@ fun RegionSelection(onRegionSelected: (String) -> Unit) {
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            OutlinedTextField(
+            RegionField(
                 value = region,
                 onValueChange = {
                     region = it
                     onRegionSelected(it)
-                },
-                modifier = Modifier.fillMaxWidth(),
-                label = { Text(stringResource(R.string.district)) }
+                }
             )
-
-            Spacer(modifier = Modifier.height(16.dp))
-
-            OutlinedButton(
-                onClick = {
-                    // 检查是否拥有位置权限
-                    when {
-                        ContextCompat.checkSelfPermission(
-                            context,
-                            Manifest.permission.ACCESS_COARSE_LOCATION
-                        ) == PackageManager.PERMISSION_GRANTED -> {
-                            // 已有权限，直接获取位置
-                            try {
-                                val cityName = getCityName(context)
-                                if (cityName.isNotEmpty()) {
-                                    region = cityName
-                                    onRegionSelected(cityName)
-                                } else {
-                                    Toast.makeText(
-                                        context,
-                                        "未能获取到位置信息",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            } catch (e: Exception) {
-                                // 处理异常
-                                Toast.makeText(
-                                    context,
-                                    "获取位置信息失败：${e.message}",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                        }
-
-                        else -> {
-                            // 请求权限
-                            requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
-                        }
-                    }
-                },
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Icon(
-                    imageVector = Icons.Default.LocationOn,
-                    contentDescription = null
-                )
-                Text(
-                    text = stringResource(R.string.use_location),
-                    modifier = Modifier.padding(start = 8.dp)
-                )
-            }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SubjectSelection(selectedSubjects: androidx.compose.runtime.MutableState<Set<Int>>) {
-    // 保存资源ID列表
-    val subjectIds = listOf(
-        R.string.physics,
-        R.string.chemistry,
-        R.string.biology,
-        R.string.political,
-        R.string.history_subject,
-        R.string.geography,
-        R.string.pe
-    )
-
-    // 用于显示的字符串列表
-    val subjectTexts = subjectIds.map { stringResource(it) }
-
+fun SubjectSelection(selectedSubjects: androidx.compose.runtime.MutableState<Set<String>>) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
@@ -421,40 +290,28 @@ fun SubjectSelection(selectedSubjects: androidx.compose.runtime.MutableState<Set
                 modifier = Modifier.padding(bottom = 16.dp)
             )
 
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                subjectIds.chunked(3).forEachIndexed { rowIndex, rowSubjectIds ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
-                    ) {
-                        rowSubjectIds.forEachIndexed { colIndex, subjectId ->
-                            val index = rowIndex * 3 + colIndex
-                            FilterChip(
-                                selected = selectedSubjects.value.contains(subjectId),
-                                onClick = {
-                                    selectedSubjects.value =
-                                        if (selectedSubjects.value.contains(subjectId)) {
-                                            selectedSubjects.value - subjectId
-                                        } else {
-                                            selectedSubjects.value + subjectId
-                                        }
-                                },
-                                label = { Text(subjectTexts[index]) },
-                                modifier = Modifier.weight(1f)
-                            )
+            SubjectSelector(
+                selected = selectedSubjects.value,
+                onToggle = { key ->
+                    selectedSubjects.value =
+                        if (selectedSubjects.value.contains(key)) {
+                            selectedSubjects.value - key
+                        } else {
+                            selectedSubjects.value + key
                         }
-
-                        // Add empty chips to fill the row if needed
-                        repeat(3 - rowSubjectIds.size) {
-                            Box(modifier = Modifier.weight(1f))
-                        }
-                    }
-
-                    Spacer(modifier = Modifier.height(8.dp))
                 }
-            }
+            )
         }
     }
+}
+
+private fun persistOnboarding(
+    preferenceUtil: PreferenceUtil,
+    identity: Int,
+    region: String,
+    selectedSubjects: Set<String>
+) {
+    preferenceUtil.updateIdentity(identity)
+    preferenceUtil.updateRegion(region)
+    preferenceUtil.updateSelectedSubjects(selectedSubjects)
 }

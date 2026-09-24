@@ -26,6 +26,22 @@ val Typography =
             labelLarge = labelLarge.applyTextDirection(),
             labelMedium = labelMedium.applyTextDirection(),
             labelSmall = labelSmall.applyTextDirection(),
+            // Emphasized styles for M3 Expressive
+            bodyLargeEmphasized = bodyLargeEmphasized.applyLinebreak().applyTextDirection(),
+            bodyMediumEmphasized = bodyMediumEmphasized.applyLinebreak().applyTextDirection(),
+            bodySmallEmphasized = bodySmallEmphasized.applyLinebreak().applyTextDirection(),
+            titleLargeEmphasized = titleLargeEmphasized.applyTextDirection(),
+            titleMediumEmphasized = titleMediumEmphasized.applyTextDirection(),
+            titleSmallEmphasized = titleSmallEmphasized.applyTextDirection(),
+            headlineSmallEmphasized = headlineSmallEmphasized.applyTextDirection(),
+            headlineMediumEmphasized = headlineMediumEmphasized.applyTextDirection(),
+            headlineLargeEmphasized = headlineLargeEmphasized.applyTextDirection(),
+            displaySmallEmphasized = displaySmallEmphasized.applyTextDirection(),
+            displayMediumEmphasized = displayMediumEmphasized.applyTextDirection(),
+            displayLargeEmphasized = displayLargeEmphasized.applyTextDirection(),
+            labelLargeEmphasized = labelLargeEmphasized.applyTextDirection(),
+            labelMediumEmphasized = labelMediumEmphasized.applyTextDirection(),
+            labelSmallEmphasized = labelSmallEmphasized.applyTextDirection(),
         )
     }
 

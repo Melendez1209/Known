@@ -1,16 +1,12 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
-
 package com.melendez.known.ui.components
 
-import android.os.Build
 import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.LargeTopAppBar
-import androidx.compose.material3.MediumTopAppBar
+import androidx.compose.material3.LargeFlexibleTopAppBar
+import androidx.compose.material3.MediumFlexibleTopAppBar
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.TopAppBarScrollBehavior
@@ -31,21 +27,10 @@ fun SharedTopBar(
     scrollBehavior: TopAppBarScrollBehavior? = null,
     actions: @Composable RowScope.() -> Unit = {}
 ) {
-    val activity = LocalActivity.current
-    val supportsPredictiveBack = Build.VERSION.SDK_INT >= 34
-
-    val onBackPressed: () -> Unit = {
-        if (supportsPredictiveBack && activity != null) {
-            // Using predictive back API
-            activity.onBackPressedDispatcher.onBackPressed()
-        } else {
-            // Traditional back operation
-            navController.goBack()
-        }
-    }
+    val onBackPressed: () -> Unit = { navController.goBack() }
 
     if (screenType == ScreenType.Medium) {
-        MediumTopAppBar(
+        MediumFlexibleTopAppBar(
             title = { Text(text = title) },
             navigationIcon = {
                 IconButton(onClick = onBackPressed) {
@@ -59,7 +44,7 @@ fun SharedTopBar(
             scrollBehavior = scrollBehavior
         )
     } else {
-        LargeTopAppBar(
+        LargeFlexibleTopAppBar(
             title = { Text(text = title) },
             navigationIcon = {
                 IconButton(onClick = onBackPressed) {
@@ -80,7 +65,13 @@ fun SharedTopBar(
 fun MediumTopBar_Preview() {
     SharedTopBar(
         screenType = ScreenType.Medium,
-        navController = Navigator(remember { com.melendez.known.ui.navigation.NavigationState(com.melendez.known.ui.screens.Screens.Main, mutableStateOf(com.melendez.known.ui.screens.Screens.Main), emptyMap()) }),
+        navController = Navigator(remember {
+            com.melendez.known.ui.navigation.NavigationState(
+                com.melendez.known.ui.screens.Screens.Main,
+                mutableStateOf(com.melendez.known.ui.screens.Screens.Main),
+                emptyMap()
+            )
+        }),
         title = "Title",
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     )
@@ -91,7 +82,13 @@ fun MediumTopBar_Preview() {
 fun LargeTopBar_Preview() {
     SharedTopBar(
         screenType = ScreenType.Compact,
-        navController = Navigator(remember { com.melendez.known.ui.navigation.NavigationState(com.melendez.known.ui.screens.Screens.Main, mutableStateOf(com.melendez.known.ui.screens.Screens.Main), emptyMap()) }),
+        navController = Navigator(remember {
+            com.melendez.known.ui.navigation.NavigationState(
+                com.melendez.known.ui.screens.Screens.Main,
+                mutableStateOf(com.melendez.known.ui.screens.Screens.Main),
+                emptyMap()
+            )
+        }),
         title = "Title",
         scrollBehavior = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     )

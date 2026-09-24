@@ -12,6 +12,9 @@ sealed class Screens : NavKey {
     data object Settings : NavKey
 
     @Serializable
+    data object General : NavKey
+
+    @Serializable
     data object Appearance : NavKey
 
     @Serializable

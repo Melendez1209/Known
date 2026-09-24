@@ -111,4 +111,5 @@ dependencies {
     debugImplementation(libs.ui.test.manifest)
 
     testImplementation(libs.junit)
+    testImplementation(libs.mockito.core)
 }
