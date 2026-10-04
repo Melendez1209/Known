@@ -36,11 +36,13 @@ import androidx.compose.material3.WideNavigationRailValue
 import androidx.compose.material3.rememberWideNavigationRailState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.semantics
@@ -51,6 +53,7 @@ import com.melendez.known.R
 import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.navigation.rememberNavigationState
+import com.melendez.known.ui.screens.main.inners.DeleteExamsDialog
 import com.melendez.known.ui.screens.main.inners.History
 import com.melendez.known.ui.screens.main.inners.Home
 import com.melendez.known.ui.screens.main.inners.Me
@@ -62,6 +65,18 @@ fun MainScreen(navigator: Navigator) {
 
     val screenType = LocalScreenType.current
     val screens = listOf(Screens.Home, Screens.History, Screens.Me)
+
+    // The history list's selection is held here so every layout shares one source of truth for
+    // multi-select mode and for the delete confirmation
+    val checkedIds = remember { mutableStateListOf<Long>() }
+    var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
+
+    if (showDeleteDialog) {
+        DeleteExamsDialog(
+            checkedIds = checkedIds,
+            onDismiss = { showDeleteDialog = false }
+        )
+    }
 
     val navigationState = rememberNavigationState(
         startRoute = Screens.Home,
@@ -81,21 +96,25 @@ fun MainScreen(navigator: Navigator) {
             navigator = navigator,
             innerNavigator = innerNavigator,
             screens = screens,
-            navigationState = navigationState
+            navigationState = navigationState,
+            checkedIds = checkedIds,
+            onRequestDelete = { showDeleteDialog = true }
         )
 
         ScreenType.Medium -> Main_Medium(
             navigator = navigator,
             innerNavigator = innerNavigator,
             screens = screens,
-            navigationState = navigationState
+            navigationState = navigationState,
+            checkedIds = checkedIds
         )
 
         ScreenType.Expanded -> Main_Expanded(
             navigator = navigator,
             innerNavigator = innerNavigator,
             screens = screens,
-            navigationState = navigationState
+            navigationState = navigationState,
+            checkedIds = checkedIds
         )
     }
 }
@@ -105,10 +124,12 @@ fun Main_Compact(
     navigator: Navigator,
     innerNavigator: Navigator,
     screens: List<Screens>,
-    navigationState: com.melendez.known.ui.navigation.NavigationState
+    navigationState: com.melendez.known.ui.navigation.NavigationState,
+    checkedIds: SnapshotStateList<Long>,
+    onRequestDelete: () -> Unit
 ) {
 
-    var isEditing by rememberSaveable { mutableStateOf(false) }
+    val isEditing = checkedIds.isNotEmpty()
 
     Scaffold(
         bottomBar = {
@@ -150,7 +171,7 @@ fun Main_Compact(
                                     contentDescription = stringResource(R.string.print)
                                 )
                             }
-                            IconButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP) }) {
+                            IconButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP()) }) {
                                 Icon(
                                     imageVector = Icons.Rounded.Edit,
                                     contentDescription = stringResource(R.string.edit)
@@ -164,7 +185,7 @@ fun Main_Compact(
                             }
                         },
                         floatingActionButton = {
-                            FloatingActionButton(onClick = { /*TODO*/ }) {
+                            FloatingActionButton(onClick = onRequestDelete) {
                                 Icon(
                                     imageVector = Icons.Rounded.Delete,
                                     contentDescription = stringResource(R.string.delete)
@@ -175,7 +196,7 @@ fun Main_Compact(
                 }
             }
         }, floatingActionButton = {
-            FloatingActionButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP) }) {
+            FloatingActionButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP()) }) {
                 Icon(
                     imageVector = Icons.Rounded.Add,
                     contentDescription = stringResource(R.string.add)
@@ -193,7 +214,7 @@ fun Main_Compact(
                 Screens.History -> History(
                     paddingValues = paddings,
                     navigator = navigator,
-                    onEditingChange = { isEditing = it }
+                    checkedIds = checkedIds
                 )
 
                 Screens.Me -> Me(navigator)
@@ -208,10 +229,11 @@ fun Main_Medium(
     navigator: Navigator,
     innerNavigator: Navigator,
     screens: List<Screens>,
-    navigationState: com.melendez.known.ui.navigation.NavigationState
+    navigationState: com.melendez.known.ui.navigation.NavigationState,
+    checkedIds: SnapshotStateList<Long>
 ) {
 
-    var isEditing by rememberSaveable { mutableStateOf(false) }
+    val isEditing = checkedIds.isNotEmpty()
     val wideNavigationRailState = rememberWideNavigationRailState()
     val wideNavigationRailScope = rememberCoroutineScope()
 
@@ -250,7 +272,7 @@ fun Main_Medium(
                         selected = screen == navigationState.topLevelRoute,
                         onClick = {
                             innerNavigator.navigate(screen)
-                            isEditing = false
+                            checkedIds.clear()
                         },
                         icon = {
                             Icon(
@@ -284,7 +306,7 @@ fun Main_Medium(
                                         contentDescription = stringResource(R.string.print)
                                     )
                                 }
-                                IconButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP) }) {
+                                IconButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP()) }) {
                                     Icon(
                                         imageVector = Icons.Rounded.Edit,
                                         contentDescription = stringResource(R.string.edit)
@@ -301,7 +323,7 @@ fun Main_Medium(
                     }
                 },
                 floatingActionButton = {
-                    LargeFloatingActionButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP) }) {
+                    LargeFloatingActionButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP()) }) {
                         Icon(
                             imageVector = Icons.Rounded.Add,
                             contentDescription = stringResource(R.string.add)
@@ -318,7 +340,7 @@ fun Main_Medium(
                         Screens.Home -> Home()
                         Screens.History -> History(
                             navigator = navigator,
-                            onEditingChange = { isEditing = it }
+                            checkedIds = checkedIds
                         )
 
                         Screens.Me -> Me(navigator)
@@ -335,10 +357,11 @@ fun Main_Expanded(
     navigator: Navigator,
     innerNavigator: Navigator,
     screens: List<Screens>,
-    navigationState: com.melendez.known.ui.navigation.NavigationState
+    navigationState: com.melendez.known.ui.navigation.NavigationState,
+    checkedIds: SnapshotStateList<Long>
 ) {
 
-    var isEditing by rememberSaveable { mutableStateOf(false) }
+    val isEditing = checkedIds.isNotEmpty()
 
     Surface(modifier = Modifier.fillMaxSize()) {
         PermanentNavigationDrawer(
@@ -351,7 +374,7 @@ fun Main_Expanded(
                             onClick = {
                                 innerNavigator.navigate(screen)
                                 if (screen.router != Screens.History.router) {
-                                    isEditing = false
+                                    checkedIds.clear()
                                 }
                             },
                             icon = {
@@ -385,7 +408,7 @@ fun Main_Expanded(
                                         contentDescription = stringResource(R.string.print)
                                     )
                                 }
-                                IconButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP) }) {
+                                IconButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP()) }) {
                                     Icon(
                                         imageVector = Icons.Rounded.Edit,
                                         contentDescription = stringResource(R.string.edit)
@@ -402,7 +425,7 @@ fun Main_Expanded(
                     }
                 },
                 floatingActionButton = {
-                    LargeFloatingActionButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP) }) {
+                    LargeFloatingActionButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP()) }) {
                         Icon(
                             imageVector = Icons.Rounded.Add,
                             contentDescription = stringResource(R.string.add)
@@ -419,7 +442,7 @@ fun Main_Expanded(
                         Screens.Home -> Home()
                         Screens.History -> History(
                             navigator = navigator,
-                            onEditingChange = { isEditing = it }
+                            checkedIds = checkedIds
                         )
 
                         Screens.Me -> Me(navigator)

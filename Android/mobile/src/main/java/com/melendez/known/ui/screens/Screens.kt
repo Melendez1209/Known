@@ -23,11 +23,27 @@ sealed class Screens : NavKey {
     @Serializable
     data object Language : NavKey
 
+    /**
+     * Date range picker that opens the score input screen. A non-zero [examId] means an existing
+     * exam is being re-dated, so [startDate] and [endDate] preselect the range it already covers.
+     */
     @Serializable
-    data object DRP : NavKey
+    data class DRP(
+        val examId: Long = 0L,
+        val startDate: Long = 0L,
+        val endDate: Long = 0L
+    ) : NavKey
 
+    /**
+     * Score input screen. A non-zero [examId] means an existing exam is edited in place rather than
+     * a new one being created.
+     */
     @Serializable
-    data object Inputting : NavKey
+    data class Inputting(
+        val startDate: Long = 0L,
+        val endDate: Long = 0L,
+        val examId: Long = 0L
+    ) : NavKey
 
     @Serializable
     data object About : NavKey
@@ -35,8 +51,9 @@ sealed class Screens : NavKey {
     @Serializable
     data object Signin : NavKey
 
+    /** Exam detail screen for the single exam identified by [examId]. */
     @Serializable
-    data object Detail : NavKey
+    data class Detail(val examId: Long = 0L) : NavKey
 
     @Serializable
     data object Prophets : NavKey

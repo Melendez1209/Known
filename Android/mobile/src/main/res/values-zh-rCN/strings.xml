@@ -121,4 +121,11 @@
     <string name="clear_cache">清除缓存</string>
     <string name="clear_cache_desc">清除缓存数据以释放空间（%1$s）</string>
     <string name="cache_freed">缓存已清除。已释放 %1$s。</string>
+    <string name="no_mark_entered">尚未录入任何分数，无法保存。</string>
+    <string name="mark_exceeds_full">分数不可超过满分。</string>
+    <string name="delete_exam_message">该场考试及其所有分数将被永久删除。</string>
+    <string name="no_search_result">没有符合条件的考试</string>
+    <string name="history_average">历史平均</string>
+    <string name="total_score">总分</string>
+    <string name="rank">排名</string>
 </resources>

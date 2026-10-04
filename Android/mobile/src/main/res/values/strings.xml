@@ -120,4 +120,11 @@
     <string name="clear_cache">Clear cache</string>
     <string name="clear_cache_desc">Clear cached data to free up space (%1$s)</string>
     <string name="cache_freed">Cache cleared. Freed %1$s.</string>
+    <string name="no_mark_entered">Enter at least one mark before saving.</string>
+    <string name="mark_exceeds_full">A mark cannot exceed its full mark.</string>
+    <string name="delete_exam_message">The exam and all of its scores will be permanently deleted.</string>
+    <string name="no_search_result">No matching exams</string>
+    <string name="history_average">Historical average</string>
+    <string name="total_score">Total score</string>
+    <string name="rank">Rank</string>
 </resources>

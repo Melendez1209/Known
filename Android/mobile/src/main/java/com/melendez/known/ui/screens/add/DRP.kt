@@ -1,6 +1,5 @@
 package com.melendez.known.ui.screens.add
 
-import android.util.Log
 import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,7 +12,6 @@ import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.DateRangePicker
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedButton
@@ -33,11 +31,19 @@ import com.melendez.known.R
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DRP(navigator: Navigator) {
+fun DRP(
+    navigator: Navigator,
+    examId: Long = 0L,
+    startDate: Long = 0L,
+    endDate: Long = 0L
+) {
 
-    val state = rememberDateRangePickerState()
+    // Re-dating an existing exam preselects the range it already covers
+    val state = rememberDateRangePickerState(
+        initialSelectedStartDateMillis = startDate.takeIf { it > 0L },
+        initialSelectedEndDateMillis = endDate.takeIf { it > 0L }
+    )
 
     var showingDialog by remember { mutableStateOf(false) }
 
@@ -101,11 +107,13 @@ fun DRP(navigator: Navigator) {
                 actions = {
                     IconButton(
                         onClick = {
-                            Log.d(
-                                "Melendez",
-                                "DRP: ${state.selectedStartDateMillis!!..state.selectedEndDateMillis!!}"
+                            navigator.navigate(
+                                Screens.Inputting(
+                                    startDate = state.selectedStartDateMillis ?: 0L,
+                                    endDate = state.selectedEndDateMillis ?: 0L,
+                                    examId = examId
+                                )
                             )
-                            navigator.navigate(Screens.Inputting)
                         },
                         enabled = state.selectedEndDateMillis != null
                     ) {

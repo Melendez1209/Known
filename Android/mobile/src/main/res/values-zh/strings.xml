@@ -120,4 +120,11 @@
     <string name="clear_cache">清除快取</string>
     <string name="clear_cache_desc">清除快取資料以釋放空間（%1$s）</string>
     <string name="cache_freed">快取已清除。已釋放 %1$s。</string>
+    <string name="no_mark_entered">尚未錄入任何分數，無法儲存。</string>
+    <string name="mark_exceeds_full">分數不可超過滿分。</string>
+    <string name="delete_exam_message">該場考試及其所有分數將被永久刪除。</string>
+    <string name="no_search_result">沒有符合的考試</string>
+    <string name="history_average">歷史平均</string>
+    <string name="total_score">總分</string>
+    <string name="rank">排名</string>
 </resources>

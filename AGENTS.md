@@ -14,6 +14,8 @@ messages, Markdown files and similar content in British English.
   `origin/dev_android`).
 - Pushes to `main` containing changes under `Web/` trigger the GitHub Pages deploy workflow
   (`.github/workflows/static.yml`). Treat pushes to `main` with extra care.
+- Prior to the official release of the [GitHub repository](https://github.com/Melendez1209/Known), the database version
+  will be standardised as v1; no migration is required.
 
 ## Repository layout (monorepo, single git repo at root)
 
