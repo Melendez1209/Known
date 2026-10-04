@@ -14,6 +14,11 @@ import androidx.compose.ui.unit.dp
 import com.melendez.known.svg.DynamicColorImageVectors
 import com.melendez.known.ui.theme.FixedAccentColors
 
+/**
+ * Coding illustration, ported from Seal's `Coder.kt`
+ * (https://github.com/JunkFood02/Seal, GPL-3.0). The colour roles are mapped onto this app's
+ * fixed accent palette
+ */
 @Composable
 fun DynamicColorImageVectors.coder(): ImageVector {
     return Builder(

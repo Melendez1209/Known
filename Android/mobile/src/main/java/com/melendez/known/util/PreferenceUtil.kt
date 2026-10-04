@@ -41,6 +41,22 @@ val subjectKeys = listOf(
     "pe"
 )
 
+/**
+ * Every subject that can be scored in an exam, in display order for the input and detail screens.
+ */
+val examSubjectKeys = listOf(
+    "chinese",
+    "maths",
+    "foreign_language",
+    "physics",
+    "chemistry",
+    "biology",
+    "political",
+    "history",
+    "geography",
+    "pe"
+)
+
 fun identityResourceToConstant(resourceId: Int): Int = when (resourceId) {
     R.string.student -> Identity.STUDENT
     R.string.teacher -> Identity.TEACHER
@@ -48,7 +64,14 @@ fun identityResourceToConstant(resourceId: Int): Int = when (resourceId) {
     else -> Identity.NONE
 }
 
+/**
+ * Maps a subject key from either [subjectKeys] or [examSubjectKeys] to its display string. Unknown
+ * keys fall back to PE, matching the historical behaviour of the onboarding selector.
+ */
 fun subjectKeyToStringResource(key: String): Int = when (key) {
+    "chinese" -> R.string.chinese
+    "maths" -> R.string.maths
+    "foreign_language" -> R.string.foreign_language
     "physics" -> R.string.physics
     "chemistry" -> R.string.chemistry
     "biology" -> R.string.biology

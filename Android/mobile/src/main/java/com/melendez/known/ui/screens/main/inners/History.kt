@@ -4,22 +4,27 @@ import android.annotation.SuppressLint
 import androidx.activity.compose.BackHandler
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.core.animateDpAsState
-import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material.ExperimentalMaterialApi
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Close
+import androidx.compose.material.icons.rounded.Delete
 import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.Search
+import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -29,6 +34,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ListItem
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -41,76 +47,132 @@ import androidx.compose.material3.pulltorefresh.rememberPullToRefreshState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
+import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.state.ToggleableState
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.melendez.known.R
+import com.melendez.known.data.entity.ExamWithTotal
+import com.melendez.known.svg.DynamicColorImageVectors
+import com.melendez.known.svg.drawablevectors.download
 import com.melendez.known.ui.navigation.NavigationState
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
+import com.melendez.known.ui.viewmodel.exam.ExamViewModel
+import com.melendez.known.util.formatDateRange
+import com.melendez.known.util.formatScoreInput
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
+
+/** Upper bound on the pull-to-refresh indicator, so it cannot outlive a silent re-query. */
+private const val REFRESH_TIMEOUT_MILLIS = 500L
 
 @SuppressLint("MemberExtensionConflict")
 @Suppress("DEPRECATION")
-@OptIn(
-    ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class,
-    ExperimentalMaterialApi::class, ExperimentalMaterial3ExpressiveApi::class
-)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3ExpressiveApi::class)
 @Composable
 fun History(
     paddingValues: PaddingValues? = null,
     navigator: Navigator,
-    onEditingChange: (Boolean) -> Unit
+    checkedIds: SnapshotStateList<Long>
 ) {
-    val checkboxes = remember { mutableStateListOf(false, false, false) }
-    var hasData by rememberSaveable { mutableStateOf(true) }
+    val viewModel: ExamViewModel = viewModel()
 
-    LaunchedEffect(Unit) {
-        hasData = checkboxes.isNotEmpty()
+    var key by rememberSaveable { mutableStateOf("") }
+    var active by rememberSaveable { mutableStateOf(false) }
+    // Room already keeps every list live, so a pull-to-refresh just starts a fresh subscription
+    var refreshTick by rememberSaveable { mutableIntStateOf(0) }
+    var isRefreshing by rememberSaveable { mutableStateOf(false) }
+
+    val examsResult by remember(key, refreshTick) {
+        if (key.isBlank()) viewModel.exams else viewModel.search(key.trim())
+    }.collectAsStateWithLifecycle(initialValue = null)
+    val exams: List<ExamWithTotal> = examsResult.orEmpty()
+    // Either this subscription has yet to deliver anything, or the user has just pulled
+    val loading = examsResult == null || isRefreshing
+
+    // A refreshed subscription emits as soon as its query returns. The timeout only guarantees the
+    // indicator cannot stick when those rows come back identical to the ones already shown.
+    LaunchedEffect(isRefreshing) {
+        if (isRefreshing) {
+            delay(REFRESH_TIMEOUT_MILLIS.milliseconds)
+            isRefreshing = false
+        }
+    }
+    val isEditing = checkedIds.isNotEmpty()
+
+    // Selection must never outlive the rows it was taken from, otherwise the tri-state header and
+    // the delete action would act on exams the user can no longer see
+    LaunchedEffect(exams) {
+        checkedIds.retainAll(exams.map { it.exam.id })
     }
 
-    Surface {
+    val rowPadding by animateDpAsState(
+        targetValue = if (isEditing) 36.dp else 12.dp,
+        label = "Checkbox spacing to expand or not"
+    )
+    val searchbarPadding by animateDpAsState(
+        targetValue = if (active) 0.dp else 12.dp,
+        label = "SearchBar spacing to expand or not"
+    )
+
+    val triState = when {
+        exams.isNotEmpty() && exams.all { it.exam.id in checkedIds } -> ToggleableState.On
+        exams.any { it.exam.id in checkedIds } -> ToggleableState.Indeterminate
+        else -> ToggleableState.Off
+    }
+    val toggleTriState: () -> Unit = {
+        if (triState == ToggleableState.On) {
+            checkedIds.clear()
+        } else {
+            checkedIds.clear()
+            checkedIds.addAll(exams.map { it.exam.id })
+        }
+    }
+
+    fun select(examId: Long, selected: Boolean) {
+        if (selected) {
+            if (examId !in checkedIds) checkedIds.add(examId)
+        } else {
+            checkedIds.remove(examId)
+        }
+    }
+
+    BackHandler(enabled = isEditing) {
+        checkedIds.clear()
+    }
+
+    Surface(modifier = Modifier.fillMaxSize()) {
         Column(horizontalAlignment = Alignment.CenterHorizontally) {
-            if (hasData && checkboxes.isNotEmpty()) {
-                var isEditing by rememberSaveable { mutableStateOf(false) }
-                val rowPadding by animateDpAsState(
-                    targetValue = if (isEditing) 36.dp else 12.dp,
-                    label = "Checkbox spacing to expand or not"
-                )
-
-                var triState by rememberSaveable { mutableStateOf(ToggleableState.Off) }
-                val toggleTriState = {
-                    triState = when (triState) {
-                        ToggleableState.On -> ToggleableState.Off
-                        ToggleableState.Off -> ToggleableState.On
-                        else -> ToggleableState.On
+            if (exams.isEmpty() && !loading && key.isBlank()) {
+                HistoryPlaceholder(
+                    text = stringResource(R.string.no_history),
+                    modifier = Modifier.weight(1f),
+                    action = {
+                        TextButton(
+                            onClick = { navigator.navigate(Screens.DRP()) },
+                            modifier = Modifier.padding(vertical = 3.dp)
+                        ) {
+                            Text(text = stringResource(id = R.string.add))
+                        }
                     }
-                    checkboxes.indices.forEach { index ->
-                        checkboxes[index] = triState == ToggleableState.On
-                    }
-                }
-
-                var key by rememberSaveable { mutableStateOf("") }
-                var active by rememberSaveable { mutableStateOf(false) }
-                val searchbarPadding by animateDpAsState(
-                    targetValue = if (active) 0.dp else 12.dp,
-                    label = "SearchBar spacing to expand or not"
                 )
-
-                BackHandler(enabled = isEditing) {
-                    isEditing = false
-                    onEditingChange(false)
-                    checkboxes.clear()
-                    checkboxes.addAll(listOf(false, false, false))
-                }
-
+            } else {
                 SearchBar(
                     query = key,
                     onQueryChange = { key = it },
@@ -129,7 +191,7 @@ fun History(
                     },
                     trailingIcon = {
                         IconButton(
-                            enabled = if (key.isNotBlank()) true else active,
+                            enabled = key.isNotBlank() || active,
                             onClick = {
                                 if (key.isNotBlank()) {
                                     key = ""
@@ -148,79 +210,103 @@ fun History(
                     }
                 ) {
                     LazyColumn(modifier = Modifier.fillMaxWidth()) {
-                        items(4) { index ->
-
-                            val resultText = stringResource(R.string.exam) + index
-
+                        itemsIndexed(exams, key = { _, item -> item.exam.id }) { index, item ->
                             ListItem(
-                                headlineContent = { Text(resultText) },
-                                modifier = Modifier.clickable {
-                                    key = resultText
-                                    active = false
+                                headlineContent = { Text(item.exam.name) },
+                                supportingContent = {
+                                    Text(
+                                        text = formatDateRange(
+                                            item.exam.startDate,
+                                            item.exam.endDate
+                                        )
+                                    )
                                 },
-                                supportingContent = { Text(text = "$index") }, //TODO: Marks
+                                modifier = Modifier.clickable {
+                                    active = false
+                                    navigator.navigate(Screens.Detail(examId = item.exam.id))
+                                },
                                 leadingContent = {
                                     Icon(
                                         Icons.Rounded.School,
-                                        contentDescription = stringResource(R.string.exam) + index
+                                        contentDescription = item.exam.name
                                     )
                                 }
                             )
-                            if (index != 3) {
+                            if (index != exams.lastIndex) {
                                 HorizontalDivider()
                             }
                         }
                     }
                 }
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(horizontal = 12.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    AnimatedVisibility(visible = isEditing) {
-                        TriStateCheckbox(state = triState, onClick = toggleTriState)
-                    }
+
+                if (exams.isEmpty() && !loading) {
+                    HistoryPlaceholder(
+                        text = stringResource(R.string.no_search_result),
+                        modifier = Modifier.weight(1f)
+                    )
+                } else {
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(start = rowPadding, end = 12.dp, top = 12.dp, bottom = 12.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween
+                            .padding(horizontal = 12.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
                     ) {
-                        Text(
-                            text = stringResource(R.string.exam),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            text = stringResource(R.string.time),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                        Text(
-                            text = stringResource(R.string.mark),
-                            style = MaterialTheme.typography.titleMedium
-                        )
+                        AnimatedVisibility(visible = isEditing) {
+                            TriStateCheckbox(state = triState, onClick = toggleTriState)
+                        }
+                        Row(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    start = rowPadding,
+                                    end = 12.dp,
+                                    top = 12.dp,
+                                    bottom = 12.dp
+                                ),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(
+                                text = stringResource(R.string.exam),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text(
+                                text = stringResource(R.string.time),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                            Text(
+                                text = stringResource(R.string.mark),
+                                style = MaterialTheme.typography.titleMedium
+                            )
+                        }
                     }
-                }
 
-                var isRefreshing by rememberSaveable { mutableStateOf(false) }
-                val pullToRefreshState: PullToRefreshState = rememberPullToRefreshState()
+                    val pullToRefreshState: PullToRefreshState = rememberPullToRefreshState()
 
-                PullToRefreshBox(
-                    isRefreshing = isRefreshing,
-                    onRefresh = { TODO() },
-                    state = pullToRefreshState,
-                    indicator = {
-                        PullToRefreshDefaults.LoadingIndicator(
-                            state = pullToRefreshState,
-                            isRefreshing = isRefreshing,
-                            modifier = Modifier.align(Alignment.TopCenter)
-                        )
-                    }
-                ) {
-                    LazyColumn(modifier = if (paddingValues != null) Modifier.padding(bottom = paddingValues.calculateBottomPadding()) else Modifier) {
-                        checkboxes.forEachIndexed { index, it ->
-                            item {
+                    PullToRefreshBox(
+                        isRefreshing = loading,
+                        onRefresh = {
+                            isRefreshing = true
+                            refreshTick++
+                        },
+                        state = pullToRefreshState,
+                        indicator = {
+                            PullToRefreshDefaults.LoadingIndicator(
+                                state = pullToRefreshState,
+                                isRefreshing = loading,
+                                modifier = Modifier.align(Alignment.TopCenter)
+                            )
+                        }
+                    ) {
+                        LazyColumn(
+                            modifier =
+                                if (paddingValues != null) {
+                                    Modifier.padding(bottom = paddingValues.calculateBottomPadding())
+                                } else {
+                                    Modifier
+                                }
+                        ) {
+                            items(exams, key = { it.exam.id }) { item ->
                                 Row(
                                     modifier = Modifier.padding(
                                         top = 6.dp,
@@ -233,50 +319,30 @@ fun History(
                                 ) {
                                     AnimatedVisibility(visible = isEditing) {
                                         Checkbox(
-                                            checked = it,
-                                            onCheckedChange = { it ->
-                                                checkboxes[index] = it
-                                                triState =
-                                                    if (
-                                                        checkboxes.stream().allMatch { it }
-                                                    ) ToggleableState.On
-                                                    else if (
-                                                        checkboxes.stream().allMatch { !it }
-                                                    ) ToggleableState.Off
-                                                    else ToggleableState.Indeterminate
-                                            }
+                                            checked = item.exam.id in checkedIds,
+                                            onCheckedChange = { select(item.exam.id, it) }
                                         )
                                     }
                                     Card(
-                                        modifier = Modifier
-                                            .combinedClickable(
-                                                onClick = {
-                                                    navigator.navigate(Screens.Detail)
-                                                }, onLongClick = {
-                                                    if (!isEditing) {
-                                                        checkboxes[index] = true
-                                                        triState =
-                                                            if (
-                                                                checkboxes.stream().allMatch { it }
-                                                            ) ToggleableState.On
-                                                            else if (
-                                                                checkboxes.stream().allMatch { !it }
-                                                            ) ToggleableState.Off
-                                                            else ToggleableState.Indeterminate
-                                                    } else {
-                                                        checkboxes.clear()
-                                                        checkboxes.addAll(
-                                                            listOf(
-                                                                false,
-                                                                false,
-                                                                false
-                                                            )
-                                                        )
-                                                    }
-                                                    isEditing = !isEditing
-                                                    onEditingChange(isEditing)
+                                        modifier = Modifier.combinedClickable(
+                                            onClick = {
+                                                if (isEditing) {
+                                                    select(
+                                                        item.exam.id,
+                                                        item.exam.id !in checkedIds
+                                                    )
+                                                } else {
+                                                    navigator.navigate(Screens.Detail(examId = item.exam.id))
                                                 }
-                                            )
+                                            },
+                                            onLongClick = {
+                                                if (isEditing) {
+                                                    checkedIds.clear()
+                                                } else {
+                                                    checkedIds.add(item.exam.id)
+                                                }
+                                            }
+                                        )
                                     ) {
                                         Row(
                                             modifier = Modifier
@@ -286,16 +352,24 @@ fun History(
                                             verticalAlignment = Alignment.CenterVertically,
                                         ) {
                                             Text(
-                                                text = stringResource(R.string.exam),
-                                                modifier = Modifier.padding(start = 12.dp),
-                                                style = MaterialTheme.typography.bodyLarge
+                                                text = item.exam.name,
+                                                modifier = Modifier
+                                                    .weight(1f)
+                                                    .padding(start = 12.dp),
+                                                style = MaterialTheme.typography.bodyLarge,
+                                                maxLines = 1,
+                                                overflow = TextOverflow.Ellipsis
                                             )
                                             Text(
-                                                text = stringResource(R.string.time),
-                                                style = MaterialTheme.typography.bodyLarge
+                                                text = formatDateRange(
+                                                    item.exam.startDate,
+                                                    item.exam.endDate
+                                                ),
+                                                style = MaterialTheme.typography.bodyLarge,
+                                                maxLines = 1
                                             )
                                             Text(
-                                                text = "150",
+                                                text = formatScoreInput(item.totalMark.toString()),
                                                 modifier = Modifier.padding(end = 12.dp),
                                                 style = MaterialTheme.typography.bodyLarge
                                             )
@@ -306,23 +380,81 @@ fun History(
                         }
                     }
                 }
-            } else {
-                Text(
-                    text = stringResource(R.string.no_history),
-                    modifier = Modifier.padding(vertical = 3.dp)
-                )
-                TextButton(
-                    onClick = { navigator.navigate(Screens.DRP) },
-                    modifier = Modifier.padding(vertical = 3.dp)
-                ) {
-                    Text(text = stringResource(id = R.string.add))
-                }
             }
         }
     }
 }
 
-@Preview(device = "id:pixel_9_pro")
+/**
+ * Empty-state placeholder shared by the two history states: the download illustration over the
+ * message that explains why the list is empty, with an optional action underneath. The picture is
+ * decorative, so the message alone carries the meaning for screen readers
+ */
+@Composable
+private fun HistoryPlaceholder(
+    text: String,
+    modifier: Modifier = Modifier,
+    action: @Composable () -> Unit = {}
+) {
+    Column(
+        modifier = modifier,
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            painter = rememberVectorPainter(image = DynamicColorImageVectors.download()),
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxWidth(0.6f)
+                .padding(bottom = 16.dp)
+        )
+        Text(text = text)
+        action()
+    }
+}
+
+/**
+ * Confirmation shown by the bottom bar's delete action. Owning the view model here keeps the three
+ * main layouts free of save plumbing; clearing [checkedIds] is what takes every screen back out of
+ * multi-select mode.
+ */
+@Composable
+fun DeleteExamsDialog(
+    checkedIds: SnapshotStateList<Long>,
+    onDismiss: () -> Unit
+) {
+    val viewModel: ExamViewModel = viewModel()
+    val coroutineScope = rememberCoroutineScope()
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        icon = {
+            Icon(
+                imageVector = Icons.Rounded.Delete,
+                contentDescription = stringResource(R.string.delete)
+            )
+        },
+        title = { Text(text = stringResource(R.string.delete)) },
+        text = { Text(text = stringResource(R.string.delete_exam_message)) },
+        confirmButton = {
+            Button(
+                onClick = {
+                    val examIds = checkedIds.toList()
+                    checkedIds.clear()
+                    onDismiss()
+                    coroutineScope.launch { viewModel.deleteExams(examIds) }
+                }
+            ) { Text(text = stringResource(R.string.delete)) }
+        },
+        dismissButton = {
+            OutlinedButton(onClick = onDismiss) {
+                Text(text = stringResource(R.string.cancel))
+            }
+        }
+    )
+}
+
+@Preview(device = "id:pixel_10_pro")
 @Composable
 fun History_Preview() {
     val navigationState = remember {
@@ -332,5 +464,8 @@ fun History_Preview() {
             backStacks = emptyMap()
         )
     }
-    History(navigator = Navigator(navigationState), onEditingChange = {})
+    History(
+        navigator = Navigator(navigationState),
+        checkedIds = remember { mutableStateListOf() }
+    )
 }

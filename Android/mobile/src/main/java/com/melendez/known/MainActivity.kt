@@ -22,7 +22,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation3.runtime.NavKey
 import androidx.navigation3.runtime.entryProvider
 import androidx.navigation3.scene.DialogSceneStrategy
 import androidx.navigation3.ui.NavDisplay
@@ -163,18 +162,15 @@ class MainActivity : ComponentActivity() {
                                         Screens.Appearance,
                                         Screens.Dark,
                                         Screens.Language,
-                                        Screens.DRP,
-                                        Screens.Inputting,
                                         Screens.About,
                                         Screens.Signin,
-                                        Screens.Detail,
                                         Screens.Prophets,
                                         Screens.Credits,
                                         Screens.Guide
                                     )
                                 )
                                 val navigator = remember { Navigator(navigationState) }
-                                val entryProvider = entryProvider<NavKey> {
+                                val entryProvider = entryProvider {
                                     entry<Screens.Guide> {
                                         Guide(navigator = navigator)
                                     }
@@ -196,9 +192,21 @@ class MainActivity : ComponentActivity() {
                                     entry<Screens.Language> {
                                         Language(navigator = navigator)
                                     }
-                                    entry<Screens.DRP> { DRP(navigator = navigator) }
-                                    entry<Screens.Inputting> {
-                                        Inputting(navigator = navigator)
+                                    entry<Screens.DRP> { key ->
+                                        DRP(
+                                            navigator = navigator,
+                                            examId = key.examId,
+                                            startDate = key.startDate,
+                                            endDate = key.endDate
+                                        )
+                                    }
+                                    entry<Screens.Inputting> { key ->
+                                        Inputting(
+                                            navigator = navigator,
+                                            startDate = key.startDate,
+                                            endDate = key.endDate,
+                                            examId = key.examId
+                                        )
                                     }
                                     entry<Screens.About> {
                                         About(navigator = navigator)
@@ -206,8 +214,8 @@ class MainActivity : ComponentActivity() {
                                     entry<Screens.Signin> {
                                         Signin(navigator = navigator)
                                     }
-                                    entry<Screens.Detail> {
-                                        Detail(navigator = navigator)
+                                    entry<Screens.Detail> { key ->
+                                        Detail(navigator = navigator, examId = key.examId)
                                     }
                                     entry<Screens.Prophets> {
                                         Prophets(navigator = navigator)

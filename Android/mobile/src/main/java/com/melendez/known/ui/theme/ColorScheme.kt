@@ -17,6 +17,9 @@ object FixedAccentColors {
     val onPrimaryFixed: Color
         @Composable get() = LocalFixedColorRoles.current.onPrimaryFixed
 
+    val onPrimaryFixedVariant: Color
+        @Composable get() = LocalFixedColorRoles.current.onPrimaryFixedVariant
+
     val secondaryFixed: Color
         @Composable get() = LocalFixedColorRoles.current.secondaryFixed
 
