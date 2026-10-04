@@ -99,16 +99,43 @@ body {
     align-items: center;
     gap: 0.5rem;
     padding: 0.5rem 0.75rem;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.55);
+    backdrop-filter: blur(16px) saturate(1.6);
+    -webkit-backdrop-filter: blur(16px) saturate(1.6);
+    backdrop-filter: blur(16px) saturate(1.6) url(#liquid-glass);
+    -webkit-backdrop-filter: blur(16px) saturate(1.6) url(#liquid-glass);
     border: 1px solid rgba(165, 75, 207, 0.1);
     border-radius: 999px;
-    box-shadow: 0 8px 30px var(--shadow-color);
+    box-shadow: 0 8px 30px var(--shadow-color),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 0 12px rgba(255, 255, 255, 0.12);
+}
+
+.controls::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.9),
+            rgba(255, 255, 255, 0.15) 40%,
+            rgba(165, 75, 207, 0.25)
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
 }
 
 [data-theme='dark'] .controls {
-    background: rgba(22, 33, 62, 0.85);
+    background: rgba(22, 33, 62, 0.55);
+    box-shadow: 0 8px 30px var(--shadow-color),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 0 12px rgba(255, 255, 255, 0.05);
 }
 
 .theme-selector,
@@ -150,15 +177,40 @@ body {
     flex-direction: column;
     gap: 0.2rem;
     border-radius: 12px;
-    background: rgba(255, 255, 255, 0.85);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(16px) saturate(1.6);
+    -webkit-backdrop-filter: blur(16px) saturate(1.6);
+    backdrop-filter: blur(16px) saturate(1.6) url(#liquid-glass);
+    -webkit-backdrop-filter: blur(16px) saturate(1.6) url(#liquid-glass);
     border: 1px solid rgba(165, 75, 207, 0.1);
-    box-shadow: 0 8px 30px var(--shadow-color);
+    box-shadow: 0 8px 30px var(--shadow-color),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65),
+    inset 0 0 12px rgba(255, 255, 255, 0.12);
     opacity: 0;
     visibility: hidden;
     transform: translateY(-10px) scale(0.95);
     transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.theme-dropdown::after,
+.lang-dropdown::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(
+            135deg,
+            rgba(255, 255, 255, 0.9),
+            rgba(255, 255, 255, 0.15) 40%,
+            rgba(165, 75, 207, 0.25)
+    );
+    -webkit-mask: linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    mask-composite: exclude;
+    pointer-events: none;
 }
 
 .theme-dropdown.show,
@@ -170,7 +222,10 @@ body {
 
 [data-theme='dark'] .theme-dropdown,
 [data-theme='dark'] .lang-dropdown {
-    background: rgba(22, 33, 62, 0.85);
+    background: rgba(22, 33, 62, 0.6);
+    box-shadow: 0 8px 30px var(--shadow-color),
+    inset 0 1px 0 rgba(255, 255, 255, 0.22),
+    inset 0 0 12px rgba(255, 255, 255, 0.05);
 }
 
 .theme-dropdown button,
