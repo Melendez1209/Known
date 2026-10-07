@@ -127,4 +127,10 @@
     <string name="history_average">歷史平均</string>
     <string name="total_score">總分</string>
     <string name="rank">排名</string>
+    <string name="share_as_image">以圖片分享</string>
+    <string name="share_as_text">以文字分享</string>
+    <string name="share_image_saving">正在生成圖片…</string>
+    <string name="share_image_saved">圖片已成功儲存</string>
+    <string name="share_image_failed">圖片生成失敗</string>
+    <string name="share_via">透過以下方式分享</string>
 </resources>

@@ -1,7 +1,6 @@
 package com.melendez.known.ui.screens
 
 import android.annotation.SuppressLint
-import android.content.Intent
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
@@ -64,12 +63,14 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.melendez.known.R
 import com.melendez.known.data.entity.ExamScore
 import com.melendez.known.data.entity.SubjectStat
+import com.melendez.known.ui.components.ShareOptionsSheet
 import com.melendez.known.ui.components.Tip
 import com.melendez.known.ui.components.chart.ComboChart
 import com.melendez.known.ui.components.chart.ScorePieChart
 import com.melendez.known.ui.navigation.NavigationState
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.viewmodel.exam.ExamViewModel
+import com.melendez.known.util.ShareManager
 import com.melendez.known.util.averageDelta
 import com.melendez.known.util.examSubjectKeys
 import com.melendez.known.util.formatScoreInput
@@ -115,6 +116,7 @@ fun Detail(navigator: Navigator, examId: Long = 0L) {
     val behaviorTop = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     var expanded by rememberSaveable { mutableStateOf(true) }
     var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
+    var showShareSheet by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
 
     if (showDeleteDialog) {
@@ -143,6 +145,38 @@ fun Detail(navigator: Navigator, examId: Long = 0L) {
                 OutlinedButton(onClick = { showDeleteDialog = false }) {
                     Text(text = stringResource(R.string.cancel))
                 }
+            }
+        )
+    }
+
+    if (showShareSheet && examWithScores != null) {
+        val context = androidx.compose.ui.platform.LocalContext.current
+        val examData = examWithScores!!
+        ShareOptionsSheet(
+            onDismiss = { showShareSheet = false },
+            onShareAsImage = {
+                ShareManager.shareAsImage(
+                    context = context,
+                    examWithScores = examData,
+                    allExams = exams,
+                    subjectStats = stats,
+                    subjectNameResolver = { key ->
+                        val resId = subjectKeyToStringResource(key)
+                        context.getString(resId)
+                    }
+                )
+            },
+            onShareAsText = {
+                ShareManager.shareAsText(
+                    context = context,
+                    examWithScores = examData,
+                    allExams = exams,
+                    subjectStats = stats,
+                    subjectNameResolver = { key ->
+                        val resId = subjectKeyToStringResource(key)
+                        context.getString(resId)
+                    }
+                )
             }
         )
     }
@@ -189,16 +223,7 @@ fun Detail(navigator: Navigator, examId: Long = 0L) {
                 leadingContent = {
                     Tip(null, text = stringResource(R.string.share)) {
                         IconButton(
-                            onClick = {
-                                val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                                    type = "text/plain"
-                                    putExtra(
-                                        Intent.EXTRA_TEXT,
-                                        "Known"
-                                    )//TODO: replace Known with detail info
-                                }
-                                launcher.launch(shareIntent)
-                            }
+                            onClick = { showShareSheet = true }
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Share,

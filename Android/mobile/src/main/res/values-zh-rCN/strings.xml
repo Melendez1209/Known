@@ -128,4 +128,10 @@
     <string name="history_average">历史平均</string>
     <string name="total_score">总分</string>
     <string name="rank">排名</string>
+    <string name="share_as_image">以图片分享</string>
+    <string name="share_as_text">以文本分享</string>
+    <string name="share_image_saving">正在生成图片…</string>
+    <string name="share_image_saved">图片已成功保存</string>
+    <string name="share_image_failed">图片生成失败</string>
+    <string name="share_via">通过以下方式分享</string>
 </resources>

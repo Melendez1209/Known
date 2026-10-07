@@ -127,4 +127,10 @@
     <string name="history_average">Historical average</string>
     <string name="total_score">Total score</string>
     <string name="rank">Rank</string>
+    <string name="share_as_image">Share as image</string>
+    <string name="share_as_text">Share as text</string>
+    <string name="share_image_saving">Generating image…</string>
+    <string name="share_image_saved">Image saved successfully</string>
+    <string name="share_image_failed">Failed to generate image</string>
+    <string name="share_via">Share via</string>
 </resources>
