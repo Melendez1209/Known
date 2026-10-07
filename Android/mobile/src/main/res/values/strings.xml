@@ -140,4 +140,7 @@
     <string name="share_image_saved">Image saved successfully</string>
     <string name="share_image_failed">Failed to generate image</string>
     <string name="share_via">Share via</string>
+    <string name="remove_favourite">Remove from favourite</string>
+    <string name="favourites">Favourites</string>
+    <string name="no_favourites">No favourites yet</string>
 </resources>

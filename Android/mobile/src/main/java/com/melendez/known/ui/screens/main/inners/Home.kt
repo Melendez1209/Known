@@ -14,7 +14,6 @@ import androidx.compose.foundation.layout.systemBars
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Card
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -33,9 +32,8 @@ import coil3.compose.rememberAsyncImagePainter
 import com.melendez.known.R
 import com.melendez.known.ui.components.chart.SubjectBarChart
 import com.melendez.known.ui.components.chart.TrendChart
-import com.melendez.known.ui.viewmodel.exam.ExamViewModel
+import com.melendez.known.ui.viewmodel.ExamViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Home(
     onExamClick: (Long) -> Unit = {},
@@ -101,9 +99,7 @@ private fun ChartCard(
             .fillMaxWidth()
             .padding(horizontal = 16.dp, vertical = 8.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(vertical = 12.dp)
-        ) {
+        Column(modifier = Modifier.padding(vertical = 12.dp)) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.titleMedium,

@@ -72,7 +72,7 @@ import com.melendez.known.svg.drawablevectors.download
 import com.melendez.known.ui.navigation.NavigationState
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
-import com.melendez.known.ui.viewmodel.exam.ExamViewModel
+import com.melendez.known.ui.viewmodel.ExamViewModel
 import com.melendez.known.util.formatDateRange
 import com.melendez.known.util.formatScoreInput
 import kotlinx.coroutines.delay

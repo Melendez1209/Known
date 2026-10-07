@@ -1,8 +1,14 @@
-package com.melendez.known.util
+package com.melendez.known.util.share
 
 import com.melendez.known.data.entity.ExamWithScores
 import com.melendez.known.data.entity.ExamWithTotal
 import com.melendez.known.data.entity.SubjectStat
+import com.melendez.known.util.averageDelta
+import com.melendez.known.util.formatDateRange
+import com.melendez.known.util.percentage
+import com.melendez.known.util.rankOf
+import com.melendez.known.util.totalFullMark
+import com.melendez.known.util.totalMark
 
 /**
  * Builds a formatted plain-text summary of an exam for sharing via text.
@@ -36,7 +42,11 @@ object ShareTextGenerator {
         sb.appendLine("Date: $dateRange")
         sb.appendLine()
         sb.appendLine("━━━━━━━━━━━━━━━━━━")
-        sb.appendLine("Total: ${formatScore(totalMark)} / ${formatScore(totalFullMark)} (${"%.1f".format(pct)}%)")
+        sb.appendLine(
+            "Total: ${formatScore(totalMark)} / ${formatScore(totalFullMark)} (${
+                "%.1f".format(pct)
+            }%)"
+        )
         sb.appendLine("Rank: $rank / $examCount")
 
         // Historical comparison
@@ -56,18 +66,22 @@ object ShareTextGenerator {
         sb.appendLine()
         sb.appendLine("Subjects:")
 
-        for (score in scores) {
-            val subjectName = subjectNameResolver(score.subjectKey)
-            val subjectPct = percentage(score.mark, score.fullMark)
-            val stat = subjectStats.firstOrNull { it.subjectKey == score.subjectKey }
+        for ((_, _, subjectKey, mark, fullMark) in scores) {
+            val subjectName = subjectNameResolver(subjectKey)
+            val subjectPct = percentage(mark, fullMark)
+            val stat = subjectStats.firstOrNull { it.subjectKey == subjectKey }
             val deltaStr = if (stat != null) {
-                val delta = averageDelta(score.mark, score.fullMark, stat)
+                val delta = averageDelta(mark, fullMark, stat)
                 if (delta != null) {
                     val sign = if (delta >= 0) "+" else ""
                     " ($sign${"%.1f".format(delta)})"
                 } else ""
             } else ""
-            sb.appendLine("  $subjectName: ${formatScore(score.mark)} / ${formatScore(score.fullMark)} (${"%.1f".format(subjectPct)}%)$deltaStr")
+            sb.appendLine(
+                "  $subjectName: ${formatScore(mark)} / ${formatScore(fullMark)} (${
+                    "%.1f".format(subjectPct)
+                }%)$deltaStr"
+            )
         }
 
         sb.appendLine()

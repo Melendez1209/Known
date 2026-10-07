@@ -1,8 +1,6 @@
 package com.melendez.known.ui.screens
 
 import android.annotation.SuppressLint
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -54,6 +52,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -69,14 +68,14 @@ import com.melendez.known.ui.components.chart.ComboChart
 import com.melendez.known.ui.components.chart.ScorePieChart
 import com.melendez.known.ui.navigation.NavigationState
 import com.melendez.known.ui.navigation.Navigator
-import com.melendez.known.ui.viewmodel.exam.ExamViewModel
-import com.melendez.known.util.ShareManager
+import com.melendez.known.ui.viewmodel.ExamViewModel
 import com.melendez.known.util.averageDelta
 import com.melendez.known.util.examSubjectKeys
 import com.melendez.known.util.formatScoreInput
 import com.melendez.known.util.percentage
 import com.melendez.known.util.rankOf
 import com.melendez.known.util.recordedSubjectKeys
+import com.melendez.known.util.share.ShareManager
 import com.melendez.known.util.subjectKeyToStringResource
 import com.melendez.known.util.totalFullMark
 import com.melendez.known.util.totalMark
@@ -107,12 +106,8 @@ fun Detail(navigator: Navigator, examId: Long = 0L) {
     val exam = examWithScores?.exam
     val scores = examWithScores?.scores.orEmpty()
 
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-        onResult = {}
-    )
-
-    var isFavorite by remember { mutableStateOf(false) }
+    val isFavorite by viewModel.isFavorite(examId)
+        .collectAsStateWithLifecycle(initialValue = false)
     val behaviorTop = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     var expanded by rememberSaveable { mutableStateOf(true) }
     var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
@@ -150,8 +145,12 @@ fun Detail(navigator: Navigator, examId: Long = 0L) {
     }
 
     if (showShareSheet && examWithScores != null) {
-        val context = androidx.compose.ui.platform.LocalContext.current
+        val context = LocalContext.current
         val examData = examWithScores!!
+        // Resolve subject names in the @Composable context so they are configuration-aware
+        val subjectNames = examData.scores.associate { score ->
+            score.subjectKey to stringResource(subjectKeyToStringResource(score.subjectKey))
+        }
         ShareOptionsSheet(
             onDismiss = { showShareSheet = false },
             onShareAsImage = {
@@ -159,11 +158,7 @@ fun Detail(navigator: Navigator, examId: Long = 0L) {
                     context = context,
                     examWithScores = examData,
                     allExams = exams,
-                    subjectStats = stats,
-                    subjectNameResolver = { key ->
-                        val resId = subjectKeyToStringResource(key)
-                        context.getString(resId)
-                    }
+                    subjectNameResolver = { key -> subjectNames[key] ?: key }
                 )
             },
             onShareAsText = {
@@ -172,10 +167,7 @@ fun Detail(navigator: Navigator, examId: Long = 0L) {
                     examWithScores = examData,
                     allExams = exams,
                     subjectStats = stats,
-                    subjectNameResolver = { key ->
-                        val resId = subjectKeyToStringResource(key)
-                        context.getString(resId)
-                    }
+                    subjectNameResolver = { key -> subjectNames[key] ?: key }
                 )
             }
         )
@@ -259,11 +251,17 @@ fun Detail(navigator: Navigator, examId: Long = 0L) {
                             )
                         }
                     }
-                    Tip(text = stringResource(R.string.add_favourite)) {
-                        IconButton(onClick = { isFavorite = !isFavorite }) {
+                    Tip(text = stringResource(if (isFavorite) R.string.remove_favourite else R.string.add_favourite)) {
+                        IconButton(
+                            onClick = {
+                                coroutineScope.launch {
+                                    viewModel.toggleFavorite(examId)
+                                }
+                            }
+                        ) {
                             Icon(
                                 imageVector = if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite,
-                                contentDescription = stringResource(R.string.add_favourite)
+                                contentDescription = stringResource(if (isFavorite) R.string.remove_favourite else R.string.add_favourite)
                             )
                         }
                     }
@@ -298,13 +296,11 @@ fun Detail(navigator: Navigator, examId: Long = 0L) {
             } else {
                 Column(modifier = Modifier.fillMaxSize()) {
                     SecondaryScrollableTabRow(selectedTabIndex = pagerState.currentPage) {
-                        courseTabs.forEachIndexed { index, (tabKey, title) ->
+                        courseTabs.forEachIndexed { index, (_, title) ->
                             Tab(
                                 selected = index == pagerState.currentPage,
                                 onClick = {
-                                    coroutineScope.launch {
-                                        pagerState.animateScrollToPage(index)
-                                    }
+                                    coroutineScope.launch { pagerState.animateScrollToPage(index) }
                                 },
                                 text = { Text(text = title) }
                             )

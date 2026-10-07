@@ -134,4 +134,14 @@
     <string name="share_image_saved">Image saved successfully</string>
     <string name="share_image_failed">Failed to generate image</string>
     <string name="share_via">Share via</string>
+    <string name="remove_favourite">Remove from favorite</string>
+    <string name="favourites">Favorites</string>
+    <string name="no_favourites">No favorites yet</string>
+    <string name="score_trend">Score Trend</string>
+    <string name="subject_average">Subject Average</string>
+    <string name="score_distribution">Score Distribution</string>
+    <string name="comparison">Comparison</string>
+    <string name="no_exam_data">No exam data yet. Add your first exam to see trends.</string>
+    <string name="no_subject_data">No subject data available.</string>
+    <string name="no_score_data">No score data available.</string>
 </resources>

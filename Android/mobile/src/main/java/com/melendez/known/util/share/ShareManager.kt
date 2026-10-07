@@ -1,8 +1,7 @@
-package com.melendez.known.util
+package com.melendez.known.util.share
 
 import android.content.Context
 import android.content.Intent
-import android.net.Uri
 import android.widget.Toast
 import com.melendez.known.R
 import com.melendez.known.data.entity.ExamWithScores
@@ -21,17 +20,21 @@ object ShareManager {
         context: Context,
         examWithScores: ExamWithScores,
         allExams: List<ExamWithTotal>,
-        subjectStats: List<SubjectStat>,
         subjectNameResolver: (String) -> String
     ) {
-        Toast.makeText(context, context.getString(R.string.share_image_saving), Toast.LENGTH_SHORT).show()
+        Toast.makeText(context, context.getString(R.string.share_image_saving), Toast.LENGTH_SHORT)
+            .show()
 
         val uri = ShareCardGenerator.generateShareCard(
-            context, examWithScores, allExams, subjectStats, subjectNameResolver
+            context, examWithScores, allExams, subjectNameResolver
         )
 
         if (uri == null) {
-            Toast.makeText(context, context.getString(R.string.share_image_failed), Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                context,
+                context.getString(R.string.share_image_failed),
+                Toast.LENGTH_SHORT
+            ).show()
             return
         }
 

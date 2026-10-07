@@ -134,4 +134,14 @@
     <string name="share_image_saved">图片已成功保存</string>
     <string name="share_image_failed">图片生成失败</string>
     <string name="share_via">通过以下方式分享</string>
+    <string name="remove_favourite">取消收藏</string>
+    <string name="favourites">收藏夹</string>
+    <string name="no_favourites">暂无收藏</string>
+    <string name="score_trend">成绩趋势</string>
+    <string name="subject_average">科目平均</string>
+    <string name="score_distribution">分数分布</string>
+    <string name="comparison">对比</string>
+    <string name="no_exam_data">暂无考试数据。添加第一场考试以查看趋势。</string>
+    <string name="no_subject_data">暂无科目数据。</string>
+    <string name="no_score_data">暂无分数数据。</string>
 </resources>

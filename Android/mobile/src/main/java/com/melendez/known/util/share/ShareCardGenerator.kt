@@ -1,4 +1,4 @@
-package com.melendez.known.util
+package com.melendez.known.util.share
 
 import android.content.Context
 import android.graphics.Bitmap
@@ -7,16 +7,22 @@ import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.LinearGradient
 import android.graphics.Paint
-import android.graphics.Rect
 import android.graphics.RectF
 import android.graphics.Shader
 import android.graphics.Typeface
 import android.net.Uri
 import androidx.core.content.FileProvider
+import androidx.core.graphics.createBitmap
+import androidx.core.graphics.scale
+import androidx.core.graphics.toColorInt
 import com.melendez.known.R
 import com.melendez.known.data.entity.ExamWithScores
 import com.melendez.known.data.entity.ExamWithTotal
-import com.melendez.known.data.entity.SubjectStat
+import com.melendez.known.util.formatDateRange
+import com.melendez.known.util.percentage
+import com.melendez.known.util.rankOf
+import com.melendez.known.util.totalFullMark
+import com.melendez.known.util.totalMark
 import java.io.File
 import java.io.FileOutputStream
 
@@ -38,16 +44,16 @@ object ShareCardGenerator {
     private const val PADDING = 64f
     private const val CARD_RADIUS = 32f
 
-    // Brand colors matching the app's green seed
-    private val BRAND_GREEN = Color.parseColor("#A3D48D")
-    private val BRAND_GREEN_DARK = Color.parseColor("#7BB861")
-    private val SURFACE_LIGHT = Color.parseColor("#FAFAFA")
-    private val SURFACE_CARD = Color.parseColor("#FFFFFF")
-    private val TEXT_PRIMARY = Color.parseColor("#1A1A1A")
-    private val TEXT_SECONDARY = Color.parseColor("#666666")
-    private val TEXT_ON_BRAND = Color.parseColor("#1A3A0A")
-    private val DIVIDER_COLOR = Color.parseColor("#E0E0E0")
-    private val PROGRESS_BG = Color.parseColor("#E8E8E8")
+    // Brand colours matching the app's green seed
+    private val BRAND_GREEN = "#A3D48D".toColorInt()
+    private val BRAND_GREEN_DARK = "#7BB861".toColorInt()
+    private val SURFACE_LIGHT = "#FAFAFA".toColorInt()
+    private val SURFACE_CARD = "#FFFFFF".toColorInt()
+    private val TEXT_PRIMARY = "#1A1A1A".toColorInt()
+    private val TEXT_SECONDARY = "#666666".toColorInt()
+    private val TEXT_ON_BRAND = "#1A3A0A".toColorInt()
+    private val DIVIDER_COLOR = "#E0E0E0".toColorInt()
+    private val PROGRESS_BG = "#E8E8E8".toColorInt()
 
     /**
      * Generates a share card bitmap for [examWithScores] and saves it to the app's cache directory.
@@ -57,13 +63,12 @@ object ShareCardGenerator {
         context: Context,
         examWithScores: ExamWithScores,
         allExams: List<ExamWithTotal>,
-        subjectStats: List<SubjectStat>,
         subjectNameResolver: (String) -> String
     ): Uri? {
-        val bitmap = Bitmap.createBitmap(WIDTH, HEIGHT, Bitmap.Config.ARGB_8888)
+        val bitmap = createBitmap(WIDTH, HEIGHT)
         val canvas = Canvas(bitmap)
 
-        drawCard(context, canvas, examWithScores, allExams, subjectStats, subjectNameResolver)
+        drawCard(context, canvas, examWithScores, allExams, subjectNameResolver)
 
         // Save to cache
         val cacheDir = File(context.cacheDir, "share_images")
@@ -77,7 +82,7 @@ object ShareCardGenerator {
             }
             bitmap.recycle()
             FileProvider.getUriForFile(context, "${context.packageName}.fileprovider", file)
-        } catch (e: Exception) {
+        } catch (_: Exception) {
             bitmap.recycle()
             null
         }
@@ -88,7 +93,6 @@ object ShareCardGenerator {
         canvas: Canvas,
         examWithScores: ExamWithScores,
         allExams: List<ExamWithTotal>,
-        subjectStats: List<SubjectStat>,
         subjectNameResolver: (String) -> String
     ) {
         val exam = examWithScores.exam
@@ -143,7 +147,7 @@ object ShareCardGenerator {
         val scoreCardHeight = 200f
         val scoreCardPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
             color = SURFACE_CARD
-            setShadowLayer(12f, 0f, 4f, Color.parseColor("#1A000000"))
+            setShadowLayer(12f, 0f, 4f, "#1A000000".toColorInt())
         }
         val scoreRect = RectF(PADDING, y, WIDTH - PADDING, y + scoreCardHeight)
         canvas.drawRoundRect(scoreRect, 24f, 24f, scoreCardPaint)
@@ -207,7 +211,7 @@ object ShareCardGenerator {
             val delta = pct - historicalAvg
             val sign = if (delta >= 0) "+" else ""
             val deltaColor =
-                if (delta >= 0) Color.parseColor("#4CAF50") else Color.parseColor("#F44336")
+                if (delta >= 0) "#4CAF50".toColorInt() else "#F44336".toColorInt()
             infoValuePaint.color = deltaColor
             canvas.drawText(
                 "${"%.1f".format(historicalAvg)}% ($sign${"%.1f".format(delta)})",
@@ -250,15 +254,15 @@ object ShareCardGenerator {
             style = Paint.Style.FILL
         }
 
-        for (score in scores) {
-            val subjectName = subjectNameResolver(score.subjectKey)
-            val subjectPct = percentage(score.mark, score.fullMark)
+        for ((_, _, subjectKey, mark, fullMark) in scores) {
+            val subjectName = subjectNameResolver(subjectKey)
+            val subjectPct = percentage(mark, fullMark)
 
             // Subject name
             canvas.drawText(subjectName, PADDING + 16f, y + 36f, subjectNamePaint)
 
             // Score text
-            val scoreStr = "${formatScoreNum(score.mark)} / ${formatScoreNum(score.fullMark)}"
+            val scoreStr = "${formatScoreNum(mark)} / ${formatScoreNum(fullMark)}"
             val scoreWidth = subjectScorePaint.measureText(scoreStr)
             canvas.drawText(
                 scoreStr,
@@ -291,7 +295,7 @@ object ShareCardGenerator {
             // Draw white background for QR code
             val qrBgPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
                 color = Color.WHITE
-                setShadowLayer(8f, 0f, 2f, Color.parseColor("#1A000000"))
+                setShadowLayer(8f, 0f, 2f, "#1A000000".toColorInt())
             }
             val qrBgRect = RectF(
                 qrCodeMargin - 8f, qrCodeY - 8f,
@@ -300,12 +304,7 @@ object ShareCardGenerator {
             canvas.drawRoundRect(qrBgRect, 16f, 16f, qrBgPaint)
 
             // Draw QR code scaled to fit
-            val scaledQr = Bitmap.createScaledBitmap(
-                qrCodeBitmap,
-                qrCodeSize.toInt(),
-                qrCodeSize.toInt(),
-                false
-            )
+            val scaledQr = qrCodeBitmap.scale(qrCodeSize.toInt(), qrCodeSize.toInt(), false)
             canvas.drawBitmap(scaledQr, qrCodeMargin, qrCodeY, null)
 
             // QR code label
@@ -313,11 +312,19 @@ object ShareCardGenerator {
                 color = TEXT_SECONDARY
                 textSize = 24f
             }
-            canvas.drawText("Scan to open source", qrCodeMargin + qrCodeSize + 24f, qrCodeY + 60f, qrLabelPaint)
-            canvas.drawText("github.com/Melendez1209/Known", qrCodeMargin + qrCodeSize + 24f, qrCodeY + 100f, qrLabelPaint)
+            canvas.drawText(
+                "Scan to open source",
+                qrCodeMargin + qrCodeSize + 24f,
+                qrCodeY + 60f,
+                qrLabelPaint
+            )
+            canvas.drawText(
+                "github.com/Melendez1209/Known",
+                qrCodeMargin + qrCodeSize + 24f,
+                qrCodeY + 100f,
+                qrLabelPaint
+            )
         }
-
-        y = qrCodeY + qrCodeSize + 40f
 
         // Footer
         val footerY = HEIGHT - 80f

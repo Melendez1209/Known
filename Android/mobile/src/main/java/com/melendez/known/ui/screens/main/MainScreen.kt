@@ -61,9 +61,9 @@ import com.melendez.known.ui.screens.main.inners.DeleteExamsDialog
 import com.melendez.known.ui.screens.main.inners.History
 import com.melendez.known.ui.screens.main.inners.Home
 import com.melendez.known.ui.screens.main.inners.Me
-import com.melendez.known.ui.viewmodel.exam.ExamViewModel
+import com.melendez.known.ui.viewmodel.ExamViewModel
 import com.melendez.known.util.ScreenType
-import com.melendez.known.util.ShareManager
+import com.melendez.known.util.share.ShareManager
 import com.melendez.known.util.subjectKeyToStringResource
 import kotlinx.coroutines.launch
 
@@ -84,12 +84,20 @@ fun MainScreen(navigator: Navigator) {
     val exams by remember { viewModel.exams }
         .collectAsStateWithLifecycle(initialValue = emptyList())
 
-    // The exam to share: the first selected one, or the most recent exam when nothing is selected
-    val shareExamId = checkedIds.firstOrNull() ?: exams.firstOrNull()?.exam?.id
-    val shareExamWithScores by remember(shareExamId) { viewModel.examWithScores(shareExamId ?: 0L) }
+    // The exam to share/favourite: the first selected one, or the most recent exam when nothing is selected
+    val targetExamId = checkedIds.firstOrNull() ?: exams.firstOrNull()?.exam?.id
+    val shareExamWithScores by remember(targetExamId) {
+        viewModel.examWithScores(
+            targetExamId ?: 0L
+        )
+    }
         .collectAsStateWithLifecycle(initialValue = null)
-    val shareStats by remember(shareExamId) { viewModel.subjectStats(shareExamId ?: 0L) }
+    val shareStats by remember(targetExamId) { viewModel.subjectStats(targetExamId ?: 0L) }
         .collectAsStateWithLifecycle(initialValue = emptyList())
+
+    // Favourite state for the target exam
+    val isFavorite by remember(targetExamId) { viewModel.isFavorite(targetExamId ?: 0L) }
+        .collectAsStateWithLifecycle(initialValue = false)
 
     if (showDeleteDialog) {
         DeleteExamsDialog(
@@ -99,6 +107,10 @@ fun MainScreen(navigator: Navigator) {
     }
 
     if (showShareSheet && shareExamWithScores != null) {
+        // Resolve subject names in the @Composable context so they are configuration-aware
+        val subjectNames = shareExamWithScores!!.scores.associate { score ->
+            score.subjectKey to stringResource(subjectKeyToStringResource(score.subjectKey))
+        }
         ShareOptionsSheet(
             onDismiss = { showShareSheet = false },
             onShareAsImage = {
@@ -106,8 +118,7 @@ fun MainScreen(navigator: Navigator) {
                     context = context,
                     examWithScores = shareExamWithScores!!,
                     allExams = exams,
-                    subjectStats = shareStats,
-                    subjectNameResolver = { key -> context.getString(subjectKeyToStringResource(key)) }
+                    subjectNameResolver = { key -> subjectNames[key] ?: key }
                 )
             },
             onShareAsText = {
@@ -116,7 +127,7 @@ fun MainScreen(navigator: Navigator) {
                     examWithScores = shareExamWithScores!!,
                     allExams = exams,
                     subjectStats = shareStats,
-                    subjectNameResolver = { key -> context.getString(subjectKeyToStringResource(key)) }
+                    subjectNameResolver = { key -> subjectNames[key] ?: key }
                 )
             }
         )
@@ -143,7 +154,14 @@ fun MainScreen(navigator: Navigator) {
             navigationState = navigationState,
             checkedIds = checkedIds,
             onRequestDelete = { showDeleteDialog = true },
-            onRequestShare = { showShareSheet = true }
+            onRequestShare = { showShareSheet = true },
+            targetExamId = targetExamId,
+            isFavorite = isFavorite,
+            onToggleFavorite = { examId ->
+                kotlinx.coroutines.MainScope().launch {
+                    viewModel.toggleFavorite(examId)
+                }
+            }
         )
 
         ScreenType.Medium -> Main_Medium(
@@ -152,7 +170,14 @@ fun MainScreen(navigator: Navigator) {
             screens = screens,
             navigationState = navigationState,
             checkedIds = checkedIds,
-            onRequestShare = { showShareSheet = true }
+            onRequestShare = { showShareSheet = true },
+            targetExamId = targetExamId,
+            isFavorite = isFavorite,
+            onToggleFavorite = { examId ->
+                kotlinx.coroutines.MainScope().launch {
+                    viewModel.toggleFavorite(examId)
+                }
+            }
         )
 
         ScreenType.Expanded -> Main_Expanded(
@@ -161,7 +186,14 @@ fun MainScreen(navigator: Navigator) {
             screens = screens,
             navigationState = navigationState,
             checkedIds = checkedIds,
-            onRequestShare = { showShareSheet = true }
+            onRequestShare = { showShareSheet = true },
+            targetExamId = targetExamId,
+            isFavorite = isFavorite,
+            onToggleFavorite = { examId ->
+                kotlinx.coroutines.MainScope().launch {
+                    viewModel.toggleFavorite(examId)
+                }
+            }
         )
     }
 }
@@ -174,7 +206,10 @@ fun Main_Compact(
     navigationState: com.melendez.known.ui.navigation.NavigationState,
     checkedIds: SnapshotStateList<Long>,
     onRequestDelete: () -> Unit,
-    onRequestShare: () -> Unit
+    onRequestShare: () -> Unit,
+    targetExamId: Long?,
+    isFavorite: Boolean,
+    onToggleFavorite: (Long) -> Unit
 ) {
 
     val isEditing = checkedIds.isNotEmpty()
@@ -203,8 +238,6 @@ fun Main_Compact(
                     }
                 } else {
 
-                    var isFavorite by remember { mutableStateOf(false) }
-
                     BottomAppBar(
                         actions = {
                             IconButton(onClick = onRequestShare) {
@@ -225,10 +258,12 @@ fun Main_Compact(
                                     contentDescription = stringResource(R.string.edit)
                                 )
                             }
-                            IconButton(onClick = { isFavorite = !isFavorite }) {
+                            IconButton(
+                                onClick = { targetExamId?.let { examId -> onToggleFavorite(examId) } }
+                            ) {
                                 Icon(
                                     imageVector = if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite,
-                                    contentDescription = stringResource(R.string.share)
+                                    contentDescription = stringResource(if (isFavorite) R.string.remove_favourite else R.string.add_favourite)
                                 )
                             }
                         },
@@ -279,7 +314,10 @@ fun Main_Medium(
     screens: List<Screens>,
     navigationState: com.melendez.known.ui.navigation.NavigationState,
     checkedIds: SnapshotStateList<Long>,
-    onRequestShare: () -> Unit
+    onRequestShare: () -> Unit,
+    targetExamId: Long?,
+    isFavorite: Boolean,
+    onToggleFavorite: (Long) -> Unit
 ) {
 
     val isEditing = checkedIds.isNotEmpty()
@@ -339,8 +377,6 @@ fun Main_Medium(
                 bottomBar = {
                     if (isEditing) {
 
-                        var isFavorite by remember { mutableStateOf(false) }
-
                         BottomAppBar(
                             actions = {
                                 IconButton(onClick = onRequestShare) {
@@ -361,10 +397,10 @@ fun Main_Medium(
                                         contentDescription = stringResource(R.string.edit)
                                     )
                                 }
-                                IconButton(onClick = { isFavorite = !isFavorite }) {
+                                IconButton(onClick = { targetExamId?.let { onToggleFavorite(it) } }) {
                                     Icon(
                                         imageVector = if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite,
-                                        contentDescription = stringResource(R.string.share)
+                                        contentDescription = stringResource(if (isFavorite) R.string.remove_favourite else R.string.add_favourite)
                                     )
                                 }
                             }
@@ -408,7 +444,10 @@ fun Main_Expanded(
     screens: List<Screens>,
     navigationState: com.melendez.known.ui.navigation.NavigationState,
     checkedIds: SnapshotStateList<Long>,
-    onRequestShare: () -> Unit
+    onRequestShare: () -> Unit,
+    targetExamId: Long?,
+    isFavorite: Boolean,
+    onToggleFavorite: (Long) -> Unit
 ) {
 
     val isEditing = checkedIds.isNotEmpty()
@@ -442,8 +481,6 @@ fun Main_Expanded(
                 bottomBar = {
                     if (isEditing) {
 
-                        var isFavorite by remember { mutableStateOf(false) }
-
                         BottomAppBar(
                             actions = {
                                 IconButton(onClick = onRequestShare) {
@@ -464,10 +501,10 @@ fun Main_Expanded(
                                         contentDescription = stringResource(R.string.edit)
                                     )
                                 }
-                                IconButton(onClick = { isFavorite = !isFavorite }) {
+                                IconButton(onClick = { targetExamId?.let { onToggleFavorite(it) } }) {
                                     Icon(
                                         imageVector = if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite,
-                                        contentDescription = stringResource(R.string.share)
+                                        contentDescription = stringResource(if (isFavorite) R.string.remove_favourite else R.string.add_favourite)
                                     )
                                 }
                             }
