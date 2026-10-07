@@ -10,5 +10,6 @@ data class Exam(
     val name: String,
     val startDate: Long,
     val endDate: Long,
-    val createdAt: Long = System.currentTimeMillis()
+    val createdAt: Long = System.currentTimeMillis(),
+    val isFavorite: Boolean = false
 )

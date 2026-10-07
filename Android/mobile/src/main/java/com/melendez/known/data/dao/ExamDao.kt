@@ -89,4 +89,10 @@ interface ExamDao {
 
     @Query("DELETE FROM exams WHERE id IN (:examIds)")
     suspend fun deleteExams(examIds: List<Long>)
+
+    @Query("UPDATE exams SET isFavorite = :isFavorite WHERE id = :examId")
+    suspend fun updateFavorite(examId: Long, isFavorite: Boolean)
+
+    @Query("SELECT * FROM exams WHERE isFavorite = 1")
+    fun getFavoriteExams(): Flow<List<Exam>>
 }

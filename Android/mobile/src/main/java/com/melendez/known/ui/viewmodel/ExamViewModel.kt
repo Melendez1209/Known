@@ -1,4 +1,4 @@
-package com.melendez.known.ui.viewmodel.exam
+package com.melendez.known.ui.viewmodel
 
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
@@ -10,6 +10,8 @@ import com.melendez.known.data.entity.ExamWithTotal
 import com.melendez.known.data.entity.SubjectStat
 import com.melendez.known.data.repository.ExamRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
 
 /**
  * Exposes the exam queries and writes to the history, detail and input screens.
@@ -51,4 +53,20 @@ class ExamViewModel(application: Application) : AndroidViewModel(application) {
 
     /** Deletes several exams at once, used by the history list's multi-select mode. */
     suspend fun deleteExams(examIds: List<Long>) = repository.deleteExams(examIds)
+
+    /** Whether a single exam is favourited, so the detail screen can reflect the saved state. */
+    fun isFavorite(examId: Long): Flow<Boolean> = repository.getExam(examId)
+        .map { it?.isFavorite ?: false }
+
+    /** Toggles the favourite state of a single exam. */
+    suspend fun toggleFavorite(examId: Long) {
+        val exam = repository.getExam(examId).first()
+        if (exam != null) {
+            repository.setFavorite(examId, !exam.isFavorite)
+        }
+    }
+
+    /** All favourited exams, for a future favourites list. */
+    val favoriteExams: Flow<List<Exam>> =
+        repository.getFavoriteExams()
 }

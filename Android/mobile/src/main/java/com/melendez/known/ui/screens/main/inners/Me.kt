@@ -60,7 +60,6 @@ fun Me(navigator: Navigator) {
         ) {
             AccountCard(isLoggedIn = isLoggedIn, navigator = navigator)
             ListItem(
-                headlineContent = { Text(text = stringResource(id = R.string.settings)) },
                 modifier = Modifier
                     .clickable { navigator.navigate(Screens.Settings) }
                     .fillMaxWidth(),
@@ -76,11 +75,9 @@ fun Me(navigator: Navigator) {
                         contentDescription = stringResource(id = R.string.settings)
                     )
                 }
-            )
+            ) { Text(text = stringResource(id = R.string.settings)) }
             HorizontalDivider()
-
             ListItem(
-                headlineContent = { Text(text = stringResource(R.string.about)) },
                 modifier = Modifier
                     .clickable { navigator.navigate(Screens.About) }
                     .fillMaxWidth(),
@@ -96,7 +93,7 @@ fun Me(navigator: Navigator) {
                         contentDescription = stringResource(R.string.about)
                     )
                 }
-            )
+            ) { Text(text = stringResource(R.string.about)) }
         }
     }
 }

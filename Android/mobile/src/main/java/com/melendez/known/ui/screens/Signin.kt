@@ -30,7 +30,6 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Divider
 import androidx.compose.material3.ElevatedButton
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
@@ -66,9 +65,8 @@ import com.melendez.known.R
 import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.components.SharedTopBar
 import com.melendez.known.ui.navigation.Navigator
-import com.melendez.known.ui.viewmodel.signin.SignInViewModel
+import com.melendez.known.ui.viewmodel.SignInViewModel
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Signin(navigator: Navigator) {
 

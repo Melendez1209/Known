@@ -1,9 +1,6 @@
 package com.melendez.known.ui.screens
 
 import android.annotation.SuppressLint
-import android.content.Intent
-import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,6 +12,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.rounded.ArrowBack
 import androidx.compose.material.icons.automirrored.rounded.Message
@@ -53,6 +52,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -62,16 +62,20 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.melendez.known.R
 import com.melendez.known.data.entity.ExamScore
 import com.melendez.known.data.entity.SubjectStat
+import com.melendez.known.ui.components.ShareOptionsSheet
 import com.melendez.known.ui.components.Tip
+import com.melendez.known.ui.components.chart.ComboChart
+import com.melendez.known.ui.components.chart.ScorePieChart
 import com.melendez.known.ui.navigation.NavigationState
 import com.melendez.known.ui.navigation.Navigator
-import com.melendez.known.ui.viewmodel.exam.ExamViewModel
+import com.melendez.known.ui.viewmodel.ExamViewModel
 import com.melendez.known.util.averageDelta
 import com.melendez.known.util.examSubjectKeys
 import com.melendez.known.util.formatScoreInput
 import com.melendez.known.util.percentage
 import com.melendez.known.util.rankOf
 import com.melendez.known.util.recordedSubjectKeys
+import com.melendez.known.util.share.ShareManager
 import com.melendez.known.util.subjectKeyToStringResource
 import com.melendez.known.util.totalFullMark
 import com.melendez.known.util.totalMark
@@ -102,15 +106,12 @@ fun Detail(navigator: Navigator, examId: Long = 0L) {
     val exam = examWithScores?.exam
     val scores = examWithScores?.scores.orEmpty()
 
-    val launcher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartActivityForResult(),
-        onResult = {}
-    )
-
-    var isFavorite by remember { mutableStateOf(false) }
+    val isFavorite by viewModel.isFavorite(examId)
+        .collectAsStateWithLifecycle(initialValue = false)
     val behaviorTop = TopAppBarDefaults.exitUntilCollapsedScrollBehavior()
     var expanded by rememberSaveable { mutableStateOf(true) }
     var showDeleteDialog by rememberSaveable { mutableStateOf(false) }
+    var showShareSheet by rememberSaveable { mutableStateOf(false) }
     val scrollBehavior = BottomAppBarDefaults.exitAlwaysScrollBehavior()
 
     if (showDeleteDialog) {
@@ -143,6 +144,35 @@ fun Detail(navigator: Navigator, examId: Long = 0L) {
         )
     }
 
+    if (showShareSheet && examWithScores != null) {
+        val context = LocalContext.current
+        val examData = examWithScores!!
+        // Resolve subject names in the @Composable context so they are configuration-aware
+        val subjectNames = examData.scores.associate { score ->
+            score.subjectKey to stringResource(subjectKeyToStringResource(score.subjectKey))
+        }
+        ShareOptionsSheet(
+            onDismiss = { showShareSheet = false },
+            onShareAsImage = {
+                ShareManager.shareAsImage(
+                    context = context,
+                    examWithScores = examData,
+                    allExams = exams,
+                    subjectNameResolver = { key -> subjectNames[key] ?: key }
+                )
+            },
+            onShareAsText = {
+                ShareManager.shareAsText(
+                    context = context,
+                    examWithScores = examData,
+                    allExams = exams,
+                    subjectStats = stats,
+                    subjectNameResolver = { key -> subjectNames[key] ?: key }
+                )
+            }
+        )
+    }
+
     Scaffold(
         modifier = Modifier.nestedScroll(scrollBehavior.nestedScrollConnection),
         topBar = {
@@ -166,9 +196,9 @@ fun Detail(navigator: Navigator, examId: Long = 0L) {
         // pointing at another subject or running past the end of the list
         val scoredKeys = recordedSubjectKeys(examSubjectKeys, scores)
         val courseTabs = listOf("" to stringResource(R.string.all)) +
-                scoredKeys.map { it to stringResource(subjectKeyToStringResource(it)) }
-        var courseKey by rememberSaveable { mutableStateOf("") }
-        val courseIndex = courseTabs.indexOfFirst { it.first == courseKey }.coerceAtLeast(0)
+                scoredKeys.map { it to stringResource(subjectKeyToStringResource(it)) } +
+                ("comparison" to stringResource(R.string.comparison))
+        val pagerState = rememberPagerState(pageCount = { courseTabs.size })
 
         Box(
             Modifier
@@ -185,16 +215,7 @@ fun Detail(navigator: Navigator, examId: Long = 0L) {
                 leadingContent = {
                     Tip(null, text = stringResource(R.string.share)) {
                         IconButton(
-                            onClick = {
-                                val shareIntent = Intent(Intent.ACTION_SEND).apply {
-                                    type = "text/plain"
-                                    putExtra(
-                                        Intent.EXTRA_TEXT,
-                                        "Known"
-                                    )//TODO: replace Known with detail info
-                                }
-                                launcher.launch(shareIntent)
-                            }
+                            onClick = { showShareSheet = true }
                         ) {
                             Icon(
                                 imageVector = Icons.Rounded.Share,
@@ -230,11 +251,17 @@ fun Detail(navigator: Navigator, examId: Long = 0L) {
                             )
                         }
                     }
-                    Tip(text = stringResource(R.string.add_favourite)) {
-                        IconButton(onClick = { isFavorite = !isFavorite }) {
+                    Tip(text = stringResource(if (isFavorite) R.string.remove_favourite else R.string.add_favourite)) {
+                        IconButton(
+                            onClick = {
+                                coroutineScope.launch {
+                                    viewModel.toggleFavorite(examId)
+                                }
+                            }
+                        ) {
                             Icon(
                                 imageVector = if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite,
-                                contentDescription = stringResource(R.string.add_favourite)
+                                contentDescription = stringResource(if (isFavorite) R.string.remove_favourite else R.string.add_favourite)
                             )
                         }
                     }
@@ -267,54 +294,77 @@ fun Detail(navigator: Navigator, examId: Long = 0L) {
                     contentAlignment = Alignment.Center
                 ) {}
             } else {
-                LazyColumn(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .nestedScroll(behaviorTop.nestedScrollConnection)
-                        .floatingToolbarVerticalNestedScroll(
-                            expanded = expanded,
-                            onExpand = { expanded = true },
-                            onCollapse = { expanded = false }
-                        )
-                ) {
-                    stickyHeader {
-                        SecondaryScrollableTabRow(selectedTabIndex = courseIndex) {
-                            courseTabs.forEachIndexed { index, (tabKey, title) ->
-                                Tab(
-                                    selected = index == courseIndex,
-                                    onClick = { courseKey = tabKey },
-                                    text = { Text(text = title) }
-                                )
-                            }
+                Column(modifier = Modifier.fillMaxSize()) {
+                    SecondaryScrollableTabRow(selectedTabIndex = pagerState.currentPage) {
+                        courseTabs.forEachIndexed { index, (_, title) ->
+                            Tab(
+                                selected = index == pagerState.currentPage,
+                                onClick = {
+                                    coroutineScope.launch { pagerState.animateScrollToPage(index) }
+                                },
+                                text = { Text(text = title) }
+                            )
                         }
                     }
-                    if (courseIndex == 0) {
-                        item(key = "stats") {
-                            StatsCard(
-                                totalMark = totalMark(scores),
-                                totalFullMark = totalFullMark(scores),
-                                rank = rankOf(examId, exams),
-                                examCount = exams.size,
-                                historicalPercentages = exams
-                                    .filter { it.exam.id != examId }
-                                    .map { percentage(it.totalMark, it.totalFullMark) }
+                    HorizontalPager(
+                        state = pagerState,
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .nestedScroll(behaviorTop.nestedScrollConnection)
+                            .floatingToolbarVerticalNestedScroll(
+                                expanded = expanded,
+                                onExpand = { expanded = true },
+                                onCollapse = { expanded = false }
                             )
-                        }
-                        items(scoredKeys, key = { it }) { subjectKey ->
-                            SubjectRow(
-                                label = stringResource(subjectKeyToStringResource(subjectKey)),
-                                score = scores.firstOrNull { it.subjectKey == subjectKey },
-                                stat = stats.firstOrNull { it.subjectKey == subjectKey }
-                            )
-                        }
-                    } else {
-                        val subjectKey = courseTabs[courseIndex].first
-                        item(key = subjectKey) {
-                            SubjectRow(
-                                label = stringResource(subjectKeyToStringResource(subjectKey)),
-                                score = scores.firstOrNull { it.subjectKey == subjectKey },
-                                stat = stats.firstOrNull { it.subjectKey == subjectKey }
-                            )
+                    ) { page ->
+                        LazyColumn(
+                            modifier = Modifier.fillMaxSize()
+                        ) {
+                            if (page == 0) {
+                                item(key = "stats") {
+                                    StatsCard(
+                                        totalMark = totalMark(scores),
+                                        totalFullMark = totalFullMark(scores),
+                                        rank = rankOf(examId, exams),
+                                        examCount = exams.size,
+                                        historicalPercentages = exams
+                                            .filter { it.exam.id != examId }
+                                            .map { percentage(it.totalMark, it.totalFullMark) }
+                                    )
+                                }
+                                item(key = "pie_chart") {
+                                    ScorePieChart(scores = scores)
+                                }
+                                items(scoredKeys, key = { it }) { subjectKey ->
+                                    SubjectRow(
+                                        label = stringResource(subjectKeyToStringResource(subjectKey)),
+                                        score = scores.firstOrNull { it.subjectKey == subjectKey },
+                                        stat = stats.firstOrNull { it.subjectKey == subjectKey }
+                                    )
+                                }
+                            } else if (courseTabs[page].first == "comparison") {
+                                item(key = "comparison_chart") {
+                                    val averageMark = exams
+                                        .filter { it.exam.id != examId }
+                                        .map { it.totalMark }
+                                        .takeIf { it.isNotEmpty() }
+                                        ?.average()
+                                        ?.toFloat() ?: 0f
+                                    ComboChart(
+                                        exams = exams,
+                                        averageLine = averageMark
+                                    )
+                                }
+                            } else {
+                                val subjectKey = courseTabs[page].first
+                                item(key = subjectKey) {
+                                    SubjectRow(
+                                        label = stringResource(subjectKeyToStringResource(subjectKey)),
+                                        score = scores.firstOrNull { it.subjectKey == subjectKey },
+                                        stat = stats.firstOrNull { it.subjectKey == subjectKey }
+                                    )
+                                }
+                            }
                         }
                     }
                 }

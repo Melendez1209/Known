@@ -59,7 +59,7 @@ import com.melendez.known.data.entity.Exam
 import com.melendez.known.ui.components.LocalScreenType
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
-import com.melendez.known.ui.viewmodel.exam.ExamViewModel
+import com.melendez.known.ui.viewmodel.ExamViewModel
 import com.melendez.known.util.COMPULSORY_SUBJECT_COUNT
 import com.melendez.known.util.DEFAULT_FULL_MARK
 import com.melendez.known.util.PreferenceUtil

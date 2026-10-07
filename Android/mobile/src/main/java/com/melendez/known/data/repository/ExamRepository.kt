@@ -61,4 +61,10 @@ class ExamRepository(private val database: AppDatabase) {
             examDao.deleteExams(examIds)
         }
     }
+
+    suspend fun setFavorite(examId: Long, isFavorite: Boolean) {
+        examDao.updateFavorite(examId, isFavorite)
+    }
+
+    fun getFavoriteExams(): Flow<List<Exam>> = examDao.getFavoriteExams()
 }

@@ -1,7 +1,8 @@
 @file:Suppress("DEPRECATION")
 
-package com.melendez.known.ui.viewmodel.signin
+package com.melendez.known.ui.viewmodel
 
+import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -132,7 +133,7 @@ class SignInViewModel : ViewModel() {
                     _isSuccessful.value = true
                 } else {
                     auth.startActivityForSignInWithProvider(
-                        context as android.app.Activity,
+                        context as Activity,
                         provider.build()
                     )
                         .addOnSuccessListener {

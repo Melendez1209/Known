@@ -127,4 +127,20 @@
     <string name="history_average">歷史平均</string>
     <string name="total_score">總分</string>
     <string name="rank">排名</string>
+    <string name="share_as_image">以圖片分享</string>
+    <string name="share_as_text">以文字分享</string>
+    <string name="share_image_saving">正在生成圖片…</string>
+    <string name="share_image_saved">圖片已成功儲存</string>
+    <string name="share_image_failed">圖片生成失敗</string>
+    <string name="share_via">透過以下方式分享</string>
+    <string name="remove_favourite">取消收藏</string>
+    <string name="favourites">收藏夾</string>
+    <string name="no_favourites">暫無收藏</string>
+    <string name="score_trend">成績趨勢</string>
+    <string name="subject_average">科目平均</string>
+    <string name="score_distribution">分數分佈</string>
+    <string name="comparison">對比</string>
+    <string name="no_exam_data">暫無考試數據。添加第一場考試以查看趨勢。</string>
+    <string name="no_subject_data">暫無科目數據。</string>
+    <string name="no_score_data">暫無分數數據。</string>
 </resources>

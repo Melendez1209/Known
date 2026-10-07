@@ -12,17 +12,14 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation3.runtime.NavKey
 import com.melendez.known.R
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.Transient
 
 @Serializable
 sealed class Screens(
     val router: String,
     @StringRes val resourceId: Int,
 ) : NavKey {
-    @Transient
     abstract val iconSelected: ImageVector
 
-    @Transient
     abstract val iconUnelected: ImageVector
 
     @Serializable
