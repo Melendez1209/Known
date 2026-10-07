@@ -93,6 +93,9 @@ dependencies {
     implementation(libs.accompanist.pager)
     implementation(libs.accompanist.pager.indicators)
 
+    implementation(libs.vico.compose)
+    implementation(libs.vico.compose.m3)
+
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)
     implementation(libs.animation)

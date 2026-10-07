@@ -50,6 +50,7 @@ tilesTooling = "1.6.2"
 tilesToolingPreview = "1.6.2"
 material3Version = "1.4.0"
 mockito = "5.24.0"
+vico = "3.3.1"
 
 [libraries]
 accompanist-pager = { group = "com.google.accompanist", name = "accompanist-pager", version.ref = "accompanist" }
@@ -116,6 +117,8 @@ androidx-tiles-tooling = { group = "androidx.wear.tiles", name = "tiles-tooling"
 androidx-tiles-tooling-preview = { group = "androidx.wear.tiles", name = "tiles-tooling-preview", version.ref = "tilesToolingPreview" }
 androidx-material3 = { group = "androidx.compose.material3", name = "material3", version.ref = "material3Version" }
 mockito-core = { group = "org.mockito", name = "mockito-core", version.ref = "mockito" }
+vico-compose = { group = "com.patrykandpatrick.vico", name = "compose", version.ref = "vico" }
+vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 
 [plugins]
 androidx-compose-ui = { id = "androidx.compose.ui", version.ref = "composeUi" }

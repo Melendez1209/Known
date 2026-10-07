@@ -127,4 +127,11 @@
     <string name="history_average">Historical average</string>
     <string name="total_score">Total score</string>
     <string name="rank">Rank</string>
+    <string name="score_trend">Score Trend</string>
+    <string name="subject_average">Subject Average</string>
+    <string name="score_distribution">Score Distribution</string>
+    <string name="comparison">Comparison</string>
+    <string name="no_exam_data">No exam data yet. Add your first exam to see trends.</string>
+    <string name="no_subject_data">No subject data available.</string>
+    <string name="no_score_data">No score data available.</string>
 </resources>
