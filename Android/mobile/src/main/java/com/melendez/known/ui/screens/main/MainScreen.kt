@@ -99,6 +99,17 @@ fun MainScreen(navigator: Navigator) {
     val isFavorite by remember(targetExamId) { viewModel.isFavorite(targetExamId ?: 0L) }
         .collectAsStateWithLifecycle(initialValue = false)
 
+    // Whether any selected exam is not favourited, so the favourite action can bulk-toggle
+    val hasUnfavourite by remember(checkedIds.toList()) {
+        viewModel.hasUnfavourite(checkedIds.toList())
+    }.collectAsStateWithLifecycle(initialValue = false)
+
+    val onToggleFavorites: (Boolean) -> Unit = { favorite ->
+        kotlinx.coroutines.MainScope().launch {
+            viewModel.toggleFavorites(checkedIds.toList(), favorite)
+        }
+    }
+
     if (showDeleteDialog) {
         DeleteExamsDialog(
             checkedIds = checkedIds,
@@ -161,7 +172,9 @@ fun MainScreen(navigator: Navigator) {
                 kotlinx.coroutines.MainScope().launch {
                     viewModel.toggleFavorite(examId)
                 }
-            }
+            },
+            hasUnfavourite = hasUnfavourite,
+            onToggleFavorites = onToggleFavorites
         )
 
         ScreenType.Medium -> Main_Medium(
@@ -177,7 +190,9 @@ fun MainScreen(navigator: Navigator) {
                 kotlinx.coroutines.MainScope().launch {
                     viewModel.toggleFavorite(examId)
                 }
-            }
+            },
+            hasUnfavourite = hasUnfavourite,
+            onToggleFavorites = onToggleFavorites
         )
 
         ScreenType.Expanded -> Main_Expanded(
@@ -193,7 +208,9 @@ fun MainScreen(navigator: Navigator) {
                 kotlinx.coroutines.MainScope().launch {
                     viewModel.toggleFavorite(examId)
                 }
-            }
+            },
+            hasUnfavourite = hasUnfavourite,
+            onToggleFavorites = onToggleFavorites
         )
     }
 }
@@ -209,7 +226,9 @@ fun Main_Compact(
     onRequestShare: () -> Unit,
     targetExamId: Long?,
     isFavorite: Boolean,
-    onToggleFavorite: (Long) -> Unit
+    onToggleFavorite: (Long) -> Unit,
+    hasUnfavourite: Boolean,
+    onToggleFavorites: (Boolean) -> Unit
 ) {
 
     val isEditing = checkedIds.isNotEmpty()
@@ -252,18 +271,37 @@ fun Main_Compact(
                                     contentDescription = stringResource(R.string.print)
                                 )
                             }
-                            IconButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP()) }) {
+                            IconButton(
+                                onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP()) },
+                                enabled = checkedIds.size <= 1
+                            ) {
                                 Icon(
                                     imageVector = Icons.Rounded.Edit,
                                     contentDescription = stringResource(R.string.edit)
                                 )
                             }
                             IconButton(
-                                onClick = { targetExamId?.let { examId -> onToggleFavorite(examId) } }
+                                onClick = {
+                                    if (checkedIds.isEmpty()) {
+                                        targetExamId?.let { onToggleFavorite(it) }
+                                    } else {
+                                        onToggleFavorites(hasUnfavourite)
+                                    }
+                                }
                             ) {
                                 Icon(
-                                    imageVector = if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite,
-                                    contentDescription = stringResource(if (isFavorite) R.string.remove_favourite else R.string.add_favourite)
+                                    imageVector = if (checkedIds.isEmpty()) {
+                                        if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite
+                                    } else {
+                                        if (hasUnfavourite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite
+                                    },
+                                    contentDescription = stringResource(
+                                        if (checkedIds.isEmpty()) {
+                                            if (isFavorite) R.string.remove_favourite else R.string.add_favourite
+                                        } else {
+                                            if (hasUnfavourite) R.string.add_favourite else R.string.remove_favourite
+                                        }
+                                    )
                                 )
                             }
                         },
@@ -317,7 +355,9 @@ fun Main_Medium(
     onRequestShare: () -> Unit,
     targetExamId: Long?,
     isFavorite: Boolean,
-    onToggleFavorite: (Long) -> Unit
+    onToggleFavorite: (Long) -> Unit,
+    hasUnfavourite: Boolean,
+    onToggleFavorites: (Boolean) -> Unit
 ) {
 
     val isEditing = checkedIds.isNotEmpty()
@@ -391,16 +431,37 @@ fun Main_Medium(
                                         contentDescription = stringResource(R.string.print)
                                     )
                                 }
-                                IconButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP()) }) {
+                                IconButton(
+                                    onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP()) },
+                                    enabled = checkedIds.size <= 1
+                                ) {
                                     Icon(
                                         imageVector = Icons.Rounded.Edit,
                                         contentDescription = stringResource(R.string.edit)
                                     )
                                 }
-                                IconButton(onClick = { targetExamId?.let { onToggleFavorite(it) } }) {
+                                IconButton(
+                                    onClick = {
+                                        if (checkedIds.isEmpty()) {
+                                            targetExamId?.let { onToggleFavorite(it) }
+                                        } else {
+                                            onToggleFavorites(hasUnfavourite)
+                                        }
+                                    }
+                                ) {
                                     Icon(
-                                        imageVector = if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite,
-                                        contentDescription = stringResource(if (isFavorite) R.string.remove_favourite else R.string.add_favourite)
+                                        imageVector = if (checkedIds.isEmpty()) {
+                                            if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite
+                                        } else {
+                                            if (hasUnfavourite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite
+                                        },
+                                        contentDescription = stringResource(
+                                            if (checkedIds.isEmpty()) {
+                                                if (isFavorite) R.string.remove_favourite else R.string.add_favourite
+                                            } else {
+                                                if (hasUnfavourite) R.string.add_favourite else R.string.remove_favourite
+                                            }
+                                        )
                                     )
                                 }
                             }
@@ -447,7 +508,9 @@ fun Main_Expanded(
     onRequestShare: () -> Unit,
     targetExamId: Long?,
     isFavorite: Boolean,
-    onToggleFavorite: (Long) -> Unit
+    onToggleFavorite: (Long) -> Unit,
+    hasUnfavourite: Boolean,
+    onToggleFavorites: (Boolean) -> Unit
 ) {
 
     val isEditing = checkedIds.isNotEmpty()
@@ -495,16 +558,37 @@ fun Main_Expanded(
                                         contentDescription = stringResource(R.string.print)
                                     )
                                 }
-                                IconButton(onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP()) }) {
+                                IconButton(
+                                    onClick = { navigator.navigate(com.melendez.known.ui.screens.Screens.DRP()) },
+                                    enabled = checkedIds.size <= 1
+                                ) {
                                     Icon(
                                         imageVector = Icons.Rounded.Edit,
                                         contentDescription = stringResource(R.string.edit)
                                     )
                                 }
-                                IconButton(onClick = { targetExamId?.let { onToggleFavorite(it) } }) {
+                                IconButton(
+                                    onClick = {
+                                        if (checkedIds.isEmpty()) {
+                                            targetExamId?.let { onToggleFavorite(it) }
+                                        } else {
+                                            onToggleFavorites(hasUnfavourite)
+                                        }
+                                    }
+                                ) {
                                     Icon(
-                                        imageVector = if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite,
-                                        contentDescription = stringResource(if (isFavorite) R.string.remove_favourite else R.string.add_favourite)
+                                        imageVector = if (checkedIds.isEmpty()) {
+                                            if (!isFavorite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite
+                                        } else {
+                                            if (hasUnfavourite) Icons.Rounded.FavoriteBorder else Icons.Rounded.Favorite
+                                        },
+                                        contentDescription = stringResource(
+                                            if (checkedIds.isEmpty()) {
+                                                if (isFavorite) R.string.remove_favourite else R.string.add_favourite
+                                            } else {
+                                                if (hasUnfavourite) R.string.add_favourite else R.string.remove_favourite
+                                            }
+                                        )
                                     )
                                 }
                             }

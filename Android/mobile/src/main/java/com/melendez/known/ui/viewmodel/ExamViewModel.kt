@@ -66,6 +66,15 @@ class ExamViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    /** Toggles the favourite state of multiple exams at once. */
+    suspend fun toggleFavorites(examIds: List<Long>, favourite: Boolean) {
+        repository.toggleFavorites(examIds, favourite)
+    }
+
+    /** Whether any exam in the given list is not favourited. */
+    fun hasUnfavourite(examIds: List<Long>): Flow<Boolean> =
+        repository.getExamsByIds(examIds).map { exams -> exams.any { !it.isFavorite } }
+
     /** All favourited exams, for a future favourites list. */
     val favoriteExams: Flow<List<Exam>> =
         repository.getFavoriteExams()

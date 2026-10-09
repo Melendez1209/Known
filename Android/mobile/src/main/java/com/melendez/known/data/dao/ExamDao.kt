@@ -93,6 +93,9 @@ interface ExamDao {
     @Query("UPDATE exams SET isFavorite = :isFavorite WHERE id = :examId")
     suspend fun updateFavorite(examId: Long, isFavorite: Boolean)
 
+    @Query("SELECT * FROM exams WHERE id IN (:examIds)")
+    fun getExamsByIds(examIds: List<Long>): Flow<List<Exam>>
+
     @Query("SELECT * FROM exams WHERE isFavorite = 1")
     fun getFavoriteExams(): Flow<List<Exam>>
 }
