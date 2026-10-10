@@ -19,4 +19,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Known"
 include(":mobile")
-include(":wear")
