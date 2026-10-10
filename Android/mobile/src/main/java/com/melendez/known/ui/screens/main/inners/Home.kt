@@ -24,7 +24,6 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -43,13 +42,12 @@ fun Home(
     val stats by viewModel.subjectStats(0L).collectAsStateWithLifecycle(initialValue = emptyList())
 
     Surface {
-        val items =
-            listOf(
-                CarouselItem(0, R.drawable.sample0, R.string.sample),
-                CarouselItem(1, R.drawable.sample1, R.string.sample),
-                CarouselItem(2, R.drawable.sample2, R.string.sample),
-                CarouselItem(3, R.drawable.sample3, R.string.sample)
-            )
+        val items = listOf(
+            CarouselItem(0, R.drawable.sample0, R.string.sample),
+            CarouselItem(1, R.drawable.sample1, R.string.sample),
+            CarouselItem(2, R.drawable.sample2, R.string.sample),
+            CarouselItem(3, R.drawable.sample3, R.string.sample)
+        )
 
         Column(
             modifier = Modifier
@@ -108,12 +106,6 @@ private fun ChartCard(
             content()
         }
     }
-}
-
-@Preview(device = "id:pixel_9_pro")
-@Composable
-fun Home_Preview() {
-    Home()
 }
 
 data class CarouselItem(

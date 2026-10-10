@@ -48,7 +48,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -61,7 +60,6 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -69,18 +67,20 @@ import com.melendez.known.R
 import com.melendez.known.data.entity.ExamWithTotal
 import com.melendez.known.svg.DynamicColorImageVectors
 import com.melendez.known.svg.drawablevectors.download
-import com.melendez.known.ui.navigation.NavigationState
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
 import com.melendez.known.ui.viewmodel.ExamViewModel
-import com.melendez.known.util.formatDateRange
 import com.melendez.known.util.formatScoreInput
+import com.melendez.known.util.percentage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.time.Duration.Companion.milliseconds
 
 /** Upper bound on the pull-to-refresh indicator, so it cannot outlive a silent re-query. */
 private const val REFRESH_TIMEOUT_MILLIS = 500L
+
+/** Percentage for the history list, two decimal places, e.g. `87.35%`. */
+private fun formatPercent(value: Float): String = "%.2f%%".format(value)
 
 @SuppressLint("MemberExtensionConflict")
 @Suppress("DEPRECATION")
@@ -215,10 +215,13 @@ fun History(
                                 headlineContent = { Text(item.exam.name) },
                                 supportingContent = {
                                     Text(
-                                        text = formatDateRange(
-                                            item.exam.startDate,
-                                            item.exam.endDate
-                                        )
+                                        text = formatScoreInput(item.totalMark.toString()) + " · " +
+                                                formatPercent(
+                                                    percentage(
+                                                        item.totalMark,
+                                                        item.totalFullMark
+                                                    )
+                                                )
                                     )
                                 },
                                 modifier = Modifier.clickable {
@@ -271,11 +274,11 @@ fun History(
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Text(
-                                text = stringResource(R.string.time),
+                                text = stringResource(R.string.mark),
                                 style = MaterialTheme.typography.titleMedium
                             )
                             Text(
-                                text = stringResource(R.string.mark),
+                                text = stringResource(R.string.score_rate),
                                 style = MaterialTheme.typography.titleMedium
                             )
                         }
@@ -347,29 +350,30 @@ fun History(
                                         Row(
                                             modifier = Modifier
                                                 .fillMaxWidth()
-                                                .height(50.dp),
+                                                .height(52.dp),
                                             horizontalArrangement = Arrangement.SpaceBetween,
                                             verticalAlignment = Alignment.CenterVertically,
                                         ) {
                                             Text(
                                                 text = item.exam.name,
-                                                modifier = Modifier
-                                                    .weight(1f)
-                                                    .padding(start = 12.dp),
+                                                modifier = Modifier.padding(start = 12.dp),
                                                 style = MaterialTheme.typography.bodyLarge,
                                                 maxLines = 1,
                                                 overflow = TextOverflow.Ellipsis
                                             )
                                             Text(
-                                                text = formatDateRange(
-                                                    item.exam.startDate,
-                                                    item.exam.endDate
-                                                ),
+                                                text = formatScoreInput(item.totalMark.toString()),
                                                 style = MaterialTheme.typography.bodyLarge,
-                                                maxLines = 1
+                                                maxLines = 1,
+                                                modifier = Modifier.padding(horizontal = 8.dp),
                                             )
                                             Text(
-                                                text = formatScoreInput(item.totalMark.toString()),
+                                                text = formatPercent(
+                                                    percentage(
+                                                        item.totalMark,
+                                                        item.totalFullMark
+                                                    )
+                                                ),
                                                 modifier = Modifier.padding(end = 12.dp),
                                                 style = MaterialTheme.typography.bodyLarge
                                             )
@@ -451,21 +455,5 @@ fun DeleteExamsDialog(
                 Text(text = stringResource(R.string.cancel))
             }
         }
-    )
-}
-
-@Preview(device = "id:pixel_10_pro")
-@Composable
-fun History_Preview() {
-    val navigationState = remember {
-        NavigationState(
-            startRoute = Screens.Main,
-            topLevelRoute = mutableStateOf(Screens.Main),
-            backStacks = emptyMap()
-        )
-    }
-    History(
-        navigator = Navigator(navigationState),
-        checkedIds = remember { mutableStateListOf() }
     )
 }
