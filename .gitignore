@@ -36,6 +36,16 @@ gradle-app.setting
 !gradle-wrapper.jar
 !gradle-wrapper.properties
 
+# .NET build output
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+*.binlog
+*.user
+.vs/
+TestResults/
+
 # Kotlin
 .kotlin/
 *.kotlin_module
