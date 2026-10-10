@@ -24,9 +24,9 @@ import com.melendez.known.ui.components.SharedTopBar
 import com.melendez.known.ui.components.generalsets.SubjectSelector
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
-import com.melendez.known.util.Identity
-import com.melendez.known.util.PreferenceUtil
-import com.melendez.known.util.toSubjectKeySet
+import com.melendez.known.util.settings.Identity
+import com.melendez.known.util.settings.PreferenceUtil
+import com.melendez.known.util.settings.toSubjectKeySet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

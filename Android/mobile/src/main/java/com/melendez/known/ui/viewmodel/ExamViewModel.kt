@@ -34,6 +34,15 @@ class ExamViewModel(application: Application) : AndroidViewModel(application) {
     /** One exam together with its subject scores, or `null` while it does not exist yet. */
     fun examWithScores(examId: Long): Flow<ExamWithScores?> = repository.getExamWithScores(examId)
 
+    /** Multiple exams with their subject scores, for batch operations. */
+    fun examsWithScoresByIds(examIds: List<Long>): Flow<List<ExamWithScores>> =
+        repository.getExamsWithScoresByIds(examIds)
+
+    /** Flow of the exams with scores for the given IDs, as a map keyed by exam ID. */
+    fun examsWithScoresMapByIds(examIds: List<Long>): Flow<Map<Long, ExamWithScores>> =
+        repository.getExamsWithScoresByIds(examIds)
+            .map { list -> list.associateBy { it.exam.id } }
+
     /**
      * Per-subject averages across every exam except [examId], used by the detail screen to compare
      * the current exam against the student's own history.
@@ -65,6 +74,15 @@ class ExamViewModel(application: Application) : AndroidViewModel(application) {
             repository.setFavorite(examId, !exam.isFavorite)
         }
     }
+
+    /** Toggles the favourite state of multiple exams at once. */
+    suspend fun toggleFavorites(examIds: List<Long>, favourite: Boolean) {
+        repository.toggleFavorites(examIds, favourite)
+    }
+
+    /** Whether any exam in the given list is not favourited. */
+    fun hasUnfavourite(examIds: List<Long>): Flow<Boolean> =
+        repository.getExamsByIds(examIds).map { exams -> exams.any { !it.isFavorite } }
 
     /** All favourited exams, for a future favourites list. */
     val favoriteExams: Flow<List<Exam>> =

@@ -25,10 +25,10 @@ import com.melendez.known.ui.components.PreferenceSwitchVariant
 import com.melendez.known.ui.components.SharedTopBar
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
-import com.melendez.known.util.DarkThemePreference.Companion.FOLLOW_SYSTEM
-import com.melendez.known.util.DarkThemePreference.Companion.OFF
-import com.melendez.known.util.DarkThemePreference.Companion.ON
-import com.melendez.known.util.PreferenceUtil
+import com.melendez.known.util.settings.DarkThemePreference.Companion.FOLLOW_SYSTEM
+import com.melendez.known.util.settings.DarkThemePreference.Companion.OFF
+import com.melendez.known.util.settings.DarkThemePreference.Companion.ON
+import com.melendez.known.util.settings.PreferenceUtil
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

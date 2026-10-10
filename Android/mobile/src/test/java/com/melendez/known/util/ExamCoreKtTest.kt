@@ -4,6 +4,7 @@ import com.melendez.known.data.entity.Exam
 import com.melendez.known.data.entity.ExamScore
 import com.melendez.known.data.entity.ExamWithTotal
 import com.melendez.known.data.entity.SubjectStat
+import com.melendez.known.util.settings.examSubjectKeys
 import org.junit.Assert.assertEquals
 import org.junit.Assert.assertFalse
 import org.junit.Assert.assertNull

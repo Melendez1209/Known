@@ -72,12 +72,12 @@ import com.melendez.known.ui.components.SharedTopBar
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
 import com.melendez.known.ui.theme.DEFAULT_SEED_COLOR
-import com.melendez.known.util.DarkThemePreference
-import com.melendez.known.util.PreferenceUtil
-import com.melendez.known.util.STYLE_MONOCHROME
-import com.melendez.known.util.STYLE_TONAL_SPOT
-import com.melendez.known.util.paletteStyles
-import com.melendez.known.util.toDisplayName
+import com.melendez.known.util.settings.DarkThemePreference
+import com.melendez.known.util.settings.PreferenceUtil
+import com.melendez.known.util.settings.STYLE_MONOCHROME
+import com.melendez.known.util.settings.STYLE_TONAL_SPOT
+import com.melendez.known.util.settings.paletteStyles
+import com.melendez.known.util.settings.toDisplayName
 import io.material.hct.material.hct.Hct
 import java.util.Locale
 

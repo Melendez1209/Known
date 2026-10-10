@@ -54,7 +54,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -66,17 +65,16 @@ import com.melendez.known.ui.components.ShareOptionsSheet
 import com.melendez.known.ui.components.Tip
 import com.melendez.known.ui.components.chart.ComboChart
 import com.melendez.known.ui.components.chart.ScorePieChart
-import com.melendez.known.ui.navigation.NavigationState
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.viewmodel.ExamViewModel
 import com.melendez.known.util.averageDelta
-import com.melendez.known.util.examSubjectKeys
 import com.melendez.known.util.formatScoreInput
 import com.melendez.known.util.percentage
 import com.melendez.known.util.rankOf
 import com.melendez.known.util.recordedSubjectKeys
+import com.melendez.known.util.settings.examSubjectKeys
+import com.melendez.known.util.settings.subjectKeyToStringResource
 import com.melendez.known.util.share.ShareManager
-import com.melendez.known.util.subjectKeyToStringResource
 import com.melendez.known.util.totalFullMark
 import com.melendez.known.util.totalMark
 import kotlinx.coroutines.launch
@@ -481,17 +479,4 @@ private fun SubjectRow(label: String, score: ExamScore?, stat: SubjectStat?) {
             }
         }
     }
-}
-
-@Preview(device = "id:pixel_10_pro")
-@Composable
-fun Detail_Preview() {
-    val navigationState = remember {
-        NavigationState(
-            startRoute = Screens.Main,
-            topLevelRoute = mutableStateOf(Screens.Main),
-            backStacks = emptyMap()
-        )
-    }
-    Detail(navigator = Navigator(navigationState))
 }

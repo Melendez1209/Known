@@ -24,6 +24,7 @@ import com.patrykandpatrick.vico.compose.cartesian.layer.LineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.layer.rememberLineCartesianLayer
 import com.patrykandpatrick.vico.compose.cartesian.rememberCartesianChart
 import com.patrykandpatrick.vico.compose.common.Fill
+import com.patrykandpatrick.vico.compose.cartesian.data.CartesianLayerRangeProvider
 
 /**
  * A line chart showing the trend of total marks across exams.
@@ -55,6 +56,13 @@ fun TrendChart(
 
     val lineColor = MaterialTheme.colorScheme.primary
 
+    val marks = exams.map { it.totalMark }
+    val minMark = marks.min()
+    val maxMark = marks.max()
+    val yPadding = ((maxMark - minMark) * 0.1).coerceAtLeast(1.0)
+    val yMin = (minMark - yPadding).coerceAtLeast(0.0)
+    val yMax = maxMark + yPadding
+
     CartesianChartHost(
         chart = rememberCartesianChart(
             rememberLineCartesianLayer(
@@ -62,6 +70,10 @@ fun TrendChart(
                     LineCartesianLayer.Line(
                         fill = LineCartesianLayer.LineFill.single(Fill(lineColor))
                     )
+                ),
+                rangeProvider = CartesianLayerRangeProvider.fixed(
+                    minY = yMin,
+                    maxY = yMax
                 )
             ),
             startAxis = VerticalAxis.rememberStart(),
