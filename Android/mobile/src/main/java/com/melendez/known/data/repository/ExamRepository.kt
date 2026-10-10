@@ -68,6 +68,9 @@ class ExamRepository(private val database: AppDatabase) {
 
     fun getExamsByIds(examIds: List<Long>): Flow<List<Exam>> = examDao.getExamsByIds(examIds)
 
+    fun getExamsWithScoresByIds(examIds: List<Long>): Flow<List<ExamWithScores>> =
+        examDao.getExamsWithScoresByIds(examIds)
+
     suspend fun toggleFavorites(examIds: List<Long>, isFavorite: Boolean) {
         examIds.forEach { examDao.updateFavorite(it, isFavorite) }
     }

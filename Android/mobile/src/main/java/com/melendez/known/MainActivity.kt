@@ -55,8 +55,8 @@ import com.melendez.known.ui.screens.settings.appearance.Dark
 import com.melendez.known.ui.screens.settings.appearance.Language
 import com.melendez.known.ui.theme.DEFAULT_SEED_COLOR
 import com.melendez.known.ui.theme.KnownTheme
-import com.melendez.known.util.DarkThemePreference
-import com.melendez.known.util.PreferenceUtil
+import com.melendez.known.util.settings.DarkThemePreference
+import com.melendez.known.util.settings.PreferenceUtil
 import com.melendez.known.util.getUnifiedSizeClass
 
 @OptIn(ExperimentalMaterial3WindowSizeClassApi::class)

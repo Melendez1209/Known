@@ -70,13 +70,13 @@ import com.melendez.known.ui.navigation.NavigationState
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.viewmodel.ExamViewModel
 import com.melendez.known.util.averageDelta
-import com.melendez.known.util.examSubjectKeys
+import com.melendez.known.util.settings.examSubjectKeys
 import com.melendez.known.util.formatScoreInput
 import com.melendez.known.util.percentage
 import com.melendez.known.util.rankOf
 import com.melendez.known.util.recordedSubjectKeys
 import com.melendez.known.util.share.ShareManager
-import com.melendez.known.util.subjectKeyToStringResource
+import com.melendez.known.util.settings.subjectKeyToStringResource
 import com.melendez.known.util.totalFullMark
 import com.melendez.known.util.totalMark
 import kotlinx.coroutines.launch

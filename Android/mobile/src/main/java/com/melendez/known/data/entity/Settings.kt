@@ -2,7 +2,7 @@ package com.melendez.known.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.melendez.known.util.DarkThemePreference
+import com.melendez.known.util.settings.DarkThemePreference
 
 @Entity(tableName = "settings")
 data class Settings(

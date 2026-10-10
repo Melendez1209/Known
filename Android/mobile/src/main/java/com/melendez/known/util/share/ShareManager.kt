@@ -22,14 +22,30 @@ object ShareManager {
         allExams: List<ExamWithTotal>,
         subjectNameResolver: (String) -> String
     ) {
+        shareAsImages(context, listOf(examWithScores), allExams, subjectNameResolver)
+    }
+
+    /**
+     * Shares multiple exam results as formatted image cards via the system share sheet.
+     */
+    fun shareAsImages(
+        context: Context,
+        examWithScoresList: List<ExamWithScores>,
+        allExams: List<ExamWithTotal>,
+        subjectNameResolver: (String) -> String
+    ) {
+        if (examWithScoresList.isEmpty()) return
+
         Toast.makeText(context, context.getString(R.string.share_image_saving), Toast.LENGTH_SHORT)
             .show()
 
-        val uri = ShareCardGenerator.generateShareCard(
-            context, examWithScores, allExams, subjectNameResolver
-        )
+        val uris = examWithScoresList.mapNotNull { examWithScores ->
+            ShareCardGenerator.generateShareCard(
+                context, examWithScores, allExams, subjectNameResolver
+            )
+        }
 
-        if (uri == null) {
+        if (uris.isEmpty()) {
             Toast.makeText(
                 context,
                 context.getString(R.string.share_image_failed),
@@ -38,10 +54,18 @@ object ShareManager {
             return
         }
 
-        val shareIntent = Intent(Intent.ACTION_SEND).apply {
-            type = "image/png"
-            putExtra(Intent.EXTRA_STREAM, uri)
-            addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+        val shareIntent = if (uris.size == 1) {
+            Intent(Intent.ACTION_SEND).apply {
+                type = "image/png"
+                putExtra(Intent.EXTRA_STREAM, uris.first())
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
+        } else {
+            Intent(Intent.ACTION_SEND_MULTIPLE).apply {
+                type = "image/png"
+                putParcelableArrayListExtra(Intent.EXTRA_STREAM, ArrayList(uris))
+                addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+            }
         }
 
         val chooser = Intent.createChooser(shareIntent, context.getString(R.string.share_via))

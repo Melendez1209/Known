@@ -1,4 +1,4 @@
-package com.melendez.known.util
+package com.melendez.known.util.settings
 
 import android.app.Application
 import androidx.compose.runtime.Composable

@@ -49,9 +49,9 @@ import com.melendez.known.ui.components.PreferencesHintCard
 import com.melendez.known.ui.components.SharedTopBar
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
-import com.melendez.known.util.LocaleLanguageCodeMap
-import com.melendez.known.util.PreferenceUtil
-import com.melendez.known.util.toDisplayName
+import com.melendez.known.util.settings.LocaleLanguageCodeMap
+import com.melendez.known.util.settings.PreferenceUtil
+import com.melendez.known.util.settings.toDisplayName
 import java.util.Locale
 
 const val WEBLATE = "https://weblate.org/zh-hans/"

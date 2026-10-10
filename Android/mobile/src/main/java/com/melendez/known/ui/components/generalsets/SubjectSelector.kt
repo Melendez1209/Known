@@ -14,8 +14,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.melendez.known.util.subjectKeyToStringResource
-import com.melendez.known.util.subjectKeys
+import com.melendez.known.util.settings.subjectKeyToStringResource
+import com.melendez.known.util.settings.subjectKeys
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

@@ -96,6 +96,10 @@ interface ExamDao {
     @Query("SELECT * FROM exams WHERE id IN (:examIds)")
     fun getExamsByIds(examIds: List<Long>): Flow<List<Exam>>
 
+    @Transaction
+    @Query("SELECT * FROM exams WHERE id IN (:examIds)")
+    fun getExamsWithScoresByIds(examIds: List<Long>): Flow<List<ExamWithScores>>
+
     @Query("SELECT * FROM exams WHERE isFavorite = 1")
     fun getFavoriteExams(): Flow<List<Exam>>
 }

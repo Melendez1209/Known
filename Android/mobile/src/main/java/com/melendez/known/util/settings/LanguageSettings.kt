@@ -1,4 +1,4 @@
-package com.melendez.known.util
+package com.melendez.known.util.settings
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource

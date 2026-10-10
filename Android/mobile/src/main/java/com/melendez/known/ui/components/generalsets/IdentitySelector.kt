@@ -6,7 +6,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.melendez.known.R
 import com.melendez.known.ui.components.PreferenceSingleChoiceItem
-import com.melendez.known.util.Identity
+import com.melendez.known.util.settings.Identity
 
 @Composable
 fun IdentitySelector(

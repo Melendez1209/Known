@@ -3,6 +3,7 @@ package com.melendez.known.util
 import com.melendez.known.data.entity.ExamScore
 import com.melendez.known.data.entity.ExamWithTotal
 import com.melendez.known.data.entity.SubjectStat
+import com.melendez.known.util.settings.examSubjectKeys
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale

@@ -63,8 +63,10 @@ import com.melendez.known.ui.screens.main.inners.Home
 import com.melendez.known.ui.screens.main.inners.Me
 import com.melendez.known.ui.viewmodel.ExamViewModel
 import com.melendez.known.util.ScreenType
+import com.melendez.known.util.print.PrintManager
+import com.melendez.known.util.settings.subjectKeyToStringResource
 import com.melendez.known.util.share.ShareManager
-import com.melendez.known.util.subjectKeyToStringResource
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.launch
 
 @Composable
@@ -110,6 +112,37 @@ fun MainScreen(navigator: Navigator) {
         }
     }
 
+    // Resolve subject names in the @Composable context so they are configuration-aware
+    val shareSubjectNames = shareExamWithScores?.scores?.associate { score ->
+        score.subjectKey to stringResource(subjectKeyToStringResource(score.subjectKey))
+    } ?: emptyMap()
+
+    // All selected exams for batch operations
+    val selectedExamIds = checkedIds.toList()
+    val selectedExamsWithScores by remember(selectedExamIds) {
+        if (selectedExamIds.isEmpty()) {
+            flowOf(emptyList())
+        } else {
+            viewModel.examsWithScoresByIds(selectedExamIds)
+        }
+    }.collectAsStateWithLifecycle(initialValue = emptyList())
+
+    val onRequestPrint: () -> Unit = {
+        val examsToPrint = if (selectedExamIds.isNotEmpty()) {
+            selectedExamsWithScores
+        } else {
+            shareExamWithScores?.let { listOf(it) } ?: emptyList()
+        }
+        if (examsToPrint.isNotEmpty()) {
+            PrintManager.printExams(
+                context = context,
+                examWithScoresList = examsToPrint,
+                allExams = exams,
+                subjectNameResolver = { key: String -> shareSubjectNames[key] ?: key }
+            )
+        }
+    }
+
     if (showDeleteDialog) {
         DeleteExamsDialog(
             checkedIds = checkedIds,
@@ -117,31 +150,50 @@ fun MainScreen(navigator: Navigator) {
         )
     }
 
-    if (showShareSheet && shareExamWithScores != null) {
-        // Resolve subject names in the @Composable context so they are configuration-aware
-        val subjectNames = shareExamWithScores!!.scores.associate { score ->
-            score.subjectKey to stringResource(subjectKeyToStringResource(score.subjectKey))
+    if (showShareSheet) {
+        val examsToShare = if (checkedIds.isNotEmpty()) {
+            selectedExamsWithScores
+        } else {
+            shareExamWithScores?.let { listOf(it) } ?: emptyList()
         }
-        ShareOptionsSheet(
-            onDismiss = { showShareSheet = false },
-            onShareAsImage = {
-                ShareManager.shareAsImage(
+
+        if (examsToShare.isNotEmpty()) {
+            val subjectNames = examsToShare.flatMap { it.scores }
+                .associate { score ->
+                    score.subjectKey to stringResource(subjectKeyToStringResource(score.subjectKey))
+                }
+
+            if (examsToShare.size == 1) {
+                ShareOptionsSheet(
+                    onDismiss = { showShareSheet = false },
+                    onShareAsImage = {
+                        ShareManager.shareAsImage(
+                            context = context,
+                            examWithScores = examsToShare.first(),
+                            allExams = exams,
+                            subjectNameResolver = { key -> subjectNames[key] ?: key }
+                        )
+                    },
+                    onShareAsText = {
+                        ShareManager.shareAsText(
+                            context = context,
+                            examWithScores = examsToShare.first(),
+                            allExams = exams,
+                            subjectStats = shareStats,
+                            subjectNameResolver = { key -> subjectNames[key] ?: key }
+                        )
+                    }
+                )
+            } else {
+                ShareManager.shareAsImages(
                     context = context,
-                    examWithScores = shareExamWithScores!!,
+                    examWithScoresList = examsToShare,
                     allExams = exams,
                     subjectNameResolver = { key -> subjectNames[key] ?: key }
                 )
-            },
-            onShareAsText = {
-                ShareManager.shareAsText(
-                    context = context,
-                    examWithScores = shareExamWithScores!!,
-                    allExams = exams,
-                    subjectStats = shareStats,
-                    subjectNameResolver = { key -> subjectNames[key] ?: key }
-                )
+                showShareSheet = false
             }
-        )
+        }
     }
 
     val navigationState = rememberNavigationState(
@@ -174,7 +226,8 @@ fun MainScreen(navigator: Navigator) {
                 }
             },
             hasUnfavourite = hasUnfavourite,
-            onToggleFavorites = onToggleFavorites
+            onToggleFavorites = onToggleFavorites,
+            onRequestPrint = onRequestPrint
         )
 
         ScreenType.Medium -> Main_Medium(
@@ -192,7 +245,8 @@ fun MainScreen(navigator: Navigator) {
                 }
             },
             hasUnfavourite = hasUnfavourite,
-            onToggleFavorites = onToggleFavorites
+            onToggleFavorites = onToggleFavorites,
+            onRequestPrint = onRequestPrint
         )
 
         ScreenType.Expanded -> Main_Expanded(
@@ -210,7 +264,8 @@ fun MainScreen(navigator: Navigator) {
                 }
             },
             hasUnfavourite = hasUnfavourite,
-            onToggleFavorites = onToggleFavorites
+            onToggleFavorites = onToggleFavorites,
+            onRequestPrint = onRequestPrint
         )
     }
 }
@@ -228,7 +283,8 @@ fun Main_Compact(
     isFavorite: Boolean,
     onToggleFavorite: (Long) -> Unit,
     hasUnfavourite: Boolean,
-    onToggleFavorites: (Boolean) -> Unit
+    onToggleFavorites: (Boolean) -> Unit,
+    onRequestPrint: () -> Unit
 ) {
 
     val isEditing = checkedIds.isNotEmpty()
@@ -265,7 +321,7 @@ fun Main_Compact(
                                     contentDescription = stringResource(R.string.share)
                                 )
                             }
-                            IconButton(onClick = { /*TODO*/ }) {
+                            IconButton(onClick = onRequestPrint) {
                                 Icon(
                                     imageVector = Icons.Rounded.Print,
                                     contentDescription = stringResource(R.string.print)
@@ -357,7 +413,8 @@ fun Main_Medium(
     isFavorite: Boolean,
     onToggleFavorite: (Long) -> Unit,
     hasUnfavourite: Boolean,
-    onToggleFavorites: (Boolean) -> Unit
+    onToggleFavorites: (Boolean) -> Unit,
+    onRequestPrint: () -> Unit
 ) {
 
     val isEditing = checkedIds.isNotEmpty()
@@ -419,13 +476,16 @@ fun Main_Medium(
 
                         BottomAppBar(
                             actions = {
-                                IconButton(onClick = onRequestShare) {
+                                IconButton(
+                                    onClick = onRequestShare,
+                                    enabled = checkedIds.size <= 1
+                                ) {
                                     Icon(
                                         imageVector = Icons.Rounded.Share,
                                         contentDescription = stringResource(R.string.share)
                                     )
                                 }
-                                IconButton(onClick = { /*TODO*/ }) {
+                                IconButton(onClick = onRequestPrint) {
                                     Icon(
                                         imageVector = Icons.Rounded.Print,
                                         contentDescription = stringResource(R.string.print)
@@ -510,7 +570,8 @@ fun Main_Expanded(
     isFavorite: Boolean,
     onToggleFavorite: (Long) -> Unit,
     hasUnfavourite: Boolean,
-    onToggleFavorites: (Boolean) -> Unit
+    onToggleFavorites: (Boolean) -> Unit,
+    onRequestPrint: () -> Unit
 ) {
 
     val isEditing = checkedIds.isNotEmpty()
@@ -546,13 +607,16 @@ fun Main_Expanded(
 
                         BottomAppBar(
                             actions = {
-                                IconButton(onClick = onRequestShare) {
+                                IconButton(
+                                    onClick = onRequestShare,
+                                    enabled = checkedIds.size <= 1
+                                ) {
                                     Icon(
                                         imageVector = Icons.Rounded.Share,
                                         contentDescription = stringResource(R.string.share)
                                     )
                                 }
-                                IconButton(onClick = { /*TODO*/ }) {
+                                IconButton(onClick = onRequestPrint) {
                                     Icon(
                                         imageVector = Icons.Rounded.Print,
                                         contentDescription = stringResource(R.string.print)

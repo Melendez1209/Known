@@ -4,7 +4,7 @@ import android.app.Application
 import android.util.Log
 import com.google.android.gms.ads.MobileAds
 import com.melendez.known.util.AppOpenAdManager
-import com.melendez.known.util.PreferenceUtil
+import com.melendez.known.util.settings.PreferenceUtil
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
