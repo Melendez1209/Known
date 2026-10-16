@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<local:KnownPage
+    x:Class="Known.Pages.SettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Known.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Padding="24" RowSpacing="8">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            x:Name="TitleText"
+            Style="{StaticResource TitleTextBlockStyle}"
+            Text="Settings" />
+
+        <ListView Grid.Row="1" SelectionMode="None" IsItemClickEnabled="True" ItemClick="OnItemClick">
+            <ListViewItem x:Name="GeneralEntry" Content="General" />
+            <ListViewItem x:Name="AppearanceEntry" Content="Look &amp; feel" />
+            <ListViewItem x:Name="ClearCacheEntry" Content="Clear cache" />
+        </ListView>
+    </Grid>
+
+</local:KnownPage>

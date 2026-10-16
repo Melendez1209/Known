@@ -8,9 +8,21 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
-                <!-- Other merged dictionaries here -->
             </ResourceDictionary.MergedDictionaries>
-            <!-- Other app resources here -->
+
+            <!--
+                Charts are drawn by SkiaSharp, which cannot see XAML theme resources. These brushes
+                resolve to concrete colours the chart code can copy into an SKColor, and because they
+                are declared against theme resources they follow the light and dark variants on
+                their own. The chart pages still rebuild their series when the theme changes, since
+                a Skia colour is a snapshot rather than a live binding.
+            -->
+            <SolidColorBrush x:Key="ChartAccentBrush" Color="{ThemeResource AccentFillColorDefaultBrush}" />
+            <SolidColorBrush x:Key="ChartAccentSecondaryBrush" Color="{ThemeResource AccentFillColorSecondaryBrush}" />
+            <SolidColorBrush x:Key="ChartAccentTertiaryBrush" Color="{ThemeResource AccentFillColorTertiaryBrush}" />
+            <SolidColorBrush x:Key="ChartTextBrush" Color="{ThemeResource TextFillColorSecondaryBrush}" />
+            <SolidColorBrush x:Key="ChartGridLineBrush" Color="{ThemeResource DividerStrokeColorDefaultBrush}" />
+            <SolidColorBrush x:Key="ChartSurfaceBrush" Color="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
         </ResourceDictionary>
     </Application.Resources>
 </Application>

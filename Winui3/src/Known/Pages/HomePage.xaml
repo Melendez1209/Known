@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<local:KnownPage
+    x:Class="Known.Pages.HomePage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:lvc="using:LiveChartsCore.SkiaSharpView.WinUI"
+    xmlns:local="using:Known.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d">
+
+    <!--
+        The chart data is assigned from the code behind rather than bound. A page property cannot
+        raise change notifications without reintroducing the plumbing the rest of the app avoids, and
+        the chart control owns its own data anyway.
+    -->
+    <Grid Padding="24" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            x:Name="TitleText"
+            Style="{StaticResource TitleTextBlockStyle}" />
+
+        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12">
+            <Border
+                Style="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="8"
+                Padding="16,12"
+                MinWidth="160">
+                <StackPanel Spacing="2">
+                    <TextBlock x:Name="ExamCountValue" Style="{StaticResource CaptionTextBlockStyle}" />
+                    <TextBlock x:Name="ExamCountCaption" Style="{StaticResource BodyTextBlockStyle}" />
+                </StackPanel>
+            </Border>
+
+            <Border
+                Style="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="8"
+                Padding="16,12"
+                MinWidth="160">
+                <StackPanel Spacing="2">
+                    <TextBlock x:Name="AverageValue" Style="{StaticResource SubtitleTextBlockStyle}" />
+                    <TextBlock x:Name="AverageCaption" Style="{StaticResource BodyTextBlockStyle}" />
+                </StackPanel>
+            </Border>
+
+            <Border
+                Style="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="8"
+                Padding="16,12"
+                MinWidth="160">
+                <StackPanel Spacing="2">
+                    <TextBlock x:Name="BestRankValue" Style="{StaticResource SubtitleTextBlockStyle}" />
+                    <TextBlock x:Name="BestRankCaption" Style="{StaticResource BodyTextBlockStyle}" />
+                </StackPanel>
+            </Border>
+        </StackPanel>
+
+        <Grid Grid.Row="2" ColumnSpacing="16">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <Border
+                Grid.Column="0"
+                Style="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="8"
+                Padding="12">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" x:Name="TrendCaption" Style="{StaticResource BodyStrongTextBlockStyle}" />
+                    <lvc:CartesianChart
+                        Grid.Row="1"
+                        x:Name="TrendChart"
+                        Margin="0,8,0,0"
+                        LegendPosition="Hidden"
+                        ZoomMode="None" />
+                </Grid>
+            </Border>
+
+            <Border
+                Grid.Column="1"
+                Style="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="8"
+                Padding="12">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" x:Name="SubjectCaption" Style="{StaticResource BodyStrongTextBlockStyle}" />
+                    <lvc:CartesianChart
+                        Grid.Row="1"
+                        x:Name="SubjectChart"
+                        Margin="0,8,0,0"
+                        LegendPosition="Hidden"
+                        ZoomMode="None" />
+                </Grid>
+            </Border>
+        </Grid>
+    </Grid>
+
+</local:KnownPage>

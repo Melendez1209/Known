@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Desktop only strings.
+
+    The main translation set is generated from the Android resources, which the desktop build is
+    not allowed to edit. These are the handful of labels the Windows app needs and Android has no
+    equivalent for, kept here so both platforms stay untouched by each other.
+
+    A bare element supplies the neutral English text. Elements carrying a locale attribute
+    override it for that satellite; a missing locale falls back to English.
+-->
+<strings>
+
+    <string name="average">Average</string>
+    <string name="average" locale="zh-Hans">平均分</string>
+    <string name="average" locale="zh-Hant">平均分</string>
+
+    <string name="percentage">Percentage</string>
+    <string name="percentage" locale="zh-Hans">百分比</string>
+    <string name="percentage" locale="zh-Hant">百分比</string>
+
+    <string name="search_hint">Search exams</string>
+    <string name="search_hint" locale="zh-Hans">搜索考试</string>
+    <string name="search_hint" locale="zh-Hant">搜尋考試</string>
+
+    <string name="microsoft_sign_in">Sign in with Microsoft</string>
+    <string name="microsoft_sign_in" locale="zh-Hans">使用 Microsoft 账户登录</string>
+    <string name="microsoft_sign_in" locale="zh-Hant">使用 Microsoft 帳戶登入</string>
+
+    <string name="account_not_signed_in">Sign in to sync your account</string>
+    <string name="account_not_signed_in" locale="zh-Hans">登录以同步你的账户</string>
+    <string name="account_not_signed_in" locale="zh-Hant">登入以同步你的帳戶</string>
+
+    <string name="language_restart_hint">The language change takes effect after a restart.</string>
+    <string name="language_restart_hint" locale="zh-Hans">语言更改将在重启后生效。</string>
+    <string name="language_restart_hint" locale="zh-Hant">語言變更將在重新啟動後生效。</string>
+
+    <string name="delete_exams_confirm">Delete the selected exams?</string>
+    <string name="delete_exams_confirm" locale="zh-Hans">要删除选中的考试吗？</string>
+    <string name="delete_exams_confirm" locale="zh-Hant">要刪除選中的考試嗎？</string>
+
+    <string name="discard_exam_confirm">Do you want to discard the content you have entered?</string>
+    <string name="discard_exam_confirm" locale="zh-Hans">要放弃已输入的内容吗？</string>
+    <string name="discard_exam_confirm" locale="zh-Hant">要捨棄已輸入的內容嗎？</string>
+
+</strings>

@@ -19,9 +19,10 @@ messages, Markdown files and similar content in British English.
 
 ## Repository layout (monorepo, single git repo at root)
 
-- `Android/` - the main workspace: Gradle project with two modules, `mobile` (phone app, package `com.melendez.known`)
-  and `wear` (Wear OS app). Most work happens here.
+- `Android/` - the main workspace: Gradle project with two modules, `mobile` (phone app, package `com.melendez.known`).
+  Active branch `dev_Android`.
 - `HarmonyOS/` - HarmonyOS app (hvigor build); `Web/` - static Vite site. Usually out of scope for Android work.
+- `Winui3/` - Windows desktop app (WinUI 3 / Windows App SDK). Active branch `dev_win`.
 
 ## Android specifics
 
@@ -44,6 +45,44 @@ messages, Markdown files and similar content in British English.
 - In Compose, use `stringResource()` instead of `context.getString()` for querying string resources;
   `LocalContext.current` should only be used for Android framework APIs (e.g., `Toast`, `Intent`), not for resource
   queries.
+
+## Windows specifics (`Winui3/`)
+
+- Three projects under `Winui3/`: `src/Known` (WinUI 3 app), `src/Known.Core` (net8.0 class library, no WinUI
+  dependency) and `tests/Known.Core.Tests` (xUnit). `Known.Core` holds the domain rules, the EF Core layer and the
+  localisation, so it can be tested without a window.
+- Build with `dotnet`. The app project **requires an explicit platform**, because MSIX packaging cannot target AnyCPU:
+  `dotnet build Winui3\Known.slnx -c Debug -p:Platform=x64`.
+- `dotnet` is not on `PATH` on this machine; the SDK lives at `C:\Program Files\dotnet\dotnet.exe`. Only the .NET 10 SDK
+  is installed, but it builds and runs the `net8.0` targets because the .NET 8 runtime is present.
+- Run the tests with `dotnet test Winui3\tests\Known.Core.Tests\Known.Core.Tests.csproj`. The 31 cases in
+  `ExamScoringTests` are a deliberate port of the Android `ExamCoreKtTest`, so keep them in step when either side
+  changes.
+- Package versions: `Microsoft.WindowsAppSDK` 2.5.1, `LiveChartsCore.SkiaSharpView.WinUI` 2.0.5, `CommunityToolkit.Mvvm`
+  8.4.2, `Microsoft.Identity.Client` 4.90.1, EF Core 9.0.20 (EF Core 10 needs .NET 10, so do not bump it).
+- The Windows build uses the **native WinUI theme only**. The Android HCT/CAM16 palette engine was deliberately not
+  ported, so there is no seed colour or palette style setting here. Do not reintroduce one.
+- Cloud services were dropped except Microsoft account sign in: no Firebase, AdMob, Gemini or ML Kit. The desktop app is
+  local first. `MsalAuthService.ClientId` is empty until an Entra app is registered, and the sign in button stays
+  disabled until it is filled in.
+- Localisation is generated, not handwritten. `tools\New-LocalizationResources.ps1` reads the Android `res/values*` and
+  `tools/winui-strings.xml` and writes `AppStrings*.resx` into `Known.Core/Localization`. Re-run it after any Android
+  string change. Note that Android's `values-zh` holds **Traditional** and `values-zh-rCN` holds **Simplified**, which
+  is the opposite of what the folder names suggest.
+- Navigation uses four frames in `MainWindow` (one per top level tab plus a shared one), driven by `ShellNavigator`, to
+  reproduce the Android behaviour of one back stack per top level route.
+- Charts are SkiaSharp based and therefore cannot follow XAML theme resources. `ChartPalette` copies the resolved
+  brushes from `App.xaml` into `SKColor` values, and the chart pages rebuild their series on
+  `ThemeService.ThemeChanged`.
+- `KnownPage` must be the XAML **root element** of a page (`<local:KnownPage x:Class="...">`), otherwise the generated
+  partial declares a different base class and the build fails with CS0263.
+- WinUI 3 has no `Page.Parameter`; read the navigation argument from `KnownPage.NavigationParameter` instead.
+- `AppWindow.TitleBar.RightInset` is an `int` in Windows App SDK 2.5.1, **not** the `RectInt32` the documentation shows.
+  Writing `.Width` on it fails to compile.
+- `ShellNavigator` owns the visibility and the root navigation of all four frames. A visible but empty `Frame` renders
+  nothing, which is why a tab is given its root page lazily on first selection rather than all three at startup. Pages
+  shown on the shared stack close themselves with `CloseRoot()`, not `GoBack()`, because a single entry frame reports
+  `CanGoBack == false`.
 
 ## Style (see CONTRIBUTING.md for full spec)
 

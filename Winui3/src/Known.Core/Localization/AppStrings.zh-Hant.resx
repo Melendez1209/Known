@@ -1,0 +1,468 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="app_name" xml:space="preserve">
+    <value>知學情</value>
+  </data>
+  <data name="home" xml:space="preserve">
+    <value>首頁</value>
+  </data>
+  <data name="me" xml:space="preserve">
+    <value>我</value>
+  </data>
+  <data name="history" xml:space="preserve">
+    <value>歷史</value>
+  </data>
+  <data name="add" xml:space="preserve">
+    <value>添加</value>
+  </data>
+  <data name="exam" xml:space="preserve">
+    <value>考試</value>
+  </data>
+  <data name="time" xml:space="preserve">
+    <value>時間</value>
+  </data>
+  <data name="cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="search" xml:space="preserve">
+    <value>搜索</value>
+  </data>
+  <data name="clear" xml:space="preserve">
+    <value>清除</value>
+  </data>
+  <data name="settings" xml:space="preserve">
+    <value>設置</value>
+  </data>
+  <data name="back" xml:space="preserve">
+    <value>返抵上一屏幕</value>
+  </data>
+  <data name="close_bar" xml:space="preserve">
+    <value>關閉搜索列</value>
+  </data>
+  <data name="about" xml:space="preserve">
+    <value>關於</value>
+  </data>
+  <data name="mark" xml:space="preserve">
+    <value>我的分數</value>
+  </data>
+  <data name="full_mark" xml:space="preserve">
+    <value>滿分</value>
+  </data>
+  <data name="next" xml:space="preserve">
+    <value>繼續</value>
+  </data>
+  <data name="sign_to" xml:space="preserve">
+    <value>登錄您的 知學情 帳號</value>
+  </data>
+  <data name="avatar" xml:space="preserve">
+    <value>頭像</value>
+  </data>
+  <data name="dynamic_color" xml:space="preserve">
+    <value>動態顏色</value>
+  </data>
+  <data name="exam_dates" xml:space="preserve">
+    <value>考試期</value>
+  </data>
+  <data name="discard_sum" xml:space="preserve">
+    <value>您是否要放棄已錄入內容？</value>
+  </data>
+  <data name="reserve" xml:space="preserve">
+    <value>保留</value>
+  </data>
+  <data name="discard" xml:space="preserve">
+    <value>放棄</value>
+  </data>
+  <data name="exam_name" xml:space="preserve">
+    <value>考試名稱</value>
+  </data>
+  <data name="name_this" xml:space="preserve">
+    <value>為這次考試命名</value>
+  </data>
+  <data name="district" xml:space="preserve">
+    <value>地區</value>
+  </data>
+  <data name="physiotherapy" xml:space="preserve">
+    <value>物理</value>
+  </data>
+  <data name="biology" xml:space="preserve">
+    <value>生物</value>
+  </data>
+  <data name="chemotherapy" xml:space="preserve">
+    <value>化學</value>
+  </data>
+  <data name="political" xml:space="preserve">
+    <value>政治</value>
+  </data>
+  <data name="geography" xml:space="preserve">
+    <value>地理</value>
+  </data>
+  <data name="chinese" xml:space="preserve">
+    <value>語文</value>
+  </data>
+  <data name="maths" xml:space="preserve">
+    <value>數學</value>
+  </data>
+  <data name="foreign_language" xml:space="preserve">
+    <value>外語</value>
+  </data>
+  <data name="no_history" xml:space="preserve">
+    <value>暫無歷史記錄</value>
+  </data>
+  <data name="sign_in" xml:space="preserve">
+    <value>登錄</value>
+  </data>
+  <data name="sign_up" xml:space="preserve">
+    <value>註冊</value>
+  </data>
+  <data name="password" xml:space="preserve">
+    <value>密碼</value>
+  </data>
+  <data name="edit" xml:space="preserve">
+    <value>編輯</value>
+  </data>
+  <data name="share" xml:space="preserve">
+    <value>分享</value>
+  </data>
+  <data name="print" xml:space="preserve">
+    <value>列印</value>
+  </data>
+  <data name="delete" xml:space="preserve">
+    <value>刪除</value>
+  </data>
+  <data name="add_favourite" xml:space="preserve">
+    <value>收藏</value>
+  </data>
+  <data name="done" xml:space="preserve">
+    <value>完成</value>
+  </data>
+  <data name="all" xml:space="preserve">
+    <value>全部</value>
+  </data>
+  <data name="upload_ai" xml:space="preserve">
+    <value>上傳照片</value>
+  </data>
+  <data name="ask" xml:space="preserve">
+    <value>發送</value>
+  </data>
+  <data name="ask_something" xml:space="preserve">
+    <value>問點什麼吧</value>
+  </data>
+  <data name="prophets" xml:space="preserve">
+    <value>先知</value>
+  </data>
+  <data name="confirm" xml:space="preserve">
+    <value>確認</value>
+  </data>
+  <data name="attention" xml:space="preserve">
+    <value>注意</value>
+  </data>
+  <data name="disclaimer" xml:space="preserve">
+    <value>您的贊助行為唔屬於軟件發行方（ 知學情 團隊）嘅經營性行為！ 僅作您對於本項目（ 知學情 ）發展支持！ 我哋嘅軟件功能完全免費！</value>
+  </data>
+  <data name="pe" xml:space="preserve">
+    <value>體育</value>
+  </data>
+  <data name="follow_system" xml:space="preserve">
+    <value>跟隨系統</value>
+  </data>
+  <data name="on" xml:space="preserve">
+    <value>開</value>
+  </data>
+  <data name="off" xml:space="preserve">
+    <value>關</value>
+  </data>
+  <data name="multiselect_mode" xml:space="preserve">
+    <value>多選模式</value>
+  </data>
+  <data name="custom_command_enabled_hint" xml:space="preserve">
+    <value>部分選項在使用自訂命令時不可用</value>
+  </data>
+  <data name="open_settings" xml:space="preserve">
+    <value>開啟設定</value>
+  </data>
+  <data name="dynamic_color_desc" xml:space="preserve">
+    <value>將桌布顏色套用至應用程式主題</value>
+  </data>
+  <data name="dark_theme" xml:space="preserve">
+    <value>深色主題</value>
+  </data>
+  <data name="sample" xml:space="preserve">
+    <value>示例</value>
+  </data>
+  <data name="language" xml:space="preserve">
+    <value>介面語言</value>
+  </data>
+  <data name="look_and_feel" xml:space="preserve">
+    <value>介面與外觀</value>
+  </data>
+  <data name="additional_settings" xml:space="preserve">
+    <value>其他設定</value>
+  </data>
+  <data name="high_contrast" xml:space="preserve">
+    <value>高對比深色主題</value>
+  </data>
+  <data name="translate" xml:space="preserve">
+    <value>翻譯</value>
+  </data>
+  <data name="translate_desc" xml:space="preserve">
+    <value>在 Hosted Weblate 上協助翻譯此應用程式</value>
+  </data>
+  <data name="suggested" xml:space="preserve">
+    <value>建議</value>
+  </data>
+  <data name="all_languages" xml:space="preserve">
+    <value>所有語言</value>
+  </data>
+  <data name="system_settings" xml:space="preserve">
+    <value>系統設定</value>
+  </data>
+  <data name="predictive_back" xml:space="preserve">
+    <value>預測性返回手勢</value>
+  </data>
+  <data name="predictive_back_desc" xml:space="preserve">
+    <value>啟用更流暢嘅返回手勢體驗</value>
+  </data>
+  <data name="email" xml:space="preserve">
+    <value>郵箱</value>
+  </data>
+  <data name="email_hint" xml:space="preserve">
+    <value>請輸入您的郵箱</value>
+  </data>
+  <data name="password_hint" xml:space="preserve">
+    <value>請輸入您的密碼</value>
+  </data>
+  <data name="forgot_password" xml:space="preserve">
+    <value>忘記密碼？</value>
+  </data>
+  <data name="no_account" xml:space="preserve">
+    <value>未有賬號？</value>
+  </data>
+  <data name="has_account" xml:space="preserve">
+    <value>已有賬號？</value>
+  </data>
+  <data name="or_continue_with" xml:space="preserve">
+    <value>或透過以下方式繼續</value>
+  </data>
+  <data name="google_sign_in" xml:space="preserve">
+    <value>使用 Google 賬號登錄</value>
+  </data>
+  <data name="github_sign_in" xml:space="preserve">
+    <value>使用 GitHub 帳號登入</value>
+  </data>
+  <data name="email_sign_in" xml:space="preserve">
+    <value>使用郵箱登錄</value>
+  </data>
+  <data name="register_with_email" xml:space="preserve">
+    <value>使用郵箱註冊</value>
+  </data>
+  <data name="sign_out" xml:space="preserve">
+    <value>退出登錄</value>
+  </data>
+  <data name="release_desc" xml:space="preserve">
+    <value>查看更新日誌和最新版本</value>
+  </data>
+  <data name="release" xml:space="preserve">
+    <value>最新版本</value>
+  </data>
+  <data name="github_issue" xml:space="preserve">
+    <value>GitHub 議題</value>
+  </data>
+  <data name="github_issue_desc" xml:space="preserve">
+    <value>提交錯誤報告或功能請求議題</value>
+  </data>
+  <data name="credits" xml:space="preserve">
+    <value>鳴謝</value>
+  </data>
+  <data name="credits_desc" xml:space="preserve">
+    <value>來源與自由軟體</value>
+  </data>
+  <data name="general_settings" xml:space="preserve">
+    <value>一般</value>
+  </data>
+  <data name="general_settings_desc" xml:space="preserve">
+    <value>学生状况与教育模式</value>
+  </data>
+  <data name="display_settings" xml:space="preserve">
+    <value>深色主题、动态色彩、语言</value>
+  </data>
+  <data name="onboarding_welcome" xml:space="preserve">
+    <value>歡迎使用 Known</value>
+  </data>
+  <data name="onboarding_description" xml:space="preserve">
+    <value>請告訴我們一些基本資訊，以獲得更好的體驗</value>
+  </data>
+  <data name="onboarding_identity" xml:space="preserve">
+    <value>您的身份是？</value>
+  </data>
+  <data name="onboarding_region" xml:space="preserve">
+    <value>您所在的地區</value>
+  </data>
+  <data name="use_location" xml:space="preserve">
+    <value>使用定位</value>
+  </data>
+  <data name="location_no_data" xml:space="preserve">
+    <value>未能獲取到位置資訊</value>
+  </data>
+  <data name="location_failed" xml:space="preserve">
+    <value>獲取位置資訊失敗：%1$s</value>
+  </data>
+  <data name="location_permission_denied" xml:space="preserve">
+    <value>無法獲取位置資訊：權限被拒絕</value>
+  </data>
+  <data name="onboarding_subjects" xml:space="preserve">
+    <value>選擇您關注的學科</value>
+  </data>
+  <data name="skip" xml:space="preserve">
+    <value>跳過</value>
+  </data>
+  <data name="get_started" xml:space="preserve">
+    <value>開始使用</value>
+  </data>
+  <data name="expanded" xml:space="preserve">
+    <value>Expanded</value>
+  </data>
+  <data name="collapsed" xml:space="preserve">
+    <value>Collapsed</value>
+  </data>
+  <data name="identity" xml:space="preserve">
+    <value>身份</value>
+  </data>
+  <data name="region" xml:space="preserve">
+    <value>地區</value>
+  </data>
+  <data name="subjects" xml:space="preserve">
+    <value>學科</value>
+  </data>
+  <data name="student" xml:space="preserve">
+    <value>學生</value>
+  </data>
+  <data name="teacher" xml:space="preserve">
+    <value>老師</value>
+  </data>
+  <data name="parent" xml:space="preserve">
+    <value>家長</value>
+  </data>
+  <data name="physics" xml:space="preserve">
+    <value>物理</value>
+  </data>
+  <data name="chemistry" xml:space="preserve">
+    <value>化學</value>
+  </data>
+  <data name="history_subject" xml:space="preserve">
+    <value>歷史</value>
+  </data>
+  <data name="clear_cache" xml:space="preserve">
+    <value>清除快取</value>
+  </data>
+  <data name="clear_cache_desc" xml:space="preserve">
+    <value>清除快取資料以釋放空間（%1$s）</value>
+  </data>
+  <data name="cache_freed" xml:space="preserve">
+    <value>快取已清除。已釋放 %1$s。</value>
+  </data>
+  <data name="no_mark_entered" xml:space="preserve">
+    <value>尚未錄入任何分數，無法儲存。</value>
+  </data>
+  <data name="mark_exceeds_full" xml:space="preserve">
+    <value>分數不可超過滿分。</value>
+  </data>
+  <data name="delete_exam_message" xml:space="preserve">
+    <value>該場考試及其所有分數將被永久刪除。</value>
+  </data>
+  <data name="no_search_result" xml:space="preserve">
+    <value>沒有符合的考試</value>
+  </data>
+  <data name="history_average" xml:space="preserve">
+    <value>歷史平均</value>
+  </data>
+  <data name="total_score" xml:space="preserve">
+    <value>總分</value>
+  </data>
+  <data name="rank" xml:space="preserve">
+    <value>排名</value>
+  </data>
+  <data name="share_as_image" xml:space="preserve">
+    <value>以圖片分享</value>
+  </data>
+  <data name="share_as_text" xml:space="preserve">
+    <value>以文字分享</value>
+  </data>
+  <data name="share_image_saving" xml:space="preserve">
+    <value>正在生成圖片…</value>
+  </data>
+  <data name="share_image_saved" xml:space="preserve">
+    <value>圖片已成功儲存</value>
+  </data>
+  <data name="share_image_failed" xml:space="preserve">
+    <value>圖片生成失敗</value>
+  </data>
+  <data name="share_via" xml:space="preserve">
+    <value>透過以下方式分享</value>
+  </data>
+  <data name="remove_favourite" xml:space="preserve">
+    <value>取消收藏</value>
+  </data>
+  <data name="favourites" xml:space="preserve">
+    <value>收藏夾</value>
+  </data>
+  <data name="no_favourites" xml:space="preserve">
+    <value>暫無收藏</value>
+  </data>
+  <data name="score_trend" xml:space="preserve">
+    <value>成績趨勢</value>
+  </data>
+  <data name="subject_average" xml:space="preserve">
+    <value>科目平均</value>
+  </data>
+  <data name="score_distribution" xml:space="preserve">
+    <value>分數分佈</value>
+  </data>
+  <data name="comparison" xml:space="preserve">
+    <value>對比</value>
+  </data>
+  <data name="no_exam_data" xml:space="preserve">
+    <value>暫無考試數據。添加第一場考試以查看趨勢。</value>
+  </data>
+  <data name="no_subject_data" xml:space="preserve">
+    <value>暫無科目數據。</value>
+  </data>
+  <data name="no_score_data" xml:space="preserve">
+    <value>暫無分數數據。</value>
+  </data>
+  <data name="average" xml:space="preserve">
+    <value>Average</value>
+  </data>
+  <data name="percentage" xml:space="preserve">
+    <value>Percentage</value>
+  </data>
+  <data name="search_hint" xml:space="preserve">
+    <value>Search exams</value>
+  </data>
+  <data name="microsoft_sign_in" xml:space="preserve">
+    <value>Sign in with Microsoft</value>
+  </data>
+  <data name="account_not_signed_in" xml:space="preserve">
+    <value>Sign in to sync your account</value>
+  </data>
+  <data name="language_restart_hint" xml:space="preserve">
+    <value>The language change takes effect after a restart.</value>
+  </data>
+  <data name="delete_exams_confirm" xml:space="preserve">
+    <value>Delete the selected exams?</value>
+  </data>
+  <data name="discard_exam_confirm" xml:space="preserve">
+    <value>Do you want to discard the content you have entered?</value>
+  </data>
+</root>

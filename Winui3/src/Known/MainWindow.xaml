@@ -14,6 +14,56 @@
     </Window.SystemBackdrop>
 
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
 
+        <!--
+            The TitleBar control replaces the system title bar and reserves room for the caption
+            buttons itself, so no manual inset padding is needed. It also owns the back and pane
+            toggle buttons, which the NavigationView below therefore hides: having them in both
+            places would duplicate them. NavigationView.IsTitleBarAutoPaddingEnabled, left at its
+            default, is what pulls the pane header up so the two read as one continuous surface.
+
+            IsBackButtonVisible takes a bool on the TitleBar control, whereas the identically named
+            NavigationView property is the UWP NavigationViewBackButtonVisible enum. The two are
+            unrelated types, so "Collapsed" is correct below and rejected here at run time.
+        -->
+        <TitleBar
+            x:Name="AppTitleBar"
+            IsBackButtonVisible="False"
+            IsBackButtonEnabled="False"
+            IsPaneToggleButtonVisible="True"
+            PaneToggleRequested="OnPaneToggleRequested"
+            BackRequested="OnTitleBarBackRequested">
+            <TitleBar.IconSource>
+                <ImageIconSource ImageSource="ms-appx:///Assets/StoreLogo.png" />
+            </TitleBar.IconSource>
+        </TitleBar>
+
+        <NavigationView
+            Grid.Row="1"
+            x:Name="Navigation"
+            PaneDisplayMode="Auto"
+            IsBackButtonVisible="Collapsed"
+            IsPaneToggleButtonVisible="False"
+            SelectionChanged="OnTabSelectionChanged"
+            DisplayModeChanged="OnDisplayModeChanged">
+
+            <NavigationView.MenuItems>
+                <NavigationViewItem x:Name="HomeItem" Content="Home" Tag="Home" Icon="Home" />
+                <NavigationViewItem x:Name="HistoryItem" Content="History" Tag="History" Icon="AllApps" />
+                <NavigationViewItem x:Name="AccountItem" Content="Me" Tag="Account" Icon="Contact" />
+            </NavigationView.MenuItems>
+
+            <Grid>
+                <Frame x:Name="RootFrame" Visibility="Collapsed" />
+                <Frame x:Name="HomeFrame" />
+                <Frame x:Name="HistoryFrame" Visibility="Collapsed" />
+                <Frame x:Name="AccountFrame" Visibility="Collapsed" />
+            </Grid>
+        </NavigationView>
     </Grid>
+
 </Window>
