@@ -1,26 +1,28 @@
+using Known.Core.Data;
 using Microsoft.UI.Xaml;
+using UnhandledExceptionEventArgs = System.UnhandledExceptionEventArgs;
 
 namespace Known.Services;
 
 /// <summary>
-/// Writes an unhandled exception to a log next to the database.
+///     Writes an unhandled exception to a log next to the database.
 /// </summary>
 /// <remarks>
-/// A managed exception escaping through the XAML framework takes the whole process down and leaves
-/// only a native status code in the Windows event log, with no managed stack trace. Without this
-/// file the only way to find out what went wrong is to attach a debugger, so every startup crash is
-/// appended here in full.
+///     A managed exception escaping through the XAML framework takes the whole process down and leaves
+///     only a native status code in the Windows event log, with no managed stack trace. Without this
+///     file the only way to find out what went wrong is to attach a debugger, so every startup crash is
+///     appended here in full.
 /// </remarks>
 public static class CrashLog
 {
     /// <summary>File the crashes are appended to, inside the application's data directory.</summary>
     public static string Path { get; } = System.IO.Path.Combine(
-        Core.Data.KnownDatabase.ResolveDataDirectory(),
+        KnownDatabase.ResolveDataDirectory(),
         "crash.log");
 
     /// <summary>
-    /// Registers the handlers against the running application. Call once, at the very start of the
-    /// application constructor.
+    ///     Registers the handlers against the running application. Call once, at the very start of the
+    ///     application constructor.
     /// </summary>
     public static void Install(Application application)
     {
@@ -33,12 +35,9 @@ public static class CrashLog
         AppDomain.CurrentDomain.UnhandledException += OnDomainUnhandled;
     }
 
-    private static void OnDomainUnhandled(object sender, System.UnhandledExceptionEventArgs e)
+    private static void OnDomainUnhandled(object sender, UnhandledExceptionEventArgs e)
     {
-        if (e.ExceptionObject is Exception exception)
-        {
-            Write(exception);
-        }
+        if (e.ExceptionObject is Exception exception) Write(exception);
     }
 
     private static void OnUiUnhandled(object sender, Microsoft.UI.Xaml.UnhandledExceptionEventArgs e)
@@ -55,10 +54,7 @@ public static class CrashLog
         {
             var directory = System.IO.Path.GetDirectoryName(Path);
 
-            if (!string.IsNullOrEmpty(directory))
-            {
-                Directory.CreateDirectory(directory);
-            }
+            if (!string.IsNullOrEmpty(directory)) Directory.CreateDirectory(directory);
 
             File.AppendAllText(
                 Path,

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <local:KnownPage
     x:Class="Known.Pages.HomePage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -28,7 +29,7 @@
 
         <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12">
             <Border
-                Style="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="8"
                 Padding="16,12"
                 MinWidth="160">
@@ -39,7 +40,7 @@
             </Border>
 
             <Border
-                Style="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="8"
                 Padding="16,12"
                 MinWidth="160">
@@ -50,7 +51,7 @@
             </Border>
 
             <Border
-                Style="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="8"
                 Padding="16,12"
                 MinWidth="160">
@@ -69,7 +70,7 @@
 
             <Border
                 Grid.Column="0"
-                Style="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="8"
                 Padding="12">
                 <Grid>
@@ -89,7 +90,7 @@
 
             <Border
                 Grid.Column="1"
-                Style="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                 CornerRadius="8"
                 Padding="12">
                 <Grid>

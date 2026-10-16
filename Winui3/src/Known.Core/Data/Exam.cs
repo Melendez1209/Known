@@ -1,6 +1,6 @@
 namespace Known.Core.Data;
 
-/// <summary>One recorded exam. Deleting it cascades to every <see cref="ExamScore"/> of that exam.</summary>
+/// <summary>One recorded exam. Deleting it cascades to every <see cref="ExamScore" /> of that exam.</summary>
 public sealed class Exam
 {
     /// <summary>Primary key, assigned by the database on insert.</summary>

@@ -1,3 +1,4 @@
+using Known.Core.Data;
 using Known.Core.Domain;
 using Known.Core.Localization;
 using Microsoft.UI.Xaml;
@@ -6,9 +7,9 @@ using Microsoft.UI.Xaml.Controls;
 namespace Known.Pages;
 
 /// <summary>
-/// Theme and language. The Android build also offered a palette picker with nine colour schemes
-/// driven by its own HCT engine; the desktop build uses the Windows theme instead, so only the
-/// light and dark choice and the language are left.
+///     Theme and language. The Android build also offered a palette picker with nine colour schemes
+///     driven by its own HCT engine; the desktop build uses the Windows theme instead, so only the
+///     light and dark choice and the language are left.
 /// </summary>
 public sealed partial class AppearancePage : KnownPage
 {
@@ -83,14 +84,14 @@ public sealed partial class AppearancePage : KnownPage
         }
     }
 
-    private void OnSettingsChanged(object? sender, Core.Data.Settings settings) => ApplyStoredSettings();
+    private void OnSettingsChanged(object? sender, Settings settings)
+    {
+        ApplyStoredSettings();
+    }
 
     private async void OnThemeChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (_suppressEvents)
-        {
-            return;
-        }
+        if (_suppressEvents) return;
 
         var value = (ThemeOptions.SelectedIndex + 1) switch
         {
@@ -104,20 +105,14 @@ public sealed partial class AppearancePage : KnownPage
 
     private async void OnHighContrastToggled(object sender, RoutedEventArgs e)
     {
-        if (_suppressEvents)
-        {
-            return;
-        }
+        if (_suppressEvents) return;
 
         await Settings.SetHighContrastAsync(HighContrastToggle.IsOn);
     }
 
     private async void OnLanguageChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (_suppressEvents || LanguageBox.SelectedItem is not LanguageOption option)
-        {
-            return;
-        }
+        if (_suppressEvents || LanguageBox.SelectedItem is not LanguageOption option) return;
 
         // The switch takes effect on the next launch, because every already constructed page holds
         // the strings it resolved when it was loaded

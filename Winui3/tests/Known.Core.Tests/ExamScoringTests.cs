@@ -5,26 +5,32 @@ using Xunit;
 namespace Known.Core.Tests;
 
 /// <summary>
-/// Port of the Android <c>ExamCoreKtTest</c>, case for case, so the scoring rules are known to
-/// behave identically on the desktop build.
+///     Port of the Android <c>ExamCoreKtTest</c>, case for case, so the scoring rules are known to
+///     behave identically on the desktop build.
 /// </summary>
 public class ExamScoringTests
 {
-    private static ExamScore Score(string subjectKey, float mark, float fullMark = 150f) =>
-        new() { ExamId = 7L, SubjectKey = subjectKey, Mark = mark, FullMark = fullMark };
+    private static ExamScore Score(string subjectKey, float mark, float fullMark = 150f)
+    {
+        return new ExamScore { ExamId = 7L, SubjectKey = subjectKey, Mark = mark, FullMark = fullMark };
+    }
 
-    private static ExamWithTotal ExamWith(long id, float mark, float fullMark) =>
-        new()
+    private static ExamWithTotal ExamWith(long id, float mark, float fullMark)
+    {
+        return new ExamWithTotal
         {
             Exam = new Exam { Id = id, Name = $"Exam {id}" },
             TotalMark = mark,
             TotalFullMark = fullMark
         };
+    }
 
     /// <summary>Local midnight of a date, matching the local Calendar the Android test used.</summary>
-    private static long At(int year, int month, int day) =>
-        new DateTimeOffset(new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Local))
+    private static long At(int year, int month, int day)
+    {
+        return new DateTimeOffset(new DateTime(year, month, day, 0, 0, 0, DateTimeKind.Local))
             .ToUnixTimeMilliseconds();
+    }
 
     // --- ParseScoreOrNull ---
 
@@ -129,9 +135,9 @@ public class ExamScoringTests
     {
         var inputs = new[]
         {
-            new ScoreInput("chinese", Checked: true, Mark: "120", FullMark: "150"),
-            new ScoreInput("maths", Checked: false, Mark: "140", FullMark: "150"),
-            new ScoreInput("physics", Checked: true, Mark: "", FullMark: "100")
+            new ScoreInput("chinese", true, "120"),
+            new ScoreInput("maths", false, "140"),
+            new ScoreInput("physics", true, "", "100")
         };
 
         var scores = ExamScoring.BuildExamScores(7L, inputs);
@@ -147,8 +153,8 @@ public class ExamScoringTests
     {
         var inputs = new[]
         {
-            new ScoreInput("chinese", Checked: true, Mark: "160", FullMark: "150"),
-            new ScoreInput("maths", Checked: true, Mark: "140", FullMark: "150")
+            new ScoreInput("chinese", true, "160"),
+            new ScoreInput("maths", true, "140")
         };
 
         var invalid = new List<ScoreInput>();
@@ -166,8 +172,8 @@ public class ExamScoringTests
     {
         var inputs = new[]
         {
-            new ScoreInput("chinese", Checked: true, Mark: "", FullMark: "150"),
-            new ScoreInput("pe", Checked: false, Mark: "", FullMark: "100")
+            new ScoreInput("chinese"),
+            new ScoreInput("pe", false, "", "100")
         };
 
         Assert.Equal(ScoreValidation.NoMarkEntered, ExamScoring.ValidateScoreInputs(inputs));
@@ -178,8 +184,8 @@ public class ExamScoringTests
     {
         var inputs = new[]
         {
-            new ScoreInput("chinese", Checked: true, Mark: "160", FullMark: "150"),
-            new ScoreInput("maths", Checked: true, Mark: "140", FullMark: "150")
+            new ScoreInput("chinese", true, "160"),
+            new ScoreInput("maths", true, "140")
         };
 
         Assert.Equal(ScoreValidation.MarkExceedsFull, ExamScoring.ValidateScoreInputs(inputs));
@@ -190,7 +196,7 @@ public class ExamScoringTests
     {
         var inputs = new[]
         {
-            new ScoreInput("chinese", Checked: true, Mark: "140", FullMark: ".")
+            new ScoreInput("chinese", true, "140", ".")
         };
 
         Assert.Equal(ScoreValidation.MarkExceedsFull, ExamScoring.ValidateScoreInputs(inputs));
@@ -201,8 +207,8 @@ public class ExamScoringTests
     {
         var inputs = new[]
         {
-            new ScoreInput("chinese", Checked: true, Mark: "140", FullMark: "150"),
-            new ScoreInput("maths", Checked: true, Mark: "", FullMark: "150")
+            new ScoreInput("chinese", true, "140"),
+            new ScoreInput("maths")
         };
 
         Assert.Equal(ScoreValidation.Valid, ExamScoring.ValidateScoreInputs(inputs));
@@ -275,7 +281,7 @@ public class ExamScoringTests
     [Fact]
     public void AZeroMarkStillCountsAsRecordedData()
     {
-        var scores = new[] { Score("pe", 0f, fullMark: 100f) };
+        var scores = new[] { Score("pe", 0f, 100f) };
 
         Assert.Equal(["pe"], ExamScoring.RecordedSubjectKeys(SubjectCatalogue.ExamSubjectKeys, scores));
     }
@@ -287,8 +293,8 @@ public class ExamScoringTests
     {
         var scores = new[]
         {
-            Score("chinese", 120f, 150f),
-            Score("maths", 98.5f, 150f)
+            Score("chinese", 120f),
+            Score("maths", 98.5f)
         };
 
         Assert.Equal(218.5f, ExamScoring.TotalMark(scores));

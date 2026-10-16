@@ -1,18 +1,17 @@
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Known.Core.Domain;
 using Known.Core.Services;
 
 namespace Known.Services;
 
 /// <summary>
-/// Turns the stored preference into the concrete values the window needs: which
-/// <see cref="Microsoft.UI.Xaml.ElementTheme"/> to request and whether the high contrast variants
-/// should be layered on top. The service never touches XAML itself.
+///     Turns the stored preference into the concrete values the window needs: which
+///     <see cref="Microsoft.UI.Xaml.ElementTheme" /> to request and whether the high contrast variants
+///     should be layered on top. The service never touches XAML itself.
 /// </summary>
 public sealed class ThemeService(SettingsService settingsService)
 {
-    /// <summary>Raised whenever the effective values change, on the UI thread.</summary>
-    public event EventHandler? ThemeChanged;
-
     /// <summary>Whether Windows is currently offering the dark variant of the system theme.</summary>
     public bool IsSystemInDarkTheme { get; private set; }
 
@@ -28,9 +27,12 @@ public sealed class ThemeService(SettingsService settingsService)
     /// <summary>Whether the high contrast variants should be requested right now.</summary>
     public bool HighContrastActive => Preference.IsHighContrastModeEnabled || IsSystemHighContrast;
 
+    /// <summary>Raised whenever the effective values change, on the UI thread.</summary>
+    public event EventHandler? ThemeChanged;
+
     /// <summary>
-    /// Re-reads the Windows settings, so "follow system" keeps tracking the user flipping the
-    /// system app mode, then notifies listeners with the resolved values.
+    ///     Re-reads the Windows settings, so "follow system" keeps tracking the user flipping the
+    ///     system app mode, then notifies listeners with the resolved values.
     /// </summary>
     public void Refresh()
     {
@@ -46,8 +48,8 @@ public sealed class ThemeService(SettingsService settingsService)
     /// <summary>Whether Windows is currently offering the dark variant.</summary>
     public static bool QueryIsSystemInDarkTheme()
     {
-        var settings = new Windows.UI.ViewManagement.UISettings();
-        var background = settings.GetColorValue(Windows.UI.ViewManagement.UIColorType.Background);
+        var settings = new UISettings();
+        var background = settings.GetColorValue(UIColorType.Background);
 
         return IsDark(background);
     }
@@ -57,7 +59,7 @@ public sealed class ThemeService(SettingsService settingsService)
     {
         try
         {
-            return new Windows.UI.ViewManagement.AccessibilitySettings().HighContrast;
+            return new AccessibilitySettings().HighContrast;
         }
         catch (Exception)
         {
@@ -67,10 +69,10 @@ public sealed class ThemeService(SettingsService settingsService)
         }
     }
 
-    private static bool IsDark(Windows.UI.Color colour)
+    private static bool IsDark(Color colour)
     {
         // Rec. 709 luma, the same rule the shell uses to decide which of a pair of theme brushes wins
-        var luma = ((0.2126f * colour.R) + (0.7152f * colour.G) + (0.0722f * colour.B)) / 255f;
+        var luma = (0.2126f * colour.R + 0.7152f * colour.G + 0.0722f * colour.B) / 255f;
 
         return luma < 0.5f;
     }

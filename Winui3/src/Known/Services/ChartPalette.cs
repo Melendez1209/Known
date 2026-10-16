@@ -5,14 +5,14 @@ using SkiaSharp;
 namespace Known.Services;
 
 /// <summary>
-/// Copies colours out of the live XAML theme so the Skia based charts can use them.
+///     Copies colours out of the live XAML theme so the Skia based charts can use them.
 /// </summary>
 /// <remarks>
-/// SkiaSharp has no notion of a theme resource, so a chart either hardcodes a colour and breaks in
-/// dark mode, or reads the resolved brush at build time. The brushes declared in App.xaml are
-/// declared against theme resources, so they already carry the right colour for the current theme,
-/// but a Skia colour is a snapshot, which is why the chart pages rebuild their series whenever
-/// <see cref="ThemeService.ThemeChanged"/> fires.
+///     SkiaSharp has no notion of a theme resource, so a chart either hardcodes a colour and breaks in
+///     dark mode, or reads the resolved brush at build time. The brushes declared in App.xaml are
+///     declared against theme resources, so they already carry the right colour for the current theme,
+///     but a Skia colour is a snapshot, which is why the chart pages rebuild their series whenever
+///     <see cref="ThemeService.ThemeChanged" /> fires.
 /// </remarks>
 public static class ChartPalette
 {
@@ -45,9 +45,11 @@ public static class ChartPalette
         Surface = Read("ChartSurfaceBrush", SKColors.White);
     }
 
-    private static SKColor Read(string key, SKColor fallback) =>
-        Application.Current?.Resources.TryGetValue(key, out var value) == true
-        && value is SolidColorBrush brush
+    private static SKColor Read(string key, SKColor fallback)
+    {
+        return Application.Current?.Resources.TryGetValue(key, out var value) == true
+               && value is SolidColorBrush brush
             ? new SKColor(brush.Color.R, brush.Color.G, brush.Color.B, (byte)Math.Round(brush.Opacity * 255))
             : fallback;
+    }
 }

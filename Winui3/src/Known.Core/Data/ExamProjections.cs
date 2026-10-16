@@ -1,8 +1,8 @@
 namespace Known.Core.Data;
 
 /// <summary>
-/// An exam together with the sum of its subject scores, as read by the history list. The totals
-/// come from a LEFT JOIN aggregate, so they are zero for an exam that has not been scored yet.
+///     An exam together with the sum of its subject scores, as read by the history list. The totals
+///     come from a LEFT JOIN aggregate, so they are zero for an exam that has not been scored yet.
 /// </summary>
 public sealed class ExamWithTotal
 {
@@ -27,8 +27,8 @@ public sealed class ExamWithScores
 }
 
 /// <summary>
-/// Average score of one subject across every recorded exam, as aggregated by the detail screen.
-/// The current exam is excluded by the query so it is never compared against itself.
+///     Average score of one subject across every recorded exam, as aggregated by the detail screen.
+///     The current exam is excluded by the query so it is never compared against itself.
 /// </summary>
 public sealed class SubjectStat
 {

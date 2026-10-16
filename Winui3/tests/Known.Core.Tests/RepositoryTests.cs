@@ -7,13 +7,13 @@ using Xunit;
 namespace Known.Core.Tests;
 
 /// <summary>
-/// Exercises the repositories against a real SQLite database, so the LINQ aggregations that stand
-/// in for the Android LEFT JOIN queries are verified to translate and produce the same numbers.
+///     Exercises the repositories against a real SQLite database, so the LINQ aggregations that stand
+///     in for the Android LEFT JOIN queries are verified to translate and produce the same numbers.
 /// </summary>
 public sealed class ExamRepositoryTests : IAsyncLifetime
 {
-    private SqliteConnection _keepAlive = null!;
     private KnownDbContext _context = null!;
+    private SqliteConnection _keepAlive = null!;
     private ExamRepository _repository = null!;
 
     /// <inheritdoc />
@@ -43,11 +43,15 @@ public sealed class ExamRepositoryTests : IAsyncLifetime
         await _keepAlive.DisposeAsync();
     }
 
-    private static Exam Exam(string name, long startDate, long endDate) =>
-        new() { Name = name, StartDate = startDate, EndDate = endDate };
+    private static Exam Exam(string name, long startDate, long endDate)
+    {
+        return new Exam { Name = name, StartDate = startDate, EndDate = endDate };
+    }
 
-    private static ExamScore Score(string subjectKey, float mark, float fullMark = 150f) =>
-        new() { SubjectKey = subjectKey, Mark = mark, FullMark = fullMark };
+    private static ExamScore Score(string subjectKey, float mark, float fullMark = 150f)
+    {
+        return new ExamScore { SubjectKey = subjectKey, Mark = mark, FullMark = fullMark };
+    }
 
     [Fact]
     public async Task InsertingAnExamAssignsAnIdAndAggregatesItsScores()
@@ -171,7 +175,7 @@ public sealed class ExamRepositoryTests : IAsyncLifetime
         var updated = await _repository.GetExamAsync(examId);
         Assert.NotNull(updated);
 
-        await _repository.UpdateExamAsync(updated!, [Score("chinese", 130f, 150f)]);
+        await _repository.UpdateExamAsync(updated!, [Score("chinese", 130f)]);
 
         var loaded = await _repository.GetExamWithScoresAsync(examId);
         Assert.NotNull(loaded);
@@ -290,8 +294,8 @@ public sealed class ExamRepositoryTests : IAsyncLifetime
 /// <summary>Covers the single-row settings table and its defaults.</summary>
 public sealed class SettingsRepositoryTests : IAsyncLifetime
 {
-    private SqliteConnection _keepAlive = null!;
     private KnownDbContext _context = null!;
+    private SqliteConnection _keepAlive = null!;
     private SettingsRepository _repository = null!;
 
     /// <inheritdoc />

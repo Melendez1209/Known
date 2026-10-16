@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Globalization;
 using System.Resources;
 
@@ -8,19 +9,22 @@ namespace Known.Core.Localization;
 /// <param name="EnglishName">Name shown in the language list, always written in that language.</param>
 public sealed record LanguageOption(string Tag, string EnglishName)
 {
-    /// <summary>The culture to switch to, or <see langword="null"/> to follow the system.</summary>
+    /// <summary>The culture to switch to, or <see langword="null" /> to follow the system.</summary>
     public CultureInfo? Culture => string.IsNullOrEmpty(Tag)
         ? null
         : new CultureInfo(Tag);
 
     /// <inheritdoc />
-    public override string ToString() => EnglishName;
+    public override string ToString()
+    {
+        return EnglishName;
+    }
 }
 
 /// <summary>
-/// Resolves a string key against the culture the app is currently running under, falling back to
-/// the neutral resource set and finally to the key itself so a missing translation shows up as a
-/// recognisable name rather than an empty label.
+///     Resolves a string key against the culture the app is currently running under, falling back to
+///     the neutral resource set and finally to the key itself so a missing translation shows up as a
+///     recognisable name rather than an empty label.
 /// </summary>
 public sealed class StringLocalizer
 {
@@ -62,10 +66,7 @@ public sealed class StringLocalizer
     /// <summary>Looks a key up in the current culture, falling back to neutral and then the key.</summary>
     public string Get(string key)
     {
-        if (string.IsNullOrEmpty(key))
-        {
-            return string.Empty;
-        }
+        if (string.IsNullOrEmpty(key)) return string.Empty;
 
         try
         {
@@ -94,29 +95,22 @@ public sealed class StringLocalizer
     }
 
     /// <summary>
-    /// Every key a culture's resource set defines, used to prove the generated satellites stay in
-    /// step with the neutral file.
+    ///     Every key a culture's resource set defines, used to prove the generated satellites stay in
+    ///     step with the neutral file.
     /// </summary>
     public IReadOnlyList<string> Keys(CultureInfo culture)
     {
         ArgumentNullException.ThrowIfNull(culture);
 
-        var set = _resources.GetResourceSet(culture, createIfNotExists: true, tryParents: true);
+        var set = _resources.GetResourceSet(culture, true, true);
 
-        if (set is null)
-        {
-            return [];
-        }
+        if (set is null) return [];
 
         var keys = new List<string>();
 
-        foreach (System.Collections.DictionaryEntry entry in set)
-        {
+        foreach (DictionaryEntry entry in set)
             if (entry.Key is string key)
-            {
                 keys.Add(key);
-            }
-        }
 
         keys.Sort(StringComparer.Ordinal);
 
@@ -124,8 +118,8 @@ public sealed class StringLocalizer
     }
 
     /// <summary>
-    /// Applies a stored language tag to the running process. Passing an empty tag clears the
-    /// override so the app follows the Windows display language again.
+    ///     Applies a stored language tag to the running process. Passing an empty tag clears the
+    ///     override so the app follows the Windows display language again.
     /// </summary>
     /// <returns>True when the effective culture changed, which means the interface needs a reload.</returns>
     public static bool UseLanguage(string? tag)
@@ -138,15 +132,12 @@ public sealed class StringLocalizer
     }
 
     /// <summary>
-    /// Maps a stored tag onto a culture, falling back to the invariant culture when Windows has
-    /// never heard of the language.
+    ///     Maps a stored tag onto a culture, falling back to the invariant culture when Windows has
+    ///     never heard of the language.
     /// </summary>
     public static CultureInfo ResolveCulture(string? tag)
     {
-        if (string.IsNullOrWhiteSpace(tag))
-        {
-            return CultureInfo.InstalledUICulture;
-        }
+        if (string.IsNullOrWhiteSpace(tag)) return CultureInfo.InstalledUICulture;
 
         try
         {

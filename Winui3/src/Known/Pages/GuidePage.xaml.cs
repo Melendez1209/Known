@@ -8,21 +8,21 @@ using Microsoft.UI.Xaml.Shapes;
 namespace Known.Pages;
 
 /// <summary>
-/// The three step onboarding wizard: who the student is, where they are, and which subjects they
-/// sit. Finishing writes the answers and clears the first login flag so the shell opens the
-/// dashboard next time.
+///     The three step onboarding wizard: who the student is, where they are, and which subjects they
+///     sit. Finishing writes the answers and clears the first login flag so the shell opens the
+///     dashboard next time.
 /// </summary>
 public sealed partial class GuidePage : KnownPage
 {
     private const int StepCount = 3;
+    private readonly HashSet<string> _selectedSubjects = new(StringComparer.Ordinal);
 
     private readonly StringLocalizer _strings = new();
-    private readonly HashSet<string> _selectedSubjects = new(StringComparer.Ordinal);
     private readonly List<CheckBox> _subjectBoxes = [];
+    private bool _finishing;
+    private int _identity = StudentIdentity.None;
 
     private string _region = string.Empty;
-    private int _identity = StudentIdentity.None;
-    private bool _finishing;
 
     /// <summary>Creates the wizard, builds its three steps and shows the first one.</summary>
     public GuidePage()
@@ -32,10 +32,7 @@ public sealed partial class GuidePage : KnownPage
         _identity = Settings.Current.Identity;
         _region = Settings.Current.Region;
 
-        foreach (var key in Settings.SelectedSubjects)
-        {
-            _selectedSubjects.Add(key);
-        }
+        foreach (var key in Settings.SelectedSubjects) _selectedSubjects.Add(key);
 
         ApplyCaptions();
         BuildSteps();
@@ -51,16 +48,18 @@ public sealed partial class GuidePage : KnownPage
     }
 
     /// <summary>
-    /// Builds one page per onboarding step. The steps are built eagerly and handed to the
-    /// FlipView as a source, so swiping back and forth keeps whatever the student already typed.
+    ///     Builds one page per onboarding step. The steps are built eagerly and handed to the
+    ///     FlipView as a source, so swiping back and forth keeps whatever the student already typed.
     /// </summary>
-    private void BuildSteps() =>
+    private void BuildSteps()
+    {
         Pager.ItemsSource = new List<UIElement>
         {
             BuildIdentityStep(),
             BuildRegionStep(),
             BuildSubjectStep()
         };
+    }
 
     /// <summary>Draws one dot per step, sized and coloured to show which one is showing.</summary>
     private void BuildDots()
@@ -68,14 +67,12 @@ public sealed partial class GuidePage : KnownPage
         var dots = new List<Ellipse>();
 
         for (var index = 0; index < StepCount; index++)
-        {
             dots.Add(new Ellipse
             {
                 Width = 8,
                 Height = 8,
                 VerticalAlignment = VerticalAlignment.Center
             });
-        }
 
         Dots.ItemsSource = dots;
         UpdateDots();
@@ -101,10 +98,7 @@ public sealed partial class GuidePage : KnownPage
         // RadioButtons reports the selection by index, so the identity is derived from it
         options.SelectionChanged += (_, _) =>
         {
-            if (options.SelectedIndex >= 0)
-            {
-                _identity = IdentityForIndex(options.SelectedIndex);
-            }
+            if (options.SelectedIndex >= 0) _identity = IdentityForIndex(options.SelectedIndex);
         };
 
         panel.Children.Add(options);
@@ -167,43 +161,45 @@ public sealed partial class GuidePage : KnownPage
         return panel;
     }
 
-    private TextBlock Heading(string text) => new()
+    private TextBlock Heading(string text)
     {
-        Text = text,
-        Style = (Style)Application.Current.Resources["SubtitleTextBlockStyle"]
-    };
+        return new TextBlock
+        {
+            Text = text,
+            Style = (Style)Application.Current.Resources["SubtitleTextBlockStyle"]
+        };
+    }
 
-    private static int IndexOfIdentity(int identity) => identity switch
+    private static int IndexOfIdentity(int identity)
     {
-        StudentIdentity.Student => 0,
-        StudentIdentity.Teacher => 1,
-        StudentIdentity.Parent => 2,
-        _ => -1
-    };
+        return identity switch
+        {
+            StudentIdentity.Student => 0,
+            StudentIdentity.Teacher => 1,
+            StudentIdentity.Parent => 2,
+            _ => -1
+        };
+    }
 
-    private static int IdentityForIndex(int index) => index switch
+    private static int IdentityForIndex(int index)
     {
-        0 => StudentIdentity.Student,
-        1 => StudentIdentity.Teacher,
-        2 => StudentIdentity.Parent,
-        _ => StudentIdentity.None
-    };
+        return index switch
+        {
+            0 => StudentIdentity.Student,
+            1 => StudentIdentity.Teacher,
+            2 => StudentIdentity.Parent,
+            _ => StudentIdentity.None
+        };
+    }
 
     private void OnSubjectToggled(object sender, RoutedEventArgs e)
     {
-        if (sender is not CheckBox box || box.Tag is not string key)
-        {
-            return;
-        }
+        if (sender is not CheckBox box || box.Tag is not string key) return;
 
         if (box.IsChecked == true)
-        {
             _selectedSubjects.Add(key);
-        }
         else
-        {
             _selectedSubjects.Remove(key);
-        }
     }
 
     private void OnPageChanged(object sender, SelectionChangedEventArgs e)
@@ -214,12 +210,9 @@ public sealed partial class GuidePage : KnownPage
 
     private void UpdateDots()
     {
-        if (Dots.ItemsSource is not IEnumerable<Ellipse> dots)
-        {
-            return;
-        }
+        if (Dots.ItemsSource is not IEnumerable<Ellipse> dots) return;
 
-        var active = (int)Math.Max(Pager.SelectedIndex, 0);
+        var active = Math.Max(Pager.SelectedIndex, 0);
         var accent = (Brush)Application.Current.Resources["ChartAccentBrush"];
         var muted = (Brush)Application.Current.Resources["ChartGridLineBrush"];
 
@@ -235,7 +228,7 @@ public sealed partial class GuidePage : KnownPage
 
     private void UpdateFooter()
     {
-        var isLastStep = (int)Math.Max(Pager.SelectedIndex, 0) >= StepCount - 1;
+        var isLastStep = Math.Max(Pager.SelectedIndex, 0) >= StepCount - 1;
 
         // The wizard has a skip button, so it is hidden on the final step where finishing replaces it
         SkipButton.Visibility = isLastStep ? Visibility.Collapsed : Visibility.Visible;
@@ -244,7 +237,7 @@ public sealed partial class GuidePage : KnownPage
 
     private async void OnPrimaryAction(object sender, RoutedEventArgs e)
     {
-        if ((int)Math.Max(Pager.SelectedIndex, 0) < StepCount - 1)
+        if (Math.Max(Pager.SelectedIndex, 0) < StepCount - 1)
         {
             Pager.SelectedIndex += 1;
             return;
@@ -253,14 +246,14 @@ public sealed partial class GuidePage : KnownPage
         await FinishAsync();
     }
 
-    private async void OnSkip(object sender, RoutedEventArgs e) => await FinishAsync();
-
-    private async System.Threading.Tasks.Task FinishAsync()
+    private async void OnSkip(object sender, RoutedEventArgs e)
     {
-        if (_finishing)
-        {
-            return;
-        }
+        await FinishAsync();
+    }
+
+    private async Task FinishAsync()
+    {
+        if (_finishing) return;
 
         _finishing = true;
 
@@ -272,10 +265,7 @@ public sealed partial class GuidePage : KnownPage
             await Settings.CompleteOnboardingAsync();
 
             // The wizard lives on the shared stack, so popping it returns to the dashboard tab
-            if (Shell.CanGoBack)
-            {
-                Shell.GoBack();
-            }
+            if (Shell.CanGoBack) Shell.GoBack();
         }
         finally
         {

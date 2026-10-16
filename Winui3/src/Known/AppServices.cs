@@ -1,14 +1,13 @@
 using Known.Core.Data;
 using Known.Core.Services;
 using Known.Services;
-using Microsoft.EntityFrameworkCore;
 
 namespace Known;
 
 /// <summary>
-/// Owns the application's long lived services. A WinUI 3 window has no built in container, and
-/// the app only ever needs one database context for the whole process, so a small lazily
-/// initialised holder is simpler than pulling a dependency injection framework in for it.
+///     Owns the application's long lived services. A WinUI 3 window has no built in container, and
+///     the app only ever needs one database context for the whole process, so a small lazily
+///     initialised holder is simpler than pulling a dependency injection framework in for it.
 /// </summary>
 public static class AppServices
 {
@@ -18,7 +17,7 @@ public static class AppServices
     private static IExamRepository? _examRepository;
     private static ISettingsRepository? _settingsRepository;
 
-    /// <summary>The shared context. Valid only after <see cref="InitialiseAsync"/> has completed.</summary>
+    /// <summary>The shared context. Valid only after <see cref="InitialiseAsync" /> has completed.</summary>
     public static KnownDbContext Context =>
         _context ?? throw new InvalidOperationException(
             $"{nameof(AppServices)} has not been initialised yet.");
@@ -46,12 +45,12 @@ public static class AppServices
     public static MsalAuthService Auth { get; } = new();
 
     /// <summary>Set by the main window once its frames exist, so any page can route itself.</summary>
-    public static Services.ShellNavigator? Shell { get; set; }
+    public static ShellNavigator? Shell { get; set; }
 
     /// <summary>
-    /// Opens the database, creates the schema on first run and makes sure the settings row exists,
-    /// then builds the services that sit on top of it. Repeated calls wait on the gate and return
-    /// immediately once the first one has finished.
+    ///     Opens the database, creates the schema on first run and makes sure the settings row exists,
+    ///     then builds the services that sit on top of it. Repeated calls wait on the gate and return
+    ///     immediately once the first one has finished.
     /// </summary>
     public static async Task InitialiseAsync(CancellationToken cancellationToken = default)
     {
@@ -59,10 +58,7 @@ public static class AppServices
 
         try
         {
-            if (_context is not null)
-            {
-                return;
-            }
+            if (_context is not null) return;
 
             var context = KnownDatabase.CreateContext();
 
@@ -89,8 +85,8 @@ public static class AppServices
     }
 
     /// <summary>
-    /// Releases the database context. Called when the last window closes so the SQLite file handle
-    /// is not left open while the process lingers during shutdown.
+    ///     Releases the database context. Called when the last window closes so the SQLite file handle
+    ///     is not left open while the process lingers during shutdown.
     /// </summary>
     public static void Shutdown()
     {

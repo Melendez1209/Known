@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <local:KnownPage
     x:Class="Known.Pages.HistoryPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -119,7 +120,8 @@
             HorizontalAlignment="Stretch"
             Visibility="Collapsed">
             <AppBarButton x:Name="DeleteSelectionButton" Icon="Delete" Label="Delete" Click="OnDeleteSelected" />
-            <AppBarButton x:Name="FavouriteSelectionButton" Icon="Favorite" Label="Add to favorite" Click="OnFavouriteSelected" />
+            <AppBarButton x:Name="FavouriteSelectionButton" Icon="Favorite" Label="Add to favorite"
+                          Click="OnFavouriteSelected" />
             <AppBarSeparator />
             <AppBarButton Icon="Cancel" Label="Cancel" Click="OnClearSelection" />
         </CommandBar>

@@ -7,10 +7,10 @@ using Microsoft.UI.Xaml.Input;
 namespace Known.Pages;
 
 /// <summary>
-/// The account tab: who is signed in, plus the way into the settings, the about page and the
-/// favourites list.
+///     The account tab: who is signed in, plus the way into the settings, the about page and the
+///     favourites list.
 /// </summary>
-public sealed partial class AccountPage : KnownPage
+public sealed partial class AccountPage
 {
     private readonly StringLocalizer _strings = new();
 
@@ -35,7 +35,10 @@ public sealed partial class AccountPage : KnownPage
         base.OnNavigatedAway();
     }
 
-    private void OnAuthStateChanged(object? sender, AccountState state) => ApplyAccountState(state);
+    private void OnAuthStateChanged(object? sender, AccountState state)
+    {
+        ApplyAccountState(state);
+    }
 
     private void ApplyAccountState(AccountState state)
     {
@@ -75,13 +78,9 @@ public sealed partial class AccountPage : KnownPage
         try
         {
             if (AppServices.Auth.State.IsSignedIn)
-            {
                 AppServices.Auth.SignOut();
-            }
             else
-            {
                 await AppServices.Auth.SignInAsync();
-            }
         }
         catch (Exception)
         {
@@ -102,10 +101,18 @@ public sealed partial class AccountPage : KnownPage
         await dialog.ShowAsync();
     }
 
-    private void OnSettings(object sender, TappedRoutedEventArgs e) => Shell.NavigateRoot(typeof(SettingsPage));
+    private void OnSettings(object sender, TappedRoutedEventArgs e)
+    {
+        Shell.NavigateRoot(typeof(SettingsPage));
+    }
 
-    private void OnAbout(object sender, TappedRoutedEventArgs e) => Shell.NavigateRoot(typeof(AboutPage));
+    private void OnAbout(object sender, TappedRoutedEventArgs e)
+    {
+        Shell.NavigateRoot(typeof(AboutPage));
+    }
 
-    private void OnFavourites(object sender, TappedRoutedEventArgs e) =>
+    private void OnFavourites(object sender, TappedRoutedEventArgs e)
+    {
         Shell.NavigateInTab(typeof(HistoryPage));
+    }
 }

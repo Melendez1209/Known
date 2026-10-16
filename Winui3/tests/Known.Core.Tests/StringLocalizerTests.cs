@@ -5,16 +5,16 @@ using Xunit;
 namespace Known.Core.Tests;
 
 /// <summary>
-/// Checks that the .resx files generated from the Android string resources are actually embedded
-/// and resolve, so a broken generation step cannot silently fall back to keys in the interface.
+///     Checks that the .resx files generated from the Android string resources are actually embedded
+///     and resolve, so a broken generation step cannot silently fall back to keys in the interface.
 /// </summary>
 public class StringLocalizerTests
 {
     private static readonly StringLocalizer Localizer = new();
 
     /// <summary>
-    /// Languages that have a satellite assembly of their own. en-US is deliberately absent: it is
-    /// the neutral resource set, so it has nothing to compare against.
+    ///     Languages that have a satellite assembly of their own. en-US is deliberately absent: it is
+    ///     the neutral resource set, so it has nothing to compare against.
     /// </summary>
     private static readonly string[] SatelliteTags = ["en-GB", "zh-Hans", "zh-Hant"];
 

@@ -2,20 +2,18 @@ using System.Globalization;
 using Known.Core.Domain;
 using Known.Core.Localization;
 using Known.Services;
-using LiveChartsCore.Defaults;
-using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 
 namespace Known.Pages;
 
 /// <summary>
-/// The dashboard: a row of summary figures followed by the trend and per subject charts.
+///     The dashboard: a row of summary figures followed by the trend and per subject charts.
 /// </summary>
 /// <remarks>
-/// The page owns its own state. The chart series are rebuilt whenever the exam list or the theme
-/// changes, because a Skia colour is a snapshot and cannot follow an XAML theme resource the way a
-/// brush does.
+///     The page owns its own state. The chart series are rebuilt whenever the exam list or the theme
+///     changes, because a Skia colour is a snapshot and cannot follow an XAML theme resource the way a
+///     brush does.
 /// </remarks>
 public sealed partial class HomePage : KnownPage
 {
@@ -35,6 +33,11 @@ public sealed partial class HomePage : KnownPage
 
         Exams.Reloaded += OnReloaded;
         AppServices.Theme.ThemeChanged += OnThemeChanged;
+
+        // The shared exam store finishes its first load before this page exists, so no Reloaded
+        // event is waiting to be picked up. The charts would otherwise stay empty until the first
+        // write, and Loaded is the earliest point the controls can safely be filled in.
+        Loaded += (_, _) => Reload();
     }
 
     /// <inheritdoc />
@@ -46,17 +49,20 @@ public sealed partial class HomePage : KnownPage
         base.OnNavigatedAway();
     }
 
-    private void OnReloaded(object? sender, EventArgs e) => Reload();
+    private void OnReloaded(object? sender, EventArgs e)
+    {
+        Reload();
+    }
 
-    private void OnThemeChanged(object? sender, EventArgs e) => Reload();
+    private void OnThemeChanged(object? sender, EventArgs e)
+    {
+        Reload();
+    }
 
     /// <summary>Rebuilds the figures and both charts from the current exam list and theme.</summary>
     private void Reload()
     {
-        if (!IsLoaded)
-        {
-            return;
-        }
+        if (!IsLoaded) return;
 
         ChartPalette.Refresh();
 
@@ -108,33 +114,39 @@ public sealed partial class HomePage : KnownPage
     }
 
     /// <summary>
-    /// The charts plot a positional index, so an axis whose labels are looked up from a list turns
-    /// that index back into an exam date or a subject name.
+    ///     The charts plot a positional index, so an axis whose labels are looked up from a list turns
+    ///     that index back into an exam date or a subject name.
     /// </summary>
-    private static Axis BuildIndexAxis(IReadOnlyList<string> labels) => new()
+    private static Axis BuildIndexAxis(IReadOnlyList<string> labels)
     {
-        LabelsPaint = new SolidColorPaint(ChartPalette.Text),
-        NamePaint = new SolidColorPaint(ChartPalette.Text),
-        SeparatorsPaint = new SolidColorPaint(ChartPalette.GridLine),
-        TextSize = 11,
-        MinStep = 1,
-        Labeler = value =>
+        return new Axis
         {
-            var index = (int)Math.Round(value);
+            LabelsPaint = new SolidColorPaint(ChartPalette.Text),
+            NamePaint = new SolidColorPaint(ChartPalette.Text),
+            SeparatorsPaint = new SolidColorPaint(ChartPalette.GridLine),
+            TextSize = 11,
+            MinStep = 1,
+            Labeler = value =>
+            {
+                var index = (int)Math.Round(value);
 
-            return index >= 0 && index < labels.Count ? labels[index] : string.Empty;
-        }
-    };
+                return index >= 0 && index < labels.Count ? labels[index] : string.Empty;
+            }
+        };
+    }
 
-    private static Axis BuildValueAxis(string name, double? min, double? max) => new()
+    private static Axis BuildValueAxis(string name, double? min, double? max)
     {
-        Name = name,
-        NamePaint = new SolidColorPaint(ChartPalette.Text),
-        LabelsPaint = new SolidColorPaint(ChartPalette.Text),
-        SeparatorsPaint = new SolidColorPaint(ChartPalette.GridLine),
-        TextSize = 11,
-        MinLimit = min,
-        MaxLimit = max,
-        Labeler = value => ((int)Math.Round(value)).ToString(CultureInfo.CurrentCulture)
-    };
+        return new Axis
+        {
+            Name = name,
+            NamePaint = new SolidColorPaint(ChartPalette.Text),
+            LabelsPaint = new SolidColorPaint(ChartPalette.Text),
+            SeparatorsPaint = new SolidColorPaint(ChartPalette.GridLine),
+            TextSize = 11,
+            MinLimit = min,
+            MaxLimit = max,
+            Labeler = value => ((int)Math.Round(value)).ToString(CultureInfo.CurrentCulture)
+        };
+    }
 }

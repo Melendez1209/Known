@@ -9,15 +9,15 @@ public interface ISettingsRepository
     event EventHandler? Changed;
 
     /// <summary>
-    /// Creates the row with defaults when it is missing and returns whatever is stored afterwards,
-    /// so callers always receive a usable instance.
+    ///     Creates the row with defaults when it is missing and returns whatever is stored afterwards,
+    ///     so callers always receive a usable instance.
     /// </summary>
     Task<Settings> InitialiseAsync(CancellationToken cancellationToken = default);
 
-    /// <summary>The stored row, or <see langword="null"/> before <see cref="InitialiseAsync"/> has run.</summary>
+    /// <summary>The stored row, or <see langword="null" /> before <see cref="InitialiseAsync" /> has run.</summary>
     Task<Settings?> GetAsync(CancellationToken cancellationToken = default);
 
-    /// <summary>Writes every field of <paramref name="settings"/> back, inserting the row if needed.</summary>
+    /// <summary>Writes every field of <paramref name="settings" /> back, inserting the row if needed.</summary>
     Task SaveAsync(Settings settings, CancellationToken cancellationToken = default);
 }
 
@@ -35,10 +35,7 @@ public sealed class SettingsRepository(KnownDbContext context) : ISettingsReposi
     {
         var stored = await GetAsync(cancellationToken).ConfigureAwait(false);
 
-        if (stored is not null)
-        {
-            return stored;
-        }
+        if (stored is not null) return stored;
 
         var defaults = new Settings { Id = SingletonId };
 
@@ -50,10 +47,12 @@ public sealed class SettingsRepository(KnownDbContext context) : ISettingsReposi
     }
 
     /// <inheritdoc />
-    public Task<Settings?> GetAsync(CancellationToken cancellationToken = default) =>
-        context.Settings
+    public Task<Settings?> GetAsync(CancellationToken cancellationToken = default)
+    {
+        return context.Settings
             .AsNoTracking()
             .FirstOrDefaultAsync(settings => settings.Id == SingletonId, cancellationToken);
+    }
 
     /// <inheritdoc />
     public async Task SaveAsync(Settings settings, CancellationToken cancellationToken = default)
@@ -85,5 +84,8 @@ public sealed class SettingsRepository(KnownDbContext context) : ISettingsReposi
         RaiseChanged();
     }
 
-    private void RaiseChanged() => Changed?.Invoke(this, EventArgs.Empty);
+    private void RaiseChanged()
+    {
+        Changed?.Invoke(this, EventArgs.Empty);
+    }
 }

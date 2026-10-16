@@ -5,9 +5,9 @@ using Known.Core.Domain;
 namespace Known.Services;
 
 /// <summary>
-/// Holds the exams in memory as observable collections so the list, the charts and the dashboard
-/// all react to one write. It stands in for the cold Kotlin flows the Android repositories exposed,
-/// which the platform has no direct equivalent of.
+///     Holds the exams in memory as observable collections so the list, the charts and the dashboard
+///     all react to one write. It stands in for the cold Kotlin flows the Android repositories exposed,
+///     which the platform has no direct equivalent of.
 /// </summary>
 public sealed class ExamService
 {
@@ -32,13 +32,10 @@ public sealed class ExamService
     public ObservableCollection<Exam> Favourites { get; } = [];
 
     /// <summary>
-    /// Mean score per subject across every exam. The dashboard shows all exams at once, so unlike
-    /// the detail screen nothing needs excluding.
+    ///     Mean score per subject across every exam. The dashboard shows all exams at once, so unlike
+    ///     the detail screen nothing needs excluding.
     /// </summary>
     public ObservableCollection<SubjectStat> SubjectStats { get; } = [];
-
-    /// <summary>Raised on the UI thread after <see cref="Exams"/> and <see cref="Favourites"/> reload.</summary>
-    public event EventHandler? Reloaded;
 
     /// <summary>Mean percentage across every exam that carries a score, or zero when there is none.</summary>
     public float AveragePercentage =>
@@ -62,6 +59,9 @@ public sealed class ExamService
             return ranks.Count == 0 ? 0 : ranks.Min();
         }
     }
+
+    /// <summary>Raised on the UI thread after <see cref="Exams" /> and <see cref="Favourites" /> reload.</summary>
+    public event EventHandler? Reloaded;
 
     /// <summary>Reloads both collections from the database.</summary>
     public async Task LoadAsync(CancellationToken cancellationToken = default)
@@ -89,7 +89,8 @@ public sealed class ExamService
     }
 
     /// <summary>Runs a write against the repository and refreshes the collections afterwards.</summary>
-    public async Task<T> MutateAsync<T>(Func<IExamRepository, Task<T>> write, CancellationToken cancellationToken = default)
+    public async Task<T> MutateAsync<T>(Func<IExamRepository, Task<T>> write,
+        CancellationToken cancellationToken = default)
     {
         var result = await write(Repository).ConfigureAwait(true);
 
@@ -99,30 +100,28 @@ public sealed class ExamService
     }
 
     /// <summary>Runs a write against the repository and refreshes the collections afterwards.</summary>
-    public Task MutateAsync(Func<IExamRepository, Task> write, CancellationToken cancellationToken = default) =>
-        MutateAsync<object?>(
+    public Task MutateAsync(Func<IExamRepository, Task> write, CancellationToken cancellationToken = default)
+    {
+        return MutateAsync<object?>(
             async repository =>
             {
                 await write(repository).ConfigureAwait(true);
                 return null;
             },
             cancellationToken);
+    }
 
     /// <summary>
-    /// Orders the subject averages by the display order of the subject catalogue, so the bar chart
-    /// puts the compulsory subjects first instead of sorting them alphabetically by their key.
+    ///     Orders the subject averages by the display order of the subject catalogue, so the bar chart
+    ///     puts the compulsory subjects first instead of sorting them alphabetically by their key.
     /// </summary>
     private static IEnumerable<SubjectStat> OrderStats(IEnumerable<SubjectStat> stats)
     {
         var byKey = stats.ToDictionary(stat => stat.SubjectKey, StringComparer.Ordinal);
 
         foreach (var key in SubjectCatalogue.ExamSubjectKeys)
-        {
             if (byKey.TryGetValue(key, out var stat))
-            {
                 yield return stat;
-            }
-        }
     }
 
     /// <summary>Replaces the contents of a collection in place, so bindings survive the update.</summary>
@@ -130,10 +129,7 @@ public sealed class ExamService
     {
         target.Clear();
 
-        foreach (var item in items)
-        {
-            target.Add(item);
-        }
+        foreach (var item in items) target.Add(item);
     }
 
     private async void OnRepositoryChanged(object? sender, EventArgs e)

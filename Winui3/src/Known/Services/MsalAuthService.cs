@@ -18,19 +18,19 @@ public sealed record AccountState(
 }
 
 /// <summary>
-/// Signs the student in with a Microsoft account.
+///     Signs the student in with a Microsoft account.
 /// </summary>
 /// <remarks>
-/// The Android build signed in against Firebase, with Google and GitHub as extra providers. None
-/// of that carries over to a desktop app, so the desktop build talks to Microsoft identity
-/// directly. Registration is still required: <see cref="ClientId"/> has to be filled in with the
-/// application registered in the tenant before this can sign anybody in.
+///     The Android build signed in against Firebase, with Google and GitHub as extra providers. None
+///     of that carries over to a desktop app, so the desktop build talks to Microsoft identity
+///     directly. Registration is still required: <see cref="ClientId" /> has to be filled in with the
+///     application registered in the tenant before this can sign anybody in.
 /// </remarks>
 public sealed class MsalAuthService
 {
     /// <summary>
-    /// Application id of the Entra registration. Empty until the app is registered, in which case
-    /// <see cref="IsConfigured"/> stays false and the sign in button explains why.
+    ///     Application id of the Entra registration. Empty until the app is registered, in which case
+    ///     <see cref="IsConfigured" /> stays false and the sign in button explains why.
     /// </summary>
     public const string ClientId = "";
 
@@ -40,19 +40,13 @@ public sealed class MsalAuthService
     private IPublicClientApplication? _application;
     private AccountState _state = AccountState.SignedOut;
 
-    /// <summary>Raised whenever the signed in account changes.</summary>
-    public event EventHandler<AccountState>? StateChanged;
-
     /// <summary>Who is currently signed in.</summary>
     public AccountState State
     {
         get => _state;
         private set
         {
-            if (_state == value)
-            {
-                return;
-            }
+            if (_state == value) return;
 
             _state = value;
             StateChanged?.Invoke(this, value);
@@ -62,14 +56,21 @@ public sealed class MsalAuthService
     /// <summary>Whether an Entra registration has been supplied.</summary>
     public bool IsConfigured => !string.IsNullOrWhiteSpace(ClientId);
 
+    private IPublicClientApplication Application =>
+        _application ??= PublicClientApplicationBuilder
+            .Create(ClientId)
+            .WithRedirectUri("https://login.microsoftonline.com/common/oauth2/nativeclient")
+            .Build();
+
+    /// <summary>Raised whenever the signed in account changes.</summary>
+    public event EventHandler<AccountState>? StateChanged;
+
     /// <summary>Starts the interactive sign in, returning the account that came back.</summary>
     public async Task<AccountState> SignInAsync(CancellationToken cancellationToken = default)
     {
         if (!IsConfigured)
-        {
             throw new InvalidOperationException(
                 "No Entra application id has been configured for this build.");
-        }
 
         var result = await Application
             .AcquireTokenInteractive(Scopes)
@@ -85,14 +86,11 @@ public sealed class MsalAuthService
     }
 
     /// <summary>
-    /// Drops the held account. The MSAL token cache is left alone on purpose, so signing back in
-    /// with the same account does not prompt the student again.
+    ///     Drops the held account. The MSAL token cache is left alone on purpose, so signing back in
+    ///     with the same account does not prompt the student again.
     /// </summary>
-    public void SignOut() => State = AccountState.SignedOut;
-
-    private IPublicClientApplication Application =>
-        _application ??= PublicClientApplicationBuilder
-            .Create(ClientId)
-            .WithRedirectUri("https://login.microsoftonline.com/common/oauth2/nativeclient")
-            .Build();
+    public void SignOut()
+    {
+        State = AccountState.SignedOut;
+    }
 }

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <local:KnownPage
     x:Class="Known.Pages.InputtingPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -59,7 +60,7 @@
                 <ItemsControl.ItemTemplate>
                     <DataTemplate x:DataType="local:ScoreRow">
                         <Border
-                            Style="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                             CornerRadius="8"
                             Padding="16"
                             Margin="0,0,12,12"
@@ -70,10 +71,16 @@
                                     Content="{x:Bind SubjectName}"
                                     IsChecked="{x:Bind IsChecked, Mode=TwoWay}" />
 
+                                <!--
+                                    The track spans the full mark rather than a normalised 0..1
+                                    range, so StepFrequency can stay a literal half mark whatever
+                                    the denominator is.
+                                -->
                                 <Slider
                                     Minimum="0"
-                                    Maximum="1"
-                                    StepFrequency="1"
+                                    Maximum="{x:Bind FullMarkValue, Mode=OneWay}"
+                                    StepFrequency="0.5"
+                                    SnapsTo="StepValues"
                                     Value="{x:Bind Slider, Mode=TwoWay}"
                                     IsEnabled="{x:Bind IsChecked, Mode=OneWay}" />
 

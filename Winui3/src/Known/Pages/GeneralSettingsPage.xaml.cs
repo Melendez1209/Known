@@ -6,14 +6,14 @@ using Microsoft.UI.Xaml.Controls;
 namespace Known.Pages;
 
 /// <summary>
-/// The general settings: who the student is, their region and the subjects they sit. These are the
-/// same three questions the onboarding wizard asks, editable later.
+///     The general settings: who the student is, their region and the subjects they sit. These are the
+///     same three questions the onboarding wizard asks, editable later.
 /// </summary>
 public sealed partial class GeneralSettingsPage : KnownPage
 {
     private readonly StringLocalizer _strings = new();
-    private readonly HashSet<string> _subjects = new(StringComparer.Ordinal);
     private readonly List<CheckBox> _subjectBoxes = [];
+    private readonly HashSet<string> _subjects = new(StringComparer.Ordinal);
 
     private bool _suppressEvents;
 
@@ -79,21 +79,14 @@ public sealed partial class GeneralSettingsPage : KnownPage
 
             foreach (var box in _subjectBoxes)
             {
-                if (box.Tag is not string key)
-                {
-                    continue;
-                }
+                if (box.Tag is not string key) continue;
 
                 var isSelected = selected.Contains(key);
 
                 if (isSelected)
-                {
                     _subjects.Add(key);
-                }
                 else
-                {
                     _subjects.Remove(key);
-                }
 
                 box.IsChecked = isSelected;
             }
@@ -106,10 +99,7 @@ public sealed partial class GeneralSettingsPage : KnownPage
 
     private async void OnIdentityChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (_suppressEvents || IdentityOptions.SelectedIndex < 0)
-        {
-            return;
-        }
+        if (_suppressEvents || IdentityOptions.SelectedIndex < 0) return;
 
         var identity = IdentityOptions.SelectedIndex switch
         {
@@ -124,29 +114,19 @@ public sealed partial class GeneralSettingsPage : KnownPage
 
     private async void OnRegionLostFocus(object sender, RoutedEventArgs e)
     {
-        if (_suppressEvents)
-        {
-            return;
-        }
+        if (_suppressEvents) return;
 
         await Settings.SetRegionAsync(RegionBox.Text);
     }
 
     private async void OnSubjectToggled(object sender, RoutedEventArgs e)
     {
-        if (_suppressEvents || sender is not CheckBox box || box.Tag is not string key)
-        {
-            return;
-        }
+        if (_suppressEvents || sender is not CheckBox box || box.Tag is not string key) return;
 
         if (box.IsChecked == true)
-        {
             _subjects.Add(key);
-        }
         else
-        {
             _subjects.Remove(key);
-        }
 
         await Settings.SetSelectedSubjectsAsync(_subjects);
     }

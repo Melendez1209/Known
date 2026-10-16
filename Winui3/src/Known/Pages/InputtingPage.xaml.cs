@@ -1,23 +1,20 @@
-using System.Globalization;
 using Known.Core.Data;
 using Known.Core.Domain;
 using Known.Core.Localization;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Navigation;
 
 namespace Known.Pages;
 
 /// <summary>
-/// The score entry form: one card per subject holding a tick box, a slider and the two score
-/// fields. Saving turns the rows into exam scores through the same domain helpers the Android build
-/// used, so the two platforms accept and reject exactly the same input.
+///     The score entry form: one card per subject holding a tick box, a slider and the two score
+///     fields. Saving turns the rows into exam scores through the same domain helpers the Android build
+///     used, so the two platforms accept and reject exactly the same input.
 /// </summary>
 public sealed partial class InputtingPage : KnownPage
 {
-    private readonly StringLocalizer _strings = new();
-
     private readonly List<ScoreRow> _rows = [];
+    private readonly StringLocalizer _strings = new();
     private InputtingNavigation? _navigation;
     private bool _saving;
 
@@ -33,23 +30,20 @@ public sealed partial class InputtingPage : KnownPage
     protected override void OnPageLoaded()
     {
         _navigation = NavigationParameter as InputtingNavigation
-            ?? new InputtingNavigation(
-                DateTimeOffset.Now.ToUnixTimeMilliseconds(),
-                DateTimeOffset.Now.ToUnixTimeMilliseconds());
+                      ?? new InputtingNavigation(
+                          DateTimeOffset.Now.ToUnixTimeMilliseconds(),
+                          DateTimeOffset.Now.ToUnixTimeMilliseconds());
 
         Load();
     }
 
     /// <summary>
-    /// Builds the form. An existing exam is prefilled, and the subject tick boxes start from the
-    /// selection made during onboarding.
+    ///     Builds the form. An existing exam is prefilled, and the subject tick boxes start from the
+    ///     selection made during onboarding.
     /// </summary>
     private async void Load()
     {
-        if (_navigation is null)
-        {
-            return;
-        }
+        if (_navigation is null) return;
 
         var navigation = _navigation;
 
@@ -71,8 +65,8 @@ public sealed partial class InputtingPage : KnownPage
                         ? input with
                         {
                             Checked = true,
-                            Mark = Format(score.Mark),
-                            FullMark = Format(score.FullMark)
+                            Mark = ExamScoring.FormatScoreValue(score.Mark),
+                            FullMark = ExamScoring.FormatScoreValue(score.FullMark)
                         }
                         : input with { Checked = false })
                     .ToList();
@@ -85,21 +79,22 @@ public sealed partial class InputtingPage : KnownPage
 
         foreach (var input in inputs)
         {
-            _rows.Add(new ScoreRow(
+            var row = new ScoreRow(
                 input,
                 SubjectLabels.NameOf(_strings, input.SubjectKey),
                 _strings.Get("mark"),
-                _strings.Get("full_mark")));
+                _strings.Get("full_mark"));
+
+            // Without this the save button keeps the verdict computed when the form was built, which
+            // is "nothing entered", because nothing else told the page that the rows had changed
+            row.Changed += (_, _) => UpdateValidation();
+
+            _rows.Add(row);
         }
 
         SubjectList.ItemsSource = _rows;
         UpdateValidation();
     }
-
-    private static string Format(float value) =>
-        value % 1f == 0f
-            ? ((long)value).ToString(CultureInfo.CurrentCulture)
-            : value.ToString("0.0###", CultureInfo.CurrentCulture);
 
     private async void OnRenameExam(object sender, RoutedEventArgs e)
     {
@@ -121,15 +116,13 @@ public sealed partial class InputtingPage : KnownPage
         };
 
         if (await dialog.ShowAsync() == ContentDialogResult.Primary && !string.IsNullOrWhiteSpace(box.Text))
-        {
             NameButton.Content = box.Text.Trim();
-        }
     }
 
     /// <summary>
-    /// The domain rules own the verdict, so the message never drifts from what the save will do.
-    /// Every row is re-read here rather than tracked as it is edited, because the slider and the
-    /// text fields both feed the same model.
+    ///     The domain rules own the verdict, so the message never drifts from what the save will do.
+    ///     Every row is re-read here rather than tracked as it is edited, because the slider and the
+    ///     text fields both feed the same model.
     /// </summary>
     private void UpdateValidation()
     {
@@ -151,10 +144,7 @@ public sealed partial class InputtingPage : KnownPage
 
     private async void OnSave(object sender, RoutedEventArgs e)
     {
-        if (_saving || _navigation is null)
-        {
-            return;
-        }
+        if (_saving || _navigation is null) return;
 
         var navigation = _navigation;
 

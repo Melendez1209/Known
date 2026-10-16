@@ -3,9 +3,9 @@ using Microsoft.EntityFrameworkCore;
 namespace Known.Core.Data;
 
 /// <summary>
-/// The application's SQLite database. Schema version 1 matches the Android build table for table:
-/// three tables, a cascading foreign key from scores to exams, and a unique index so a subject can
-/// only be scored once per exam.
+///     The application's SQLite database. Schema version 1 matches the Android build table for table:
+///     three tables, a cascading foreign key from scores to exams, and a unique index so a subject can
+///     only be scored once per exam.
 /// </summary>
 public sealed class KnownDbContext(DbContextOptions<KnownDbContext> options) : DbContext(options)
 {

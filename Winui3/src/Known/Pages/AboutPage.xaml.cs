@@ -1,21 +1,19 @@
 using System.Diagnostics;
 using Known.Core.Localization;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
 namespace Known.Pages;
 
 /// <summary>
-/// The about page. Every row opens a link in the system browser, which is the Windows equivalent
-/// of the Android build firing an ACTION_VIEW intent.
+///     The about page. Every row opens a link in the system browser, which is the Windows equivalent
+///     of the Android build firing an ACTION_VIEW intent.
 /// </summary>
 public sealed partial class AboutPage : KnownPage
 {
-    private readonly StringLocalizer _strings = new();
-
     private const string RepositoryUrl = "https://github.com/Melendez1209/Known";
     private const string ReleaseUrl = RepositoryUrl + "/releases";
     private const string IssueUrl = RepositoryUrl + "/issues";
+    private readonly StringLocalizer _strings = new();
 
     /// <summary>Creates the page and fills in its labels.</summary>
     public AboutPage()
@@ -38,10 +36,7 @@ public sealed partial class AboutPage : KnownPage
             _ => null
         };
 
-        if (url is null)
-        {
-            return;
-        }
+        if (url is null) return;
 
         // Launching must not be allowed to take the app down when no browser is registered
         try

@@ -6,7 +6,7 @@ public sealed class ExamScore
     /// <summary>Primary key, assigned by the database on insert.</summary>
     public long Id { get; set; }
 
-    /// <summary>Foreign key onto <see cref="Exam.Id"/>, cascading on delete.</summary>
+    /// <summary>Foreign key onto <see cref="Exam.Id" />, cascading on delete.</summary>
     public long ExamId { get; set; }
 
     /// <summary>Subject identifier, unique per exam so a subject can only be scored once.</summary>

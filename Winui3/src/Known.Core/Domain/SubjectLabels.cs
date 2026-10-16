@@ -1,40 +1,50 @@
+using Known.Core.Localization;
+
 namespace Known.Core.Domain;
 
 /// <summary>
-/// Maps the stable subject keys used in the database onto the translatable strings shown in the
-/// interface. Keeping the mapping beside the key list stops the resource key from drifting into
-/// the screens, where a rename would only show up as a blank label.
+///     Maps the stable subject keys used in the database onto the translatable strings shown in the
+///     interface. Keeping the mapping beside the key list stops the resource key from drifting into
+///     the screens, where a rename would only show up as a blank label.
 /// </summary>
 public static class SubjectLabels
 {
     /// <summary>
-    /// Resource key for the display name of a subject. An unknown key falls back to PE, matching
-    /// the historical behaviour of the onboarding selector.
+    ///     Resource key for the display name of a subject. An unknown key falls back to PE, matching
+    ///     the historical behaviour of the onboarding selector.
     /// </summary>
-    public static string ResourceKeyFor(string? subjectKey) => subjectKey switch
+    public static string ResourceKeyFor(string? subjectKey)
     {
-        "chinese" => "chinese",
-        "maths" => "maths",
-        "foreign_language" => "foreign_language",
-        "physics" => "physics",
-        "chemistry" => "chemistry",
-        "biology" => "biology",
-        "political" => "political",
-        "history" => "history_subject",
-        "geography" => "geography",
-        _ => "pe"
-    };
+        return subjectKey switch
+        {
+            "chinese" => "chinese",
+            "maths" => "maths",
+            "foreign_language" => "foreign_language",
+            "physics" => "physics",
+            "chemistry" => "chemistry",
+            "biology" => "biology",
+            "political" => "political",
+            "history" => "history_subject",
+            "geography" => "geography",
+            _ => "pe"
+        };
+    }
 
     /// <summary>Display name of a subject, resolved through the supplied localiser.</summary>
-    public static string NameOf(Localization.StringLocalizer strings, string? subjectKey) =>
-        strings.Get(ResourceKeyFor(subjectKey));
+    public static string NameOf(StringLocalizer strings, string? subjectKey)
+    {
+        return strings.Get(ResourceKeyFor(subjectKey));
+    }
 
     /// <summary>Display name of the identity the student picked during onboarding.</summary>
-    public static string IdentityName(Localization.StringLocalizer strings, int identity) => identity switch
+    public static string IdentityName(StringLocalizer strings, int identity)
     {
-        StudentIdentity.Student => strings.Get("student"),
-        StudentIdentity.Teacher => strings.Get("teacher"),
-        StudentIdentity.Parent => strings.Get("parent"),
-        _ => strings.Get("follow_system")
-    };
+        return identity switch
+        {
+            StudentIdentity.Student => strings.Get("student"),
+            StudentIdentity.Teacher => strings.Get("teacher"),
+            StudentIdentity.Parent => strings.Get("parent"),
+            _ => strings.Get("follow_system")
+        };
+    }
 }

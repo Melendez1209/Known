@@ -5,14 +5,14 @@ using Microsoft.UI.Xaml.Controls;
 namespace Known.Pages;
 
 /// <summary>
-/// The first step of recording an exam: when it happened.
+///     The first step of recording an exam: when it happened.
 /// </summary>
 /// <remarks>
-/// The Android build used the Material date range picker, which WinUI has no equivalent of. This
-/// page therefore offers two calendar pickers with an explicit rule that the end cannot precede the
-/// start, which is the behaviour that actually matters to the student.
+///     The Android build used the Material date range picker, which WinUI has no equivalent of. This
+///     page therefore offers two calendar pickers with an explicit rule that the end cannot precede the
+///     start, which is the behaviour that actually matters to the student.
 /// </remarks>
-public sealed partial class DateRangePage : KnownPage
+public sealed partial class DateRangePage
 {
     private readonly StringLocalizer _strings = new();
 
@@ -41,10 +41,7 @@ public sealed partial class DateRangePage : KnownPage
         // button and leaving the student to work out why it went grey
         if (sender == StartPicker)
         {
-            if (StartPicker.Date is { } start && EndPicker.Date is { } end && end < start)
-            {
-                EndPicker.Date = start;
-            }
+            if (StartPicker.Date is { } start && EndPicker.Date is { } end && end < start) EndPicker.Date = start;
         }
         else if (EndPicker.Date is { } chosen && StartPicker.Date is { } from && chosen < from)
         {
@@ -76,10 +73,7 @@ public sealed partial class DateRangePage : KnownPage
             XamlRoot = XamlRoot
         };
 
-        if (await dialog.ShowAsync() == ContentDialogResult.Primary)
-        {
-            Shell.GoBack();
-        }
+        if (await dialog.ShowAsync() == ContentDialogResult.Primary) Shell.GoBack();
     }
 
     private void OnNext(object sender, RoutedEventArgs e)
@@ -90,8 +84,10 @@ public sealed partial class DateRangePage : KnownPage
         Shell.NavigateInTab(typeof(InputtingPage), new InputtingNavigation(start, end));
     }
 
-    private static long ToEpochMilliseconds(DateTimeOffset? value) =>
-        value?.ToUnixTimeMilliseconds() ?? DateTimeOffset.Now.ToUnixTimeMilliseconds();
+    private static long ToEpochMilliseconds(DateTimeOffset? value)
+    {
+        return value?.ToUnixTimeMilliseconds() ?? DateTimeOffset.Now.ToUnixTimeMilliseconds();
+    }
 }
 
 /// <summary>What the score entry page needs to open with, passed as the frame navigation parameter.</summary>

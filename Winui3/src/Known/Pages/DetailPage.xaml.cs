@@ -4,27 +4,24 @@ using Known.Core.Domain;
 using Known.Core.Localization;
 using Known.Services;
 using LiveChartsCore;
-using LiveChartsCore.Defaults;
-using LiveChartsCore.Kernel.Sketches;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
-using Windows.ApplicationModel.DataTransfer;
 
 namespace Known.Pages;
 
 /// <summary>
-/// A single exam: its totals, how the marks split across subjects, and how it compares with every
-/// other exam the student has recorded.
+///     A single exam: its totals, how the marks split across subjects, and how it compares with every
+///     other exam the student has recorded.
 /// </summary>
-public sealed partial class DetailPage : KnownPage
+public sealed partial class DetailPage
 {
     private readonly StringLocalizer _strings = new();
+    private Exam? _exam;
 
     private long _examId;
-    private Exam? _exam;
     private string _shareText = string.Empty;
 
     /// <summary>Creates the page and translates its captions.</summary>
@@ -51,10 +48,7 @@ public sealed partial class DetailPage : KnownPage
     {
         _examId = NavigationParameter is long id ? id : 0;
 
-        if (_examId != 0)
-        {
-            LoadAsync();
-        }
+        if (_examId != 0) LoadAsync();
     }
 
     private async void LoadAsync()
@@ -110,7 +104,7 @@ public sealed partial class DetailPage : KnownPage
         DistributionChart.Series = subjects
             .Select(subject => (ISeries)new PieSeries<double>
             {
-                Values = new[] { (double)subject.Mark },
+                Values = [subject.Mark],
                 Name = subject.Name,
                 Fill = new SolidColorPaint(ChartPalette.Accent)
             })
@@ -122,8 +116,8 @@ public sealed partial class DetailPage : KnownPage
     }
 
     /// <summary>
-    /// Every exam as a column, with the mean drawn across them, so one exam can be placed in the
-    /// context of the rest.
+    ///     Every exam as a column, with the mean drawn across them, so one exam can be placed in the
+    ///     context of the rest.
     /// </summary>
     private void BuildComparisonChart()
     {
@@ -162,8 +156,8 @@ public sealed partial class DetailPage : KnownPage
     }
 
     /// <summary>
-    /// Builds one row per recorded subject. The rows are created in code because each one needs a
-    /// different mix of values and a history that may not exist.
+    ///     Builds one row per recorded subject. The rows are created in code because each one needs a
+    ///     different mix of values and a history that may not exist.
     /// </summary>
     private void BuildSubjectRows(IReadOnlyList<SubjectFigure> subjects)
     {
@@ -174,12 +168,10 @@ public sealed partial class DetailPage : KnownPage
             var grid = new Grid { ColumnSpacing = 16 };
 
             for (var column = 0; column < 4; column++)
-            {
                 grid.ColumnDefinitions.Add(new ColumnDefinition
                 {
                     Width = new GridLength(column == 0 ? 2 : 1, GridUnitType.Star)
                 });
-            }
 
             var name = new TextBlock
             {
@@ -193,7 +185,9 @@ public sealed partial class DetailPage : KnownPage
 
             Grid.SetColumn(AddCell(grid, subject.Mark.ToString("0.#", CultureInfo.CurrentCulture)), 1);
             Grid.SetColumn(
-                AddCell(grid, ExamScoring.Percentage(subject.Mark, subject.FullMark).ToString("0.#", CultureInfo.CurrentCulture) + "%"),
+                AddCell(grid,
+                    ExamScoring.Percentage(subject.Mark, subject.FullMark).ToString("0.#", CultureInfo.CurrentCulture) +
+                    "%"),
                 2);
 
             // The comparison only makes sense once the subject has been recorded in another exam,
@@ -243,39 +237,42 @@ public sealed partial class DetailPage : KnownPage
         _shareText = string.Join(Environment.NewLine, lines);
     }
 
-    private static Axis BuildIndexAxis(IReadOnlyList<string> labels) => new()
+    private static Axis BuildIndexAxis(IReadOnlyList<string> labels)
     {
-        LabelsPaint = new SolidColorPaint(ChartPalette.Text),
-        NamePaint = new SolidColorPaint(ChartPalette.Text),
-        SeparatorsPaint = new SolidColorPaint(ChartPalette.GridLine),
-        TextSize = 11,
-        MinStep = 1,
-        Labeler = value =>
+        return new Axis
         {
-            var index = (int)Math.Round(value);
+            LabelsPaint = new SolidColorPaint(ChartPalette.Text),
+            NamePaint = new SolidColorPaint(ChartPalette.Text),
+            SeparatorsPaint = new SolidColorPaint(ChartPalette.GridLine),
+            TextSize = 11,
+            MinStep = 1,
+            Labeler = value =>
+            {
+                var index = (int)Math.Round(value);
 
-            return index >= 0 && index < labels.Count ? labels[index] : string.Empty;
-        }
-    };
+                return index >= 0 && index < labels.Count ? labels[index] : string.Empty;
+            }
+        };
+    }
 
-    private static Axis BuildValueAxis(string name, double? min, double? max) => new()
+    private static Axis BuildValueAxis(string name, double? min, double? max)
     {
-        Name = name,
-        NamePaint = new SolidColorPaint(ChartPalette.Text),
-        LabelsPaint = new SolidColorPaint(ChartPalette.Text),
-        SeparatorsPaint = new SolidColorPaint(ChartPalette.GridLine),
-        TextSize = 11,
-        MinLimit = min,
-        MaxLimit = max,
-        Labeler = value => ((int)Math.Round(value)).ToString(CultureInfo.CurrentCulture)
-    };
+        return new Axis
+        {
+            Name = name,
+            NamePaint = new SolidColorPaint(ChartPalette.Text),
+            LabelsPaint = new SolidColorPaint(ChartPalette.Text),
+            SeparatorsPaint = new SolidColorPaint(ChartPalette.GridLine),
+            TextSize = 11,
+            MinLimit = min,
+            MaxLimit = max,
+            Labeler = value => ((int)Math.Round(value)).ToString(CultureInfo.CurrentCulture)
+        };
+    }
 
     private void OnEdit(object sender, RoutedEventArgs e)
     {
-        if (_exam is null)
-        {
-            return;
-        }
+        if (_exam is null) return;
 
         Shell.NavigateInTab(
             typeof(InputtingPage),
@@ -284,20 +281,14 @@ public sealed partial class DetailPage : KnownPage
 
     private async void OnToggleFavourite(object sender, RoutedEventArgs e)
     {
-        if (_exam is null)
-        {
-            return;
-        }
+        if (_exam is null) return;
 
         await Exams.MutateAsync(repository => repository.SetFavoriteAsync(_exam.Id, !_exam.IsFavorite));
     }
 
     private async void OnDelete(object sender, RoutedEventArgs e)
     {
-        if (_exam is null)
-        {
-            return;
-        }
+        if (_exam is null) return;
 
         var dialog = new ContentDialog
         {
@@ -308,34 +299,14 @@ public sealed partial class DetailPage : KnownPage
             XamlRoot = XamlRoot
         };
 
-        if (await dialog.ShowAsync() != ContentDialogResult.Primary)
-        {
-            return;
-        }
+        if (await dialog.ShowAsync() != ContentDialogResult.Primary) return;
 
         await Exams.MutateAsync(repository => repository.DeleteExamAsync(_exam.Id));
         Shell.GoBack();
     }
 
-    private void OnShare(object sender, RoutedEventArgs e)
-    {
-        // The payload is only built once the user has picked a target, so it is produced in the
-        // handler rather than handed over up front
-        var manager = DataTransferManager.GetForCurrentView();
-        manager.DataRequested += OnDataRequested;
-
-        try
-        {
-            DataTransferManager.ShowShareUI();
-        }
-        finally
-        {
-            manager.DataRequested -= OnDataRequested;
-        }
-    }
-
-    private void OnDataRequested(DataTransferManager sender, DataRequestedEventArgs args) =>
-        args.Request.Data.SetText(_shareText);
+    private void OnShare(object sender, RoutedEventArgs e) =>
+        DesktopShare.ShareText(_exam?.Name ?? _strings.Get("exam"), _shareText);
 
     /// <summary>One subject's figures on the detail page.</summary>
     /// <param name="Name">Translated subject name.</param>

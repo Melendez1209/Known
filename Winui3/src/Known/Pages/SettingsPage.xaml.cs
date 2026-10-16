@@ -1,14 +1,12 @@
-using Known.Core.Domain;
 using System.Globalization;
 using Known.Core.Localization;
-using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
 namespace Known.Pages;
 
 /// <summary>
-/// The settings root. The desktop build keeps only the settings that mean anything on Windows:
-/// the student profile, the theme and language, and the cache.
+///     The settings root. The desktop build keeps only the settings that mean anything on Windows:
+///     the student profile, the theme and language, and the cache.
 /// </summary>
 public sealed partial class SettingsPage : KnownPage
 {
@@ -44,8 +42,8 @@ public sealed partial class SettingsPage : KnownPage
     }
 
     /// <summary>
-    /// Removes the application's cache directory and reports how much was freed, mirroring the
-    /// Android settings entry.
+    ///     Removes the application's cache directory and reports how much was freed, mirroring the
+    ///     Android settings entry.
     /// </summary>
     private async Task ClearCacheAsync()
     {
@@ -61,7 +59,6 @@ public sealed partial class SettingsPage : KnownPage
             if (Directory.Exists(directory))
             {
                 foreach (var file in Directory.EnumerateFiles(directory, "*", SearchOption.AllDirectories))
-                {
                     try
                     {
                         freed += new FileInfo(file).Length;
@@ -70,9 +67,8 @@ public sealed partial class SettingsPage : KnownPage
                     {
                         // A file held open by another process is simply not counted
                     }
-                }
 
-                Directory.Delete(directory, recursive: true);
+                Directory.Delete(directory, true);
             }
         }
         catch (IOException)
@@ -96,11 +92,15 @@ public sealed partial class SettingsPage : KnownPage
     }
 
     /// <summary>Formats a byte count the same way the Android settings entry does.</summary>
-    internal static string FormatSize(long bytes) => bytes switch
+    internal static string FormatSize(long bytes)
     {
-        >= 1024 * 1024 * 1024 => string.Format(CultureInfo.InvariantCulture, "%.2f GB", bytes / (1024.0 * 1024 * 1024)),
-        >= 1024 * 1024 => string.Format(CultureInfo.InvariantCulture, "%.2f MB", bytes / (1024.0 * 1024)),
-        >= 1024 => string.Format(CultureInfo.InvariantCulture, "%.2f KB", bytes / 1024.0),
-        _ => string.Format(CultureInfo.InvariantCulture, "%d B", bytes)
-    };
+        return bytes switch
+        {
+            >= 1024 * 1024 * 1024 => string.Format(CultureInfo.InvariantCulture, "%.2f GB",
+                bytes / (1024.0 * 1024 * 1024)),
+            >= 1024 * 1024 => string.Format(CultureInfo.InvariantCulture, "%.2f MB", bytes / (1024.0 * 1024)),
+            >= 1024 => string.Format(CultureInfo.InvariantCulture, "%.2f KB", bytes / 1024.0),
+            _ => string.Format(CultureInfo.InvariantCulture, "%d B", bytes)
+        };
+    }
 }

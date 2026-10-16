@@ -3,14 +3,14 @@ using Known.Core.Domain;
 namespace Known.Core.Data;
 
 /// <summary>
-/// The single settings row. Only one record is ever kept, identified by <see cref="Id"/>.
+///     The single settings row. Only one record is ever kept, identified by <see cref="Id" />.
 /// </summary>
 public sealed class Settings
 {
     /// <summary>Always <c>1</c>; the table holds exactly one row.</summary>
     public int Id { get; set; } = 1;
 
-    /// <summary>One of the <see cref="DarkThemeMode"/> constants.</summary>
+    /// <summary>One of the <see cref="DarkThemeMode" /> constants.</summary>
     public int DarkThemeValue { get; set; } = DarkThemeMode.FollowSystem;
 
     /// <summary>Whether the high contrast variants of the system theme are requested.</summary>
@@ -22,7 +22,7 @@ public sealed class Settings
     /// <summary>Whether the onboarding wizard still has to run before the main window opens.</summary>
     public bool IsFirstLogin { get; set; } = true;
 
-    /// <summary>One of the <see cref="StudentIdentity"/> constants.</summary>
+    /// <summary>One of the <see cref="StudentIdentity" /> constants.</summary>
     public int Identity { get; set; } = StudentIdentity.None;
 
     /// <summary>Free text region the student typed during onboarding.</summary>

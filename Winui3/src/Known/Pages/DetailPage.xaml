@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <local:KnownPage
     x:Class="Known.Pages.DetailPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
@@ -54,29 +55,31 @@
 
                         <StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="12">
                             <Border
-                                Style="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                                 CornerRadius="8"
                                 Padding="16,10"
                                 MinWidth="140">
                                 <StackPanel Spacing="2">
-                                    <TextBlock x:Name="TotalScoreCaption" Style="{StaticResource CaptionTextBlockStyle}" />
+                                    <TextBlock x:Name="TotalScoreCaption"
+                                               Style="{StaticResource CaptionTextBlockStyle}" />
                                     <TextBlock x:Name="TotalScoreText" Style="{StaticResource TitleTextBlockStyle}" />
                                 </StackPanel>
                             </Border>
 
                             <Border
-                                Style="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                                 CornerRadius="8"
                                 Padding="16,10"
                                 MinWidth="140">
                                 <StackPanel Spacing="2">
-                                    <TextBlock x:Name="PercentageCaption" Style="{StaticResource CaptionTextBlockStyle}" />
+                                    <TextBlock x:Name="PercentageCaption"
+                                               Style="{StaticResource CaptionTextBlockStyle}" />
                                     <TextBlock x:Name="PercentageText" Style="{StaticResource TitleTextBlockStyle}" />
                                 </StackPanel>
                             </Border>
 
                             <Border
-                                Style="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                                 CornerRadius="8"
                                 Padding="16,10"
                                 MinWidth="140">
@@ -89,7 +92,7 @@
 
                         <Border
                             Grid.Row="1"
-                            Style="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                             CornerRadius="8"
                             Padding="12">
                             <Grid>
@@ -111,7 +114,7 @@
 
                         <Border
                             Grid.Row="2"
-                            Style="{StaticResource CardBackgroundFillColorDefaultBrush}"
+                            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
                             CornerRadius="8"
                             Padding="16">
                             <StackPanel Spacing="8">
