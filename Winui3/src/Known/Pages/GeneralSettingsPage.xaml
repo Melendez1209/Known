@@ -48,7 +48,18 @@
                     x:Name="SubjectsCaption"
                     Style="{StaticResource BodyStrongTextBlockStyle}"
                     Text="Subjects" />
-                <WrapGrid x:Name="SubjectGrid" Orientation="Horizontal" />
+                <!--
+                    An ItemsWrapGrid rather than the older WrapGrid, which fails the app outright the
+                    moment it first measures its children. The boxes are added from code, so they go
+                    in as controls rather than through a template
+                -->
+                <ItemsControl x:Name="SubjectGrid">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
             </StackPanel>
         </StackPanel>
     </Grid>

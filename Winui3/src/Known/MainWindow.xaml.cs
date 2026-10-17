@@ -37,6 +37,7 @@ public sealed partial class MainWindow : Window
             RootPageFor);
 
         _navigator.StateChanged += (_, _) => UpdateBackButton();
+        _navigator.TabChanged += OnTabChanged;
 
         AppServices.Shell = _navigator;
 
@@ -54,9 +55,6 @@ public sealed partial class MainWindow : Window
         // Stated explicitly rather than left to the selection change above, so the content area is
         // never left empty even if the event does not arrive
         _navigator.GoToTab(ShellTab.Home);
-
-        // A student who has onboarded before goes straight to their dashboard
-        if (AppServices.Settings.Current.IsFirstLogin) _navigator.NavigateRoot(typeof(GuidePage));
 
         Closed += OnClosed;
         Activated += OnWindowActivated;
@@ -92,6 +90,8 @@ public sealed partial class MainWindow : Window
         HomeItem.Content = _strings.Get("home");
         HistoryItem.Content = _strings.Get("history");
         AccountItem.Content = _strings.Get("me");
+        SettingsItem.Content = _strings.Get("settings");
+        AboutItem.Content = _strings.Get("about");
     }
 
     private void OnThemeChanged(object? sender, EventArgs e)
@@ -133,18 +133,51 @@ public sealed partial class MainWindow : Window
             Navigation.PaneDisplayMode != NavigationViewPaneDisplayMode.Top;
     }
 
+    /// <summary>
+    ///     Routes a pane selection. Every tag is matched explicitly: a catch-all would quietly send
+    ///     a misspelt or newly added item to the dashboard instead of showing that it is unhandled.
+    /// </summary>
     private void OnTabSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {
         if (args.SelectedItem is not NavigationViewItem item) return;
 
-        var tab = (item.Tag as string) switch
+        switch (item.Tag as string)
         {
-            "History" => ShellTab.History,
-            "Account" => ShellTab.Account,
-            _ => ShellTab.Home
-        };
+            case "History":
+                _navigator.GoToTab(ShellTab.History);
+                break;
 
-        _navigator.GoToTab(tab);
+            case "Account":
+                _navigator.GoToTab(ShellTab.Account);
+                break;
+
+            case "Home":
+                _navigator.GoToTab(ShellTab.Home);
+                break;
+
+            case "Settings":
+                _navigator.NavigateRoot(typeof(SettingsPage));
+                break;
+
+            case "About":
+                _navigator.NavigateRoot(typeof(AboutPage));
+                break;
+        }
+    }
+
+    /// <summary>
+    ///     Keeps the pane highlighting the tab on screen. Revealing the shared stack over its owner
+    ///     tab does not change the selection by itself, so the pane would otherwise still be showing
+    ///     whichever footer item was last clicked.
+    /// </summary>
+    private void OnTabChanged(object? sender, ShellTab tab)
+    {
+        Navigation.SelectedItem = tab switch
+        {
+            ShellTab.History => HistoryItem,
+            ShellTab.Account => AccountItem,
+            _ => HomeItem
+        };
     }
 
     /// <summary>

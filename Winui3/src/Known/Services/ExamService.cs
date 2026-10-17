@@ -37,12 +37,11 @@ public sealed class ExamService
     /// </summary>
     public ObservableCollection<SubjectStat> SubjectStats { get; } = [];
 
+    /// <summary>Mean total mark across every exam that carries a score.</summary>
+    public float AverageMark => ExamScoring.AverageMarkOf(Exams);
+
     /// <summary>Mean percentage across every exam that carries a score, or zero when there is none.</summary>
-    public float AveragePercentage =>
-        Exams.Count == 0
-            ? 0f
-            : (float)Exams.Average(exam =>
-                (double)ExamScoring.Percentage(exam.TotalMark, exam.TotalFullMark));
+    public float AveragePercentage => ExamScoring.AverageRateOf(Exams);
 
     /// <summary>The best rank the student reached, or zero when no exam carries a score.</summary>
     public int BestRank

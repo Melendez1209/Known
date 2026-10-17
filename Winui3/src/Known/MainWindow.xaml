@@ -57,11 +57,27 @@
                 <NavigationViewItem x:Name="AccountItem" Content="Me" Tag="Account" Icon="Contact" />
             </NavigationView.MenuItems>
 
+            <!--
+                Settings and about belong to no tab, so they open on the shared frame above the tabs
+                rather than replacing one. Kept in the footer because they are destinations the
+                student comes back to, not sections of the exam workflow.
+            -->
+            <NavigationView.FooterMenuItems>
+                <NavigationViewItem x:Name="SettingsItem" Content="Settings" Tag="Settings" Icon="Setting" />
+                <NavigationViewItem x:Name="AboutItem" Content="About" Tag="About" Icon="Help" />
+            </NavigationView.FooterMenuItems>
+
+            <!--
+                The shared frame is declared last on purpose. Grid children paint in declaration
+                order, so a frame listed first is painted under the tab frames and would stay hidden
+                behind them even once made visible. Collapsed here because ShellNavigator reveals it
+                when a page belonging to no tab, such as the settings, is opened.
+            -->
             <Grid>
-                <Frame x:Name="RootFrame" Visibility="Collapsed" />
                 <Frame x:Name="HomeFrame" />
                 <Frame x:Name="HistoryFrame" Visibility="Collapsed" />
                 <Frame x:Name="AccountFrame" Visibility="Collapsed" />
+                <Frame x:Name="RootFrame" Visibility="Collapsed" />
             </Grid>
         </NavigationView>
     </Grid>

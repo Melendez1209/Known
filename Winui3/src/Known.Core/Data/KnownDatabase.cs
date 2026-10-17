@@ -56,13 +56,16 @@ public static class KnownDatabase
     }
 
     /// <summary>
-    ///     Creates the schema when the file is new and makes sure the settings row exists, so the rest
+    ///     Creates the schema when needed and makes sure the settings row exists, so the rest
     ///     of the app never has to special case a first run.
     /// </summary>
     public static async Task InitialiseAsync(CancellationToken cancellationToken = default)
     {
         await using var context = CreateContext();
 
+        // No migration step yet: the schema is still at v1 and the app has not shipped, so a fresh
+        // file is all a new install needs. Existing databases are the developer's own, and are
+        // deleted by hand rather than upgraded.
         await context.Database.EnsureCreatedAsync(cancellationToken).ConfigureAwait(false);
 
         var settingsRepository = new SettingsRepository(context);

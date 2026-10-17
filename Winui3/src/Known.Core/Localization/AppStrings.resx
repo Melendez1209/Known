@@ -451,6 +451,15 @@
     <data name="average" xml:space="preserve">
     <value>Average</value>
   </data>
+    <data name="average_score" xml:space="preserve">
+    <value>Average score</value>
+  </data>
+    <data name="average_rate" xml:space="preserve">
+    <value>Average rate</value>
+  </data>
+    <data name="trend_metric_hint" xml:space="preserve">
+    <value>Switch the trend chart between total marks and score rate</value>
+  </data>
     <data name="percentage" xml:space="preserve">
     <value>Percentage</value>
   </data>
@@ -471,5 +480,8 @@
   </data>
     <data name="discard_exam_confirm" xml:space="preserve">
     <value>Do you want to discard the content you have entered?</value>
+  </data>
+    <data name="back_step" xml:space="preserve">
+    <value>Back</value>
   </data>
 </root>

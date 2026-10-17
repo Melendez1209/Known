@@ -4,6 +4,8 @@ using Known.Core.Localization;
 using Known.Services;
 using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
 
 namespace Known.Pages;
 
@@ -19,17 +21,20 @@ public sealed partial class HomePage : KnownPage
 {
     private readonly StringLocalizer _strings = new();
 
+    /// <summary>Which measure the trend chart plots. Survives a restart through the settings row.</summary>
+    private TrendMetric _metric;
+
     /// <summary>Creates the page, translates its captions and subscribes to the shared data.</summary>
     public HomePage()
     {
         InitializeComponent();
 
+        _metric = AppServices.Settings.Current.TrendMetric;
+
         TitleText.Text = _strings.Get("home");
-        ExamCountCaption.Text = _strings.Get("exam");
-        AverageCaption.Text = _strings.Get("average");
-        BestRankCaption.Text = _strings.Get("rank");
         TrendCaption.Text = _strings.Get("score_trend");
         SubjectCaption.Text = _strings.Get("subject_average");
+        ToolTipService.SetToolTip(TrendMetricButton, _strings.Get("trend_metric_hint"));
 
         Exams.Reloaded += OnReloaded;
         AppServices.Theme.ThemeChanged += OnThemeChanged;
@@ -59,6 +64,16 @@ public sealed partial class HomePage : KnownPage
         Reload();
     }
 
+    /// <summary>Swaps the trend chart between raw totals and percentages, and remembers the choice.</summary>
+    private async void OnTrendMetricClick(object sender, RoutedEventArgs e)
+    {
+        _metric = _metric == TrendMetric.Marks ? TrendMetric.Rate : TrendMetric.Marks;
+
+        Reload();
+
+        await AppServices.Settings.SetTrendMetricAsync(_metric);
+    }
+
     /// <summary>Rebuilds the figures and both charts from the current exam list and theme.</summary>
     private void Reload()
     {
@@ -68,21 +83,38 @@ public sealed partial class HomePage : KnownPage
 
         var ordered = Exams.Exams.OrderBy(exam => exam.Exam.StartDate).ToList();
 
-        ExamCountValue.Text = ordered.Count.ToString(CultureInfo.CurrentCulture);
-        AverageValue.Text = Exams.AveragePercentage.ToString("0.#", CultureInfo.CurrentCulture) + "%";
-        BestRankValue.Text = Exams.BestRank.ToString(CultureInfo.CurrentCulture);
+        var metricName =
+            _metric == TrendMetric.Marks ? _strings.Get("average_score") : _strings.Get("average_rate");
+
+        TrendMetricLabel.Text = metricName;
+
+        StatCards.ItemsSource = new[]
+        {
+            new StatCard(ordered.Count.ToString(CultureInfo.CurrentCulture), _strings.Get("exam")),
+            new StatCard(
+                Exams.AverageMark.ToString("0.#", CultureInfo.CurrentCulture),
+                _strings.Get("average_score")),
+            new StatCard(
+                Exams.AveragePercentage.ToString("0.#", CultureInfo.CurrentCulture) + "%",
+                _strings.Get("average_rate")),
+            new StatCard(Exams.BestRank.ToString(CultureInfo.CurrentCulture), _strings.Get("rank"))
+        };
 
         var examLabels = ordered
             .Select(exam => ExamDates.FormatDateRange(exam.Exam.StartDate, exam.Exam.EndDate))
             .ToArray();
 
+        var plotsMarks = _metric == TrendMetric.Marks;
+
         TrendChart.Series =
         [
             new LineSeries<double>
             {
-                Name = _strings.Get("percentage"),
+                Name = metricName,
                 Values = ordered
-                    .Select(exam => (double)ExamScoring.Percentage(exam.TotalMark, exam.TotalFullMark))
+                    .Select(exam => plotsMarks
+                        ? (double)exam.TotalMark
+                        : (double)ExamScoring.Percentage(exam.TotalMark, exam.TotalFullMark))
                     .ToArray(),
                 // A filled area would hide the grid lines behind it and reads as a different measure
                 Fill = null,
@@ -94,7 +126,11 @@ public sealed partial class HomePage : KnownPage
         ];
 
         TrendChart.XAxes = [BuildIndexAxis(examLabels)];
-        TrendChart.YAxes = [BuildValueAxis(_strings.Get("percentage"), 0, 100)];
+
+        // Raw totals run to several hundred and vary far more between exams than a percentage does,
+        // so a fixed 0 to 100 would squash the line flat against the bottom of the plot.
+        TrendChart.YAxes =
+            [BuildValueAxis(metricName, plotsMarks ? null : 0, plotsMarks ? null : 100)];
 
         var stats = Exams.SubjectStats.ToList();
         var subjectLabels = stats.Select(stat => SubjectLabels.NameOf(_strings, stat.SubjectKey)).ToArray();
@@ -103,7 +139,7 @@ public sealed partial class HomePage : KnownPage
         [
             new ColumnSeries<double>
             {
-                Name = _strings.Get("average"),
+                Name = _strings.Get("average_score"),
                 Values = stats.Select(stat => (double)stat.AvgMark).ToArray(),
                 Fill = new SolidColorPaint(ChartPalette.AccentTertiary)
             }

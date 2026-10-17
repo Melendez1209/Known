@@ -30,4 +30,10 @@ public sealed class Settings
 
     /// <summary>Comma separated subject keys chosen during onboarding.</summary>
     public string SelectedSubjects { get; set; } = string.Empty;
+
+    /// <summary>
+    /// Which measure the dashboard trend chart plots. A first run has never seen the charts, so it
+    /// opens on raw marks rather than a percentage the student has no context for yet.
+    /// </summary>
+    public Domain.TrendMetric TrendMetric { get; set; } = Domain.TrendMetric.Marks;
 }

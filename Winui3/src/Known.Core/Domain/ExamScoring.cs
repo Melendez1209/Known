@@ -288,6 +288,41 @@ public static class ExamScoring
     }
 
     /// <summary>
+    /// Mean total mark across every exam that carries a score. An exam with no scores is left out
+    /// rather than counted as zero, which would drag the average down for a form the student simply
+    /// has not finished filling in.
+    /// </summary>
+    public static float AverageMarkOf(IEnumerable<ExamWithTotal> exams)
+    {
+        ArgumentNullException.ThrowIfNull(exams);
+
+        var scored = ScoredExams(exams);
+
+        return scored.Count == 0
+            ? 0f
+            : (float)scored.Average(exam => (double)exam.TotalMark);
+    }
+
+    /// <summary>
+    /// Mean percentage across every exam that carries a score, excluding unscored exams for the
+    /// same reason as <see cref="AverageMarkOf"/>.
+    /// </summary>
+    public static float AverageRateOf(IEnumerable<ExamWithTotal> exams)
+    {
+        ArgumentNullException.ThrowIfNull(exams);
+
+        var scored = ScoredExams(exams);
+
+        return scored.Count == 0
+            ? 0f
+            : (float)scored.Average(exam => (double)Percentage(exam.TotalMark, exam.TotalFullMark));
+    }
+
+    /// <summary>Keeps only the exams whose totals mean something.</summary>
+    private static List<ExamWithTotal> ScoredExams(IEnumerable<ExamWithTotal> exams) =>
+        exams.Where(exam => exam.TotalFullMark > 0f).ToList();
+
+    /// <summary>
     ///     One based rank of <paramref name="examId" /> among <paramref name="exams" />, ordered by
     ///     percentage with the highest first. Exams without any score count as zero per cent and sort
     ///     last. Returns <c>1</c> for unknown or empty input rather than throwing.

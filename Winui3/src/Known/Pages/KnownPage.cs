@@ -59,4 +59,16 @@ public abstract class KnownPage : Page
         base.OnNavigatedTo(e);
         OnPageLoaded();
     }
+
+    /// <summary>
+    ///     Fires <see cref="OnNavigatedAway" /> when the page is actually left, which means pushed
+    ///     over or popped. Switching between tabs only changes a frame's visibility and leaves the
+    ///     page alive, so a cached root page keeps its subscriptions and stays current.
+    /// </summary>
+    protected override void OnNavigatedFrom(NavigationEventArgs e)
+    {
+        base.OnNavigatedFrom(e);
+
+        OnNavigatedAway();
+    }
 }

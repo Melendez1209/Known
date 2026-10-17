@@ -55,7 +55,7 @@ public sealed partial class GeneralSettingsPage : KnownPage
             box.Unchecked += OnSubjectToggled;
 
             _subjectBoxes.Add(box);
-            SubjectGrid.Children.Add(box);
+            SubjectGrid.Items.Add(box);
         }
     }
 

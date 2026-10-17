@@ -15,6 +15,18 @@
     <string name="average" locale="zh-Hans">平均分</string>
     <string name="average" locale="zh-Hant">平均分</string>
 
+    <string name="average_score">Average score</string>
+    <string name="average_score" locale="zh-Hans">平均分</string>
+    <string name="average_score" locale="zh-Hant">平均分</string>
+
+    <string name="average_rate">Average rate</string>
+    <string name="average_rate" locale="zh-Hans">平均得分率</string>
+    <string name="average_rate" locale="zh-Hant">平均得分率</string>
+
+    <string name="trend_metric_hint">Switch the trend chart between total marks and score rate</string>
+    <string name="trend_metric_hint" locale="zh-Hans">在总分与得分率之间切换趋势图口径</string>
+    <string name="trend_metric_hint" locale="zh-Hant">在總分與得分率之間切換趨勢圖口徑</string>
+
     <string name="percentage">Percentage</string>
     <string name="percentage" locale="zh-Hans">百分比</string>
     <string name="percentage" locale="zh-Hant">百分比</string>
@@ -42,5 +54,14 @@
     <string name="discard_exam_confirm">Do you want to discard the content you have entered?</string>
     <string name="discard_exam_confirm" locale="zh-Hans">要放弃已输入的内容吗？</string>
     <string name="discard_exam_confirm" locale="zh-Hant">要捨棄已輸入的內容嗎？</string>
+
+    <!--
+        The onboarding wizard steps back through its own pages rather than leaving the shell, so it
+        needs a short button label. Android's "back" reads "Back to previous screen", which is far
+        too wordy for a button that sits between Skip and Next.
+    -->
+    <string name="back_step">Back</string>
+    <string name="back_step" locale="zh-Hans">上一步</string>
+    <string name="back_step" locale="zh-Hant">上一步</string>
 
 </strings>

@@ -30,6 +30,12 @@ public sealed class ShellNavigator
     private readonly Func<ShellTab, Type> _rootPageFor;
     private readonly Dictionary<ShellTab, Frame> _tabFrames;
 
+    /// <summary>
+    ///     The tab the shared stack was opened over. The stack belongs to no tab of its own, so this
+    ///     is what decides whether coming back to a tab reveals the settings again or shows the tab.
+    /// </summary>
+    private ShellTab? _rootOwnerTab;
+
     /// <summary>Creates the navigator over the frames declared by the main window.</summary>
     /// <param name="rootPageFor">
     ///     Supplies the page a tab shows when its frame is still empty. Without this a tab would only
@@ -99,6 +105,13 @@ public sealed class ShellNavigator
 
         CurrentTab = tab;
         TabChanged?.Invoke(this, tab);
+
+        // The shared stack is kept but hidden, and only revealed again over the tab it was opened
+        // from. Returning to any other tab shows that tab instead of the settings sitting on top.
+        HideRootFrame();
+
+        if (_rootOwnerTab == tab) ShowRootFrame();
+
         StateChanged?.Invoke(this, EventArgs.Empty);
     }
 
@@ -130,6 +143,8 @@ public sealed class ShellNavigator
     {
         ArgumentNullException.ThrowIfNull(pageType);
 
+        ShowRootFrame();
+
         RootFrame.Navigate(pageType, parameter);
 
         StateChanged?.Invoke(this, EventArgs.Empty);
@@ -150,6 +165,10 @@ public sealed class ShellNavigator
             RootFrame.GoBack();
         else
             ActiveTabFrame.GoBack();
+
+        // Unwinding the last shared page empties the frame, which leaves nothing to paint and no
+        // owner to come back to
+        if (RootFrame.Content is null) ClearRootFrame();
 
         StateChanged?.Invoke(this, EventArgs.Empty);
 
@@ -175,5 +194,33 @@ public sealed class ShellNavigator
             pair.Value.Visibility = pair.Key == tab
                 ? Visibility.Visible
                 : Visibility.Collapsed;
+    }
+
+    /// <summary>
+    ///     Reveals the shared frame. The tab it covers is recorded the first time a page is pushed,
+    ///     because from then on the stack is restored over that tab and not over whatever is current.
+    /// </summary>
+    private void ShowRootFrame()
+    {
+        if (RootFrame.Content is null) _rootOwnerTab = CurrentTab;
+
+        RootFrame.Visibility = Visibility.Visible;
+    }
+
+    /// <summary>Hides the shared frame but leaves its back stack alone, so it can be restored later.</summary>
+    private void HideRootFrame()
+    {
+        RootFrame.Visibility = Visibility.Collapsed;
+    }
+
+    /// <summary>Empties the shared stack for good, which is what happens once it is unwound.</summary>
+    private void ClearRootFrame()
+    {
+        while (RootFrame.CanGoBack) RootFrame.GoBack();
+
+        RootFrame.Content = null;
+        _rootOwnerTab = null;
+
+        HideRootFrame();
     }
 }

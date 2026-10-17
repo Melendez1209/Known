@@ -27,40 +27,39 @@
             x:Name="TitleText"
             Style="{StaticResource TitleTextBlockStyle}" />
 
-        <StackPanel Grid.Row="1" Orientation="Horizontal" Spacing="12">
-            <Border
-                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                CornerRadius="8"
-                Padding="16,12"
-                MinWidth="160">
-                <StackPanel Spacing="2">
-                    <TextBlock x:Name="ExamCountValue" Style="{StaticResource CaptionTextBlockStyle}" />
-                    <TextBlock x:Name="ExamCountCaption" Style="{StaticResource BodyTextBlockStyle}" />
-                </StackPanel>
-            </Border>
-
-            <Border
-                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                CornerRadius="8"
-                Padding="16,12"
-                MinWidth="160">
-                <StackPanel Spacing="2">
-                    <TextBlock x:Name="AverageValue" Style="{StaticResource SubtitleTextBlockStyle}" />
-                    <TextBlock x:Name="AverageCaption" Style="{StaticResource BodyTextBlockStyle}" />
-                </StackPanel>
-            </Border>
-
-            <Border
-                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                CornerRadius="8"
-                Padding="16,12"
-                MinWidth="160">
-                <StackPanel Spacing="2">
-                    <TextBlock x:Name="BestRankValue" Style="{StaticResource SubtitleTextBlockStyle}" />
-                    <TextBlock x:Name="BestRankCaption" Style="{StaticResource BodyTextBlockStyle}" />
-                </StackPanel>
-            </Border>
-        </StackPanel>
+        <!--
+            Four figures now, and a horizontal StackPanel would push the last one off a narrow
+            window. The wrap layout folds them onto a second row instead, and the trailing margin
+            keeps the gap even whichever row a card lands in.
+        -->
+        <ItemsRepeater x:Name="StatCards" Grid.Row="1">
+            <ItemsRepeater.Layout>
+                <UniformGridLayout
+                    Orientation="Horizontal"
+                    MinItemWidth="160"
+                    MaximumRowsOrColumns="4" />
+            </ItemsRepeater.Layout>
+            <ItemsRepeater.ItemTemplate>
+                <DataTemplate>
+                    <Border
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        CornerRadius="8"
+                        Padding="16,12"
+                        Margin="0,0,12,12"
+                        MinWidth="160">
+                        <StackPanel Spacing="2">
+                            <TextBlock
+                                Style="{StaticResource SubtitleTextBlockStyle}"
+                                Text="{Binding Value}" />
+                            <TextBlock
+                                Style="{StaticResource CaptionTextBlockStyle}"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="{Binding Caption}" />
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ItemsRepeater.ItemTemplate>
+        </ItemsRepeater>
 
         <Grid Grid.Row="2" ColumnSpacing="16">
             <Grid.ColumnDefinitions>
@@ -78,7 +77,35 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" x:Name="TrendCaption" Style="{StaticResource BodyStrongTextBlockStyle}" />
+                    <!--
+                        The label names the measure currently plotted, and the sync glyph says
+                        clicking will change it.
+                    -->
+                    <Grid Grid.Row="0" ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            x:Name="TrendCaption"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource BodyStrongTextBlockStyle}" />
+
+                        <Button
+                            Grid.Column="1"
+                            x:Name="TrendMetricButton"
+                            VerticalAlignment="Center"
+                            Padding="8,4"
+                            MinWidth="0"
+                            Click="OnTrendMetricClick">
+                            <StackPanel Orientation="Horizontal" Spacing="6">
+                                <SymbolIcon Symbol="Sync" />
+                                <TextBlock x:Name="TrendMetricLabel" VerticalAlignment="Center" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+
                     <lvc:CartesianChart
                         Grid.Row="1"
                         x:Name="TrendChart"

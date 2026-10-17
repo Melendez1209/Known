@@ -309,6 +309,43 @@ public class ExamScoringTests
         Assert.Equal(100f, ExamScoring.Percentage(200f, 100f));
     }
 
+    // --- dashboard averages ---
+
+    [Fact]
+    public void AverageMarkIsTheMeanOfTheExamTotals()
+    {
+        ExamWithTotal[] exams = [ExamWith(1L, 500f, 600f), ExamWith(2L, 450f, 600f)];
+
+        Assert.Equal(475f, ExamScoring.AverageMarkOf(exams));
+    }
+
+    [Fact]
+    public void AverageRateIsTheMeanOfTheExamPercentages()
+    {
+        ExamWithTotal[] exams = [ExamWith(1L, 50f, 100f), ExamWith(2L, 100f, 100f)];
+
+        Assert.Equal(75f, ExamScoring.AverageRateOf(exams));
+    }
+
+    [Fact]
+    public void AveragesIgnoreExamsThatCarryNoScore()
+    {
+        // An unfinished form has a total of zero; counting it would halve the average for no reason
+        ExamWithTotal[] exams = [ExamWith(1L, 500f, 600f), ExamWith(2L, 0f, 0f)];
+
+        Assert.Equal(500f, ExamScoring.AverageMarkOf(exams));
+        Assert.Equal(ExamScoring.Percentage(500f, 600f), ExamScoring.AverageRateOf(exams));
+    }
+
+    [Fact]
+    public void AveragesAreZeroWithoutAnyScoredExam()
+    {
+        Assert.Equal(0f, ExamScoring.AverageMarkOf(Array.Empty<ExamWithTotal>()));
+        Assert.Equal(0f, ExamScoring.AverageRateOf(Array.Empty<ExamWithTotal>()));
+        Assert.Equal(0f, ExamScoring.AverageMarkOf([ExamWith(1L, 0f, 0f)]));
+        Assert.Equal(0f, ExamScoring.AverageRateOf([ExamWith(1L, 0f, 0f)]));
+    }
+
     // --- RankOf ---
 
     [Fact]
