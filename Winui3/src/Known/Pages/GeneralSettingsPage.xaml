@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<local:KnownPage
+    x:Class="Known.Pages.GeneralSettingsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Known.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Padding="24" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            x:Name="TitleText"
+            Style="{StaticResource TitleTextBlockStyle}"
+            Text="General" />
+
+        <StackPanel Grid.Row="1" Spacing="16" MaxWidth="480" HorizontalAlignment="Left">
+
+            <StackPanel Spacing="8">
+                <TextBlock
+                    x:Name="IdentityCaption"
+                    Style="{StaticResource BodyStrongTextBlockStyle}"
+                    Text="Identity" />
+                <RadioButtons x:Name="IdentityOptions" SelectionChanged="OnIdentityChanged" />
+            </StackPanel>
+
+            <StackPanel Spacing="8">
+                <TextBlock
+                    x:Name="RegionCaption"
+                    Style="{StaticResource BodyStrongTextBlockStyle}"
+                    Text="Region" />
+                <TextBox
+                    x:Name="RegionBox"
+                    AcceptsReturn="False"
+                    LostFocus="OnRegionLostFocus" />
+
+                <!--
+                    The same lookup the onboarding wizard offers, on the page where a student corrects
+                    what the wizard put there. The caption sits under the button rather than in a
+                    dialog, so a declined prompt leaves them looking at the field
+                -->
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button x:Name="LocateButton" Click="OnLocate">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon
+                                    FontFamily="Segoe Fluent Icons"
+                                    FontSize="14"
+                                    Glyph="&#xE707;" />
+                                <TextBlock x:Name="LocateCaption" />
+                            </StackPanel>
+                        </Button>
+
+                        <ProgressRing
+                            x:Name="LocateProgress"
+                            Width="20"
+                            Height="20"
+                            IsActive="False"
+                            Visibility="Collapsed" />
+                    </StackPanel>
+
+                    <TextBlock
+                        x:Name="LocateMessage"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        TextWrapping="Wrap"
+                        Visibility="Collapsed" />
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel Spacing="8">
+                <TextBlock
+                    x:Name="SubjectsCaption"
+                    Style="{StaticResource BodyStrongTextBlockStyle}"
+                    Text="Subjects" />
+                <!--
+                    An ItemsWrapGrid rather than the older WrapGrid, which fails the app outright the
+                    moment it first measures its children. The boxes are added from code, so they go
+                    in as controls rather than through a template
+                -->
+                <ItemsControl x:Name="SubjectGrid">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+
+</local:KnownPage>

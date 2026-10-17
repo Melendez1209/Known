@@ -36,6 +36,26 @@ gradle-app.setting
 !gradle-wrapper.jar
 !gradle-wrapper.properties
 
+# .NET build output
+bin/
+obj/
+[Bb]in/
+[Oo]bj/
+*.binlog
+*.user
+.vs/
+TestResults/
+
+# MSIX packaging output. The Windows App SDK writes packages to AppPackages beside the project file,
+# which is outside bin/ and obj/, so it needs ignoring in its own right. The extension rules cover
+# packages emitted anywhere else, such as a publish directory.
+AppPackages/
+*.msix
+*.msixbundle
+*.msixupload
+*.appx
+*.appxbundle
+
 # Kotlin
 .kotlin/
 *.kotlin_module

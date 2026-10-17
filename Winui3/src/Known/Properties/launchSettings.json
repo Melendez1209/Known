@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Known (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Known (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

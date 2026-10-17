@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--
+    The onboarding wizard, on a first run, as a window of its own rather than as a page pushed onto
+    the shell's shared frame. Three separate panels live in one Grid and are swapped by Previous and
+    Next, which is what a FlipView would have done here: handing a FlipView pre-built UIElement items
+    leaves it to generate its own containers for them, and it gave the wizard no way to step back.
+-->
+<Window
+    x:Class="Known.GuideWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Title="Known">
+
+    <Window.SystemBackdrop>
+        <MicaBackdrop />
+    </Window.SystemBackdrop>
+
+    <!--
+        A portrait wizard: taller than it is wide, because each step is a short column of controls and
+        a landscape frame would leave the subject checkboxes spread across an empty band. The minimum
+        size is also enforced by the window presenter, so the frame cannot be dragged inside this and
+        clip the content
+    -->
+    <Grid
+        MinWidth="420"
+        MinHeight="620"
+        Padding="32,24"
+        RowSpacing="16"
+        Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            x:Name="WelcomeText"
+            Style="{StaticResource TitleTextBlockStyle}"
+            Text="Welcome to Known" />
+
+        <TextBlock
+            Grid.Row="1"
+            x:Name="DescriptionText"
+            Style="{StaticResource BodyTextBlockStyle}"
+            TextWrapping="Wrap"
+            Text="Tell us a little about yourself for a better experience" />
+
+        <Grid Grid.Row="2">
+            <StackPanel x:Name="IdentityPanel" Spacing="8">
+                <TextBlock
+                    x:Name="IdentityHeading"
+                    Style="{StaticResource SubtitleTextBlockStyle}" />
+
+                <RadioButtons x:Name="IdentityOptions" />
+            </StackPanel>
+
+            <StackPanel x:Name="RegionPanel" Spacing="8" Visibility="Collapsed">
+                <TextBlock
+                    x:Name="RegionHeading"
+                    Style="{StaticResource SubtitleTextBlockStyle}" />
+
+                <TextBox
+                    x:Name="RegionBox"
+                    AcceptsReturn="False" />
+
+                <!--
+                    The caption is the reason a lookup can fail as well as the reason it can succeed, so
+                    it sits under the button rather than in a dialog: a student who declines the
+                    prompt should be left looking at a filled in box or an empty one, not a modal
+                -->
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button x:Name="LocateButton" Click="OnLocate">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon
+                                    FontFamily="Segoe Fluent Icons"
+                                    FontSize="14"
+                                    Glyph="&#xE707;" />
+                                <TextBlock x:Name="LocateCaption" />
+                            </StackPanel>
+                        </Button>
+
+                        <ProgressRing
+                            x:Name="LocateProgress"
+                            Width="20"
+                            Height="20"
+                            IsActive="False"
+                            Visibility="Collapsed" />
+                    </StackPanel>
+
+                    <TextBlock
+                        x:Name="LocateMessage"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        TextWrapping="Wrap"
+                        Visibility="Collapsed" />
+                </StackPanel>
+            </StackPanel>
+
+            <StackPanel x:Name="SubjectPanel" Spacing="8" Visibility="Collapsed">
+                <TextBlock
+                    x:Name="SubjectHeading"
+                    Style="{StaticResource SubtitleTextBlockStyle}" />
+
+                <!--
+                    An ItemsWrapGrid rather than the older WrapGrid, which fails the app outright the
+                    moment it first measures its children. The items are added from code, so they go
+                    in as controls rather than through a template
+                -->
+                <ItemsControl x:Name="SubjectGrid">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </StackPanel>
+        </Grid>
+
+        <ItemsControl
+            Grid.Row="3"
+            x:Name="Dots"
+            HorizontalAlignment="Center">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal" Spacing="8" />
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+
+        <StackPanel
+            Grid.Row="4"
+            Orientation="Horizontal"
+            HorizontalAlignment="Right"
+            Spacing="8">
+            <Button x:Name="BackButton" Content="Back" Click="OnBack" />
+            <Button x:Name="SkipButton" Content="Skip" Click="OnSkip" />
+            <Button
+                x:Name="PrimaryButton"
+                Style="{StaticResource AccentButtonStyle}"
+                Content="Next"
+                Click="OnPrimaryAction" />
+        </StackPanel>
+    </Grid>
+</Window>

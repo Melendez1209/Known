@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<local:KnownPage
+    x:Class="Known.Pages.HistoryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Known.Pages"
+    xmlns:converters="using:Known.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <!--
+        The derived cells go through converters rather than x:Bind function mode. A function binding
+        is resolved against the template's x:DataType, not the page, so a page method is out of reach
+        from inside an ItemsControl template; ElementName, the usual escape hatch, belongs to the
+        classic Binding and not to x:Bind.
+    -->
+    <local:KnownPage.Resources>
+        <converters:ExamDateRangeConverter x:Key="DateRangeText" />
+        <converters:ExamPercentageConverter x:Key="PercentageText" />
+        <converters:PinnedToVisibilityConverter x:Key="PinnedVisibility" />
+    </local:KnownPage.Resources>
+
+    <Grid Padding="24" RowSpacing="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" ColumnSpacing="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+
+            <AutoSuggestBox
+                Grid.Column="0"
+                x:Name="SearchBox"
+                QueryIcon="Find"
+                PlaceholderText="Search exams"
+                TextChanged="OnSearchChanged" />
+
+            <Button
+                Grid.Column="1"
+                x:Name="AddButton"
+                Style="{StaticResource AccentButtonStyle}"
+                Content="Add new"
+                Click="OnAddExam" />
+        </Grid>
+
+        <TextBlock
+            Grid.Row="1"
+            x:Name="EmptyText"
+            Style="{StaticResource BodyTextBlockStyle}"
+            TextWrapping="Wrap"
+            Text="No history"
+            Visibility="Collapsed" />
+
+        <ListView
+            Grid.Row="2"
+            x:Name="ExamList"
+            SelectionMode="Multiple"
+            IsMultiSelectCheckBoxEnabled="True"
+            IsItemClickEnabled="True"
+            ItemClick="OnItemClick"
+            SelectionChanged="OnSelectionChanged">
+            <ListView.ItemTemplate>
+                <!--
+                    Bound straight onto the database projection. There is no wrapper type mirroring the
+                    entity: an empty Path hands the whole row to the converters, which pick out the
+                    fields they need.
+                -->
+                <DataTemplate>
+                    <Grid Padding="4,10" ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0">
+                            <TextBlock
+                                Style="{StaticResource BodyStrongTextBlockStyle}"
+                                Text="{Binding Exam.Name}" />
+                            <TextBlock
+                                Style="{StaticResource CaptionTextBlockStyle}"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="{Binding Converter={StaticResource DateRangeText}}" />
+                        </StackPanel>
+
+                        <TextBlock
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource BodyStrongTextBlockStyle}"
+                            Text="{Binding Converter={StaticResource PercentageText}}" />
+
+                        <FontIcon
+                            Grid.Column="2"
+                            VerticalAlignment="Center"
+                            FontFamily="Segoe Fluent Icons"
+                            Glyph="&#xE735;"
+                            FontSize="16"
+                            Visibility="{Binding Exam.IsFavorite, Converter={StaticResource PinnedVisibility}}" />
+                    </Grid>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <!--
+            The selection bar replaces the page padding while at least one row is ticked, matching
+            the way the Android build swapped its navigation bar for an action bar.
+        -->
+        <CommandBar
+            Grid.Row="3"
+            x:Name="SelectionBar"
+            HorizontalAlignment="Stretch"
+            Visibility="Collapsed">
+            <AppBarButton x:Name="DeleteSelectionButton" Icon="Delete" Label="Delete" Click="OnDeleteSelected" />
+            <!--
+                The star reflects the selected exam: filled once it is pinned. The code behind swaps
+                the glyph and the label whenever the selection changes.
+            -->
+            <AppBarButton x:Name="FavouriteSelectionButton" Label="Add to favorite" Click="OnFavouriteSelected">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE734;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <AppBarSeparator />
+            <AppBarButton Icon="Cancel" Label="Cancel" Click="OnClearSelection" />
+        </CommandBar>
+    </Grid>
+
+</local:KnownPage>

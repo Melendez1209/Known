@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<local:KnownPage
+    x:Class="Known.Pages.AccountPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:Known.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <Grid Padding="24" RowSpacing="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock
+            Grid.Row="0"
+            x:Name="TitleText"
+            Style="{StaticResource TitleTextBlockStyle}"
+            Text="Me" />
+
+        <Border
+            Grid.Row="1"
+            Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+            CornerRadius="8"
+            Padding="16">
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <PersonPicture
+                    Grid.Column="0"
+                    x:Name="Avatar"
+                    Width="48"
+                    Height="48" />
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                    <TextBlock
+                        x:Name="AccountName"
+                        Style="{StaticResource BodyStrongTextBlockStyle}" />
+                    <TextBlock
+                        x:Name="AccountEmail"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                </StackPanel>
+
+                <Button
+                    Grid.Column="2"
+                    x:Name="AuthButton"
+                    VerticalAlignment="Center"
+                    Content="Sign in"
+                    Click="OnAuthTapped" />
+            </Grid>
+        </Border>
+
+        <StackPanel Grid.Row="2" Spacing="4">
+            <ListViewItem
+                x:Name="SettingsEntry"
+                Content="Settings"
+                Tapped="OnSettings" />
+            <ListViewItem
+                x:Name="AboutEntry"
+                Content="About"
+                Tapped="OnAbout" />
+            <ListViewItem
+                x:Name="FavouritesEntry"
+                Content="Favourites"
+                Tapped="OnFavourites" />
+        </StackPanel>
+    </Grid>
+
+</local:KnownPage>
