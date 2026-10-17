@@ -123,4 +123,58 @@ public class StringLocalizerTests
 
         Assert.Equal(CultureInfo.InstalledUICulture.Name, resolved.Name);
     }
+
+    [Fact]
+    public void FormatFillsInTheAndroidPlaceholder()
+    {
+        using var culture = new CultureScope(CultureInfo.GetCultureInfo("en-US"));
+
+        Assert.Equal(
+            "Failed to get location info: no signal",
+            Localizer.Format("location_failed", "no signal"));
+    }
+
+    [Fact]
+    public void FormatTranslatesThePlaceholderToo()
+    {
+        using var culture = new CultureScope(StringLocalizer.ResolveCulture("zh-Hans"));
+
+        Assert.Equal("获取位置信息失败：没有信号", Localizer.Format("location_failed", "没有信号"));
+    }
+
+    [Fact]
+    public void FormatLeavesAPlaceholderFreeTemplateAlone()
+    {
+        using var culture = new CultureScope(CultureInfo.GetCultureInfo("en-US"));
+
+        Assert.Equal("Couldn't get location info", Localizer.Format("location_no_data", "ignored"));
+    }
+
+    [Fact]
+    public void FormatWithoutAnArgumentReturnsTheRawTemplate()
+    {
+        using var culture = new CultureScope(CultureInfo.GetCultureInfo("en-US"));
+
+        // A null argument must not leave a literal "{0}" behind in the interface
+        Assert.Equal("Failed to get location info: %1$s", Localizer.Format("location_failed", null));
+    }
+
+    /// <summary>
+    ///     Sets the process UI culture for the duration of a test and puts the previous one back, so
+    ///     the locale sensitive assertions do not leak into each other.
+    /// </summary>
+    private sealed class CultureScope : IDisposable
+    {
+        private readonly CultureInfo _previous = CultureInfo.CurrentUICulture;
+
+        public CultureScope(CultureInfo culture)
+        {
+            CultureInfo.CurrentUICulture = culture;
+        }
+
+        public void Dispose()
+        {
+            CultureInfo.CurrentUICulture = _previous;
+        }
+    }
 }

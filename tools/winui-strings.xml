@@ -31,6 +31,15 @@
     <string name="percentage" locale="zh-Hans">百分比</string>
     <string name="percentage" locale="zh-Hant">百分比</string>
 
+    <!--
+        Android calls this destination "me", which reads as a section of the profile rather than as
+        the account itself. The desktop build puts it in the navigation footer beside the other
+        destinations the student returns to, so it is named for what it holds.
+    -->
+    <string name="account">Account</string>
+    <string name="account" locale="zh-Hans">账户</string>
+    <string name="account" locale="zh-Hant">帳戶</string>
+
     <string name="search_hint">Search exams</string>
     <string name="search_hint" locale="zh-Hans">搜索考试</string>
     <string name="search_hint" locale="zh-Hant">搜尋考試</string>

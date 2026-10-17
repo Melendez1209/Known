@@ -20,12 +20,14 @@
     </Window.SystemBackdrop>
 
     <!--
-        A minimum size rather than an explicit resize, because the window takes its size from its
-        content and the step row is a star row, which would otherwise collapse the wizard to nothing
+        A portrait wizard: taller than it is wide, because each step is a short column of controls and
+        a landscape frame would leave the subject checkboxes spread across an empty band. The minimum
+        size is also enforced by the window presenter, so the frame cannot be dragged inside this and
+        clip the content
     -->
     <Grid
-        MinWidth="560"
-        MinHeight="460"
+        MinWidth="420"
+        MinHeight="620"
         Padding="32,24"
         RowSpacing="16"
         Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
@@ -67,6 +69,39 @@
                 <TextBox
                     x:Name="RegionBox"
                     AcceptsReturn="False" />
+
+                <!--
+                    The caption is the reason a lookup can fail as well as the reason it can succeed, so
+                    it sits under the button rather than in a dialog: a student who declines the
+                    prompt should be left looking at a filled in box or an empty one, not a modal
+                -->
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button x:Name="LocateButton" Click="OnLocate">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon
+                                    FontFamily="Segoe Fluent Icons"
+                                    FontSize="14"
+                                    Glyph="&#xE707;" />
+                                <TextBlock x:Name="LocateCaption" />
+                            </StackPanel>
+                        </Button>
+
+                        <ProgressRing
+                            x:Name="LocateProgress"
+                            Width="20"
+                            Height="20"
+                            IsActive="False"
+                            Visibility="Collapsed" />
+                    </StackPanel>
+
+                    <TextBlock
+                        x:Name="LocateMessage"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        TextWrapping="Wrap"
+                        Visibility="Collapsed" />
+                </StackPanel>
             </StackPanel>
 
             <StackPanel x:Name="SubjectPanel" Spacing="8" Visibility="Collapsed">

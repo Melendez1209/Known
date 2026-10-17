@@ -120,8 +120,15 @@
             HorizontalAlignment="Stretch"
             Visibility="Collapsed">
             <AppBarButton x:Name="DeleteSelectionButton" Icon="Delete" Label="Delete" Click="OnDeleteSelected" />
-            <AppBarButton x:Name="FavouriteSelectionButton" Icon="Favorite" Label="Add to favorite"
-                          Click="OnFavouriteSelected" />
+            <!--
+                The star reflects the selected exam: filled once it is pinned. The code behind swaps
+                the glyph and the label whenever the selection changes.
+            -->
+            <AppBarButton x:Name="FavouriteSelectionButton" Label="Add to favorite" Click="OnFavouriteSelected">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE734;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
             <AppBarSeparator />
             <AppBarButton Icon="Cancel" Label="Cancel" Click="OnClearSelection" />
         </CommandBar>

@@ -445,40 +445,43 @@
     <data name="no_score_data" xml:space="preserve">
     <value>暂无分数数据。</value>
   </data>
-    <data name="average" xml:space="preserve">
-    <value>Average</value>
-  </data>
-    <data name="average_score" xml:space="preserve">
-    <value>Average score</value>
-  </data>
-    <data name="average_rate" xml:space="preserve">
-    <value>Average rate</value>
+    <data name="language_restart_hint" xml:space="preserve">
+    <value>语言更改将在重启后生效。</value>
   </data>
     <data name="trend_metric_hint" xml:space="preserve">
-    <value>Switch the trend chart between total marks and score rate</value>
-  </data>
-    <data name="percentage" xml:space="preserve">
-    <value>Percentage</value>
-  </data>
-    <data name="search_hint" xml:space="preserve">
-    <value>Search exams</value>
-  </data>
-    <data name="microsoft_sign_in" xml:space="preserve">
-    <value>Sign in with Microsoft</value>
-  </data>
-    <data name="account_not_signed_in" xml:space="preserve">
-    <value>Sign in to sync your account</value>
-  </data>
-    <data name="language_restart_hint" xml:space="preserve">
-    <value>The language change takes effect after a restart.</value>
-  </data>
-    <data name="delete_exams_confirm" xml:space="preserve">
-    <value>Delete the selected exams?</value>
+    <value>在总分与得分率之间切换趋势图口径</value>
   </data>
     <data name="discard_exam_confirm" xml:space="preserve">
-    <value>Do you want to discard the content you have entered?</value>
+    <value>要放弃已输入的内容吗？</value>
+  </data>
+    <data name="percentage" xml:space="preserve">
+    <value>百分比</value>
+  </data>
+    <data name="microsoft_sign_in" xml:space="preserve">
+    <value>使用 Microsoft 账户登录</value>
+  </data>
+    <data name="search_hint" xml:space="preserve">
+    <value>搜索考试</value>
+  </data>
+    <data name="delete_exams_confirm" xml:space="preserve">
+    <value>要删除选中的考试吗？</value>
+  </data>
+    <data name="average" xml:space="preserve">
+    <value>平均分</value>
+  </data>
+    <data name="account" xml:space="preserve">
+    <value>账户</value>
+  </data>
+    <data name="average_rate" xml:space="preserve">
+    <value>平均得分率</value>
   </data>
     <data name="back_step" xml:space="preserve">
-    <value>Back</value>
+    <value>上一步</value>
+  </data>
+    <data name="average_score" xml:space="preserve">
+    <value>平均分</value>
+  </data>
+    <data name="account_not_signed_in" xml:space="preserve">
+    <value>登录以同步你的账户</value>
   </data>
 </root>

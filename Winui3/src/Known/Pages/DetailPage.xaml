@@ -140,7 +140,12 @@
 
         <CommandBar Grid.Row="2" x:Name="ActionBar" HorizontalAlignment="Stretch">
             <AppBarButton x:Name="EditButton" Icon="Edit" Label="Edit" Click="OnEdit" />
-            <AppBarButton x:Name="FavouriteButton" Icon="Favorite" Label="Add to favorite" Click="OnToggleFavourite" />
+            <!-- The star is state driven: the code behind swaps it for the filled glyph once the exam is pinned. -->
+            <AppBarButton x:Name="FavouriteButton" Label="Add to favorite" Click="OnToggleFavourite">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE734;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
             <AppBarButton x:Name="ShareButton" Icon="Share" Label="Share" Click="OnShare" />
             <AppBarButton x:Name="DeleteButton" Icon="Delete" Label="Delete" Click="OnDelete" />
         </CommandBar>

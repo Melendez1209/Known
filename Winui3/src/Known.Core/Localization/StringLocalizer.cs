@@ -79,6 +79,33 @@ public sealed class StringLocalizer
         }
     }
 
+    /// <summary>
+    ///     Looks a key up and fills in its placeholders. The generated resources carry Android's
+    ///     <c>%1$s</c> positional syntax, which <see cref="string.Format(CultureInfo, string, object[])" />
+    ///     does not understand, so the template is rewritten to <c>{0}</c> form first.
+    /// </summary>
+    /// <remarks>
+    ///     Only a single argument is ever interpolated today, which is why the numbered form maps
+    ///     straight onto the first hole rather than being treated as an index.
+    /// </remarks>
+    public string Format(string key, object? argument)
+    {
+        var template = Get(key);
+
+        if (argument is null) return template;
+
+        return string.Format(CultureInfo.CurrentUICulture, RewritePlaceholders(template), argument);
+    }
+
+    /// <summary>
+    ///     Turns Android's <c>%1$s</c> placeholders into the <c>{0}</c> form .NET expects, leaving
+    ///     anything else in the template alone so a stray brace cannot be turned into a format hole.
+    /// </summary>
+    private static string RewritePlaceholders(string template)
+    {
+        return template.Replace("%1$s", "{0}", StringComparison.Ordinal);
+    }
+
     /// <summary>Looks a key up in a specific culture, used by the tests and the preview tooling.</summary>
     public string Get(string key, CultureInfo culture)
     {

@@ -41,6 +41,39 @@
                     x:Name="RegionBox"
                     AcceptsReturn="False"
                     LostFocus="OnRegionLostFocus" />
+
+                <!--
+                    The same lookup the onboarding wizard offers, on the page where a student corrects
+                    what the wizard put there. The caption sits under the button rather than in a
+                    dialog, so a declined prompt leaves them looking at the field
+                -->
+                <StackPanel Spacing="8">
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <Button x:Name="LocateButton" Click="OnLocate">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon
+                                    FontFamily="Segoe Fluent Icons"
+                                    FontSize="14"
+                                    Glyph="&#xE707;" />
+                                <TextBlock x:Name="LocateCaption" />
+                            </StackPanel>
+                        </Button>
+
+                        <ProgressRing
+                            x:Name="LocateProgress"
+                            Width="20"
+                            Height="20"
+                            IsActive="False"
+                            Visibility="Collapsed" />
+                    </StackPanel>
+
+                    <TextBlock
+                        x:Name="LocateMessage"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        TextWrapping="Wrap"
+                        Visibility="Collapsed" />
+                </StackPanel>
             </StackPanel>
 
             <StackPanel Spacing="8">

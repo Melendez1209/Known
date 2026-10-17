@@ -33,6 +33,15 @@ function Escape-Xml([string]$text) {
     $text.Replace('&', '&amp;').Replace('<', '&lt;').Replace('>', '&gt;').Replace('"', '&quot;')
 }
 
+# Android's resource compiler understands backslash escapes, which XML does not: a string such as
+# "Couldn\'t" is stored with the backslash intact and unescaped only by aapt. Reading the attribute
+# with XmlDocument therefore hands back the literal backslash, which then reaches the interface as
+# "Couldn\'t". Only the escapes this project actually uses are handled.
+function Unescape-Android([string]$text) {
+    if ($null -eq $text) { return '' }
+    return $text.Replace("\'", "'").Replace('\"', '"').Replace('\n', "`n").Replace('\t', "`t")
+}
+
 foreach ($locale in $locales) {
     $sourcePath = Join-Path $AndroidRes "$($locale.Source)\strings.xml"
 
@@ -58,7 +67,7 @@ foreach ($locale in $locales) {
         }
 
         $value = if ($node -is [System.Xml.XmlCDataSection]) { $node.Value } else { $node.InnerText }
-        $entries[$name] = $value
+        $entries[$name] = Unescape-Android $value
     }
 
     # Desktop only labels, which the Android resources have no equivalent for
@@ -67,22 +76,39 @@ foreach ($locale in $locales) {
     if (Test-Path $Overlay) {
         [xml]$overlayDocument = Get-Content -Raw -LiteralPath $Overlay
 
+        # Collected separately before anything is applied. A bare element carries the neutral text and
+        # a tagged one carries a translation of it, and they sit next to each other in the document.
+        # Applying them as they were read would let the neutral one always win, because it is written
+        # first and the translation would then find the key already present.
+        $overlayNeutral = @{}
+        $overlayTranslated = @{}
+
         foreach ($node in $overlayDocument.strings.string) {
             $name = $node.name
-            $nodeLocale = $node.GetAttribute('locale')
 
             if (-not $name) { continue }
 
-            # A bare element is the neutral text; a tagged one only applies to that satellite and
-            # falls back to the neutral value when the locale does not define it
-            $applies = ($nodeLocale -eq '') -or ($nodeLocale -eq $locale.Language)
+            $nodeLocale = $node.GetAttribute('locale')
 
-            if (-not $applies) { continue }
+            if ($nodeLocale -eq '') {
+                $overlayNeutral[$name] = $node.InnerText
+                continue
+            }
 
-            if (($nodeLocale -eq '') -or (-not $entries.Contains($name))) {
-                $entries[$name] = $node.InnerText
+            if (-not $overlayTranslated.ContainsKey($name)) { $overlayTranslated[$name] = @{} }
 
-                if ($nodeLocale -ne '') { $overlaid++ }
+            $overlayTranslated[$name][$nodeLocale] = $node.InnerText
+        }
+
+        foreach ($name in $overlayNeutral.Keys) {
+            $entries[$name] = $overlayNeutral[$name]
+        }
+
+        foreach ($name in $overlayTranslated.Keys) {
+            # The outer key is the string name, so the language is looked up one level in
+            if ($overlayTranslated[$name].ContainsKey($locale.Language)) {
+                $entries[$name] = $overlayTranslated[$name][$locale.Language]
+                $overlaid++
             }
         }
     }
@@ -104,6 +130,9 @@ foreach ($locale in $locales) {
         '  </resheader>'
     )
 
+    # Two space indents, which is what the script has always written. The checked in files were
+    # last touched by Visual Studio, which reformats them, so a regenerated file will always show a
+    # large whitespace diff until it is opened and saved there too
     foreach ($name in $entries.Keys) {
         $lines += "  <data name=`"$name`" xml:space=`"preserve`">"
         $lines += "    <value>$(Escape-Xml $entries[$name])</value>"

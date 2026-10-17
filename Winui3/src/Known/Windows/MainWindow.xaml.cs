@@ -89,9 +89,14 @@ public sealed partial class MainWindow : Window
 
         HomeItem.Content = _strings.Get("home");
         HistoryItem.Content = _strings.Get("history");
-        AccountItem.Content = _strings.Get("me");
-        SettingsItem.Content = _strings.Get("settings");
+        AccountItem.Content = _strings.Get("account");
         AboutItem.Content = _strings.Get("about");
+
+        // The pane's settings item is built by NavigationView itself and comes with the framework's
+        // own caption, which would keep answering in the shell language after the student switches.
+        // SettingsItem is typed object here, as opposed to the NavigationViewItem it really is
+        if (Navigation.SettingsItem is NavigationViewItem settingsItem)
+            settingsItem.Content = _strings.Get("settings");
     }
 
     private void OnThemeChanged(object? sender, EventArgs e)
@@ -116,10 +121,13 @@ public sealed partial class MainWindow : Window
         Navigation.IsPaneOpen = !Navigation.IsPaneOpen;
     }
 
-    private void OnTitleBarBackRequested(TitleBar sender, object args)
+    /// <summary>
+    ///     Unwinds the shared stack in preference to the active tab's, because its pages sit on top.
+    ///     Running out of steps closes the window, which is what the system back gesture does on an
+    ///     app that has nowhere left to go.
+    /// </summary>
+    private void OnNavigationBackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
     {
-        // With nothing left to unwind, the back button falls back to closing the window, which is
-        // what the system back gesture does on a single page app
         if (!_navigator.GoBack()) Close();
     }
 
@@ -139,6 +147,18 @@ public sealed partial class MainWindow : Window
     /// </summary>
     private void OnTabSelectionChanged(NavigationView sender, NavigationViewSelectionChangedEventArgs args)
     {
+        // NavigationView contributes a settings item of its own, below the footer items and shown
+        // without being asked for, because IsSettingsVisible is true by default. The control builds
+        // it, so it belongs to neither collection and carries no Tag, which leaves the switch below
+        // unable to see it. IsSettingsSelected is the flag raised for exactly that item, and the one
+        // the WinUI Gallery sample tests; it is asked before the cast because the settings item is
+        // not one of ours. Without it the pane offers a settings button that does nothing at all.
+        if (args.IsSettingsSelected)
+        {
+            _navigator.NavigateRoot(typeof(SettingsPage));
+            return;
+        }
+
         if (args.SelectedItem is not NavigationViewItem item) return;
 
         switch (item.Tag as string)
@@ -153,10 +173,6 @@ public sealed partial class MainWindow : Window
 
             case "Home":
                 _navigator.GoToTab(ShellTab.Home);
-                break;
-
-            case "Settings":
-                _navigator.NavigateRoot(typeof(SettingsPage));
                 break;
 
             case "About":
@@ -181,12 +197,13 @@ public sealed partial class MainWindow : Window
     }
 
     /// <summary>
-    ///     The back button lives in the title bar, which NavigationView.IsTitleBarAutoPaddingEnabled
-    ///     renders flush with the pane, so it reads as part of the navigation column.
+    ///     NavigationView draws the back button, so the shell only has to say whether there is
+    ///     anywhere to go. That answer changes whenever a page navigates or pops, which is what
+    ///     ShellNavigator.StateChanged reports, and whenever the theme moves the pane around.
     /// </summary>
     private void UpdateBackButton()
     {
-        AppTitleBar.IsBackButtonEnabled = _navigator.CanGoBack;
+        Navigation.IsBackEnabled = _navigator.CanGoBack;
     }
 
     private void OnClosed(object sender, WindowEventArgs args)

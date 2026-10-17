@@ -44,6 +44,10 @@ public sealed partial class HistoryPage : KnownPage
     private void OnExamsReloaded(object? sender, EventArgs e)
     {
         Reload();
+
+        // Refreshing the rows normally drops the selection, which would clear the star by way of the
+        // selection changing. Asking for it here as well keeps it right whichever way the list behaves.
+        ApplyFavouriteState();
     }
 
     /// <summary>Rebuilds the row list, keeping whatever search term is currently typed.</summary>
@@ -91,6 +95,22 @@ public sealed partial class HistoryPage : KnownPage
         SelectionBar.Visibility = count > 0 ? Visibility.Visible : Visibility.Collapsed;
 
         FavouriteSelectionButton.IsEnabled = count == 1;
+
+        ApplyFavouriteState();
+    }
+
+    /// <summary>
+    ///     Shows the star and the label that fit the selected exam, so the button says what it is about
+    ///     to do rather than always offering to add.
+    /// </summary>
+    private void ApplyFavouriteState()
+    {
+        var exam = ExamList.SelectedItems.OfType<ExamWithTotal>().FirstOrDefault();
+
+        var isFavorite = exam?.Exam.IsFavorite ?? false;
+
+        FavouriteSelectionButton.Icon = FavoriteIcons.IconFor(isFavorite);
+        FavouriteSelectionButton.Label = _strings.Get(isFavorite ? "remove_favourite" : "add_favourite");
     }
 
     private void OnClearSelection(object sender, RoutedEventArgs e)

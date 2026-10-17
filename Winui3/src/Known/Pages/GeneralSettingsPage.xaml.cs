@@ -15,6 +15,7 @@ public sealed partial class GeneralSettingsPage : KnownPage
     private readonly List<CheckBox> _subjectBoxes = [];
     private readonly HashSet<string> _subjects = new(StringComparer.Ordinal);
 
+    private bool _locating;
     private bool _suppressEvents;
 
     /// <summary>Creates the page and fills it from the stored settings.</summary>
@@ -27,6 +28,7 @@ public sealed partial class GeneralSettingsPage : KnownPage
         RegionCaption.Text = _strings.Get("region");
         RegionBox.PlaceholderText = _strings.Get("district");
         SubjectsCaption.Text = _strings.Get("onboarding_subjects");
+        LocateCaption.Text = _strings.Get("use_location");
 
         IdentityOptions.ItemsSource = new[]
         {
@@ -117,6 +119,56 @@ public sealed partial class GeneralSettingsPage : KnownPage
         if (_suppressEvents) return;
 
         await Settings.SetRegionAsync(RegionBox.Text);
+    }
+
+    /// <summary>
+    ///     Fills the region box from the device location, the same lookup the onboarding wizard
+    ///     offers. A failure is reported under the button and leaves the field untouched, because this
+    ///     page exists to edit what the wizard stored and must not clear it by accident.
+    /// </summary>
+    private async void OnLocate(object sender, RoutedEventArgs e)
+    {
+        if (_locating) return;
+
+        _locating = true;
+
+        LocateButton.IsEnabled = false;
+        LocateProgress.IsActive = true;
+        LocateProgress.Visibility = Visibility.Visible;
+        LocateMessage.Visibility = Visibility.Collapsed;
+
+        try
+        {
+            var result = await AppServices.Location.DetectCityAsync();
+
+            if (result.HasCity)
+            {
+                RegionBox.Text = result.City!;
+
+                // The page saves on lost focus, so a lookup that fills the box has to be committed
+                // here or the value would be lost the moment the student clicked something else
+                await Settings.SetRegionAsync(result.City);
+
+                return;
+            }
+
+            LocateMessage.Text = _strings.Get(result.Message!);
+            LocateMessage.Visibility = Visibility.Visible;
+        }
+        catch (Exception)
+        {
+            // See the wizard: a declined prompt, a machine with location services off and an offline
+            // machine all end up here, and none of them justify taking the settings page down
+            LocateMessage.Text = _strings.Get("location_no_data");
+            LocateMessage.Visibility = Visibility.Visible;
+        }
+        finally
+        {
+            _locating = false;
+            LocateButton.IsEnabled = true;
+            LocateProgress.IsActive = false;
+            LocateProgress.Visibility = Visibility.Collapsed;
+        }
     }
 
     private async void OnSubjectToggled(object sender, RoutedEventArgs e)

@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <Package
         xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
@@ -47,8 +47,20 @@
         </Application>
     </Applications>
 
+    <!--
+        The order of these elements is load bearing. The content model is an ordered sequence, not a
+        choice, so a DeviceCapability placed before a namespaced capability makes makeappx reject the
+        package with C00CE014 and the app refuses to install. Plain and namespaced capabilities come
+        first, DeviceCapability last, verified against makeappx rather than assumed.
+
+        location backs the "use my location" button on the region field. internetClient is what lets
+        the resolved coordinates reach the reverse geocoding endpoint; without it a packaged build
+        has no outbound network at all.
+    -->
     <Capabilities>
+        <Capability Name="internetClient"/>
         <rescap:Capability Name="runFullTrust"/>
         <systemai:Capability Name="systemAIModels"/>
+        <DeviceCapability Name="location"/>
     </Capabilities>
 </Package>

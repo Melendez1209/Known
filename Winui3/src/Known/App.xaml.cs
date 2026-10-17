@@ -19,22 +19,48 @@ public partial class App
         InitializeComponent();
     }
 
-    /// <summary>Opens the shell once startup has finished.</summary>
+    /// <summary>Opens whichever window the stored state calls for.</summary>
     protected override async void OnLaunched(LaunchActivatedEventArgs args)
     {
         await AppServices.InitialiseAsync();
 
+        // A first run is asked its three questions by a window of its own, and the shell is not built
+        // until that window closes. Showing both at once would put an empty dashboard behind the
+        // wizard, which reads as a second question rather than as the app being ready
+        if (AppServices.Settings.Current.IsFirstLogin)
+        {
+            await RunOnboardingAsync();
+            return;
+        }
+
+        OpenShell();
+    }
+
+    /// <summary>
+    ///     Shows the onboarding wizard and waits for it to go away, whether the student finished it or
+    ///     dismissed it. Either way the wizard has cleared the first login flag, so the shell opens
+    ///     straight into the dashboard.
+    /// </summary>
+    private async Task RunOnboardingAsync()
+    {
+        // The field is what keeps the wizard alive for as long as it is on screen
+        _guide = new GuideWindow();
+
+        _guide.Activate();
+
+        // Dismissed rather than Closed: the wizard writes the first login flag as it goes, and the
+        // shell must not start until that write has landed
+        await _guide.Dismissed;
+
+        _guide = null;
+
+        OpenShell();
+    }
+
+    /// <summary>Creates and shows the main window.</summary>
+    private void OpenShell()
+    {
         _window = new MainWindow();
         _window.Activate();
-
-        if (!AppServices.Settings.Current.IsFirstLogin) return;
-
-        // A first run is asked its three questions by a window of its own, activated after the shell
-        // so it lands in front. Keeping it out of the shell's frames means the wizard cannot disturb
-        // the tab back stacks, and closing it is the only thing needed to get back to the dashboard.
-        // The field is what keeps it alive for as long as it is on screen
-        _guide = new GuideWindow();
-        _guide.Closed += (_, _) => _guide = null;
-        _guide.Activate();
     }
 }

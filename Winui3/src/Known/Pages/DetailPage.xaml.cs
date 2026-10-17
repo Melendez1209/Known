@@ -41,6 +41,43 @@ public sealed partial class DetailPage
         DeleteButton.Label = _strings.Get("delete");
         ShareButton.Label = _strings.Get("share");
         FavouriteButton.Label = _strings.Get("add_favourite");
+
+        Exams.Reloaded += OnExamsReloaded;
+    }
+
+    /// <inheritdoc />
+    public override void OnNavigatedAway()
+    {
+        Exams.Reloaded -= OnExamsReloaded;
+
+        base.OnNavigatedAway();
+    }
+
+    /// <summary>Keeps the star and its label in step with the stored state.</summary>
+    private void ApplyFavouriteState()
+    {
+        var isFavorite = _exam?.IsFavorite ?? false;
+
+        FavouriteButton.Icon = FavoriteIcons.IconFor(isFavorite);
+        FavouriteButton.Label = _strings.Get(isFavorite ? "remove_favourite" : "add_favourite");
+    }
+
+    /// <summary>
+    ///     Refreshes the star after a write. The exam held here is the instance loaded for this page,
+    ///     so only the pinned flag is taken from the shared list rather than reloading the whole page,
+    ///     which would blank the charts and flash the progress ring.
+    /// </summary>
+    private void OnExamsReloaded(object? sender, EventArgs e)
+    {
+        if (_exam is null) return;
+
+        var current = Exams.Exams.FirstOrDefault(exam => exam.Exam.Id == _exam.Id);
+
+        if (current is null) return;
+
+        _exam.IsFavorite = current.Exam.IsFavorite;
+
+        ApplyFavouriteState();
     }
 
     /// <inheritdoc />
@@ -81,11 +118,7 @@ public sealed partial class DetailPage
 
         BusyRing.IsActive = false;
 
-        FavouriteButton.Icon = new FontIcon
-        {
-            Glyph = _exam.IsFavorite ? "" : "",
-            FontFamily = new FontFamily("Segoe Fluent Icons")
-        };
+        ApplyFavouriteState();
 
         var subjects = ExamScoring.RecordedSubjectKeys(SubjectCatalogue.ExamSubjectKeys, scores)
             .Select(key =>

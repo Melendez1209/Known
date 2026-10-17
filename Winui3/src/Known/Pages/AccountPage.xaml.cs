@@ -19,7 +19,7 @@ public sealed partial class AccountPage
     {
         InitializeComponent();
 
-        TitleText.Text = _strings.Get("me");
+        TitleText.Text = _strings.Get("account");
         SettingsEntry.Content = _strings.Get("settings");
         AboutEntry.Content = _strings.Get("about");
         FavouritesEntry.Content = _strings.Get("favourites");

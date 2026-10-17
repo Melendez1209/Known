@@ -41,6 +41,12 @@ public static class AppServices
     /// <summary>Resolves the stored preference into concrete theme values.</summary>
     public static ThemeService Theme { get; private set; } = null!;
 
+    /// <summary>
+    ///     Turns the device position into a city name, for the region field. Stateless and cheap to
+    ///     share, so one instance serves both the wizard and the settings page.
+    /// </summary>
+    public static LocationService Location { get; } = new();
+
     /// <summary>Microsoft account sign in.</summary>
     public static MsalAuthService Auth { get; } = new();
 
