@@ -34,6 +34,51 @@ public static class ChartPalette
     /// <summary>Colour for the card the chart sits on, so a transparent plot matches its host.</summary>
     public static SKColor Surface { get; private set; } = SKColors.White;
 
+    /// <summary>
+    /// Fixed categorical palette, one entry per subject in
+    /// <see cref="Core.Domain.SubjectCatalogue.ExamSubjectKeys"/>.
+    /// </summary>
+    /// <remarks>
+    /// These are deliberately mid tone rather than the usual vivid hues: the same slice has to stay
+    /// legible on both the light card and the dark one, and a saturated yellow or lime disappears
+    /// against white. Indexing by subject rather than by position in the legend means a subject
+    /// keeps its colour across every chart in the app, so a colour can be read at a glance.
+    /// </remarks>
+    private static readonly SKColor[] CategoricalColours =
+    [
+        new(0x3B, 0x6E, 0xA5), // blue
+        new(0xE0, 0x7B, 0x39), // orange
+        new(0x4E, 0x9A, 0x4E), // green
+        new(0xD1, 0x49, 0x5B), // red
+        new(0x9B, 0x6B, 0xB0), // violet
+        new(0xC9, 0x9A, 0x12), // gold
+        new(0x3F, 0xA3, 0x96), // teal
+        new(0xE0, 0x77, 0x9B), // pink
+        new(0x8C, 0x6D, 0x52), // brown
+        new(0x6B, 0x7C, 0x8D) // slate
+    ];
+
+    /// <summary>The categorical palette, indexed by subject position.</summary>
+    public static IReadOnlyList<SKColor> Categorical => CategoricalColours;
+
+    /// <summary>
+    /// The palette entry for a subject, wrapping round if an unknown subject is asked for. A
+    /// negative index wraps too rather than throwing, so callers never have to guard.
+    /// </summary>
+    public static SKColor CategoricalAt(int index)
+    {
+        var count = CategoricalColours.Length;
+
+        if (count == 0)
+        {
+            return Accent;
+        }
+
+        var position = index % count;
+
+        return CategoricalColours[position < 0 ? position + count : position];
+    }
+
     /// <summary>Re-reads every brush from the application resources.</summary>
     public static void Refresh()
     {

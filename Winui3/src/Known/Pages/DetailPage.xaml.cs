@@ -94,6 +94,7 @@ public sealed partial class DetailPage
                 var average = ExamScoring.HistoricalAverage(key, stats);
 
                 return new SubjectFigure(
+                    key,
                     SubjectLabels.NameOf(_strings, key),
                     score.Mark,
                     score.FullMark,
@@ -101,12 +102,14 @@ public sealed partial class DetailPage
             })
             .ToList();
 
+        // One slice per subject, each in its own colour. The colour is keyed on the subject rather
+        // than on its position in the legend, so a subject looks the same in every chart
         DistributionChart.Series = subjects
             .Select(subject => (ISeries)new PieSeries<double>
             {
                 Values = [subject.Mark],
                 Name = subject.Name,
-                Fill = new SolidColorPaint(ChartPalette.Accent)
+                Fill = new SolidColorPaint(ChartPalette.CategoricalAt(SubjectCatalogue.IndexOfKey(subject.SubjectKey)))
             })
             .ToArray();
 
@@ -309,11 +312,18 @@ public sealed partial class DetailPage
         DesktopShare.ShareText(_exam?.Name ?? _strings.Get("exam"), _shareText);
 
     /// <summary>One subject's figures on the detail page.</summary>
+    /// <param name="SubjectKey">Stable subject key, used to pick a consistent colour.</param>
     /// <param name="Name">Translated subject name.</param>
     /// <param name="Mark">Score achieved in this exam.</param>
     /// <param name="FullMark">Score the mark is measured against.</param>
     /// <param name="Delta">Signed difference against the historical mean, or null without history.</param>
-    private sealed record SubjectFigure(string Name, float Mark, float FullMark, float? Delta)
+    private sealed record SubjectFigure(
+        string SubjectKey,
+        string Name,
+        float Mark,
+        float FullMark,
+        float? Delta
+    )
     {
         /// <summary>The signed difference, already formatted with an explicit sign.</summary>
         public string DeltaText => Delta is { } value

@@ -40,6 +40,23 @@ public static class SubjectCatalogue
         "pe"
     ];
 
+    /// <summary>
+    /// Position of a subject in <see cref="ExamSubjectKeys"/>. Returns zero for an unknown key, so a
+    /// caller using this to pick a stable colour never has to guard against bad data.
+    /// </summary>
+    public static int IndexOfKey(string? subjectKey)
+    {
+        for (var index = 0; index < ExamSubjectKeys.Count; index++)
+        {
+            if (string.Equals(ExamSubjectKeys[index], subjectKey, StringComparison.Ordinal))
+            {
+                return index;
+            }
+        }
+
+        return 0;
+    }
+
     /// <summary>Splits the comma separated form used by <see cref="ToSubjectString" />.</summary>
     public static IReadOnlySet<string> ToSubjectKeySet(string? joined)
     {

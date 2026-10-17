@@ -3,6 +3,7 @@ using Known.Core.Domain;
 using Known.Core.Localization;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Windows.System;
 
 namespace Known.Pages;
 
@@ -98,12 +99,15 @@ public sealed partial class InputtingPage : KnownPage
 
     private async void OnRenameExam(object sender, RoutedEventArgs e)
     {
+        var current = NameButton.Content as string ?? string.Empty;
+
         var box = new TextBox
         {
-            Text = NameButton.Content as string ?? "",
+            Text = current,
             PlaceholderText = _strings.Get("exam_name"),
+            AcceptsReturn = false,
             SelectionStart = 0,
-            SelectionLength = (NameButton.Content as string ?? "").Length
+            SelectionLength = current.Length
         };
 
         var dialog = new ContentDialog
@@ -112,11 +116,38 @@ public sealed partial class InputtingPage : KnownPage
             Content = box,
             PrimaryButtonText = _strings.Get("done"),
             CloseButtonText = _strings.Get("cancel"),
+            // Gives Done the accent treatment and makes it the button the dialog focuses
+            DefaultButton = ContentDialogButton.Primary,
             XamlRoot = XamlRoot
         };
 
-        if (await dialog.ShowAsync() == ContentDialogResult.Primary && !string.IsNullOrWhiteSpace(box.Text))
-            NameButton.Content = box.Text.Trim();
+        // Hide takes no result, so the typed text is carried out of the dialog separately
+        string? confirmedByEnter = null;
+
+        // Enter has to behave as the same gesture as pressing Done. The documented behaviour of
+        // DefaultButton is that it stops responding to ENTER once focus sits on a control that
+        // handles it, which is exactly this text box.
+        box.KeyDown += (_, args) =>
+        {
+            if (confirmedByEnter is not null || args.Key != VirtualKey.Enter || box.AcceptsReturn)
+            {
+                return;
+            }
+
+            confirmedByEnter = box.Text;
+            args.Handled = true;
+
+            dialog.Hide();
+        };
+
+        var result = await dialog.ShowAsync();
+
+        var name = confirmedByEnter ?? (result == ContentDialogResult.Primary ? box.Text : null);
+
+        if (!string.IsNullOrWhiteSpace(name))
+        {
+            NameButton.Content = name.Trim();
+        }
     }
 
     /// <summary>

@@ -20,9 +20,8 @@ public sealed partial class GuidePage : KnownPage
     private readonly StringLocalizer _strings = new();
     private readonly List<CheckBox> _subjectBoxes = [];
     private bool _finishing;
-    private int _identity = StudentIdentity.None;
-
-    private string _region = string.Empty;
+    private int _identity;
+    private string _region;
 
     /// <summary>Creates the wizard, builds its three steps and shows the first one.</summary>
     public GuidePage()
