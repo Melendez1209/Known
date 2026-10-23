@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Known.Core.Localization;
 using Microsoft.UI.Xaml.Controls;
 
@@ -8,7 +8,7 @@ namespace Known.Pages;
 ///     The settings root. The desktop build keeps only the settings that mean anything on Windows:
 ///     the student profile, the theme and language, and the cache.
 /// </summary>
-public sealed partial class SettingsPage : KnownPage
+public sealed partial class SettingsPage : Page
 {
     private readonly StringLocalizer _strings = new();
 
@@ -28,11 +28,11 @@ public sealed partial class SettingsPage : KnownPage
         switch (e.ClickedItem)
         {
             case ListViewItem when ReferenceEquals(e.ClickedItem, GeneralEntry):
-                Shell.NavigateRoot(typeof(GeneralSettingsPage));
+                this.Frame.Navigate(typeof(GeneralSettingsPage));
                 break;
 
             case ListViewItem when ReferenceEquals(e.ClickedItem, AppearanceEntry):
-                Shell.NavigateRoot(typeof(AppearancePage));
+                this.Frame.Navigate(typeof(AppearancePage));
                 break;
 
             case ListViewItem when ReferenceEquals(e.ClickedItem, ClearCacheEntry):
@@ -104,3 +104,4 @@ public sealed partial class SettingsPage : KnownPage
         };
     }
 }
+

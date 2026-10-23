@@ -1,4 +1,4 @@
-using Known.Core.Localization;
+﻿using Known.Core.Localization;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -12,7 +12,7 @@ namespace Known.Pages;
 ///     page therefore offers two calendar pickers with an explicit rule that the end cannot precede the
 ///     start, which is the behaviour that actually matters to the student.
 /// </remarks>
-public sealed partial class DateRangePage
+public sealed partial class DateRangePage : Page
 {
     private readonly StringLocalizer _strings = new();
 
@@ -73,7 +73,7 @@ public sealed partial class DateRangePage
             XamlRoot = XamlRoot
         };
 
-        if (await dialog.ShowAsync() == ContentDialogResult.Primary) Shell.GoBack();
+        if (await dialog.ShowAsync() == ContentDialogResult.Primary) this.Frame.GoBack();
     }
 
     private void OnNext(object sender, RoutedEventArgs e)
@@ -81,7 +81,7 @@ public sealed partial class DateRangePage
         var start = ToEpochMilliseconds(StartPicker.Date);
         var end = ToEpochMilliseconds(EndPicker.Date);
 
-        Shell.NavigateInTab(typeof(InputtingPage), new InputtingNavigation(start, end));
+        this.Frame.Navigate(typeof(InputtingPage), new InputtingNavigation(start, end));
     }
 
     private static long ToEpochMilliseconds(DateTimeOffset? value)
@@ -95,3 +95,4 @@ public sealed partial class DateRangePage
 /// <param name="EndDate">Last day of the exam, as epoch milliseconds.</param>
 /// <param name="ExamId">The exam being edited, or zero when a new one is being created.</param>
 public sealed record InputtingNavigation(long StartDate, long EndDate, long ExamId = 0);
+

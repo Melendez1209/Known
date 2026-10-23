@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Known.Core.Localization;
 using Microsoft.UI.Xaml.Controls;
 
@@ -8,7 +8,7 @@ namespace Known.Pages;
 ///     The about page. Every row opens a link in the system browser, which is the Windows equivalent
 ///     of the Android build firing an ACTION_VIEW intent.
 /// </summary>
-public sealed partial class AboutPage : KnownPage
+public sealed partial class AboutPage : Page
 {
     private const string RepositoryUrl = "https://github.com/Melendez1209/Known";
     private const string ReleaseUrl = RepositoryUrl + "/releases";
@@ -48,3 +48,4 @@ public sealed partial class AboutPage : KnownPage
         }
     }
 }
+

@@ -50,9 +50,6 @@ public static class AppServices
     /// <summary>Microsoft account sign in.</summary>
     public static MsalAuthService Auth { get; } = new();
 
-    /// <summary>Set by the main window once its frames exist, so any page can route itself.</summary>
-    public static ShellNavigator? Shell { get; set; }
-
     /// <summary>
     ///     Opens the database, creates the schema on first run and makes sure the settings row exists,
     ///     then builds the services that sit on top of it. Repeated calls wait on the gate and return
@@ -101,6 +98,5 @@ public static class AppServices
         _context = null;
         _examRepository = null;
         _settingsRepository = null;
-        Shell = null;
     }
 }

@@ -1,8 +1,9 @@
-using Known.Core.Localization;
+﻿using Known.Core.Localization;
 using Known.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Input;
+using Microsoft.UI.Xaml.Navigation;
 
 namespace Known.Pages;
 
@@ -10,7 +11,7 @@ namespace Known.Pages;
 ///     The account tab: who is signed in, plus the way into the settings, the about page and the
 ///     favourites list.
 /// </summary>
-public sealed partial class AccountPage
+public sealed partial class AccountPage : Page
 {
     private readonly StringLocalizer _strings = new();
 
@@ -29,10 +30,11 @@ public sealed partial class AccountPage
     }
 
     /// <inheritdoc />
-    public override void OnNavigatedAway()
+    protected override void OnNavigatedFrom(NavigationEventArgs e)
     {
         AppServices.Auth.StateChanged -= OnAuthStateChanged;
-        base.OnNavigatedAway();
+
+        base.OnNavigatedFrom(e);
     }
 
     private void OnAuthStateChanged(object? sender, AccountState state)
@@ -103,16 +105,17 @@ public sealed partial class AccountPage
 
     private void OnSettings(object sender, TappedRoutedEventArgs e)
     {
-        Shell.NavigateRoot(typeof(SettingsPage));
+        this.Frame.Navigate(typeof(SettingsPage));
     }
 
     private void OnAbout(object sender, TappedRoutedEventArgs e)
     {
-        Shell.NavigateRoot(typeof(AboutPage));
+        this.Frame.Navigate(typeof(AboutPage));
     }
 
     private void OnFavourites(object sender, TappedRoutedEventArgs e)
     {
-        Shell.NavigateInTab(typeof(HistoryPage));
+        this.Frame.Navigate(typeof(HistoryPage));
     }
 }
+

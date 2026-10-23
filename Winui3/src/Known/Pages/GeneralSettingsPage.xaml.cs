@@ -1,4 +1,4 @@
-using Known.Core.Domain;
+﻿using Known.Core.Domain;
 using Known.Core.Localization;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
@@ -9,7 +9,7 @@ namespace Known.Pages;
 ///     The general settings: who the student is, their region and the subjects they sit. These are the
 ///     same three questions the onboarding wizard asks, editable later.
 /// </summary>
-public sealed partial class GeneralSettingsPage : KnownPage
+public sealed partial class GeneralSettingsPage : Page
 {
     private readonly StringLocalizer _strings = new();
     private readonly List<CheckBox> _subjectBoxes = [];
@@ -18,7 +18,7 @@ public sealed partial class GeneralSettingsPage : KnownPage
     private bool _locating;
     private bool _suppressEvents;
 
-    /// <summary>Creates the page and fills it from the stored settings.</summary>
+    /// <summary>Creates the page and fills it from the stored AppServices.Settings.</summary>
     public GeneralSettingsPage()
     {
         InitializeComponent();
@@ -67,7 +67,7 @@ public sealed partial class GeneralSettingsPage : KnownPage
 
         try
         {
-            IdentityOptions.SelectedIndex = Settings.Current.Identity switch
+            IdentityOptions.SelectedIndex = AppServices.Settings.Current.Identity switch
             {
                 StudentIdentity.Student => 0,
                 StudentIdentity.Teacher => 1,
@@ -75,9 +75,9 @@ public sealed partial class GeneralSettingsPage : KnownPage
                 _ => -1
             };
 
-            RegionBox.Text = Settings.Current.Region;
+            RegionBox.Text = AppServices.Settings.Current.Region;
 
-            var selected = Settings.SelectedSubjects;
+            var selected = AppServices.Settings.SelectedSubjects;
 
             foreach (var box in _subjectBoxes)
             {
@@ -111,14 +111,14 @@ public sealed partial class GeneralSettingsPage : KnownPage
             _ => StudentIdentity.None
         };
 
-        await Settings.SetIdentityAsync(identity);
+        await AppServices.Settings.SetIdentityAsync(identity);
     }
 
     private async void OnRegionLostFocus(object sender, RoutedEventArgs e)
     {
         if (_suppressEvents) return;
 
-        await Settings.SetRegionAsync(RegionBox.Text);
+        await AppServices.Settings.SetRegionAsync(RegionBox.Text);
     }
 
     /// <summary>
@@ -147,7 +147,7 @@ public sealed partial class GeneralSettingsPage : KnownPage
 
                 // The page saves on lost focus, so a lookup that fills the box has to be committed
                 // here or the value would be lost the moment the student clicked something else
-                await Settings.SetRegionAsync(result.City);
+                await AppServices.Settings.SetRegionAsync(result.City);
 
                 return;
             }
@@ -180,6 +180,7 @@ public sealed partial class GeneralSettingsPage : KnownPage
         else
             _subjects.Remove(key);
 
-        await Settings.SetSelectedSubjectsAsync(_subjects);
+        await AppServices.Settings.SetSelectedSubjectsAsync(_subjects);
     }
 }
+

@@ -1,8 +1,9 @@
-using Known.Core.Data;
+﻿using Known.Core.Data;
 using Known.Core.Domain;
 using Known.Core.Localization;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 using Windows.System;
 
 namespace Known.Pages;
@@ -12,14 +13,14 @@ namespace Known.Pages;
 ///     fields. Saving turns the rows into exam scores through the same domain helpers the Android build
 ///     used, so the two platforms accept and reject exactly the same input.
 /// </summary>
-public sealed partial class InputtingPage : KnownPage
+public sealed partial class InputtingPage : Page
 {
     private readonly List<ScoreRow> _rows = [];
     private readonly StringLocalizer _strings = new();
     private InputtingNavigation? _navigation;
     private bool _saving;
 
-    /// <summary>Creates the page with a blank form; the real values arrive in OnPageLoaded.</summary>
+    /// <summary>Creates the page with a blank form; the real values arrive in OnNavigatedTo.</summary>
     public InputtingPage()
     {
         InitializeComponent();
@@ -28,9 +29,11 @@ public sealed partial class InputtingPage : KnownPage
     }
 
     /// <inheritdoc />
-    protected override void OnPageLoaded()
+    protected override void OnNavigatedTo(NavigationEventArgs e)
     {
-        _navigation = NavigationParameter as InputtingNavigation
+        base.OnNavigatedTo(e);
+
+        _navigation = e.Parameter as InputtingNavigation
                       ?? new InputtingNavigation(
                           DateTimeOffset.Now.ToUnixTimeMilliseconds(),
                           DateTimeOffset.Now.ToUnixTimeMilliseconds());
@@ -48,12 +51,12 @@ public sealed partial class InputtingPage : KnownPage
 
         var navigation = _navigation;
 
-        var inputs = ExamScoring.DefaultScoreInputs(Settings.SelectedSubjects);
+        var inputs = ExamScoring.DefaultScoreInputs(AppServices.Settings.SelectedSubjects);
         var name = ExamDates.DefaultExamName(navigation.StartDate);
 
         if (navigation.ExamId != 0)
         {
-            var existing = await Exams.Repository.GetExamWithScoresAsync(navigation.ExamId);
+            var existing = await AppServices.Exams.Repository.GetExamWithScoresAsync(navigation.ExamId);
 
             if (existing is not null)
             {
@@ -205,11 +208,11 @@ public sealed partial class InputtingPage : KnownPage
 
                 var scores = ExamScoring.BuildExamScores(0, inputs);
 
-                await Exams.MutateAsync(repository => repository.InsertExamAsync(exam, scores));
+                await AppServices.Exams.MutateAsync(repository => repository.InsertExamAsync(exam, scores));
             }
             else
             {
-                var existing = await Exams.Repository.GetExamAsync(navigation.ExamId);
+                var existing = await AppServices.Exams.Repository.GetExamAsync(navigation.ExamId);
 
                 if (existing is not null)
                 {
@@ -217,13 +220,13 @@ public sealed partial class InputtingPage : KnownPage
 
                     var scores = ExamScoring.BuildExamScores(existing.Id, inputs);
 
-                    await Exams.MutateAsync(repository => repository.UpdateExamAsync(existing, scores));
+                    await AppServices.Exams.MutateAsync(repository => repository.UpdateExamAsync(existing, scores));
                 }
             }
 
             // Two steps back: the date picker sits underneath this page
-            Shell.GoBack();
-            Shell.GoBack();
+            this.Frame.GoBack();
+            this.Frame.GoBack();
         }
         catch (Exception)
         {
@@ -237,3 +240,5 @@ public sealed partial class InputtingPage : KnownPage
         }
     }
 }
+
+

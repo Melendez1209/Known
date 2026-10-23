@@ -1,8 +1,9 @@
-using Known.Core.Data;
+﻿using Known.Core.Data;
 using Known.Core.Domain;
 using Known.Core.Localization;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 
 namespace Known.Pages;
 
@@ -11,13 +12,13 @@ namespace Known.Pages;
 ///     driven by its own HCT engine; the desktop build uses the Windows theme instead, so only the
 ///     light and dark choice and the language are left.
 /// </summary>
-public sealed partial class AppearancePage : KnownPage
+public sealed partial class AppearancePage : Page
 {
     private readonly StringLocalizer _strings = new();
 
     private bool _suppressEvents;
 
-    /// <summary>Creates the page and fills it from the stored settings.</summary>
+    /// <summary>Creates the page and fills it from the stored AppServices.Settings.</summary>
     public AppearancePage()
     {
         InitializeComponent();
@@ -28,7 +29,7 @@ public sealed partial class AppearancePage : KnownPage
         LanguageCaption.Text = _strings.Get("language");
         LanguageHint.Text = _strings.Get("language_restart_hint");
 
-        Settings.Changed += OnSettingsChanged;
+        AppServices.Settings.Changed += OnSettingsChanged;
 
         BuildThemeOptions();
         BuildLanguageOptions();
@@ -36,10 +37,11 @@ public sealed partial class AppearancePage : KnownPage
     }
 
     /// <inheritdoc />
-    public override void OnNavigatedAway()
+    protected override void OnNavigatedFrom(NavigationEventArgs e)
     {
-        Settings.Changed -= OnSettingsChanged;
-        base.OnNavigatedAway();
+        AppServices.Settings.Changed -= OnSettingsChanged;
+
+        base.OnNavigatedFrom(e);
     }
 
     private void BuildThemeOptions()
@@ -64,17 +66,17 @@ public sealed partial class AppearancePage : KnownPage
 
         try
         {
-            ThemeOptions.SelectedIndex = Settings.Current.DarkThemeValue switch
+            ThemeOptions.SelectedIndex = AppServices.Settings.Current.DarkThemeValue switch
             {
                 DarkThemeMode.On => 1,
                 DarkThemeMode.Off => 2,
                 _ => 0
             };
 
-            HighContrastToggle.IsOn = Settings.Current.IsHighContrastMode;
+            HighContrastToggle.IsOn = AppServices.Settings.Current.IsHighContrastMode;
 
             var selected = StringLocalizer.AvailableLanguages
-                .FirstOrDefault(option => option.Tag == Settings.Current.SelectedLanguage);
+                .FirstOrDefault(option => option.Tag == AppServices.Settings.Current.SelectedLanguage);
 
             LanguageBox.SelectedItem = selected ?? StringLocalizer.AvailableLanguages[0];
         }
@@ -100,14 +102,14 @@ public sealed partial class AppearancePage : KnownPage
             _ => DarkThemeMode.FollowSystem
         };
 
-        await Settings.SetDarkThemeAsync(value);
+        await AppServices.Settings.SetDarkThemeAsync(value);
     }
 
     private async void OnHighContrastToggled(object sender, RoutedEventArgs e)
     {
         if (_suppressEvents) return;
 
-        await Settings.SetHighContrastAsync(HighContrastToggle.IsOn);
+        await AppServices.Settings.SetHighContrastAsync(HighContrastToggle.IsOn);
     }
 
     private async void OnLanguageChanged(object sender, SelectionChangedEventArgs e)
@@ -116,7 +118,8 @@ public sealed partial class AppearancePage : KnownPage
 
         // The switch takes effect on the next launch, because every already constructed page holds
         // the strings it resolved when it was loaded
-        await Settings.SetLanguageAsync(option.Tag);
+        await AppServices.Settings.SetLanguageAsync(option.Tag);
         StringLocalizer.UseLanguage(option.Tag);
     }
 }
+

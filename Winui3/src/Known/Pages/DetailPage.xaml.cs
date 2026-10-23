@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Known.Core.Data;
 using Known.Core.Domain;
 using Known.Core.Localization;
@@ -9,6 +9,7 @@ using LiveChartsCore.SkiaSharpView.Painting;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
+using Microsoft.UI.Xaml.Navigation;
 
 namespace Known.Pages;
 
@@ -16,7 +17,7 @@ namespace Known.Pages;
 ///     A single exam: its totals, how the marks split across subjects, and how it compares with every
 ///     other exam the student has recorded.
 /// </summary>
-public sealed partial class DetailPage
+public sealed partial class DetailPage : Page
 {
     private readonly StringLocalizer _strings = new();
     private Exam? _exam;
@@ -42,15 +43,15 @@ public sealed partial class DetailPage
         ShareButton.Label = _strings.Get("share");
         FavouriteButton.Label = _strings.Get("add_favourite");
 
-        Exams.Reloaded += OnExamsReloaded;
+        AppServices.Exams.Reloaded += OnExamsReloaded;
     }
 
     /// <inheritdoc />
-    public override void OnNavigatedAway()
+    protected override void OnNavigatedFrom(NavigationEventArgs e)
     {
-        Exams.Reloaded -= OnExamsReloaded;
+        AppServices.Exams.Reloaded -= OnExamsReloaded;
 
-        base.OnNavigatedAway();
+        base.OnNavigatedFrom(e);
     }
 
     /// <summary>Keeps the star and its label in step with the stored state.</summary>
@@ -71,7 +72,7 @@ public sealed partial class DetailPage
     {
         if (_exam is null) return;
 
-        var current = Exams.Exams.FirstOrDefault(exam => exam.Exam.Id == _exam.Id);
+        var current = AppServices.Exams.Exams.FirstOrDefault(exam => exam.Exam.Id == _exam.Id);
 
         if (current is null) return;
 
@@ -81,16 +82,18 @@ public sealed partial class DetailPage
     }
 
     /// <inheritdoc />
-    protected override void OnPageLoaded()
+    protected override void OnNavigatedTo(NavigationEventArgs e)
     {
-        _examId = NavigationParameter is long id ? id : 0;
+        base.OnNavigatedTo(e);
+
+        _examId = e.Parameter is long id ? id : 0;
 
         if (_examId != 0) LoadAsync();
     }
 
     private async void LoadAsync()
     {
-        var loaded = await Exams.Repository.GetExamWithScoresAsync(_examId);
+        var loaded = await AppServices.Exams.Repository.GetExamWithScoresAsync(_examId);
 
         if (loaded is null)
         {
@@ -106,8 +109,8 @@ public sealed partial class DetailPage
         var totalMark = ExamScoring.TotalMark(scores);
         var totalFullMark = ExamScoring.TotalFullMark(scores);
         var totalPercentage = ExamScoring.Percentage(totalMark, totalFullMark);
-        var rank = ExamScoring.RankOf(_examId, Exams.Exams.ToList());
-        var stats = await Exams.Repository.GetSubjectStatsAsync(_examId);
+        var rank = ExamScoring.RankOf(_examId, AppServices.Exams.Exams.ToList());
+        var stats = await AppServices.Exams.Repository.GetSubjectStatsAsync(_examId);
 
         TitleText.Text = _exam.Name;
         SubtitleText.Text = ExamDates.FormatDateRange(_exam.StartDate, _exam.EndDate);
@@ -157,7 +160,7 @@ public sealed partial class DetailPage
     /// </summary>
     private void BuildComparisonChart()
     {
-        var ordered = Exams.Exams.OrderBy(exam => exam.Exam.StartDate).ToList();
+        var ordered = AppServices.Exams.Exams.OrderBy(exam => exam.Exam.StartDate).ToList();
 
         var labels = ordered
             .Select(exam => ExamDates.FormatDateRange(exam.Exam.StartDate, exam.Exam.EndDate))
@@ -310,8 +313,7 @@ public sealed partial class DetailPage
     {
         if (_exam is null) return;
 
-        Shell.NavigateInTab(
-            typeof(InputtingPage),
+        this.Frame.Navigate(typeof(InputtingPage),
             new InputtingNavigation(_exam.StartDate, _exam.EndDate, _exam.Id));
     }
 
@@ -319,7 +321,7 @@ public sealed partial class DetailPage
     {
         if (_exam is null) return;
 
-        await Exams.MutateAsync(repository => repository.SetFavoriteAsync(_exam.Id, !_exam.IsFavorite));
+        await AppServices.Exams.MutateAsync(repository => repository.SetFavoriteAsync(_exam.Id, !_exam.IsFavorite));
     }
 
     private async void OnDelete(object sender, RoutedEventArgs e)
@@ -337,8 +339,8 @@ public sealed partial class DetailPage
 
         if (await dialog.ShowAsync() != ContentDialogResult.Primary) return;
 
-        await Exams.MutateAsync(repository => repository.DeleteExamAsync(_exam.Id));
-        Shell.GoBack();
+        await AppServices.Exams.MutateAsync(repository => repository.DeleteExamAsync(_exam.Id));
+        this.Frame.GoBack();
     }
 
     private void OnShare(object sender, RoutedEventArgs e) =>
@@ -364,3 +366,4 @@ public sealed partial class DetailPage
             : string.Empty;
     }
 }
+

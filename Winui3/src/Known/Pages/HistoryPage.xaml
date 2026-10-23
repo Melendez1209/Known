@@ -1,6 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
-<local:KnownPage
+<Page
     x:Class="Known.Pages.HistoryPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
@@ -17,11 +17,11 @@
         from inside an ItemsControl template; ElementName, the usual escape hatch, belongs to the
         classic Binding and not to x:Bind.
     -->
-    <local:KnownPage.Resources>
+    <Page.Resources>
         <converters:ExamDateRangeConverter x:Key="DateRangeText" />
         <converters:ExamPercentageConverter x:Key="PercentageText" />
         <converters:PinnedToVisibilityConverter x:Key="PinnedVisibility" />
-    </local:KnownPage.Resources>
+    </Page.Resources>
 
     <Grid Padding="24" RowSpacing="12">
         <Grid.RowDefinitions>
@@ -134,4 +134,4 @@
         </CommandBar>
     </Grid>
 
-</local:KnownPage>
+</Page>

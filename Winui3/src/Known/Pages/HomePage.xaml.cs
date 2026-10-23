@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using Known.Core.Domain;
 using Known.Core.Localization;
 using Known.Services;
@@ -6,6 +6,7 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 
 namespace Known.Pages;
 
@@ -17,7 +18,7 @@ namespace Known.Pages;
 ///     changes, because a Skia colour is a snapshot and cannot follow an XAML theme resource the way a
 ///     brush does.
 /// </remarks>
-public sealed partial class HomePage : KnownPage
+public sealed partial class HomePage : Page
 {
     private readonly StringLocalizer _strings = new();
 
@@ -36,7 +37,7 @@ public sealed partial class HomePage : KnownPage
         SubjectCaption.Text = _strings.Get("subject_average");
         ToolTipService.SetToolTip(TrendMetricButton, _strings.Get("trend_metric_hint"));
 
-        Exams.Reloaded += OnReloaded;
+        AppServices.Exams.Reloaded += OnReloaded;
         AppServices.Theme.ThemeChanged += OnThemeChanged;
 
         // The shared exam store finishes its first load before this page exists, so no Reloaded
@@ -46,12 +47,12 @@ public sealed partial class HomePage : KnownPage
     }
 
     /// <inheritdoc />
-    public override void OnNavigatedAway()
+    protected override void OnNavigatedFrom(NavigationEventArgs e)
     {
-        Exams.Reloaded -= OnReloaded;
+        AppServices.Exams.Reloaded -= OnReloaded;
         AppServices.Theme.ThemeChanged -= OnThemeChanged;
 
-        base.OnNavigatedAway();
+        base.OnNavigatedFrom(e);
     }
 
     private void OnReloaded(object? sender, EventArgs e)
@@ -81,7 +82,7 @@ public sealed partial class HomePage : KnownPage
 
         ChartPalette.Refresh();
 
-        var ordered = Exams.Exams.OrderBy(exam => exam.Exam.StartDate).ToList();
+        var ordered = AppServices.Exams.Exams.OrderBy(exam => exam.Exam.StartDate).ToList();
 
         var metricName =
             _metric == TrendMetric.Marks ? _strings.Get("average_score") : _strings.Get("average_rate");
@@ -92,12 +93,12 @@ public sealed partial class HomePage : KnownPage
         {
             new StatCard(ordered.Count.ToString(CultureInfo.CurrentCulture), _strings.Get("exam")),
             new StatCard(
-                Exams.AverageMark.ToString("0.#", CultureInfo.CurrentCulture),
+                AppServices.Exams.AverageMark.ToString("0.#", CultureInfo.CurrentCulture),
                 _strings.Get("average_score")),
             new StatCard(
-                Exams.AveragePercentage.ToString("0.#", CultureInfo.CurrentCulture) + "%",
+                AppServices.Exams.AveragePercentage.ToString("0.#", CultureInfo.CurrentCulture) + "%",
                 _strings.Get("average_rate")),
-            new StatCard(Exams.BestRank.ToString(CultureInfo.CurrentCulture), _strings.Get("rank"))
+            new StatCard(AppServices.Exams.BestRank.ToString(CultureInfo.CurrentCulture), _strings.Get("rank"))
         };
 
         var examLabels = ordered
@@ -132,7 +133,7 @@ public sealed partial class HomePage : KnownPage
         TrendChart.YAxes =
             [BuildValueAxis(metricName, plotsMarks ? null : 0, plotsMarks ? null : 100)];
 
-        var stats = Exams.SubjectStats.ToList();
+        var stats = AppServices.Exams.SubjectStats.ToList();
         var subjectLabels = stats.Select(stat => SubjectLabels.NameOf(_strings, stat.SubjectKey)).ToArray();
 
         SubjectChart.Series =
@@ -186,3 +187,5 @@ public sealed partial class HomePage : KnownPage
         };
     }
 }
+
+
