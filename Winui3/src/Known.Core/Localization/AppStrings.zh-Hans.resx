@@ -484,4 +484,19 @@
     <data name="account_not_signed_in" xml:space="preserve">
     <value>登录以同步你的账户</value>
   </data>
+    <data name="account_section" xml:space="preserve">
+    <value>账户</value>
+  </data>
+    <data name="appearance_section" xml:space="preserve">
+    <value>外观</value>
+  </data>
+    <data name="general_section" xml:space="preserve">
+    <value>常规</value>
+  </data>
+    <data name="location_use" xml:space="preserve">
+    <value>使用我的位置</value>
+  </data>
+    <data name="restart_app" xml:space="preserve">
+    <value>重启应用程序</value>
+  </data>
 </root>

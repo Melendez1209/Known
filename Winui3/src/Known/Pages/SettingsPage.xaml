@@ -9,23 +9,183 @@
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <Grid Padding="24" RowSpacing="8">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-        </Grid.RowDefinitions>
+    <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto">
+        <StackPanel Padding="24" Spacing="24">
 
-        <TextBlock
-            Grid.Row="0"
-            x:Name="TitleText"
-            Style="{StaticResource TitleTextBlockStyle}"
-            Text="Settings" />
+            <TextBlock
+                x:Name="TitleText"
+                Style="{StaticResource TitleTextBlockStyle}"
+                Text="Settings" />
 
-        <ListView Grid.Row="1" SelectionMode="None" IsItemClickEnabled="True" ItemClick="OnItemClick">
-            <ListViewItem x:Name="GeneralEntry" Content="General" />
-            <ListViewItem x:Name="AppearanceEntry" Content="Look &amp; feel" />
-            <ListViewItem x:Name="ClearCacheEntry" Content="Clear cache" />
-        </ListView>
-    </Grid>
+            <!-- Account -->
+            <Border
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="8"
+                Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock
+                        x:Name="AccountCaption"
+                        Style="{StaticResource BodyStrongTextBlockStyle}"
+                        Text="Account" />
+                    <Grid ColumnSpacing="16">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <PersonPicture
+                            Grid.Column="0"
+                            x:Name="Avatar"
+                            Width="48"
+                            Height="48" />
+
+                        <StackPanel
+                            Grid.Column="1"
+                            VerticalAlignment="Center">
+                            <TextBlock
+                                x:Name="AccountName"
+                                Style="{StaticResource BodyStrongTextBlockStyle}" />
+                            <TextBlock
+                                x:Name="AccountEmail"
+                                Style="{StaticResource CaptionTextBlockStyle}"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                        </StackPanel>
+
+                        <Button
+                            Grid.Column="2"
+                            x:Name="AuthButton"
+                            VerticalAlignment="Center"
+                            Content="Sign in"
+                            Click="OnAuthTapped" />
+                    </Grid>
+                </StackPanel>
+            </Border>
+
+            <!-- General -->
+            <Border
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="8"
+                Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock
+                        x:Name="GeneralCaption"
+                        Style="{StaticResource BodyStrongTextBlockStyle}"
+                        Text="General" />
+
+                    <StackPanel Spacing="8">
+                        <TextBlock
+                            x:Name="IdentityCaption"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="Identity" />
+                        <RadioButtons
+                            x:Name="IdentityOptions"
+                            SelectionChanged="OnIdentityChanged" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="8">
+                        <TextBlock
+                            x:Name="RegionCaption"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="Region" />
+                        <TextBox
+                            x:Name="RegionBox"
+                            AcceptsReturn="False"
+                            LostFocus="OnRegionLostFocus" />
+
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <Button
+                                x:Name="LocateButton"
+                                Click="OnLocate">
+                                <StackPanel Orientation="Horizontal" Spacing="8">
+                                    <FontIcon
+                                        FontFamily="Segoe Fluent Icons"
+                                        FontSize="14"
+                                        Glyph="&#xE707;" />
+                                    <TextBlock
+                                        x:Name="LocateCaption" />
+                                </StackPanel>
+                            </Button>
+
+                            <ProgressRing
+                                x:Name="LocateProgress"
+                                Width="20"
+                                Height="20"
+                                IsActive="False"
+                                Visibility="Collapsed" />
+                        </StackPanel>
+
+                        <TextBlock
+                            x:Name="LocateMessage"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            TextWrapping="Wrap"
+                            Visibility="Collapsed" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="8">
+                        <TextBlock
+                            x:Name="SubjectsCaption"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="Subjects" />
+                        <ItemsControl x:Name="SubjectGrid">
+                            <ItemsControl.ItemsPanel>
+                                <ItemsPanelTemplate>
+                                    <ItemsWrapGrid Orientation="Horizontal" />
+                                </ItemsPanelTemplate>
+                            </ItemsControl.ItemsPanel>
+                        </ItemsControl>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Appearance -->
+            <Border
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="8"
+                Padding="16">
+                <StackPanel Spacing="12">
+                    <TextBlock
+                        x:Name="AppearanceCaption"
+                        Style="{StaticResource BodyStrongTextBlockStyle}"
+                        Text="Appearance" />
+
+                    <StackPanel Spacing="8">
+                        <TextBlock
+                            x:Name="DarkCaption"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="Dark theme" />
+                        <RadioButtons
+                            x:Name="ThemeOptions"
+                            SelectionChanged="OnThemeChanged" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="8">
+                        <TextBlock
+                            x:Name="LanguageCaption"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Text="Display language" />
+                        <ComboBox
+                            x:Name="LanguageBox"
+                            HorizontalAlignment="Stretch"
+                            SelectionChanged="OnLanguageChanged" />
+                        <TextBlock
+                            x:Name="LanguageHint"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            TextWrapping="Wrap" />
+                    </StackPanel>
+
+                    <StackPanel Spacing="8">
+                        <Button
+                            x:Name="RestartButton"
+                            Click="OnRestartClicked"
+                            Visibility="Collapsed" />
+                    </StackPanel>
+                </StackPanel>
+            </Border>
+
+        </StackPanel>
+    </ScrollViewer>
 
 </Page>

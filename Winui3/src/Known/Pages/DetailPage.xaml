@@ -129,10 +129,15 @@
 
             <TabViewItem x:Name="ComparisonTab">
                 <Grid Padding="24,8,24,16">
-                    <lvc:CartesianChart
-                        x:Name="ComparisonChart"
-                        LegendPosition="Bottom"
-                        ZoomMode="None" />
+                    <Border
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                        CornerRadius="8"
+                        Padding="12">
+                        <lvc:CartesianChart
+                            x:Name="ComparisonChart"
+                            LegendPosition="Bottom"
+                            ZoomMode="None" />
+                    </Border>
                 </Grid>
             </TabViewItem>
         </TabView>

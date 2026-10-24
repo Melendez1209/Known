@@ -69,7 +69,6 @@ public sealed partial class MainWindow
     {
         HomeItem.Content = _strings.Get("home");
         HistoryItem.Content = _strings.Get("history");
-        AccountItem.Content = _strings.Get("account");
         AboutItem.Content = _strings.Get("about");
 
         // The pane's settings item is built by NavigationView itself and comes with the framework's
@@ -148,10 +147,6 @@ public sealed partial class MainWindow
                 MainFrame.Navigate(typeof(HistoryPage));
                 break;
 
-            case "Account":
-                MainFrame.Navigate(typeof(AccountPage));
-                break;
-
             case "Home":
                 MainFrame.Navigate(typeof(HomePage));
                 break;
@@ -176,7 +171,6 @@ public sealed partial class MainWindow
         {
             HomePage => HomeItem,
             HistoryPage => HistoryItem,
-            AccountPage => AccountItem,
             AboutPage => AboutItem,
             SettingsPage when Navigation.SettingsItem is NavigationViewItem settingsItem => settingsItem,
             _ => Navigation.SelectedItem

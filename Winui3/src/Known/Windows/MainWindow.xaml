@@ -75,7 +75,6 @@
                 control gives it does not follow the language picked in the app.
             -->
             <NavigationView.FooterMenuItems>
-                <NavigationViewItem x:Name="AccountItem" Content="Account" Tag="Account" Icon="Contact" />
                 <NavigationViewItem x:Name="AboutItem" Content="About" Tag="About" Icon="Help" />
             </NavigationView.FooterMenuItems>
 

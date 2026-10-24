@@ -484,4 +484,19 @@
     <data name="account_not_signed_in" xml:space="preserve">
     <value>Sign in to sync your account</value>
   </data>
+    <data name="account_section" xml:space="preserve">
+    <value>Account</value>
+  </data>
+    <data name="appearance_section" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+    <data name="general_section" xml:space="preserve">
+    <value>General</value>
+  </data>
+    <data name="location_use" xml:space="preserve">
+    <value>Use my location</value>
+  </data>
+    <data name="restart_app" xml:space="preserve">
+    <value>Restart application</value>
+  </data>
 </root>
