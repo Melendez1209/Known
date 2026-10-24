@@ -39,7 +39,7 @@ public static class ChartPalette
     /// <see cref="Core.Domain.SubjectCatalogue.ExamSubjectKeys"/>.
     /// </summary>
     /// <remarks>
-    /// These are deliberately mid tone rather than the usual vivid hues: the same slice has to stay
+    /// These are deliberately mid-tone rather than the usual vivid hues: the same slice has to stay
     /// legible on both the light card and the dark one, and a saturated yellow or lime disappears
     /// against white. Indexing by subject rather than by position in the legend means a subject
     /// keeps its colour across every chart in the app, so a colour can be read at a glance.

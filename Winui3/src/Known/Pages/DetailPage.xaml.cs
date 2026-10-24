@@ -8,7 +8,6 @@ using LiveChartsCore.SkiaSharpView;
 using LiveChartsCore.SkiaSharpView.Painting;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Navigation;
 
 namespace Known.Pages;
@@ -17,7 +16,7 @@ namespace Known.Pages;
 ///     A single exam: its totals, how the marks split across subjects, and how it compares with every
 ///     other exam the student has recorded.
 /// </summary>
-public sealed partial class DetailPage : Page
+public sealed partial class DetailPage
 {
     private readonly StringLocalizer _strings = new();
     private Exam? _exam;
@@ -64,7 +63,7 @@ public sealed partial class DetailPage : Page
     }
 
     /// <summary>
-    ///     Refreshes the star after a write. The exam held here is the instance loaded for this page,
+    ///     Refreshes the star after a writing. The exam held here is the instance loaded for this page,
     ///     so only the pinned flag is taken from the shared list rather than reloading the whole page,
     ///     which would blank the charts and flash the progress ring.
     /// </summary>

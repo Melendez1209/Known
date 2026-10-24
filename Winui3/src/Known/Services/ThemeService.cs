@@ -13,13 +13,13 @@ namespace Known.Services;
 public sealed class ThemeService(SettingsService settingsService)
 {
     /// <summary>Whether Windows is currently offering the dark variant of the system theme.</summary>
-    public bool IsSystemInDarkTheme { get; private set; }
+    private bool IsSystemInDarkTheme { get; set; }
 
     /// <summary>Whether Windows itself is forcing a high contrast theme.</summary>
-    public bool IsSystemHighContrast { get; private set; }
+    private bool IsSystemHighContrast { get; set; }
 
     /// <summary>The preference currently in effect.</summary>
-    public DarkThemePreference Preference { get; private set; } = new();
+    private DarkThemePreference Preference { get; set; } = new();
 
     /// <summary>Whether the window should render dark.</summary>
     public bool ShouldUseDarkTheme => Preference.IsDarkTheme(IsSystemInDarkTheme);
@@ -46,7 +46,7 @@ public sealed class ThemeService(SettingsService settingsService)
     }
 
     /// <summary>Whether Windows is currently offering the dark variant.</summary>
-    public static bool QueryIsSystemInDarkTheme()
+    private static bool QueryIsSystemInDarkTheme()
     {
         var settings = new UISettings();
         var background = settings.GetColorValue(UIColorType.Background);
@@ -55,7 +55,7 @@ public sealed class ThemeService(SettingsService settingsService)
     }
 
     /// <summary>Whether Windows is forcing a high contrast theme.</summary>
-    public static bool QueryIsSystemHighContrast()
+    private static bool QueryIsSystemHighContrast()
     {
         try
         {

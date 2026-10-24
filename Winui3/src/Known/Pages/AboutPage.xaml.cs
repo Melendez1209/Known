@@ -8,7 +8,7 @@ namespace Known.Pages;
 ///     The about page. Every row opens a link in the system browser, which is the Windows equivalent
 ///     of the Android build firing an ACTION_VIEW intent.
 /// </summary>
-public sealed partial class AboutPage : Page
+public sealed partial class AboutPage
 {
     private const string RepositoryUrl = "https://github.com/Melendez1209/Known";
     private const string ReleaseUrl = RepositoryUrl + "/releases";
@@ -39,13 +39,6 @@ public sealed partial class AboutPage : Page
         if (url is null) return;
 
         // Launching must not be allowed to take the app down when no browser is registered
-        try
-        {
-            Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
-        }
-        catch (Exception)
-        {
-        }
+        Process.Start(new ProcessStartInfo(url) { UseShellExecute = true });
     }
 }
-

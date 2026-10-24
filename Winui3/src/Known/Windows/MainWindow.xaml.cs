@@ -3,10 +3,9 @@ using Known.Pages;
 using Known.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.Controls.Primitives;
 using Microsoft.UI.Xaml.Navigation;
 
-namespace Known;
+namespace Known.Windows;
 
 /// <summary>
 ///     The application shell.
@@ -17,7 +16,7 @@ namespace Known;
 ///     back button, while the NavigationView drives a single <see cref="Frame" /> for all pages.
 ///     This matches the WinUI Notes sample and the Fluent Design navigation guidance.
 /// </remarks>
-public sealed partial class MainWindow : Window
+public sealed partial class MainWindow
 {
     private readonly StringLocalizer _strings = new();
     private readonly ThemeService _themeService;

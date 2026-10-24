@@ -1,11 +1,10 @@
 using Known.Core.Data;
 using Known.Core.Services;
-using Known.Services;
 
-namespace Known;
+namespace Known.Services;
 
 /// <summary>
-///     Owns the application's long lived services. A WinUI 3 window has no built in container, and
+///     Owns the application's long-lived services. A WinUI 3 window has no built-in container, and
 ///     the app only ever needs one database context for the whole process, so a small lazily
 ///     initialised holder is simpler than pulling a dependency injection framework in for it.
 /// </summary>

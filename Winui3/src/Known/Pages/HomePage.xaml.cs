@@ -18,7 +18,7 @@ namespace Known.Pages;
 ///     changes, because a Skia colour is a snapshot and cannot follow an XAML theme resource the way a
 ///     brush does.
 /// </remarks>
-public sealed partial class HomePage : Page
+public sealed partial class HomePage
 {
     private readonly StringLocalizer _strings = new();
 
@@ -114,7 +114,7 @@ public sealed partial class HomePage : Page
                 Name = metricName,
                 Values = ordered
                     .Select(exam => plotsMarks
-                        ? (double)exam.TotalMark
+                        ? exam.TotalMark
                         : (double)ExamScoring.Percentage(exam.TotalMark, exam.TotalFullMark))
                     .ToArray(),
                 // A filled area would hide the grid lines behind it and reads as a different measure
@@ -188,4 +188,4 @@ public sealed partial class HomePage : Page
     }
 }
 
-
+public sealed record StatCard(string Value, string Caption);

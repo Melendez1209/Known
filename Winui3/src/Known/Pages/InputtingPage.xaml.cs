@@ -5,6 +5,8 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using Windows.System;
+using Known.Services;
+using Known.Views;
 
 namespace Known.Pages;
 
@@ -13,7 +15,7 @@ namespace Known.Pages;
 ///     fields. Saving turns the rows into exam scores through the same domain helpers the Android build
 ///     used, so the two platforms accept and reject exactly the same input.
 /// </summary>
-public sealed partial class InputtingPage : Page
+public sealed partial class InputtingPage
 {
     private readonly List<ScoreRow> _rows = [];
     private readonly StringLocalizer _strings = new();
@@ -119,12 +121,12 @@ public sealed partial class InputtingPage : Page
             Content = box,
             PrimaryButtonText = _strings.Get("done"),
             CloseButtonText = _strings.Get("cancel"),
-            // Gives Done the accent treatment and makes it the button the dialog focuses
+            // Gives Done the accent treatment and makes it the button the dialogue focuses
             DefaultButton = ContentDialogButton.Primary,
             XamlRoot = XamlRoot
         };
 
-        // Hide takes no result, so the typed text is carried out of the dialog separately
+        // Hide takes no result, so the typed text is carried out of the dialogue separately
         string? confirmedByEnter = null;
 
         // Enter has to behave as the same gesture as pressing Done. The documented behaviour of

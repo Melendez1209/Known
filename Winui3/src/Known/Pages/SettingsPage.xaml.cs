@@ -8,7 +8,7 @@ namespace Known.Pages;
 ///     The settings root. The desktop build keeps only the settings that mean anything on Windows:
 ///     the student profile, the theme and language, and the cache.
 /// </summary>
-public sealed partial class SettingsPage : Page
+public sealed partial class SettingsPage
 {
     private readonly StringLocalizer _strings = new();
 
@@ -92,7 +92,7 @@ public sealed partial class SettingsPage : Page
     }
 
     /// <summary>Formats a byte count the same way the Android settings entry does.</summary>
-    internal static string FormatSize(long bytes)
+    private static string FormatSize(long bytes)
     {
         return bytes switch
         {

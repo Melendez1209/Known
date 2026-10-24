@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using Known.Core.Data;
 using Known.Core.Localization;
+using Known.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
@@ -12,7 +13,7 @@ namespace Known.Pages;
 ///     opens its detail, and ticking rows swaps the page footer for an action bar, matching the way
 ///     the Android build swapped its navigation bar for one.
 /// </summary>
-public sealed partial class HistoryPage : Page
+public sealed partial class HistoryPage
 {
     private readonly StringLocalizer _strings = new();
     private readonly ObservableCollection<ExamWithTotal> _visible = [];

@@ -4,7 +4,6 @@
     x:Class="Known.Pages.HistoryPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Known.Pages"
     xmlns:converters="using:Known.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -84,8 +83,11 @@
 
                         <StackPanel Grid.Column="0">
                             <TextBlock
-                                Style="{StaticResource BodyStrongTextBlockStyle}"
-                                Text="{Binding Exam.Name}" />
+                                Style="{StaticResource BodyStrongTextBlockStyle}">
+                                <TextBlock.Text>
+                                    <Binding Path="Exam.Name" />
+                                </TextBlock.Text>
+                            </TextBlock>
                             <TextBlock
                                 Style="{StaticResource CaptionTextBlockStyle}"
                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
@@ -103,8 +105,11 @@
                             VerticalAlignment="Center"
                             FontFamily="Segoe Fluent Icons"
                             Glyph="&#xE735;"
-                            FontSize="16"
-                            Visibility="{Binding Exam.IsFavorite, Converter={StaticResource PinnedVisibility}}" />
+                            FontSize="16">
+                            <FontIcon.Visibility>
+                                <Binding Path="Exam.IsFavorite" Converter="{StaticResource PinnedVisibility}" />
+                            </FontIcon.Visibility>
+                        </FontIcon>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>

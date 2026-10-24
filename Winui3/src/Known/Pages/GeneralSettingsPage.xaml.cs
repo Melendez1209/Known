@@ -1,5 +1,6 @@
 ﻿using Known.Core.Domain;
 using Known.Core.Localization;
+using Known.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 
@@ -9,7 +10,7 @@ namespace Known.Pages;
 ///     The general settings: who the student is, their region and the subjects they sit. These are the
 ///     same three questions the onboarding wizard asks, editable later.
 /// </summary>
-public sealed partial class GeneralSettingsPage : Page
+public sealed partial class GeneralSettingsPage
 {
     private readonly StringLocalizer _strings = new();
     private readonly List<CheckBox> _subjectBoxes = [];

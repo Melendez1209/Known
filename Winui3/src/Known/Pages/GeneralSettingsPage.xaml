@@ -4,7 +4,6 @@
     x:Class="Known.Pages.GeneralSettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Known.Pages"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -44,8 +43,8 @@
 
                 <!--
                     The same lookup the onboarding wizard offers, on the page where a student corrects
-                    what the wizard put there. The caption sits under the button rather than in a
-                    dialog, so a declined prompt leaves them looking at the field
+                    what the wizard put there. The caption sits under the button rather than in a 
+                    dialogue, so a declined prompt leaves them looking at the field
                 -->
                 <StackPanel Spacing="8">
                     <StackPanel Orientation="Horizontal" Spacing="12">

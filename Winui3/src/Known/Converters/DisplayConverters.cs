@@ -53,7 +53,7 @@ public sealed partial class ExamPercentageConverter : IValueConverter
 }
 
 /// <summary>
-///     Shows an element only for a pinned exam. WinUI ships no built in converter for this, because a
+///     Shows an element only for a pinned exam. WinUI ships no built-in converter for this, because a
 ///     bool carries no opinion about which visibility to use when it is false.
 /// </summary>
 public sealed partial class PinnedToVisibilityConverter : IValueConverter

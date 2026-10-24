@@ -45,7 +45,7 @@ public sealed class SettingsService(ISettingsRepository repository)
     }
 
     /// <summary>Picks the UI language, passing an empty tag to follow the system.</summary>
-    public Task SetLanguageAsync(string languageTag, CancellationToken cancellationToken = default)
+    public Task SetLanguageAsync(string? languageTag, CancellationToken cancellationToken = default)
     {
         return UpdateAsync(settings => settings.SelectedLanguage = languageTag ?? "", cancellationToken);
     }

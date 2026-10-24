@@ -16,7 +16,7 @@ namespace Known.Services;
 public static class CrashLog
 {
     /// <summary>File the crashes are appended to, inside the application's data directory.</summary>
-    public static string Path { get; } = System.IO.Path.Combine(
+    private static string Path { get; } = System.IO.Path.Combine(
         KnownDatabase.ResolveDataDirectory(),
         "crash.log");
 

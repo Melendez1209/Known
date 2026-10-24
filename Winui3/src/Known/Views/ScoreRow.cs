@@ -2,7 +2,7 @@ using System.Globalization;
 using Known.Core.Domain;
 using Microsoft.UI.Xaml;
 
-namespace Known.Pages;
+namespace Known.Views;
 
 /// <summary>
 ///     One subject's row on the score entry form: a tick box, a slider and the two score fields.
@@ -75,7 +75,7 @@ public sealed class ScoreRow : DependencyObject
     }
 
     /// <summary>Stable subject identifier written to the database.</summary>
-    public string SubjectKey { get; }
+    private string SubjectKey { get; }
 
     /// <summary>Translated subject name shown on the card.</summary>
     public string SubjectName { get; }
@@ -206,7 +206,7 @@ public sealed class ScoreRow : DependencyObject
 
             // A blank or half typed full mark must not collapse the track, so it falls back to the
             // historical default until the field is usable
-            FullMarkValue = fullMark is { } parsed && parsed > 0f
+            FullMarkValue = fullMark is { } parsed and > 0f
                 ? parsed
                 : ExamScoring.ParseScoreOrNull(SubjectCatalogue.DefaultFullMark) ?? 150f;
 

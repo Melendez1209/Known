@@ -10,7 +10,7 @@ namespace Known;
 public partial class App
 {
     private Window? _window;
-    private GuideWindow? _guide;
+    private Windows.GuideWindow? _guide;
 
     /// <summary>Creates the application.</summary>
     public App()
@@ -44,7 +44,7 @@ public partial class App
     private async Task RunOnboardingAsync()
     {
         // The field is what keeps the wizard alive for as long as it is on screen
-        _guide = new GuideWindow();
+        _guide = new Windows.GuideWindow();
 
         _guide.Activate();
 
@@ -60,7 +60,7 @@ public partial class App
     /// <summary>Creates and shows the main window.</summary>
     private void OpenShell()
     {
-        _window = new MainWindow();
+        _window = new Windows.MainWindow();
         _window.Activate();
     }
 }

@@ -337,8 +337,8 @@
     <data name="expanded" xml:space="preserve">
     <value>Expanded</value>
   </data>
-    <data name="collapsed" xml:space="preserve">
-    <value>Collapsed</value>
+  <data name="collapsed" xml:space="preserve">
+    <value>收起</value>
   </data>
     <data name="identity" xml:space="preserve">
     <value>身份</value>

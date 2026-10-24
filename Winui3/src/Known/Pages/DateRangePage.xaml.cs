@@ -12,7 +12,7 @@ namespace Known.Pages;
 ///     page therefore offers two calendar pickers with an explicit rule that the end cannot precede the
 ///     start, which is the behaviour that actually matters to the student.
 /// </remarks>
-public sealed partial class DateRangePage : Page
+public sealed partial class DateRangePage
 {
     private readonly StringLocalizer _strings = new();
 

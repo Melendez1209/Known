@@ -35,5 +35,5 @@ public sealed class Settings
     /// Which measure the dashboard trend chart plots. A first run has never seen the charts, so it
     /// opens on raw marks rather than a percentage the student has no context for yet.
     /// </summary>
-    public Domain.TrendMetric TrendMetric { get; set; } = Domain.TrendMetric.Marks;
+    public TrendMetric TrendMetric { get; set; } = TrendMetric.Marks;
 }

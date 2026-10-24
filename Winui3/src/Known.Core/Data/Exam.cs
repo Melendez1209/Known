@@ -16,11 +16,11 @@ public sealed class Exam
     public long EndDate { get; set; }
 
     /// <summary>Insertion timestamp in epoch milliseconds, used to break ties on import.</summary>
-    public long CreatedAt { get; set; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+    public long CreatedAt { get; init; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
 
     /// <summary>Whether the student pinned this exam to their favourites.</summary>
     public bool IsFavorite { get; set; }
 
     /// <summary>Navigation to the scores of this exam when loaded through a relationship.</summary>
-    public List<ExamScore> Scores { get; set; } = [];
+    public List<ExamScore> Scores { get; init; } = [];
 }
