@@ -107,7 +107,8 @@
                                     Grid.Row="1"
                                     x:Name="DistributionChart"
                                     Margin="0,8,0,0"
-                                    LegendPosition="Right" />
+                                    LegendPosition="Right"
+                                    Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
                             </Grid>
                         </Border>
 
@@ -129,15 +130,11 @@
 
             <TabViewItem x:Name="ComparisonTab">
                 <Grid Padding="24,8,24,16">
-                    <Border
-                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                        CornerRadius="8"
-                        Padding="12">
-                        <lvc:CartesianChart
-                            x:Name="ComparisonChart"
-                            LegendPosition="Bottom"
-                            ZoomMode="None" />
-                    </Border>
+                    <lvc:CartesianChart
+                        x:Name="ComparisonChart"
+                        LegendPosition="Bottom"
+                        ZoomMode="None"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
                 </Grid>
             </TabViewItem>
         </TabView>

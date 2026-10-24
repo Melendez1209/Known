@@ -110,7 +110,8 @@
                         x:Name="TrendChart"
                         Margin="0,8,0,0"
                         LegendPosition="Hidden"
-                        ZoomMode="None" />
+                        ZoomMode="None"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
                 </Grid>
             </Border>
 
@@ -130,7 +131,8 @@
                         x:Name="SubjectChart"
                         Margin="0,8,0,0"
                         LegendPosition="Hidden"
-                        ZoomMode="None" />
+                        ZoomMode="None"
+                        Background="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
                 </Grid>
             </Border>
         </Grid>

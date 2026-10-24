@@ -10,6 +10,19 @@
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
             </ResourceDictionary.MergedDictionaries>
 
+            <ResourceDictionary.ThemeDictionaries>
+                <!-- Light theme keeps the subtle secondary text and divider colours. -->
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="ChartTextBrush" Color="{ThemeResource TextFillColorSecondaryBrush}" />
+                    <SolidColorBrush x:Key="ChartGridLineBrush" Color="{ThemeResource DividerStrokeColorDefaultBrush}" />
+                </ResourceDictionary>
+                <!-- Dark theme uses white so chart text and grid lines stay legible on a dark surface. -->
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="ChartTextBrush" Color="White" />
+                    <SolidColorBrush x:Key="ChartGridLineBrush" Color="White" Opacity="0.4" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+
             <!--
                 Charts are drawn by SkiaSharp, which cannot see XAML theme resources. These brushes
                 resolve to concrete colours the chart code can copy into an SKColor, and because they
@@ -20,8 +33,6 @@
             <SolidColorBrush x:Key="ChartAccentBrush" Color="{ThemeResource AccentFillColorDefaultBrush}" />
             <SolidColorBrush x:Key="ChartAccentSecondaryBrush" Color="{ThemeResource AccentFillColorSecondaryBrush}" />
             <SolidColorBrush x:Key="ChartAccentTertiaryBrush" Color="{ThemeResource AccentFillColorTertiaryBrush}" />
-            <SolidColorBrush x:Key="ChartTextBrush" Color="{ThemeResource TextFillColorSecondaryBrush}" />
-            <SolidColorBrush x:Key="ChartGridLineBrush" Color="{ThemeResource DividerStrokeColorDefaultBrush}" />
             <SolidColorBrush x:Key="ChartSurfaceBrush" Color="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
         </ResourceDictionary>
     </Application.Resources>
