@@ -10,8 +10,8 @@ public sealed class Settings
     /// <summary>Always <c>1</c>; the table holds exactly one row.</summary>
     public int Id { get; set; } = 1;
 
-    /// <summary>One of the <see cref="DarkThemeMode" /> constants.</summary>
-    public int DarkThemeValue { get; set; } = DarkThemeMode.FollowSystem;
+    /// <summary>One of the <see cref="AppThemeMode" /> constants.</summary>
+    public int AppThemeValue { get; set; } = AppThemeMode.FollowSystem;
 
     /// <summary>Whether the high contrast variants of the system theme are requested.</summary>
     public bool IsHighContrastMode { get; set; }

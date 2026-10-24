@@ -499,6 +499,18 @@
     <data name="location_use" xml:space="preserve">
     <value>Use my location</value>
   </data>
+    <data name="app_theme" xml:space="preserve">
+    <value>App Theme</value>
+  </data>
+    <data name="use_system_settings" xml:space="preserve">
+    <value>Use system settings</value>
+  </data>
+    <data name="light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+    <data name="dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
     <data name="restart_app" xml:space="preserve">
     <value>Restart application</value>
   </data>

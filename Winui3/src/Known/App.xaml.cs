@@ -1,3 +1,4 @@
+using Known.Core.Localization;
 using Known.Services;
 using Microsoft.UI.Xaml;
 
@@ -60,6 +61,10 @@ public partial class App
     /// <summary>Creates and shows the main window.</summary>
     private void OpenShell()
     {
+        // Restore the stored UI language before the shell is built, so every page resolves its
+        // strings in the chosen language from the first frame instead of only after a restart.
+        StringLocalizer.UseLanguage(AppServices.Settings.Current.SelectedLanguage);
+
         _window = new Windows.MainWindow();
         _window.Activate();
     }

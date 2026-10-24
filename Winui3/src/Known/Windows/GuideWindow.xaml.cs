@@ -422,7 +422,7 @@ public sealed partial class GuideWindow
     {
         if (Content is not FrameworkElement root) return;
 
-        root.RequestedTheme = _themeService.ShouldUseDarkTheme
+        root.RequestedTheme = _themeService.ShouldUseAppTheme
             ? ElementTheme.Dark
             : ElementTheme.Light;
 

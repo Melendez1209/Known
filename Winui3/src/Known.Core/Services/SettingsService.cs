@@ -33,9 +33,9 @@ public sealed class SettingsService(ISettingsRepository repository)
     }
 
     /// <summary>Chooses between the light and the dark variant of the system theme.</summary>
-    public Task SetDarkThemeAsync(int darkThemeValue, CancellationToken cancellationToken = default)
+    public Task SetAppThemeAsync(int appThemeValue, CancellationToken cancellationToken = default)
     {
-        return UpdateAsync(settings => settings.DarkThemeValue = darkThemeValue, cancellationToken);
+        return UpdateAsync(settings => settings.AppThemeValue = appThemeValue, cancellationToken);
     }
 
     /// <summary>Turns the high contrast request on or off.</summary>

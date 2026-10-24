@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using System.Globalization;
 using Known.Core.Data;
 using Known.Core.Domain;
 using Known.Core.Localization;
@@ -40,7 +41,7 @@ public sealed partial class SettingsPage
         SubjectsCaption.Text = _strings.Get("subjects");
         LocateCaption.Text = _strings.Get("location_use");
 
-        DarkCaption.Text = _strings.Get("dark_theme");
+        DarkCaption.Text = _strings.Get("app_theme");
         LanguageCaption.Text = _strings.Get("language");
 
         IdentityOptions.ItemsSource = new[]
@@ -183,10 +184,10 @@ public sealed partial class SettingsPage
                 box.IsChecked = isSelected;
             }
 
-            ThemeOptions.SelectedIndex = AppServices.Settings.Current.DarkThemeValue switch
+            ThemeOptions.SelectedIndex = AppServices.Settings.Current.AppThemeValue switch
             {
-                DarkThemeMode.On => 1,
-                DarkThemeMode.Off => 2,
+                AppThemeMode.Dark => 2,
+                AppThemeMode.Light => 1,
                 _ => 0
             };
 
@@ -282,9 +283,9 @@ public sealed partial class SettingsPage
     {
         ThemeOptions.ItemsSource = new[]
         {
-            _strings.Get("follow_system"),
-            _strings.Get("on"),
-            _strings.Get("off")
+            _strings.Get("use_system_settings"),
+            _strings.Get("light"),
+            _strings.Get("dark")
         };
     }
 
@@ -303,14 +304,15 @@ public sealed partial class SettingsPage
     {
         if (_suppressEvents) return;
 
-        var value = (ThemeOptions.SelectedIndex + 1) switch
+        var value = ThemeOptions.SelectedIndex switch
         {
-            1 => DarkThemeMode.On,
-            2 => DarkThemeMode.Off,
-            _ => DarkThemeMode.FollowSystem
+            0 => AppThemeMode.FollowSystem,
+            1 => AppThemeMode.Light,
+            2 => AppThemeMode.Dark,
+            _ => AppThemeMode.FollowSystem
         };
 
-        await AppServices.Settings.SetDarkThemeAsync(value);
+        await AppServices.Settings.SetAppThemeAsync(value);
     }
 
     private async void OnLanguageChanged(object sender, SelectionChangedEventArgs e)
@@ -318,10 +320,18 @@ public sealed partial class SettingsPage
         if (_suppressEvents || LanguageBox.SelectedItem is not LanguageOption option) return;
 
         await AppServices.Settings.SetLanguageAsync(option.Tag);
+
+        // Switching to the system language (empty tag) or to a language that already matches the
+        // system needs no restart; only a genuinely different language requires one.
+        var selectedCulture = StringLocalizer.ResolveCulture(option.Tag);
+        var systemCulture = CultureInfo.InstalledUICulture;
+        var needsRestart = !string.Equals(
+            selectedCulture.Name, systemCulture.Name, StringComparison.OrdinalIgnoreCase);
+
         StringLocalizer.UseLanguage(option.Tag);
 
         LanguageHint.Text = _strings.Get("language_restart_hint");
-        RestartButton.Visibility = Visibility.Visible;
+        RestartButton.Visibility = needsRestart ? Visibility.Visible : Visibility.Collapsed;
     }
 
     private void OnRestartClicked(object sender, RoutedEventArgs e)

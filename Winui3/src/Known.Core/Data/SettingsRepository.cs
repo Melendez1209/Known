@@ -70,7 +70,7 @@ public sealed class SettingsRepository(KnownDbContext context) : ISettingsReposi
         }
         else
         {
-            stored.DarkThemeValue = settings.DarkThemeValue;
+            stored.AppThemeValue = settings.AppThemeValue;
             stored.IsHighContrastMode = settings.IsHighContrastMode;
             stored.SelectedLanguage = settings.SelectedLanguage;
             stored.IsFirstLogin = settings.IsFirstLogin;

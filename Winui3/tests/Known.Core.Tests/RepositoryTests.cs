@@ -175,7 +175,7 @@ public sealed class ExamRepositoryTests : IAsyncLifetime
         var updated = await _repository.GetExamAsync(examId);
         Assert.NotNull(updated);
 
-        await _repository.UpdateExamAsync(updated!, [Score("chinese", 130f)]);
+        await _repository.UpdateExamAsync(updated, [Score("chinese", 130f)]);
 
         var loaded = await _repository.GetExamWithScoresAsync(examId);
         Assert.NotNull(loaded);
@@ -198,7 +198,7 @@ public sealed class ExamRepositoryTests : IAsyncLifetime
         var exam = await _repository.GetExamAsync(examId);
         Assert.NotNull(exam);
 
-        await _repository.UpdateExamAsync(exam!, []);
+        await _repository.UpdateExamAsync(exam, []);
 
         var reloaded = await _repository.GetExamAsync(examId);
         Assert.NotNull(reloaded);
@@ -330,7 +330,7 @@ public sealed class SettingsRepositoryTests : IAsyncLifetime
 
         Assert.Equal(1, settings.Id);
         Assert.True(settings.IsFirstLogin);
-        Assert.Equal(DarkThemeMode.FollowSystem, settings.DarkThemeValue);
+        Assert.Equal(AppThemeMode.FollowSystem, settings.AppThemeValue);
         Assert.Equal("", settings.SelectedLanguage);
         Assert.Equal(StudentIdentity.None, settings.Identity);
     }
@@ -342,7 +342,7 @@ public sealed class SettingsRepositoryTests : IAsyncLifetime
 
         var stored = await _repository.GetAsync();
         Assert.NotNull(stored);
-        stored!.Region = "Shanghai";
+        stored.Region = "Shanghai";
         stored.IsFirstLogin = false;
         await _repository.SaveAsync(stored);
 
@@ -360,7 +360,7 @@ public sealed class SettingsRepositoryTests : IAsyncLifetime
         await _repository.SaveAsync(new Settings
         {
             Id = SettingsRepository.SingletonId,
-            DarkThemeValue = DarkThemeMode.On,
+            AppThemeValue = AppThemeMode.Dark,
             IsHighContrastMode = true,
             SelectedLanguage = "zh-Hans",
             IsFirstLogin = false,
@@ -372,7 +372,7 @@ public sealed class SettingsRepositoryTests : IAsyncLifetime
         var stored = await _repository.GetAsync();
 
         Assert.NotNull(stored);
-        Assert.Equal(DarkThemeMode.On, stored.DarkThemeValue);
+        Assert.Equal(AppThemeMode.Dark, stored.AppThemeValue);
         Assert.True(stored.IsHighContrastMode);
         Assert.Equal("zh-Hans", stored.SelectedLanguage);
         Assert.False(stored.IsFirstLogin);

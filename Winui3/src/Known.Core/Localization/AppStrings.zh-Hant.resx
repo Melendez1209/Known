@@ -496,6 +496,18 @@
     <data name="location_use" xml:space="preserve">
     <value>使用我的位置</value>
   </data>
+    <data name="app_theme" xml:space="preserve">
+    <value>應用主題</value>
+  </data>
+    <data name="use_system_settings" xml:space="preserve">
+    <value>使用系統設定</value>
+  </data>
+    <data name="light" xml:space="preserve">
+    <value>淺色</value>
+  </data>
+    <data name="dark" xml:space="preserve">
+    <value>深色</value>
+  </data>
     <data name="restart_app" xml:space="preserve">
     <value>重新啟動應用程式</value>
   </data>
