@@ -77,8 +77,8 @@
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
                     <!--
-                        The label names the measure currently plotted, and the sync glyph says
-                        clicking will change it.
+                        The toggle asks whether the chart should plot the rate, and the sync glyph
+                        hints that clicking flips the measure.
                     -->
                     <Grid Grid.Row="0" ColumnSpacing="8">
                         <Grid.ColumnDefinitions>
@@ -91,18 +91,16 @@
                             VerticalAlignment="Center"
                             Style="{StaticResource BodyStrongTextBlockStyle}" />
 
-                        <Button
+                        <ToggleButton
                             Grid.Column="1"
                             x:Name="TrendMetricButton"
                             VerticalAlignment="Center"
                             Padding="8,4"
                             MinWidth="0"
-                            Click="OnTrendMetricClick">
-                            <StackPanel Orientation="Horizontal" Spacing="6">
-                                <SymbolIcon Symbol="Sync" />
-                                <TextBlock x:Name="TrendMetricLabel" VerticalAlignment="Center" />
-                            </StackPanel>
-                        </Button>
+                            Checked="OnTrendMetricChecked"
+                            Unchecked="OnTrendMetricUnchecked">
+                            <TextBlock x:Name="TrendMetricLabel" VerticalAlignment="Center" />
+                        </ToggleButton>
                     </Grid>
 
                     <lvc:CartesianChart
@@ -125,7 +123,28 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="*" />
                     </Grid.RowDefinitions>
-                    <TextBlock Grid.Row="0" x:Name="SubjectCaption" Style="{StaticResource BodyStrongTextBlockStyle}" />
+                    <Grid Grid.Row="0" ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            x:Name="SubjectCaption"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource BodyStrongTextBlockStyle}" />
+
+                        <ToggleButton
+                            Grid.Column="1"
+                            x:Name="SubjectMetricButton"
+                            VerticalAlignment="Center"
+                            Padding="8,4"
+                            MinWidth="0"
+                            Checked="OnSubjectMetricChecked"
+                            Unchecked="OnSubjectMetricUnchecked">
+                            <TextBlock x:Name="SubjectMetricLabel" VerticalAlignment="Center" />
+                        </ToggleButton>
+                    </Grid>
                     <lvc:CartesianChart
                         Grid.Row="1"
                         x:Name="SubjectChart"

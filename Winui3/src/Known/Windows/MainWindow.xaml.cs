@@ -26,7 +26,11 @@ public sealed partial class MainWindow
     {
         InitializeComponent();
 
-        _themeService = AppServices.Theme;
+        // Defensive: the shell is only opened after AppServices.InitialiseAsync() has completed,
+        // but guard against a null theme service in case initialisation order ever changes.
+        _themeService = AppServices.Theme ?? throw new InvalidOperationException(
+            $"{nameof(AppServices)}.{nameof(AppServices.Theme)} has not been initialised yet.");
+
         _themeService.ThemeChanged += OnThemeChanged;
 
         AppTitleBar.Title = _strings.Get("app_name");

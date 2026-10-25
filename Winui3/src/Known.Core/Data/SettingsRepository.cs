@@ -78,6 +78,7 @@ public sealed class SettingsRepository(KnownDbContext context) : ISettingsReposi
             stored.Region = settings.Region;
             stored.SelectedSubjects = settings.SelectedSubjects;
             stored.TrendMetric = settings.TrendMetric;
+            stored.SubjectMetric = settings.SubjectMetric;
         }
 
         await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

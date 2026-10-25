@@ -65,6 +65,11 @@ public partial class App
         // strings in the chosen language from the first frame instead of only after a restart.
         StringLocalizer.UseLanguage(AppServices.Settings.Current.SelectedLanguage);
 
+        // Make sure the theme service has re-read the stored preference after the onboarding
+        // wizard wrote it, so the shell renders the correct theme on the very first frame
+        // instead of flashing the wrong one and correcting itself later.
+        AppServices.Theme.Refresh();
+
         _window = new Windows.MainWindow();
         _window.Activate();
     }

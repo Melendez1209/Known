@@ -36,4 +36,10 @@ public sealed class Settings
     /// opens on raw marks rather than a percentage the student has no context for yet.
     /// </summary>
     public TrendMetric TrendMetric { get; set; } = TrendMetric.Marks;
+
+    /// <summary>
+    /// Which measure the dashboard subject chart plots. Kept separately from
+    /// <see cref="TrendMetric" /> so the two charts can be read independently.
+    /// </summary>
+    public TrendMetric SubjectMetric { get; set; } = TrendMetric.Marks;
 }

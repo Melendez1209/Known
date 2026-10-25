@@ -12,14 +12,14 @@
     <Identity
             Name="68e49fb4-767d-49a9-80e3-77803bf4cff3"
             Publisher="CN=beyon"
-            Version="1.0.0.0"/>
+            Version="1.0.2.0"/>
 
     <mp:PhoneIdentity PhoneProductId="68e49fb4-767d-49a9-80e3-77803bf4cff3"
                       PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
     <Properties>
         <DisplayName>Known</DisplayName>
-        <PublisherDisplayName>beyon</PublisherDisplayName>
+        <PublisherDisplayName>Yiming Geng</PublisherDisplayName>
         <Logo>Assets\StoreLogo.png</Logo>
     </Properties>
 

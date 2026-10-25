@@ -78,6 +78,12 @@ public sealed class SettingsService(ISettingsRepository repository)
         CancellationToken cancellationToken = default) =>
         UpdateAsync(settings => settings.TrendMetric = metric, cancellationToken);
 
+    /// <summary>Chooses which measure the dashboard subject chart plots.</summary>
+    public Task SetSubjectMetricAsync(
+        TrendMetric metric,
+        CancellationToken cancellationToken = default) =>
+        UpdateAsync(settings => settings.SubjectMetric = metric, cancellationToken);
+
     /// <summary>Marks onboarding as finished, which is what lets the shell open the main window.</summary>
     public Task CompleteOnboardingAsync(CancellationToken cancellationToken = default)
     {

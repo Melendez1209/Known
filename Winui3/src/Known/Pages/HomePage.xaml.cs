@@ -23,19 +23,32 @@ public sealed partial class HomePage
     private readonly StringLocalizer _strings = new();
 
     /// <summary>Which measure the trend chart plots. Survives a restart through the settings row.</summary>
-    private TrendMetric _metric;
+    private TrendMetric _trendMetric;
+
+    /// <summary>Which measure the subject chart plots. Survives a restart through the settings row.</summary>
+    private TrendMetric _subjectMetric;
 
     /// <summary>Creates the page, translates its captions and subscribes to the shared data.</summary>
     public HomePage()
     {
         InitializeComponent();
 
-        _metric = AppServices.Settings.Current.TrendMetric;
+        _trendMetric = AppServices.Settings.Current.TrendMetric;
+        _subjectMetric = AppServices.Settings.Current.SubjectMetric;
+
+        // The captions never change: the toggle itself carries the on/off state. Setting IsChecked
+        // here fires the Checked/Unchecked events before the page is loaded, so the handlers guard
+        // on IsLoaded and only perform real work once the page is ready.
+        TrendMetricLabel.Text = _strings.Get("show_in_rate");
+        SubjectMetricLabel.Text = _strings.Get("show_in_rate");
+        TrendMetricButton.IsChecked = _trendMetric == TrendMetric.Rate;
+        SubjectMetricButton.IsChecked = _subjectMetric == TrendMetric.Rate;
 
         TitleText.Text = _strings.Get("home");
         TrendCaption.Text = _strings.Get("score_trend");
         SubjectCaption.Text = _strings.Get("subject_average");
         ToolTipService.SetToolTip(TrendMetricButton, _strings.Get("trend_metric_hint"));
+        ToolTipService.SetToolTip(SubjectMetricButton, _strings.Get("subject_metric_hint"));
 
         AppServices.Exams.Reloaded += OnReloaded;
         AppServices.Theme.ThemeChanged += OnThemeChanged;
@@ -65,14 +78,52 @@ public sealed partial class HomePage
         Reload();
     }
 
-    /// <summary>Swaps the trend chart between raw totals and percentages, and remembers the choice.</summary>
-    private async void OnTrendMetricClick(object sender, RoutedEventArgs e)
+    /// <summary>Switches the trend chart to percentages and remembers the choice.</summary>
+    private async void OnTrendMetricChecked(object sender, RoutedEventArgs e)
     {
-        _metric = _metric == TrendMetric.Marks ? TrendMetric.Rate : TrendMetric.Marks;
+        if (!IsLoaded) return;
+
+        _trendMetric = TrendMetric.Rate;
 
         Reload();
 
-        await AppServices.Settings.SetTrendMetricAsync(_metric);
+        await AppServices.Settings.SetTrendMetricAsync(_trendMetric);
+    }
+
+    /// <summary>Switches the trend chart back to raw totals and remembers the choice.</summary>
+    private async void OnTrendMetricUnchecked(object sender, RoutedEventArgs e)
+    {
+        if (!IsLoaded) return;
+
+        _trendMetric = TrendMetric.Marks;
+
+        Reload();
+
+        await AppServices.Settings.SetTrendMetricAsync(_trendMetric);
+    }
+
+    /// <summary>Switches the subject chart to percentages and remembers the choice.</summary>
+    private async void OnSubjectMetricChecked(object sender, RoutedEventArgs e)
+    {
+        if (!IsLoaded) return;
+
+        _subjectMetric = TrendMetric.Rate;
+
+        Reload();
+
+        await AppServices.Settings.SetSubjectMetricAsync(_subjectMetric);
+    }
+
+    /// <summary>Switches the subject chart back to raw averages and remembers the choice.</summary>
+    private async void OnSubjectMetricUnchecked(object sender, RoutedEventArgs e)
+    {
+        if (!IsLoaded) return;
+
+        _subjectMetric = TrendMetric.Marks;
+
+        Reload();
+
+        await AppServices.Settings.SetSubjectMetricAsync(_subjectMetric);
     }
 
     /// <summary>Rebuilds the figures and both charts from the current exam list and theme.</summary>
@@ -84,10 +135,8 @@ public sealed partial class HomePage
 
         var ordered = AppServices.Exams.Exams.OrderBy(exam => exam.Exam.StartDate).ToList();
 
-        var metricName =
-            _metric == TrendMetric.Marks ? _strings.Get("average_score") : _strings.Get("average_rate");
-
-        TrendMetricLabel.Text = metricName;
+        var trendMetricName =
+            _trendMetric == TrendMetric.Marks ? _strings.Get("average_score") : _strings.Get("average_rate");
 
         StatCards.ItemsSource = new[]
         {
@@ -105,15 +154,15 @@ public sealed partial class HomePage
             .Select(exam => ExamDates.FormatDateRange(exam.Exam.StartDate, exam.Exam.EndDate))
             .ToArray();
 
-        var plotsMarks = _metric == TrendMetric.Marks;
+        var trendPlotsMarks = _trendMetric == TrendMetric.Marks;
 
         TrendChart.Series =
         [
             new LineSeries<double>
             {
-                Name = metricName,
+                Name = trendMetricName,
                 Values = ordered
-                    .Select(exam => plotsMarks
+                    .Select(exam => trendPlotsMarks
                         ? exam.TotalMark
                         : (double)ExamScoring.Percentage(exam.TotalMark, exam.TotalFullMark))
                     .ToArray(),
@@ -131,23 +180,36 @@ public sealed partial class HomePage
         // Raw totals run to several hundred and vary far more between exams than a percentage does,
         // so a fixed 0 to 100 would squash the line flat against the bottom of the plot.
         TrendChart.YAxes =
-            [BuildValueAxis(metricName, plotsMarks ? null : 0, plotsMarks ? null : 100)];
+            [BuildValueAxis(trendMetricName, trendPlotsMarks ? null : 0, trendPlotsMarks ? null : 100)];
 
         var stats = AppServices.Exams.SubjectStats.ToList();
         var subjectLabels = stats.Select(stat => SubjectLabels.NameOf(_strings, stat.SubjectKey)).ToArray();
+
+        var subjectMetricName =
+            _subjectMetric == TrendMetric.Marks ? _strings.Get("average_score") : _strings.Get("average_rate");
+
+        var subjectPlotsMarks = _subjectMetric == TrendMetric.Marks;
 
         SubjectChart.Series =
         [
             new ColumnSeries<double>
             {
-                Name = _strings.Get("average_score"),
-                Values = stats.Select(stat => (double)stat.AvgMark).ToArray(),
+                Name = subjectMetricName,
+                Values = stats
+                    .Select(stat => subjectPlotsMarks
+                        ? (double)stat.AvgMark
+                        : (double)ExamScoring.Percentage(stat.AvgMark, stat.AvgFullMark))
+                    .ToArray(),
                 Fill = new SolidColorPaint(ChartPalette.AccentTertiary)
             }
         ];
 
         SubjectChart.XAxes = [BuildIndexAxis(subjectLabels)];
-        SubjectChart.YAxes = [BuildValueAxis(_strings.Get("mark"), null, null)];
+
+        // The rate is a 0 to 100 percentage, so it gets the same fixed bounds as the trend chart in
+        // rate mode instead of the automatically scaled mark axis.
+        SubjectChart.YAxes =
+            [BuildValueAxis(subjectMetricName, subjectPlotsMarks ? null : 0, subjectPlotsMarks ? null : 100)];
     }
 
     /// <summary>

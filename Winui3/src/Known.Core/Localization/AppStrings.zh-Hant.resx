@@ -451,6 +451,12 @@
     <data name="trend_metric_hint" xml:space="preserve">
     <value>在總分與得分率之間切換趨勢圖口徑</value>
   </data>
+    <data name="show_in_rate" xml:space="preserve">
+    <value>按得分率顯示</value>
+  </data>
+    <data name="subject_metric_hint" xml:space="preserve">
+    <value>在平均分與得分率之間切換學科圖口徑</value>
+  </data>
     <data name="discard_exam_confirm" xml:space="preserve">
     <value>要捨棄已輸入的內容嗎？</value>
   </data>

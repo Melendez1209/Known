@@ -454,6 +454,12 @@
     <data name="trend_metric_hint" xml:space="preserve">
     <value>Switch the trend chart between total marks and score rate</value>
   </data>
+    <data name="show_in_rate" xml:space="preserve">
+    <value>Show in rate</value>
+  </data>
+    <data name="subject_metric_hint" xml:space="preserve">
+    <value>Switch the subject chart between average marks and score rate</value>
+  </data>
     <data name="discard_exam_confirm" xml:space="preserve">
     <value>Do you want to discard the content you have entered?</value>
   </data>

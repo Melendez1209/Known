@@ -1,8 +1,8 @@
 namespace Known.Core.Domain;
 
 /// <summary>
-/// Which measure the dashboard trend chart plots. Stored in the settings row, so the choice
-/// survives a restart.
+/// Which measure a dashboard chart plots. Stored in the settings row, so the choice survives a
+/// restart. Both the trend chart and the subject chart keep their own value.
 /// </summary>
 public enum TrendMetric
 {
