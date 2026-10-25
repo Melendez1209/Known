@@ -7,13 +7,15 @@ using Known.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
+using Windows.ApplicationModel;
 
 namespace Known.Pages;
 
 /// <summary>
 ///     The single settings page. All desktop-relevant settings are grouped into cards on this
 ///     page instead of being spread across child pages: the student profile, identity and region,
-///     the selected subjects, the theme and language, and the Microsoft account.
+///     the selected subjects, the theme and language, the Microsoft account, and an About card
+///     carrying the app version and the project links.
 /// </summary>
 public sealed partial class SettingsPage
 {
@@ -43,6 +45,12 @@ public sealed partial class SettingsPage
 
         DarkCaption.Text = _strings.Get("app_theme");
         LanguageCaption.Text = _strings.Get("language");
+
+        AboutCaption.Text = _strings.Get("about");
+        VersionText.Text = _strings.Get("app_name") + " " + ReadAppVersion();
+        ReadmeLink.Content = _strings.Get("readme");
+        ReleaseLink.Content = _strings.Get("release");
+        IssueLink.Content = _strings.Get("github_issue");
 
         IdentityOptions.ItemsSource = new[]
         {
@@ -352,6 +360,28 @@ public sealed partial class SettingsPage
         }
 
         Application.Current.Exit();
+    }
+
+    // ------------------------------------------------------------------
+    // About
+    // ------------------------------------------------------------------
+
+    /// <summary>
+    ///     Reads the version from the package identity, which is what the release carries. Runs
+    ///     without a package identity have none, so the assembly version stands in for them.
+    /// </summary>
+    private static string ReadAppVersion()
+    {
+        try
+        {
+            var version = Package.Current.Id.Version;
+            return $"{version.Major}.{version.Minor}.{version.Build}.{version.Revision}";
+        }
+        catch (InvalidOperationException)
+        {
+            var assembly = typeof(SettingsPage).Assembly.GetName().Version;
+            return assembly is null ? string.Empty : assembly.ToString();
+        }
     }
 
     // ------------------------------------------------------------------

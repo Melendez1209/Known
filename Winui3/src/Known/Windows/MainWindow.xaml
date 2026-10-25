@@ -55,28 +55,19 @@
             DisplayModeChanged="OnDisplayModeChanged">
 
             <!--
-                Home and History are the two day-to-day destinations. Account is somewhere the student
-                returns to rather than works in, so it sits below with About.
+                Home and History are the two day-to-day destinations.
+
+                Settings needs no item of its own: NavigationView contributes one below the menu
+                items, which IsSettingsVisible shows by default. The control generates it, so it is
+                not one of ours and carries no Tag. OnTabSelectionChanged picks it up through
+                IsSettingsSelected instead, and ApplyCaptions renames it, because the caption the
+                control gives it does not follow the language picked in the app. The About links
+                live on the settings page itself rather than getting a pane entry.
             -->
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Name="HomeItem" Content="Home" Tag="Home" Icon="Home" />
                 <NavigationViewItem x:Name="HistoryItem" Content="History" Tag="History" Icon="AllApps" />
             </NavigationView.MenuItems>
-
-            <!--
-                About sits here rather than at the top because it is a single page with nothing to
-                choose between once you are there. The account page lists it as one of its rows too,
-                which is deliberate.
-
-                Settings needs no item of its own: NavigationView contributes one below these footer
-                items, which IsSettingsVisible shows by default. The control generates it, so it is
-                not one of ours and carries no Tag. OnTabSelectionChanged picks it up through
-                IsSettingsSelected instead, and ApplyCaptions renames it, because the caption the
-                control gives it does not follow the language picked in the app.
-            -->
-            <NavigationView.FooterMenuItems>
-                <NavigationViewItem x:Name="AboutItem" Content="About" Tag="About" Icon="Help" />
-            </NavigationView.FooterMenuItems>
 
             <!--
                 The single main frame holds every page and its children. Grid children paint in

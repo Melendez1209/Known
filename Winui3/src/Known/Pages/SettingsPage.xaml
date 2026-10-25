@@ -185,6 +185,34 @@
                 </StackPanel>
             </Border>
 
+            <!-- About -->
+            <Border
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                CornerRadius="8"
+                Padding="16">
+                <StackPanel Spacing="8">
+                    <TextBlock
+                        x:Name="AboutCaption"
+                        Style="{StaticResource BodyStrongTextBlockStyle}" />
+                    <TextBlock
+                        x:Name="VersionText"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                    <HyperlinkButton
+                        x:Name="ReadmeLink"
+                        Padding="0"
+                        NavigateUri="https://github.com/Melendez1209/Known" />
+                    <HyperlinkButton
+                        x:Name="ReleaseLink"
+                        Padding="0"
+                        NavigateUri="https://github.com/Melendez1209/Known/releases" />
+                    <HyperlinkButton
+                        x:Name="IssueLink"
+                        Padding="0"
+                        NavigateUri="https://github.com/Melendez1209/Known/issues" />
+                </StackPanel>
+            </Border>
+
         </StackPanel>
     </ScrollViewer>
 

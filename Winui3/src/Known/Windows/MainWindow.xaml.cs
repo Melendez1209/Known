@@ -73,7 +73,6 @@ public sealed partial class MainWindow
     {
         HomeItem.Content = _strings.Get("home");
         HistoryItem.Content = _strings.Get("history");
-        AboutItem.Content = _strings.Get("about");
 
         // The pane's settings item is built by NavigationView itself and comes with the framework's
         // own caption, which would keep answering in the shell language after the student switches.
@@ -154,10 +153,6 @@ public sealed partial class MainWindow
             case "Home":
                 MainFrame.Navigate(typeof(HomePage));
                 break;
-
-            case "About":
-                MainFrame.Navigate(typeof(AboutPage));
-                break;
         }
     }
 
@@ -175,7 +170,6 @@ public sealed partial class MainWindow
         {
             HomePage => HomeItem,
             HistoryPage => HistoryItem,
-            AboutPage => AboutItem,
             SettingsPage when Navigation.SettingsItem is NavigationViewItem settingsItem => settingsItem,
             _ => Navigation.SelectedItem
         };
