@@ -123,7 +123,7 @@ public sealed partial class HistoryPage
 
     private void OnAddExam(object sender, RoutedEventArgs e)
     {
-        this.Frame.Navigate(typeof(DateRangePage));
+        this.Frame.Navigate(typeof(InputtingPage));
     }
 
     private async void OnDeleteSelected(object sender, RoutedEventArgs e)
