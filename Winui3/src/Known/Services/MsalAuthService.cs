@@ -30,9 +30,9 @@ public sealed class MsalAuthService
 {
     /// <summary>
     ///     Application id of the Entra registration. Empty until the app is registered, in which case
-    ///     <see cref="IsConfigured" /> stays false and the sign in button explains why.
+    ///     <see cref="IsConfigured" /> stays false and the sign-in button explains why.
     /// </summary>
-    public const string ClientId = "";
+    private const string ClientId = "";
 
     /// <summary>The scopes requested, the minimum that identifies the signed in person.</summary>
     private static readonly string[] Scopes = ["User.Read"];

@@ -1,5 +1,6 @@
 using Windows.UI;
 using Windows.UI.ViewManagement;
+using Known.Core.Data;
 using Known.Core.Domain;
 using Known.Core.Services;
 
@@ -10,25 +11,35 @@ namespace Known.Services;
 ///     <see cref="Microsoft.UI.Xaml.ElementTheme" /> to request and whether the high contrast variants
 ///     should be layered on top. The service never touches XAML itself.
 /// </summary>
-public sealed class ThemeService(SettingsService settingsService)
+public sealed class ThemeService
 {
+    private readonly SettingsService _settingsService;
+
     /// <summary>Whether Windows is currently offering the dark variant of the system theme.</summary>
-    public bool IsSystemInDarkTheme { get; private set; }
+    private bool IsSystemInDarkTheme { get; set; }
 
     /// <summary>Whether Windows itself is forcing a high contrast theme.</summary>
-    public bool IsSystemHighContrast { get; private set; }
+    private bool IsSystemHighContrast { get; set; }
 
     /// <summary>The preference currently in effect.</summary>
-    public DarkThemePreference Preference { get; private set; } = new();
+    private AppThemePreference Preference { get; set; } = new();
 
     /// <summary>Whether the window should render dark.</summary>
-    public bool ShouldUseDarkTheme => Preference.IsDarkTheme(IsSystemInDarkTheme);
+    public bool ShouldUseAppTheme => Preference.IsAppTheme(IsSystemInDarkTheme);
 
     /// <summary>Whether the high contrast variants should be requested right now.</summary>
     public bool HighContrastActive => Preference.IsHighContrastModeEnabled || IsSystemHighContrast;
 
     /// <summary>Raised whenever the effective values change, on the UI thread.</summary>
     public event EventHandler? ThemeChanged;
+
+    /// <summary>Creates the service and listens for stored preference changes so a theme switch
+    ///     takes effect immediately instead of waiting for the window to be reactivated.</summary>
+    public ThemeService(SettingsService settingsService)
+    {
+        _settingsService = settingsService;
+        settingsService.Changed += OnSettingsChanged;
+    }
 
     /// <summary>
     ///     Re-reads the Windows settings, so "follow system" keeps tracking the user flipping the
@@ -38,15 +49,20 @@ public sealed class ThemeService(SettingsService settingsService)
     {
         IsSystemInDarkTheme = QueryIsSystemInDarkTheme();
         IsSystemHighContrast = QueryIsSystemHighContrast();
-        Preference = new DarkThemePreference(
-            settingsService.Current.DarkThemeValue,
-            settingsService.Current.IsHighContrastMode);
+        Preference = new AppThemePreference(
+            _settingsService.Current.AppThemeValue,
+            _settingsService.Current.IsHighContrastMode);
 
         ThemeChanged?.Invoke(this, EventArgs.Empty);
     }
 
+    private void OnSettingsChanged(object? sender, Settings settings)
+    {
+        Refresh();
+    }
+
     /// <summary>Whether Windows is currently offering the dark variant.</summary>
-    public static bool QueryIsSystemInDarkTheme()
+    private static bool QueryIsSystemInDarkTheme()
     {
         var settings = new UISettings();
         var background = settings.GetColorValue(UIColorType.Background);
@@ -55,7 +71,7 @@ public sealed class ThemeService(SettingsService settingsService)
     }
 
     /// <summary>Whether Windows is forcing a high contrast theme.</summary>
-    public static bool QueryIsSystemHighContrast()
+    private static bool QueryIsSystemHighContrast()
     {
         try
         {

@@ -29,7 +29,7 @@ public sealed class ExamService
     public ObservableCollection<ExamWithTotal> Exams { get; } = [];
 
     /// <summary>The exams the student pinned to their favourites.</summary>
-    public ObservableCollection<Exam> Favourites { get; } = [];
+    private ObservableCollection<Exam> Favourites { get; } = [];
 
     /// <summary>
     ///     Mean score per subject across every exam. The dashboard shows all exams at once, so unlike
@@ -87,7 +87,7 @@ public sealed class ExamService
         }
     }
 
-    /// <summary>Runs a write against the repository and refreshes the collections afterwards.</summary>
+    /// <summary>Runs a writing against the repository and refreshes the collections afterwards.</summary>
     public async Task<T> MutateAsync<T>(Func<IExamRepository, Task<T>> write,
         CancellationToken cancellationToken = default)
     {
@@ -98,7 +98,7 @@ public sealed class ExamService
         return result;
     }
 
-    /// <summary>Runs a write against the repository and refreshes the collections afterwards.</summary>
+    /// <summary>Runs a writing against the repository and refreshes the collections afterwards.</summary>
     public Task MutateAsync(Func<IExamRepository, Task> write, CancellationToken cancellationToken = default)
     {
         return MutateAsync<object?>(

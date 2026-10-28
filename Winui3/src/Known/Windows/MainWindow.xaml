@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <Window
-    x:Class="Known.MainWindow"
+    x:Class="Known.Windows.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:d="http://schemas.expression.blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Title="Known">
@@ -25,14 +25,16 @@
             left at its default, is what pulls the pane header up so the two read as one continuous
             surface.
 
-            The back button is not one of this control's jobs. It belongs to the NavigationView below,
-            which draws it and reports the request, the arrangement the WinUI Gallery sample uses.
-            Only the pane toggle is kept here, and the NavigationView's own toggle is therefore
-            hidden, because having the same button twice in one column would duplicate them.
+            The back button is provided by the TitleBar itself, following the Fluent Design guideline
+            that the back button sits in the top-left corner of the window. IsBackButtonEnabled is
+            bound to MainFrame.CanGoBack so the button is only usable when there is somewhere to go.
         -->
         <TitleBar
             x:Name="AppTitleBar"
             IsPaneToggleButtonVisible="True"
+            IsBackButtonVisible="True"
+            IsBackButtonEnabled="{x:Bind MainFrame.CanGoBack, Mode=OneWay}"
+            BackRequested="OnBackRequested"
             PaneToggleRequested="OnPaneToggleRequested">
             <TitleBar.IconSource>
                 <ImageIconSource ImageSource="ms-appx:///Assets/StoreLogo.png" />
@@ -40,26 +42,27 @@
         </TitleBar>
 
         <!--
-            The back button is the NavigationView's own, and BackRequested is the only thing needed
-            to hear it, which is how the WinUI Gallery sample wires the same control. Visible rather
-            than Auto, because Auto collapses the button on Xbox and TV and this app is never one:
-            naming it outright keeps the pane the same shape everywhere. Whether the button is usable
-            is IsBackEnabled's business, and UpdateBackButton answers it from the shell.
+            NavigationView drives the top-level tabs. The back button is no longer here: it belongs to
+            the TitleBar above, matching the WinUI Notes sample and the Fluent Design guidance.
         -->
         <NavigationView
             Grid.Row="1"
             x:Name="Navigation"
             PaneDisplayMode="Auto"
-            BackRequested="OnNavigationBackRequested"
-            IsBackButtonVisible="Visible"
-            IsBackEnabled="False"
+            IsBackButtonVisible="Collapsed"
             IsPaneToggleButtonVisible="False"
             SelectionChanged="OnTabSelectionChanged"
             DisplayModeChanged="OnDisplayModeChanged">
 
             <!--
-                Only the two destinations that make up the exam workflow sit at the top. The account
-                is somewhere the student returns to rather than works in, so it goes below with about.
+                Home and History are the two day-to-day destinations.
+
+                Settings needs no item of its own: NavigationView contributes one below the menu
+                items, which IsSettingsVisible shows by default. The control generates it, so it is
+                not one of ours and carries no Tag. OnTabSelectionChanged picks it up through
+                IsSettingsSelected instead, and ApplyCaptions renames it, because the caption the
+                control gives it does not follow the language picked in the app. The About links
+                live on the settings page itself rather than getting a pane entry.
             -->
             <NavigationView.MenuItems>
                 <NavigationViewItem x:Name="HomeItem" Content="Home" Tag="Home" Icon="Home" />
@@ -67,33 +70,11 @@
             </NavigationView.MenuItems>
 
             <!--
-                About sits here rather than at the top because it is a single page with nothing to
-                choose between once you are there. The account page lists it as one of its rows too,
-                which is deliberate.
-
-                Settings needs no item of its own: NavigationView contributes one below these footer
-                items, which IsSettingsVisible shows by default. The control generates it, so it is
-                not one of ours and carries no Tag. OnTabSelectionChanged picks it up through
-                IsSettingsSelected instead, and ApplyCaptions renames it, because the caption the
-                control gives it does not follow the language picked in the app.
+                The single main frame holds every page and its children. Grid children paint in
+                declaration order, so this frame is listed last so it paints on top of nothing else
+                and fills the content area.
             -->
-            <NavigationView.FooterMenuItems>
-                <NavigationViewItem x:Name="AccountItem" Content="Account" Tag="Account" Icon="Contact" />
-                <NavigationViewItem x:Name="AboutItem" Content="About" Tag="About" Icon="Help" />
-            </NavigationView.FooterMenuItems>
-
-            <!--
-                The shared frame is declared last on purpose. Grid children paint in declaration
-                order, so a frame listed first is painted under the tab frames and would stay hidden
-                behind them even once made visible. Collapsed here because ShellNavigator reveals it
-                when a page belonging to no tab, such as the settings, is opened.
-            -->
-            <Grid>
-                <Frame x:Name="HomeFrame" />
-                <Frame x:Name="HistoryFrame" Visibility="Collapsed" />
-                <Frame x:Name="AccountFrame" Visibility="Collapsed" />
-                <Frame x:Name="RootFrame" Visibility="Collapsed" />
-            </Grid>
+            <Frame x:Name="MainFrame" />
         </NavigationView>
     </Grid>
 

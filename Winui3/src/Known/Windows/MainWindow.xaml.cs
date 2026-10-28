@@ -3,21 +3,21 @@ using Known.Pages;
 using Known.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 
-namespace Known;
+namespace Known.Windows;
 
 /// <summary>
 ///     The application shell.
 /// </summary>
 /// <remarks>
 ///     A <see cref="TitleBar" /> sits above a <see cref="NavigationView" />, which is the arrangement the
-///     Windows App SDK recommends: the TitleBar control owns the drag region and the space reserved for
-///     the caption buttons, while the NavigationView keeps one frame per top level tab so each tab
-///     keeps its own back stack, matching the Android build.
+///     Windows App SDK recommends: the TitleBar owns the drag region, the caption buttons and the
+///     back button, while the NavigationView drives a single <see cref="Frame" /> for all pages.
+///     This matches the WinUI Notes sample and the Fluent Design navigation guidance.
 /// </remarks>
-public sealed partial class MainWindow : Window
+public sealed partial class MainWindow
 {
-    private readonly ShellNavigator _navigator = null!;
     private readonly StringLocalizer _strings = new();
     private readonly ThemeService _themeService;
 
@@ -26,20 +26,14 @@ public sealed partial class MainWindow : Window
     {
         InitializeComponent();
 
-        _themeService = AppServices.Theme;
+        // Defensive: the shell is only opened after AppServices.InitialiseAsync() has completed,
+        // but guard against a null theme service in case initialisation order ever changes.
+        _themeService = AppServices.Theme ?? throw new InvalidOperationException(
+            $"{nameof(AppServices)}.{nameof(AppServices.Theme)} has not been initialised yet.");
+
         _themeService.ThemeChanged += OnThemeChanged;
 
-        _navigator = new ShellNavigator(
-            HomeFrame,
-            HistoryFrame,
-            AccountFrame,
-            RootFrame,
-            RootPageFor);
-
-        _navigator.StateChanged += (_, _) => UpdateBackButton();
-        _navigator.TabChanged += OnTabChanged;
-
-        AppServices.Shell = _navigator;
+        AppTitleBar.Title = _strings.Get("app_name");
 
         // Both of these only take effect from code. Setting ExtendsContentIntoTitleBar from XAML is
         // an error, and doing it late would flash the system title bar before replacing it
@@ -50,11 +44,14 @@ public sealed partial class MainWindow : Window
 
         ApplyCaptions();
 
+        // Start on the dashboard. The navigation item below is selected to match.
+        MainFrame.Navigate(typeof(HomePage));
+
         if (Navigation.MenuItems.FirstOrDefault() is NavigationViewItem firstItem) Navigation.SelectedItem = firstItem;
 
-        // Stated explicitly rather than left to the selection change above, so the content area is
-        // never left empty even if the event does not arrive
-        _navigator.GoToTab(ShellTab.Home);
+        // Keep the NavigationView selection in step with the frame, including when the student
+        // taps the back button and the frame unwinds to a previous page.
+        MainFrame.Navigated += OnMainFrameNavigated;
 
         Closed += OnClosed;
         Activated += OnWindowActivated;
@@ -72,25 +69,10 @@ public sealed partial class MainWindow : Window
         _themeService.Refresh();
     }
 
-    /// <summary>The page a tab shows when its frame is empty.</summary>
-    private static Type RootPageFor(ShellTab tab)
-    {
-        return tab switch
-        {
-            ShellTab.History => typeof(HistoryPage),
-            ShellTab.Account => typeof(AccountPage),
-            _ => typeof(HomePage)
-        };
-    }
-
     private void ApplyCaptions()
     {
-        AppTitleBar.Title = _strings.Get("app_name");
-
         HomeItem.Content = _strings.Get("home");
         HistoryItem.Content = _strings.Get("history");
-        AccountItem.Content = _strings.Get("account");
-        AboutItem.Content = _strings.Get("about");
 
         // The pane's settings item is built by NavigationView itself and comes with the framework's
         // own caption, which would keep answering in the shell language after the student switches.
@@ -108,11 +90,9 @@ public sealed partial class MainWindow : Window
     {
         if (Content is not FrameworkElement root) return;
 
-        root.RequestedTheme = _themeService.ShouldUseDarkTheme
+        root.RequestedTheme = _themeService.ShouldUseAppTheme
             ? ElementTheme.Dark
             : ElementTheme.Light;
-
-        UpdateBackButton();
     }
 
     /// <summary>The pane toggle lives in the title bar, so the handler lives here too.</summary>
@@ -122,13 +102,16 @@ public sealed partial class MainWindow : Window
     }
 
     /// <summary>
-    ///     Unwinds the shared stack in preference to the active tab's, because its pages sit on top.
-    ///     Running out of steps closes the window, which is what the system back gesture does on an
-    ///     app that has nowhere left to go.
+    ///     Handles the back button in the TitleBar. Unwinds the main frame; when there is nowhere
+    ///     left to go the window closes, which is what the system back gesture does on an app that
+    ///     has nowhere left to go.
     /// </summary>
-    private void OnNavigationBackRequested(NavigationView sender, NavigationViewBackRequestedEventArgs args)
+    private void OnBackRequested(TitleBar sender, object args)
     {
-        if (!_navigator.GoBack()) Close();
+        if (MainFrame.CanGoBack)
+            MainFrame.GoBack();
+        else
+            Close();
     }
 
     /// <summary>
@@ -155,7 +138,7 @@ public sealed partial class MainWindow : Window
         // not one of ours. Without it the pane offers a settings button that does nothing at all.
         if (args.IsSettingsSelected)
         {
-            _navigator.NavigateRoot(typeof(SettingsPage));
+            MainFrame.Navigate(typeof(SettingsPage));
             return;
         }
 
@@ -164,46 +147,32 @@ public sealed partial class MainWindow : Window
         switch (item.Tag as string)
         {
             case "History":
-                _navigator.GoToTab(ShellTab.History);
-                break;
-
-            case "Account":
-                _navigator.GoToTab(ShellTab.Account);
+                MainFrame.Navigate(typeof(HistoryPage));
                 break;
 
             case "Home":
-                _navigator.GoToTab(ShellTab.Home);
-                break;
-
-            case "About":
-                _navigator.NavigateRoot(typeof(AboutPage));
+                MainFrame.Navigate(typeof(HomePage));
                 break;
         }
     }
 
     /// <summary>
-    ///     Keeps the pane highlighting the tab on screen. Revealing the shared stack over its owner
-    ///     tab does not change the selection by itself, so the pane would otherwise still be showing
-    ///     whichever footer item was last clicked.
+    ///     Keeps the NavigationView selection in step with the frame, including when the student
+    ///     taps the back button and the frame unwinds to a previous page. Child pages such as
+    ///     DetailPage or InputtingPage keep the current selection because they belong to the tab
+    ///     that opened them.
     /// </summary>
-    private void OnTabChanged(object? sender, ShellTab tab)
+    private void OnMainFrameNavigated(object sender, NavigationEventArgs e)
     {
-        Navigation.SelectedItem = tab switch
-        {
-            ShellTab.History => HistoryItem,
-            ShellTab.Account => AccountItem,
-            _ => HomeItem
-        };
-    }
+        var page = MainFrame.Content;
 
-    /// <summary>
-    ///     NavigationView draws the back button, so the shell only has to say whether there is
-    ///     anywhere to go. That answer changes whenever a page navigates or pops, which is what
-    ///     ShellNavigator.StateChanged reports, and whenever the theme moves the pane around.
-    /// </summary>
-    private void UpdateBackButton()
-    {
-        Navigation.IsBackEnabled = _navigator.CanGoBack;
+        Navigation.SelectedItem = page switch
+        {
+            HomePage => HomeItem,
+            HistoryPage => HistoryItem,
+            SettingsPage when Navigation.SettingsItem is NavigationViewItem settingsItem => settingsItem,
+            _ => Navigation.SelectedItem
+        };
     }
 
     private void OnClosed(object sender, WindowEventArgs args)

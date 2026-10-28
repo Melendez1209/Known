@@ -1,10 +1,9 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 
-<local:KnownPage
+<Page
     x:Class="Known.Pages.HistoryPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:Known.Pages"
     xmlns:converters="using:Known.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -17,11 +16,11 @@
         from inside an ItemsControl template; ElementName, the usual escape hatch, belongs to the
         classic Binding and not to x:Bind.
     -->
-    <local:KnownPage.Resources>
+    <Page.Resources>
         <converters:ExamDateRangeConverter x:Key="DateRangeText" />
         <converters:ExamPercentageConverter x:Key="PercentageText" />
         <converters:PinnedToVisibilityConverter x:Key="PinnedVisibility" />
-    </local:KnownPage.Resources>
+    </Page.Resources>
 
     <Grid Padding="24" RowSpacing="12">
         <Grid.RowDefinitions>
@@ -35,6 +34,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
             <AutoSuggestBox
@@ -44,8 +44,18 @@
                 PlaceholderText="Search exams"
                 TextChanged="OnSearchChanged" />
 
-            <Button
+            <!--
+                The favourite filter: every exam, only the favourited ones or only the rest. The
+                options are filled from the localisation in the code behind.
+            -->
+            <ComboBox
                 Grid.Column="1"
+                x:Name="FavouriteFilter"
+                MinWidth="120"
+                SelectionChanged="OnFavouriteFilterChanged" />
+
+            <Button
+                Grid.Column="2"
                 x:Name="AddButton"
                 Style="{StaticResource AccentButtonStyle}"
                 Content="Add new"
@@ -84,8 +94,11 @@
 
                         <StackPanel Grid.Column="0">
                             <TextBlock
-                                Style="{StaticResource BodyStrongTextBlockStyle}"
-                                Text="{Binding Exam.Name}" />
+                                Style="{StaticResource BodyStrongTextBlockStyle}">
+                                <TextBlock.Text>
+                                    <Binding Path="Exam.Name" />
+                                </TextBlock.Text>
+                            </TextBlock>
                             <TextBlock
                                 Style="{StaticResource CaptionTextBlockStyle}"
                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
@@ -103,8 +116,11 @@
                             VerticalAlignment="Center"
                             FontFamily="Segoe Fluent Icons"
                             Glyph="&#xE735;"
-                            FontSize="16"
-                            Visibility="{Binding Exam.IsFavorite, Converter={StaticResource PinnedVisibility}}" />
+                            FontSize="16">
+                            <FontIcon.Visibility>
+                                <Binding Path="Exam.IsFavorite" Converter="{StaticResource PinnedVisibility}" />
+                            </FontIcon.Visibility>
+                        </FontIcon>
                     </Grid>
                 </DataTemplate>
             </ListView.ItemTemplate>
@@ -134,4 +150,4 @@
         </CommandBar>
     </Grid>
 
-</local:KnownPage>
+</Page>

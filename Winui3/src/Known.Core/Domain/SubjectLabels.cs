@@ -13,7 +13,7 @@ public static class SubjectLabels
     ///     Resource key for the display name of a subject. An unknown key falls back to PE, matching
     ///     the historical behaviour of the onboarding selector.
     /// </summary>
-    public static string ResourceKeyFor(string? subjectKey)
+    private static string ResourceKeyFor(string? subjectKey)
     {
         return subjectKey switch
         {

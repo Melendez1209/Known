@@ -448,11 +448,20 @@
     <data name="no_favourites" xml:space="preserve">
     <value>No favourites yet</value>
   </data>
+    <data name="not_favourites" xml:space="preserve">
+    <value>Not favourited</value>
+  </data>
     <data name="language_restart_hint" xml:space="preserve">
     <value>The language change takes effect after a restart.</value>
   </data>
     <data name="trend_metric_hint" xml:space="preserve">
     <value>Switch the trend chart between total marks and score rate</value>
+  </data>
+    <data name="show_in_rate" xml:space="preserve">
+    <value>Show in rate</value>
+  </data>
+    <data name="subject_metric_hint" xml:space="preserve">
+    <value>Switch the subject chart between average marks and score rate</value>
   </data>
     <data name="discard_exam_confirm" xml:space="preserve">
     <value>Do you want to discard the content you have entered?</value>
@@ -486,5 +495,32 @@
   </data>
     <data name="account_not_signed_in" xml:space="preserve">
     <value>Sign in to sync your account</value>
+  </data>
+    <data name="account_section" xml:space="preserve">
+    <value>Account</value>
+  </data>
+    <data name="general_section" xml:space="preserve">
+    <value>General</value>
+  </data>
+    <data name="appearance_section" xml:space="preserve">
+    <value>Appearance</value>
+  </data>
+    <data name="location_use" xml:space="preserve">
+    <value>Use my location</value>
+  </data>
+    <data name="app_theme" xml:space="preserve">
+    <value>App Theme</value>
+  </data>
+    <data name="use_system_settings" xml:space="preserve">
+    <value>Use system settings</value>
+  </data>
+    <data name="light" xml:space="preserve">
+    <value>Light</value>
+  </data>
+    <data name="dark" xml:space="preserve">
+    <value>Dark</value>
+  </data>
+    <data name="restart_app" xml:space="preserve">
+    <value>Restart application</value>
   </data>
 </root>

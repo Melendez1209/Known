@@ -33,9 +33,9 @@ public sealed class SettingsService(ISettingsRepository repository)
     }
 
     /// <summary>Chooses between the light and the dark variant of the system theme.</summary>
-    public Task SetDarkThemeAsync(int darkThemeValue, CancellationToken cancellationToken = default)
+    public Task SetAppThemeAsync(int appThemeValue, CancellationToken cancellationToken = default)
     {
-        return UpdateAsync(settings => settings.DarkThemeValue = darkThemeValue, cancellationToken);
+        return UpdateAsync(settings => settings.AppThemeValue = appThemeValue, cancellationToken);
     }
 
     /// <summary>Turns the high contrast request on or off.</summary>
@@ -45,7 +45,7 @@ public sealed class SettingsService(ISettingsRepository repository)
     }
 
     /// <summary>Picks the UI language, passing an empty tag to follow the system.</summary>
-    public Task SetLanguageAsync(string languageTag, CancellationToken cancellationToken = default)
+    public Task SetLanguageAsync(string? languageTag, CancellationToken cancellationToken = default)
     {
         return UpdateAsync(settings => settings.SelectedLanguage = languageTag ?? "", cancellationToken);
     }
@@ -77,6 +77,12 @@ public sealed class SettingsService(ISettingsRepository repository)
         TrendMetric metric,
         CancellationToken cancellationToken = default) =>
         UpdateAsync(settings => settings.TrendMetric = metric, cancellationToken);
+
+    /// <summary>Chooses which measure the dashboard subject chart plots.</summary>
+    public Task SetSubjectMetricAsync(
+        TrendMetric metric,
+        CancellationToken cancellationToken = default) =>
+        UpdateAsync(settings => settings.SubjectMetric = metric, cancellationToken);
 
     /// <summary>Marks onboarding as finished, which is what lets the shell open the main window.</summary>
     public Task CompleteOnboardingAsync(CancellationToken cancellationToken = default)

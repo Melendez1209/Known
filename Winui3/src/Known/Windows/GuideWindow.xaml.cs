@@ -1,3 +1,4 @@
+using Windows.Graphics;
 using Known.Core.Domain;
 using Known.Core.Localization;
 using Known.Services;
@@ -6,21 +7,15 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Media;
 using Microsoft.UI.Xaml.Shapes;
-using Windows.Graphics;
 
-namespace Known;
+namespace Known.Windows;
 
 /// <summary>
-///     The three step onboarding wizard: who the student is, where they are, and which subjects they
+///     The three-step onboarding wizard: who the student is, where they are, and which subjects they
 ///     sit. Finishing writes the answers and clears the first login flag, so the shell opens the
 ///     dashboard next time.
 /// </summary>
-/// <remarks>
-///     This used to be a <c>KnownPage</c> pushed onto the shell's shared frame. It is a window of its
-///     own now, which keeps it out of the tab back stacks entirely, and it no longer needs
-///     <see cref="ShellNavigator" />: closing it is enough to get back to the shell.
-/// </remarks>
-public sealed partial class GuideWindow : Window
+public sealed partial class GuideWindow
 {
     private const int StepCount = 3;
 
@@ -65,7 +60,7 @@ public sealed partial class GuideWindow : Window
     /// <summary>
     ///     Completes once the window has closed and the first login flag has been dealt with. The
     ///     caller waits on this rather than on <see cref="Window.Closed" />, because closing the
-    ///     wizard also writes that flag, and the shell opening before the write landed would race it.
+    ///     wizard also writes that flag, and the shell opening before the writing landed would race it.
     /// </summary>
     public Task Dismissed => _dismissed.Task;
 
@@ -427,7 +422,7 @@ public sealed partial class GuideWindow : Window
     {
         if (Content is not FrameworkElement root) return;
 
-        root.RequestedTheme = _themeService.ShouldUseDarkTheme
+        root.RequestedTheme = _themeService.ShouldUseAppTheme
             ? ElementTheme.Dark
             : ElementTheme.Light;
 

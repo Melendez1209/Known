@@ -1,17 +1,19 @@
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using Known.Core.Data;
 using Known.Core.Localization;
+using Known.Services;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Navigation;
 
 namespace Known.Pages;
 
 /// <summary>
-///     The exam history: a searchable, multi selectable list of every recorded exam. Clicking a row
-///     opens its detail, and ticking rows swaps the page footer for an action bar, matching the way
-///     the Android build swapped its navigation bar for one.
+///     The exam history: a searchable, favourite filterable, multi selectable list of every recorded
+///     exam. Clicking a row opens its detail, and ticking rows swaps the page footer for an action
+///     bar, matching the way the Android build swapped its navigation bar for one.
 /// </summary>
-public sealed partial class HistoryPage : KnownPage
+public sealed partial class HistoryPage
 {
     private readonly StringLocalizer _strings = new();
     private readonly ObservableCollection<ExamWithTotal> _visible = [];
@@ -27,18 +29,21 @@ public sealed partial class HistoryPage : KnownPage
         DeleteSelectionButton.Label = _strings.Get("delete");
         FavouriteSelectionButton.Label = _strings.Get("add_favourite");
 
+        BuildFavouriteFilter();
+
         ExamList.ItemsSource = _visible;
 
-        Exams.Reloaded += OnExamsReloaded;
+        AppServices.Exams.Reloaded += OnExamsReloaded;
 
         Reload();
     }
 
     /// <inheritdoc />
-    public override void OnNavigatedAway()
+    protected override void OnNavigatedFrom(NavigationEventArgs e)
     {
-        Exams.Reloaded -= OnExamsReloaded;
-        base.OnNavigatedAway();
+        AppServices.Exams.Reloaded -= OnExamsReloaded;
+
+        base.OnNavigatedFrom(e);
     }
 
     private void OnExamsReloaded(object? sender, EventArgs e)
@@ -58,9 +63,16 @@ public sealed partial class HistoryPage : KnownPage
 
     private void ApplyFilter(string? query)
     {
-        var matches = string.IsNullOrWhiteSpace(query)
-            ? Exams.Exams.AsEnumerable()
-            : Exams.Exams.Where(exam => exam.Exam.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase));
+        // 0 shows every exam, 1 only the favourites and 2 only the exams never favourited
+        var matches = FavouriteFilter.SelectedIndex switch
+        {
+            1 => AppServices.Exams.Exams.Where(exam => exam.Exam.IsFavorite),
+            2 => AppServices.Exams.Exams.Where(exam => !exam.Exam.IsFavorite),
+            _ => AppServices.Exams.Exams.AsEnumerable()
+        };
+
+        if (!string.IsNullOrWhiteSpace(query))
+            matches = matches.Where(exam => exam.Exam.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase));
 
         _visible.Clear();
 
@@ -79,13 +91,31 @@ public sealed partial class HistoryPage : KnownPage
         ApplyFilter(sender.Text);
     }
 
+    /// <summary>Fills the favourite filter with the three views the list can take.</summary>
+    private void BuildFavouriteFilter()
+    {
+        FavouriteFilter.ItemsSource = new[]
+        {
+            _strings.Get("all"),
+            _strings.Get("favourites"),
+            _strings.Get("not_favourites")
+        };
+
+        FavouriteFilter.SelectedIndex = 0;
+    }
+
+    private void OnFavouriteFilterChanged(object sender, SelectionChangedEventArgs e)
+    {
+        ApplyFilter(SearchBox.Text);
+    }
+
     private void OnItemClick(object sender, ItemClickEventArgs e)
     {
         // Ticking a row is how multi select starts, so a click only opens the detail while nothing
         // is selected yet
         if (ExamList.SelectedItems.Count > 0) return;
 
-        if (e.ClickedItem is ExamWithTotal exam) Shell.NavigateInTab(typeof(DetailPage), exam.Exam.Id);
+        if (e.ClickedItem is ExamWithTotal exam) this.Frame.Navigate(typeof(DetailPage), exam.Exam.Id);
     }
 
     private void OnSelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -120,7 +150,7 @@ public sealed partial class HistoryPage : KnownPage
 
     private void OnAddExam(object sender, RoutedEventArgs e)
     {
-        Shell.NavigateInTab(typeof(DateRangePage));
+        this.Frame.Navigate(typeof(InputtingPage));
     }
 
     private async void OnDeleteSelected(object sender, RoutedEventArgs e)
@@ -141,7 +171,7 @@ public sealed partial class HistoryPage : KnownPage
         if (await dialog.ShowAsync() != ContentDialogResult.Primary) return;
 
         ExamList.SelectedItems.Clear();
-        await Exams.MutateAsync(repository => repository.DeleteExamsAsync(ids));
+        await AppServices.Exams.MutateAsync(repository => repository.DeleteExamsAsync(ids));
     }
 
     private async void OnFavouriteSelected(object sender, RoutedEventArgs e)
@@ -153,7 +183,7 @@ public sealed partial class HistoryPage : KnownPage
         var target = !exam.Exam.IsFavorite;
 
         ExamList.SelectedItems.Clear();
-        await Exams.MutateAsync(repository => repository.SetFavoriteAsync(exam.Exam.Id, target));
+        await AppServices.Exams.MutateAsync(repository => repository.SetFavoriteAsync(exam.Exam.Id, target));
     }
 
     private List<long> SelectedIds()
@@ -161,3 +191,4 @@ public sealed partial class HistoryPage : KnownPage
         return ExamList.SelectedItems.OfType<ExamWithTotal>().Select(exam => exam.Exam.Id).ToList();
     }
 }
+

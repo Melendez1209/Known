@@ -337,8 +337,8 @@
     <data name="expanded" xml:space="preserve">
     <value>Expanded</value>
   </data>
-    <data name="collapsed" xml:space="preserve">
-    <value>Collapsed</value>
+  <data name="collapsed" xml:space="preserve">
+    <value>收起</value>
   </data>
     <data name="identity" xml:space="preserve">
     <value>身份</value>
@@ -424,6 +424,9 @@
     <data name="no_favourites" xml:space="preserve">
     <value>暂无收藏</value>
   </data>
+    <data name="not_favourites" xml:space="preserve">
+    <value>未收藏</value>
+  </data>
     <data name="score_trend" xml:space="preserve">
     <value>成绩趋势</value>
   </data>
@@ -450,6 +453,12 @@
   </data>
     <data name="trend_metric_hint" xml:space="preserve">
     <value>在总分与得分率之间切换趋势图口径</value>
+  </data>
+    <data name="show_in_rate" xml:space="preserve">
+    <value>按得分率显示</value>
+  </data>
+    <data name="subject_metric_hint" xml:space="preserve">
+    <value>在平均分与得分率之间切换学科图口径</value>
   </data>
     <data name="discard_exam_confirm" xml:space="preserve">
     <value>要放弃已输入的内容吗？</value>
@@ -483,5 +492,32 @@
   </data>
     <data name="account_not_signed_in" xml:space="preserve">
     <value>登录以同步你的账户</value>
+  </data>
+    <data name="account_section" xml:space="preserve">
+    <value>账户</value>
+  </data>
+    <data name="appearance_section" xml:space="preserve">
+    <value>外观</value>
+  </data>
+    <data name="general_section" xml:space="preserve">
+    <value>常规</value>
+  </data>
+    <data name="location_use" xml:space="preserve">
+    <value>使用我的位置</value>
+  </data>
+    <data name="app_theme" xml:space="preserve">
+    <value>应用主题</value>
+  </data>
+    <data name="use_system_settings" xml:space="preserve">
+    <value>使用系统设置</value>
+  </data>
+    <data name="light" xml:space="preserve">
+    <value>浅色</value>
+  </data>
+    <data name="dark" xml:space="preserve">
+    <value>深色</value>
+  </data>
+    <data name="restart_app" xml:space="preserve">
+    <value>重启应用程序</value>
   </data>
 </root>

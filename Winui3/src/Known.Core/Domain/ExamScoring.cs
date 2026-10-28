@@ -304,7 +304,7 @@ public static class ExamScoring
     }
 
     /// <summary>
-    /// Mean percentage across every exam that carries a score, excluding unscored exams for the
+    /// Mean percentage across every exam that carries a score, excluding unscoured exams for the
     /// same reason as <see cref="AverageMarkOf"/>.
     /// </summary>
     public static float AverageRateOf(IEnumerable<ExamWithTotal> exams)

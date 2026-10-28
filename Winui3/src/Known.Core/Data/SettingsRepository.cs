@@ -70,7 +70,7 @@ public sealed class SettingsRepository(KnownDbContext context) : ISettingsReposi
         }
         else
         {
-            stored.DarkThemeValue = settings.DarkThemeValue;
+            stored.AppThemeValue = settings.AppThemeValue;
             stored.IsHighContrastMode = settings.IsHighContrastMode;
             stored.SelectedLanguage = settings.SelectedLanguage;
             stored.IsFirstLogin = settings.IsFirstLogin;
@@ -78,6 +78,7 @@ public sealed class SettingsRepository(KnownDbContext context) : ISettingsReposi
             stored.Region = settings.Region;
             stored.SelectedSubjects = settings.SelectedSubjects;
             stored.TrendMetric = settings.TrendMetric;
+            stored.SubjectMetric = settings.SubjectMetric;
         }
 
         await context.SaveChangesAsync(cancellationToken).ConfigureAwait(false);

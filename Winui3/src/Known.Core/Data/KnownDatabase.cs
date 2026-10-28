@@ -10,7 +10,7 @@ namespace Known.Core.Data;
 public static class KnownDatabase
 {
     /// <summary>File name of the database inside the data directory.</summary>
-    public const string DatabaseFileName = "known.db";
+    private const string DatabaseFileName = "known.db";
 
     /// <summary>Folder the application keeps its local data in, under the per-user local app data root.</summary>
     public static string ResolveDataDirectory()
@@ -64,7 +64,7 @@ public static class KnownDatabase
         await using var context = CreateContext();
 
         // No migration step yet: the schema is still at v1 and the app has not shipped, so a fresh
-        // file is all a new install needs. Existing databases are the developer's own, and are
+        // file is all a new installation needs. Existing databases are the developer's own, and are
         // deleted by hand rather than upgraded.
         await context.Database.EnsureCreatedAsync(cancellationToken).ConfigureAwait(false);
 

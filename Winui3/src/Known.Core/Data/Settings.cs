@@ -10,8 +10,8 @@ public sealed class Settings
     /// <summary>Always <c>1</c>; the table holds exactly one row.</summary>
     public int Id { get; set; } = 1;
 
-    /// <summary>One of the <see cref="DarkThemeMode" /> constants.</summary>
-    public int DarkThemeValue { get; set; } = DarkThemeMode.FollowSystem;
+    /// <summary>One of the <see cref="AppThemeMode" /> constants.</summary>
+    public int AppThemeValue { get; set; } = AppThemeMode.FollowSystem;
 
     /// <summary>Whether the high contrast variants of the system theme are requested.</summary>
     public bool IsHighContrastMode { get; set; }
@@ -35,5 +35,11 @@ public sealed class Settings
     /// Which measure the dashboard trend chart plots. A first run has never seen the charts, so it
     /// opens on raw marks rather than a percentage the student has no context for yet.
     /// </summary>
-    public Domain.TrendMetric TrendMetric { get; set; } = Domain.TrendMetric.Marks;
+    public TrendMetric TrendMetric { get; set; } = TrendMetric.Marks;
+
+    /// <summary>
+    /// Which measure the dashboard subject chart plots. Kept separately from
+    /// <see cref="TrendMetric" /> so the two charts can be read independently.
+    /// </summary>
+    public TrendMetric SubjectMetric { get; set; } = TrendMetric.Marks;
 }
