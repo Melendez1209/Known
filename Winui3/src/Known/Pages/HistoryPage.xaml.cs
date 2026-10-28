@@ -9,9 +9,9 @@ using Microsoft.UI.Xaml.Navigation;
 namespace Known.Pages;
 
 /// <summary>
-///     The exam history: a searchable, multi selectable list of every recorded exam. Clicking a row
-///     opens its detail, and ticking rows swaps the page footer for an action bar, matching the way
-///     the Android build swapped its navigation bar for one.
+///     The exam history: a searchable, favourite filterable, multi selectable list of every recorded
+///     exam. Clicking a row opens its detail, and ticking rows swaps the page footer for an action
+///     bar, matching the way the Android build swapped its navigation bar for one.
 /// </summary>
 public sealed partial class HistoryPage
 {
@@ -28,6 +28,8 @@ public sealed partial class HistoryPage
         AddButton.Content = _strings.Get("add");
         DeleteSelectionButton.Label = _strings.Get("delete");
         FavouriteSelectionButton.Label = _strings.Get("add_favourite");
+
+        BuildFavouriteFilter();
 
         ExamList.ItemsSource = _visible;
 
@@ -61,9 +63,16 @@ public sealed partial class HistoryPage
 
     private void ApplyFilter(string? query)
     {
-        var matches = string.IsNullOrWhiteSpace(query)
-            ? AppServices.Exams.Exams.AsEnumerable()
-            : AppServices.Exams.Exams.Where(exam => exam.Exam.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase));
+        // 0 shows every exam, 1 only the favourites and 2 only the exams never favourited
+        var matches = FavouriteFilter.SelectedIndex switch
+        {
+            1 => AppServices.Exams.Exams.Where(exam => exam.Exam.IsFavorite),
+            2 => AppServices.Exams.Exams.Where(exam => !exam.Exam.IsFavorite),
+            _ => AppServices.Exams.Exams.AsEnumerable()
+        };
+
+        if (!string.IsNullOrWhiteSpace(query))
+            matches = matches.Where(exam => exam.Exam.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase));
 
         _visible.Clear();
 
@@ -80,6 +89,24 @@ public sealed partial class HistoryPage
         if (args.Reason != AutoSuggestionBoxTextChangeReason.UserInput) return;
 
         ApplyFilter(sender.Text);
+    }
+
+    /// <summary>Fills the favourite filter with the three views the list can take.</summary>
+    private void BuildFavouriteFilter()
+    {
+        FavouriteFilter.ItemsSource = new[]
+        {
+            _strings.Get("all"),
+            _strings.Get("favourites"),
+            _strings.Get("not_favourites")
+        };
+
+        FavouriteFilter.SelectedIndex = 0;
+    }
+
+    private void OnFavouriteFilterChanged(object sender, SelectionChangedEventArgs e)
+    {
+        ApplyFilter(SearchBox.Text);
     }
 
     private void OnItemClick(object sender, ItemClickEventArgs e)

@@ -448,6 +448,9 @@
     <data name="no_favourites" xml:space="preserve">
     <value>No favourites yet</value>
   </data>
+    <data name="not_favourites" xml:space="preserve">
+    <value>Not favourited</value>
+  </data>
     <data name="language_restart_hint" xml:space="preserve">
     <value>The language change takes effect after a restart.</value>
   </data>

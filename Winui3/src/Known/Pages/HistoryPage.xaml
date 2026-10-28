@@ -34,6 +34,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
             <AutoSuggestBox
@@ -43,8 +44,18 @@
                 PlaceholderText="Search exams"
                 TextChanged="OnSearchChanged" />
 
-            <Button
+            <!--
+                The favourite filter: every exam, only the favourited ones or only the rest. The
+                options are filled from the localisation in the code behind.
+            -->
+            <ComboBox
                 Grid.Column="1"
+                x:Name="FavouriteFilter"
+                MinWidth="120"
+                SelectionChanged="OnFavouriteFilterChanged" />
+
+            <Button
+                Grid.Column="2"
                 x:Name="AddButton"
                 Style="{StaticResource AccentButtonStyle}"
                 Content="Add new"

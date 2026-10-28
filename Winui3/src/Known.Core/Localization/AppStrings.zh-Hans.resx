@@ -424,6 +424,9 @@
     <data name="no_favourites" xml:space="preserve">
     <value>暂无收藏</value>
   </data>
+    <data name="not_favourites" xml:space="preserve">
+    <value>未收藏</value>
+  </data>
     <data name="score_trend" xml:space="preserve">
     <value>成绩趋势</value>
   </data>
