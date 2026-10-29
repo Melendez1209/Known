@@ -10,7 +10,13 @@ fetch('/assets/values/translations.json')
     changeLanguage(systemLang);
     createLanguageSwitcher();
   })
-  .catch((error) => console.error('Error loading translations:', error));
+  .catch((error) => {
+    console.error('Error loading translations:', error);
+    // Notify listeners so language-dependent pages can fall back
+    document.dispatchEvent(
+      new CustomEvent('langchange', { detail: { lang: 'en' } })
+    );
+  });
 
 const LANGUAGE_MAPPINGS = {
   'zh-cn': 'zh',
@@ -31,6 +37,10 @@ function changeLanguage(lang) {
     const key = element.getAttribute('data-i18n');
     element.textContent = translations[supportedLang][key];
   });
+  // Notify listeners (e.g. the privacy policy page) about the language change
+  document.dispatchEvent(
+    new CustomEvent('langchange', { detail: { lang: supportedLang } })
+  );
 }
 
 // Detect system theme mode
