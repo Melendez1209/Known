@@ -411,6 +411,22 @@ body {
     opacity: 0.6;
 }
 
+.page-footer .footer-links {
+    display: block;
+    margin-top: 0.35rem;
+}
+
+.page-footer .footer-links a {
+    color: var(--primary-color);
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.page-footer .footer-links a:hover {
+    color: var(--inverted-primary);
+    text-decoration: underline;
+}
+
 @keyframes layoutReveal {
     from {
         opacity: 0;
