@@ -1,7 +1,8 @@
 let translations = {};
 
-// Load translations from translations.json
-fetch('/assets/values/translations.json')
+// Load translations from translations.json (relative path, works on project
+// pages served under a sub-path such as /<repo>/)
+fetch('assets/values/translations.json')
   .then((response) => response.json())
   .then((data) => {
     translations = data;
