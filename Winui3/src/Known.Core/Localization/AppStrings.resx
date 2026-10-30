@@ -22,6 +22,15 @@
     <data name="history" xml:space="preserve">
     <value>History</value>
   </data>
+    <data name="compact" xml:space="preserve">
+    <value>Compact</value>
+  </data>
+    <data name="standard" xml:space="preserve">
+    <value>Standard</value>
+  </data>
+    <data name="list" xml:space="preserve">
+    <value>List</value>
+  </data>
     <data name="add" xml:space="preserve">
     <value>Add new</value>
   </data>
@@ -447,9 +456,6 @@
   </data>
     <data name="no_favourites" xml:space="preserve">
     <value>No favourites yet</value>
-  </data>
-    <data name="not_favourites" xml:space="preserve">
-    <value>Not favourited</value>
   </data>
     <data name="language_restart_hint" xml:space="preserve">
     <value>The language change takes effect after a restart.</value>

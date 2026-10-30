@@ -32,8 +32,7 @@
         <TitleBar
             x:Name="AppTitleBar"
             IsPaneToggleButtonVisible="True"
-            IsBackButtonVisible="True"
-            IsBackButtonEnabled="{x:Bind MainFrame.CanGoBack, Mode=OneWay}"
+            IsBackButtonVisible="{x:Bind MainFrame.CanGoBack, Mode=OneWay}"
             BackRequested="OnBackRequested"
             PaneToggleRequested="OnPaneToggleRequested">
             <TitleBar.IconSource>

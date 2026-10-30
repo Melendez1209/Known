@@ -42,4 +42,10 @@ public sealed class Settings
     /// <see cref="TrendMetric" /> so the two charts can be read independently.
     /// </summary>
     public TrendMetric SubjectMetric { get; set; } = TrendMetric.Marks;
+
+    /// <summary>
+    /// Which density the history list renders at. The list keeps the plain row, the standard card
+    /// adds the date and the score detail, and compact shows only a name and a mark.
+    /// </summary>
+    public HistoryViewMode HistoryViewMode { get; set; } = HistoryViewMode.Standard;
 }

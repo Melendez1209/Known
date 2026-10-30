@@ -28,6 +28,15 @@
     <data name="history" xml:space="preserve">
     <value>歷史</value>
   </data>
+    <data name="compact" xml:space="preserve">
+    <value>緊湊</value>
+  </data>
+    <data name="standard" xml:space="preserve">
+    <value>標準</value>
+  </data>
+    <data name="list" xml:space="preserve">
+    <value>清單</value>
+  </data>
     <data name="add" xml:space="preserve">
     <value>添加</value>
   </data>
@@ -423,9 +432,6 @@
   </data>
     <data name="no_favourites" xml:space="preserve">
     <value>暫無收藏</value>
-  </data>
-    <data name="not_favourites" xml:space="preserve">
-    <value>未收藏</value>
   </data>
     <data name="score_trend" xml:space="preserve">
     <value>成績趨勢</value>
