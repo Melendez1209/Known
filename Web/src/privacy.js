@@ -1,5 +1,5 @@
 (function () {
-  const MD_BASE = '/assets/docs/privacy/privacy.';
+  const MD_BASE = 'assets/docs/privacy/privacy.';
   const FALLBACK_LANG = 'en';
   const FALLBACK_ERROR = 'Failed to load the policy content. Please try again later.';
 
