@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using Known.Core.Data;
+using Known.Core.Domain;
 using Known.Core.Localization;
 using Known.Services;
 using Microsoft.UI.Xaml;
@@ -10,13 +11,20 @@ namespace Known.Pages;
 
 /// <summary>
 ///     The exam history: a searchable, favourite filterable, multi selectable list of every recorded
-///     exam. Clicking a row opens its detail, and ticking rows swaps the page footer for an action
-///     bar, matching the way the Android build swapped its navigation bar for one.
+///     exam, rendered at one of three view densities. Clicking a row opens its detail, and ticking
+///     rows swaps the page footer for an action bar, matching the way the Android build swapped its
+///     navigation bar for one.
 /// </summary>
 public sealed partial class HistoryPage
 {
     private readonly StringLocalizer _strings = new();
     private readonly ObservableCollection<ExamWithTotal> _visible = [];
+
+    /// <summary>The density the list currently renders at; restored from the settings row.</summary>
+    private HistoryViewMode _viewMode = HistoryViewMode.Standard;
+
+    /// <summary>Guards the view mode box while the stored choice is being restored into it.</summary>
+    private bool _restoringViewMode;
 
     /// <summary>Creates the page and fills the list from the shared exam store.</summary>
     public HistoryPage()
@@ -30,6 +38,7 @@ public sealed partial class HistoryPage
         FavouriteSelectionButton.Label = _strings.Get("add_favourite");
 
         BuildFavouriteFilter();
+        BuildViewModeFilter();
 
         ExamList.ItemsSource = _visible;
 
@@ -63,13 +72,10 @@ public sealed partial class HistoryPage
 
     private void ApplyFilter(string? query)
     {
-        // 0 shows every exam, 1 only the favourites and 2 only the exams never favourited
-        var matches = FavouriteFilter.SelectedIndex switch
-        {
-            1 => AppServices.Exams.Exams.Where(exam => exam.Exam.IsFavorite),
-            2 => AppServices.Exams.Exams.Where(exam => !exam.Exam.IsFavorite),
-            _ => AppServices.Exams.Exams.AsEnumerable()
-        };
+        // Unchecked shows every exam, checked only the favourites
+        var matches = FavouriteFilter.IsChecked == true
+            ? AppServices.Exams.Exams.Where(exam => exam.Exam.IsFavorite)
+            : AppServices.Exams.Exams.AsEnumerable();
 
         if (!string.IsNullOrWhiteSpace(query))
             matches = matches.Where(exam => exam.Exam.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase));
@@ -91,22 +97,74 @@ public sealed partial class HistoryPage
         ApplyFilter(sender.Text);
     }
 
-    /// <summary>Fills the favourite filter with the three views the list can take.</summary>
+    /// <summary>Labels the favourite toggle; unchecked means every exam, checked only favourites.</summary>
     private void BuildFavouriteFilter()
     {
-        FavouriteFilter.ItemsSource = new[]
-        {
-            _strings.Get("all"),
-            _strings.Get("favourites"),
-            _strings.Get("not_favourites")
-        };
-
-        FavouriteFilter.SelectedIndex = 0;
+        FavouriteFilterText.Text = _strings.Get("favourites");
     }
 
-    private void OnFavouriteFilterChanged(object sender, SelectionChangedEventArgs e)
+    private void OnFavouriteFilterChanged(object sender, RoutedEventArgs e)
     {
         ApplyFilter(SearchBox.Text);
+    }
+
+    /// <summary>Fills the density switcher and restores whichever view was stored last time.</summary>
+    private void BuildViewModeFilter()
+    {
+        ViewModeFilter.ItemsSource = new[]
+        {
+            _strings.Get("compact"),
+            _strings.Get("standard"),
+            _strings.Get("list")
+        };
+
+        _restoringViewMode = true;
+        ViewModeFilter.SelectedIndex = (int)AppServices.Settings.Current.HistoryViewMode;
+        _restoringViewMode = false;
+
+        _viewMode = AppServices.Settings.Current.HistoryViewMode;
+        ApplyViewMode();
+    }
+
+    private async void OnViewModeChanged(object sender, SelectionChangedEventArgs e)
+    {
+        if (_restoringViewMode) return;
+
+        var index = ViewModeFilter.SelectedIndex;
+        if (index < 0) return;
+
+        var mode = (HistoryViewMode)index;
+        if (mode == _viewMode) return;
+
+        _viewMode = mode;
+        ApplyViewMode();
+
+        await AppServices.Settings.SetHistoryViewModeAsync(mode);
+    }
+
+    /// <summary>
+    ///     Assigns the row template and the layout panel that match the stored density: a wrapping
+    ///     grid for the two card densities and the plain stack for the list.
+    /// </summary>
+    private void ApplyViewMode()
+    {
+        switch (_viewMode)
+        {
+            case HistoryViewMode.Compact:
+                ExamList.ItemTemplate = (DataTemplate)Resources["CompactRowTemplate"];
+                ExamList.ItemsPanel = (ItemsPanelTemplate)Resources["CompactGridPanel"];
+                break;
+
+            case HistoryViewMode.List:
+                ExamList.ItemTemplate = (DataTemplate)Resources["ListRowTemplate"];
+                ExamList.ItemsPanel = (ItemsPanelTemplate)Resources["ListPanel"];
+                break;
+
+            default:
+                ExamList.ItemTemplate = (DataTemplate)Resources["StandardRowTemplate"];
+                ExamList.ItemsPanel = (ItemsPanelTemplate)Resources["StandardGridPanel"];
+                break;
+        }
     }
 
     private void OnItemClick(object sender, ItemClickEventArgs e)

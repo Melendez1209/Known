@@ -84,6 +84,12 @@ public sealed class SettingsService(ISettingsRepository repository)
         CancellationToken cancellationToken = default) =>
         UpdateAsync(settings => settings.SubjectMetric = metric, cancellationToken);
 
+    /// <summary>Chooses the density the history list renders at.</summary>
+    public Task SetHistoryViewModeAsync(
+        HistoryViewMode mode,
+        CancellationToken cancellationToken = default) =>
+        UpdateAsync(settings => settings.HistoryViewMode = mode, cancellationToken);
+
     /// <summary>Marks onboarding as finished, which is what lets the shell open the main window.</summary>
     public Task CompleteOnboardingAsync(CancellationToken cancellationToken = default)
     {

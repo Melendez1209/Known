@@ -15,11 +15,177 @@
         is resolved against the template's x:DataType, not the page, so a page method is out of reach
         from inside an ItemsControl template; ElementName, the usual escape hatch, belongs to the
         classic Binding and not to x:Bind.
+
+        The three row templates are the view densities the switcher picks from: compact and standard
+        are cards laid out on a wrapping grid, list is the plain table like row. The code behind
+        assigns one template and one layout panel to the ListView.
     -->
     <Page.Resources>
         <converters:ExamDateRangeConverter x:Key="DateRangeText" />
         <converters:ExamPercentageConverter x:Key="PercentageText" />
+        <converters:ExamMarkConverter x:Key="MarkText" />
+        <converters:ExamScoreDetailConverter x:Key="ScoreDetailText" />
         <converters:PinnedToVisibilityConverter x:Key="PinnedVisibility" />
+
+        <!--
+            The grid panels behind the compact and standard densities: a wrapping layout that puts
+            as many cards on a row as the window allows. The list density keeps the plain stack.
+        -->
+        <ItemsPanelTemplate x:Key="CompactGridPanel">
+            <ItemsWrapGrid
+                Orientation="Horizontal"
+                ItemWidth="190"
+                ItemHeight="120" />
+        </ItemsPanelTemplate>
+
+        <ItemsPanelTemplate x:Key="StandardGridPanel">
+            <ItemsWrapGrid
+                Orientation="Horizontal"
+                ItemWidth="260"
+                ItemHeight="170" />
+        </ItemsPanelTemplate>
+
+        <ItemsPanelTemplate x:Key="ListPanel">
+            <ItemsStackPanel Orientation="Vertical" />
+        </ItemsPanelTemplate>
+
+        <DataTemplate x:Key="CompactRowTemplate">
+            <!--
+                The compact card: the exam name over the total mark, nothing else. The card chrome
+                matches the Border style the settings page uses.
+            -->
+            <Border
+                Padding="16"
+                CornerRadius="8"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1">
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource BodyTextBlockStyle}"
+                        MaxLines="2"
+                        TextWrapping="Wrap"
+                        TextTrimming="CharacterEllipsis"
+                        Text="{Binding Path=Exam.Name}" />
+
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource SubtitleTextBlockStyle}"
+                        Text="{Binding Converter={StaticResource MarkText}}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="StandardRowTemplate">
+            <!--
+                The standard card: name and favourite state on top, then the date and the mark
+                against the full mark with the percentage.
+            -->
+            <Border
+                Padding="16"
+                CornerRadius="8"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1">
+                <Grid RowSpacing="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource BodyStrongTextBlockStyle}"
+                            MaxLines="2"
+                            TextWrapping="Wrap"
+                            TextTrimming="CharacterEllipsis"
+                            Text="{Binding Path=Exam.Name}" />
+
+                        <FontIcon
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            FontFamily="Segoe Fluent Icons"
+                            Glyph="&#xE735;"
+                            FontSize="16">
+                            <FontIcon.Visibility>
+                                <Binding Path="Exam.IsFavorite" Converter="{StaticResource PinnedVisibility}" />
+                            </FontIcon.Visibility>
+                        </FontIcon>
+                    </Grid>
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{Binding Converter={StaticResource DateRangeText}}" />
+
+                    <TextBlock
+                        Grid.Row="2"
+                        Style="{StaticResource BodyStrongTextBlockStyle}"
+                        Text="{Binding Converter={StaticResource ScoreDetailText}}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ListRowTemplate">
+            <!--
+                Bound straight onto the database projection. There is no wrapper type mirroring the
+                entity: an empty Path hands the whole row to the converters, which pick out the
+                fields they need.
+            -->
+            <Grid Padding="4,10" ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}">
+                        <TextBlock.Text>
+                            <Binding Path="Exam.Name" />
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <TextBlock
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{Binding Converter={StaticResource DateRangeText}}" />
+                </StackPanel>
+
+                <TextBlock
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource BodyStrongTextBlockStyle}"
+                    Text="{Binding Converter={StaticResource PercentageText}}" />
+
+                <FontIcon
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe Fluent Icons"
+                    Glyph="&#xE735;"
+                    FontSize="16">
+                    <FontIcon.Visibility>
+                        <Binding Path="Exam.IsFavorite" Converter="{StaticResource PinnedVisibility}" />
+                    </FontIcon.Visibility>
+                </FontIcon>
+            </Grid>
+        </DataTemplate>
     </Page.Resources>
 
     <Grid Padding="24" RowSpacing="12">
@@ -34,6 +200,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
@@ -45,17 +212,34 @@
                 TextChanged="OnSearchChanged" />
 
             <!--
-                The favourite filter: every exam, only the favourited ones or only the rest. The
-                options are filled from the localisation in the code behind.
+                The view density switcher: compact, standard or list. The options are filled from
+                the localisation in the code behind, which also assigns the matching template.
             -->
             <ComboBox
                 Grid.Column="1"
-                x:Name="FavouriteFilter"
+                x:Name="ViewModeFilter"
                 MinWidth="120"
-                SelectionChanged="OnFavouriteFilterChanged" />
+                SelectionChanged="OnViewModeChanged" />
+
+            <!--
+                The favourite filter as a two state toggle: unchecked shows every exam, checked only
+                the favourited ones.
+            -->
+            <ToggleButton
+                Grid.Column="2"
+                x:Name="FavouriteFilter"
+                Click="OnFavouriteFilterChanged">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon
+                        FontFamily="Segoe Fluent Icons"
+                        Glyph="&#xE734;"
+                        FontSize="16" />
+                    <TextBlock x:Name="FavouriteFilterText" Text="Favourites" />
+                </StackPanel>
+            </ToggleButton>
 
             <Button
-                Grid.Column="2"
+                Grid.Column="3"
                 x:Name="AddButton"
                 Style="{StaticResource AccentButtonStyle}"
                 Content="Add new"
@@ -77,54 +261,7 @@
             IsMultiSelectCheckBoxEnabled="True"
             IsItemClickEnabled="True"
             ItemClick="OnItemClick"
-            SelectionChanged="OnSelectionChanged">
-            <ListView.ItemTemplate>
-                <!--
-                    Bound straight onto the database projection. There is no wrapper type mirroring the
-                    entity: an empty Path hands the whole row to the converters, which pick out the
-                    fields they need.
-                -->
-                <DataTemplate>
-                    <Grid Padding="4,10" ColumnSpacing="16">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="Auto" />
-                        </Grid.ColumnDefinitions>
-
-                        <StackPanel Grid.Column="0">
-                            <TextBlock
-                                Style="{StaticResource BodyStrongTextBlockStyle}">
-                                <TextBlock.Text>
-                                    <Binding Path="Exam.Name" />
-                                </TextBlock.Text>
-                            </TextBlock>
-                            <TextBlock
-                                Style="{StaticResource CaptionTextBlockStyle}"
-                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                Text="{Binding Converter={StaticResource DateRangeText}}" />
-                        </StackPanel>
-
-                        <TextBlock
-                            Grid.Column="1"
-                            VerticalAlignment="Center"
-                            Style="{StaticResource BodyStrongTextBlockStyle}"
-                            Text="{Binding Converter={StaticResource PercentageText}}" />
-
-                        <FontIcon
-                            Grid.Column="2"
-                            VerticalAlignment="Center"
-                            FontFamily="Segoe Fluent Icons"
-                            Glyph="&#xE735;"
-                            FontSize="16">
-                            <FontIcon.Visibility>
-                                <Binding Path="Exam.IsFavorite" Converter="{StaticResource PinnedVisibility}" />
-                            </FontIcon.Visibility>
-                        </FontIcon>
-                    </Grid>
-                </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            SelectionChanged="OnSelectionChanged" />
 
         <!--
             The selection bar replaces the page padding while at least one row is ticked, matching

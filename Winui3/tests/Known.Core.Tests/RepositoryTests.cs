@@ -335,6 +335,7 @@ public sealed class SettingsRepositoryTests : IAsyncLifetime
         Assert.Equal(StudentIdentity.None, settings.Identity);
         Assert.Equal(TrendMetric.Marks, settings.TrendMetric);
         Assert.Equal(TrendMetric.Marks, settings.SubjectMetric);
+        Assert.Equal(HistoryViewMode.Standard, settings.HistoryViewMode);
     }
 
     [Fact]
@@ -370,7 +371,8 @@ public sealed class SettingsRepositoryTests : IAsyncLifetime
             Region = "Shanghai",
             SelectedSubjects = "physics,chemistry",
             TrendMetric = TrendMetric.Rate,
-            SubjectMetric = TrendMetric.Rate
+            SubjectMetric = TrendMetric.Rate,
+            HistoryViewMode = HistoryViewMode.Compact
         });
 
         var stored = await _repository.GetAsync();
@@ -385,6 +387,7 @@ public sealed class SettingsRepositoryTests : IAsyncLifetime
         Assert.Equal("physics,chemistry", stored.SelectedSubjects);
         Assert.Equal(TrendMetric.Rate, stored.TrendMetric);
         Assert.Equal(TrendMetric.Rate, stored.SubjectMetric);
+        Assert.Equal(HistoryViewMode.Compact, stored.HistoryViewMode);
         Assert.Single(await _context.Settings.ToListAsync());
     }
 
