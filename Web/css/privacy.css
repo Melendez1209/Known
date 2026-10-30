@@ -472,22 +472,6 @@ body {
     opacity: 0.7;
 }
 
-.footer-links {
-    display: block;
-    margin-top: 0.5rem;
-}
-
-.footer-links a {
-    color: var(--primary-color);
-    text-decoration: none;
-    transition: color 0.3s ease;
-}
-
-.footer-links a:hover {
-    color: var(--inverted-primary);
-    text-decoration: underline;
-}
-
 @keyframes layoutReveal {
     from {
         opacity: 0;

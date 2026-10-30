@@ -681,100 +681,87 @@ main section {
 }
 
 .download-options {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1000px;
+    margin: 2.5rem auto 0;
+}
+
+.download-card {
     display: flex;
-    gap: 2rem;
-    justify-content: flex-start;
-    flex-wrap: wrap;
-    margin: 2rem 0 0;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 1.8rem 2rem 1.6rem;
+    background: var(--card-background);
+    color: var(--text-color);
+    border-radius: 20px;
+    border: 2px solid transparent;
+    box-shadow: 0 4px 20px var(--shadow-color);
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.download-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--shadow-color-hover);
+    box-shadow: 0 12px 32px var(--shadow-color-hover);
+}
+
+.download-card .platform-icon {
+    width: 44px;
+    height: 44px;
+    transition: transform 0.4s ease;
+}
+
+.download-card:hover .platform-icon {
+    transform: scale(1.15);
+}
+
+.download-card .platform-name {
+    font-weight: 700;
+    font-size: 1.15rem;
+}
+
+.download-card .version-text {
+    font-size: 0.9rem;
+    opacity: 0.6;
 }
 
 .download-button {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 1rem;
-    padding: 1.2rem 2.5rem;
-    background: var(--card-background);
-    color: var(--text-color);
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 0.4rem;
+    padding: 0.65rem 1.9rem;
+    border-radius: 999px;
+    background: linear-gradient(
+            135deg,
+            var(--primary-color),
+            var(--gradient-secondary)
+    );
+    color: #ffffff;
+    font-weight: 600;
+    font-size: 0.95rem;
     text-decoration: none;
-    border-radius: 16px;
-    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-    min-width: 240px;
-    position: relative;
-    overflow: hidden;
-    border: 2px solid transparent;
-    box-shadow: 0 4px 20px var(--shadow-color);
+    box-shadow: 0 4px 14px var(--shadow-color-hover);
+    transition: all 0.3s ease;
 }
 
-.download-button::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+.download-button:hover {
     background: linear-gradient(
             135deg,
             var(--inverted-primary),
             var(--inverted-accent)
     );
-    opacity: 0;
-    transition: opacity 0.4s ease;
-    z-index: 0;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 22px var(--shadow-color-hover);
 }
 
-.download-button:hover::before {
-    opacity: 1;
-}
-
-.download-button:hover {
-    transform: translateY(-5px) scale(1.02);
-    box-shadow: 0 12px 40px rgba(165, 75, 207, 0.3);
-    border-color: var(--inverted-primary);
-    color: white;
-}
-
-.download-button > * {
-    position: relative;
-    z-index: 1;
-}
-
-.platform-icon {
-    width: 28px;
-    height: 28px;
-    transition: transform 0.4s ease;
-}
-
-.download-button:hover .platform-icon {
-    transform: scale(1.2);
-    filter: brightness(1.2);
-}
-
-.download-button span {
-    font-weight: 600;
-    font-size: 1.1rem;
-    transition: all 0.3s ease;
-}
-
-.download-button .version-text {
-    position: absolute;
-    inset: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 1.1rem;
-    opacity: 0;
-    transform: translateY(10px);
-    transition: all 0.3s ease;
-    color: white;
-}
-
-.download-button:hover .version-text {
-    opacity: 1;
-    transform: translateY(0);
-}
-
-.download-button:hover span:not(.version-text) {
-    opacity: 0;
+.download-button i {
+    font-size: 0.85rem;
 }
 
 /* ===== Open Source Section ===== */
@@ -1357,9 +1344,14 @@ footer {
         max-width: 340px;
     }
 
+    .download-options {
+        grid-template-columns: 1fr;
+        max-width: 340px;
+        gap: 1.25rem;
+    }
+
     .download-button {
         width: 100%;
-        max-width: 300px;
         justify-content: center;
     }
 
