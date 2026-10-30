@@ -2,12 +2,8 @@ package com.melendez.known.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-<<<<<<< Updated upstream
-import com.melendez.known.util.settings.DarkThemePreference
-=======
 import com.melendez.known.util.DarkThemePreference
 import com.melendez.known.util.HistoryViewMode
->>>>>>> Stashed changes
 
 @Entity(tableName = "settings")
 data class Settings(
