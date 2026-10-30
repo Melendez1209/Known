@@ -37,6 +37,9 @@
     <string name="maths">Maths</string>
     <string name="foreign_language">Foreign language</string>
     <string name="no_history">No history</string>
+    <string name="compact">Compact</string>
+    <string name="standard">Standard</string>
+    <string name="list">List</string>
     <string name="sign_in">Sign in</string>
     <string name="sign_up">Sign up</string>
     <string name="password">Password</string>

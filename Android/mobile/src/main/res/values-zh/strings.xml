@@ -37,6 +37,9 @@
     <string name="maths">數學</string>
     <string name="foreign_language">外語</string>
     <string name="no_history">暫無歷史記錄</string>
+    <string name="compact">緊湊</string>
+    <string name="standard">標準</string>
+    <string name="list">清單</string>
     <string name="sign_in">登錄</string>
     <string name="sign_up">註冊</string>
     <string name="password">密碼</string>

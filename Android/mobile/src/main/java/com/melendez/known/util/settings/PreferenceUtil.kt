@@ -157,6 +157,12 @@ class PreferenceUtil(application: Application) : AndroidViewModel(application) {
             repository.updateSelectedSubjects(subjects.toSubjectString())
         }
     }
+
+    fun updateHistoryViewMode(mode: HistoryViewMode) {
+        viewModelScope.launch {
+            repository.updateHistoryViewMode(mode.value)
+        }
+    }
 }
 
 data class DarkThemePreference(
