@@ -8,8 +8,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.rounded.TextSnippet
 import androidx.compose.material.icons.rounded.Image
-import androidx.compose.material.icons.rounded.TextSnippet
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -72,7 +72,7 @@ fun ShareOptionsSheet(
             ShareOptionItem(
                 icon = {
                     Icon(
-                        imageVector = Icons.Rounded.TextSnippet,
+                        imageVector = Icons.AutoMirrored.Rounded.TextSnippet,
                         contentDescription = null,
                         tint = MaterialTheme.colorScheme.primary
                     )

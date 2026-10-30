@@ -61,4 +61,8 @@ class SettingsRepository(private val settingsDao: SettingsDao) {
     suspend fun updateSelectedSubjects(subjects: String) {
         settingsDao.updateSelectedSubjects(subjects)
     }
+
+    suspend fun updateHistoryViewMode(mode: Int) {
+        settingsDao.updateHistoryViewMode(mode)
+    }
 }

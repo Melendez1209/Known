@@ -37,6 +37,9 @@
     <string name="maths">数学</string>
     <string name="foreign_language">外语</string>
     <string name="no_history">暂无历史记录</string>
+    <string name="compact">紧凑</string>
+    <string name="standard">标准</string>
+    <string name="list">列表</string>
     <string name="sign_in">登录</string>
     <string name="sign_up">注册</string>
     <string name="password">密码</string>

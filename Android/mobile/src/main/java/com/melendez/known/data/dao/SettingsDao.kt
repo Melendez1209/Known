@@ -52,4 +52,7 @@ interface SettingsDao {
 
     @Query("UPDATE settings SET selectedSubjects = :subjects WHERE id = 1")
     suspend fun updateSelectedSubjects(subjects: String)
+
+    @Query("UPDATE settings SET historyViewMode = :mode WHERE id = 1")
+    suspend fun updateHistoryViewMode(mode: Int)
 } 
