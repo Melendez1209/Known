@@ -58,6 +58,7 @@ kotlin {
 
 dependencies {
 
+    implementation(libs.androidx.compose.animation)
     implementation(libs.androidx.material3)
     implementation(libs.core.ktx)
     implementation(libs.coil.compose)

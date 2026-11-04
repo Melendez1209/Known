@@ -10,6 +10,7 @@ import com.melendez.known.colour.PaletteStyle
 import com.melendez.known.data.AppDatabase
 import com.melendez.known.data.entity.Settings
 import com.melendez.known.data.repository.SettingsRepository
+import com.melendez.known.util.HistoryViewMode
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 

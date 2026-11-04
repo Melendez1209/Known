@@ -21,7 +21,6 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -70,6 +69,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -83,6 +83,7 @@ import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.state.ToggleableState
 import androidx.compose.ui.text.style.TextOverflow
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -90,17 +91,15 @@ import com.melendez.known.R
 import com.melendez.known.data.entity.ExamWithTotal
 import com.melendez.known.svg.DynamicColorImageVectors
 import com.melendez.known.svg.drawablevectors.download
+import com.melendez.known.ui.navigation.NavigationState
 import com.melendez.known.ui.navigation.Navigator
 import com.melendez.known.ui.screens.Screens
 import com.melendez.known.ui.viewmodel.ExamViewModel
-<<<<<<< Updated upstream
-=======
 import com.melendez.known.util.HistoryViewMode
-import com.melendez.known.util.PreferenceUtil
 import com.melendez.known.util.formatDateRange
->>>>>>> Stashed changes
 import com.melendez.known.util.formatScoreInput
 import com.melendez.known.util.percentage
+import com.melendez.known.util.settings.PreferenceUtil
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlin.math.roundToInt
@@ -324,84 +323,6 @@ fun History(
                         modifier = Modifier.weight(1f)
                     )
                 } else {
-<<<<<<< Updated upstream
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(horizontal = 12.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        AnimatedVisibility(visible = isEditing) {
-                            TriStateCheckbox(state = triState, onClick = toggleTriState)
-                        }
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(
-                                    start = rowPadding,
-                                    end = 12.dp,
-                                    top = 12.dp,
-                                    bottom = 12.dp
-                                ),
-                            horizontalArrangement = Arrangement.SpaceBetween
-                        ) {
-                            Text(
-                                text = stringResource(R.string.exam),
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Text(
-                                text = stringResource(R.string.mark),
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                            Text(
-                                text = stringResource(R.string.score_rate),
-                                style = MaterialTheme.typography.titleMedium
-                            )
-                        }
-                    }
-
-                    val pullToRefreshState: PullToRefreshState = rememberPullToRefreshState()
-
-                    PullToRefreshBox(
-                        isRefreshing = loading,
-                        onRefresh = {
-                            isRefreshing = true
-                            refreshTick++
-                        },
-                        state = pullToRefreshState,
-                        indicator = {
-                            PullToRefreshDefaults.LoadingIndicator(
-                                state = pullToRefreshState,
-                                isRefreshing = loading,
-                                modifier = Modifier.align(Alignment.TopCenter)
-                            )
-                        }
-                    ) {
-                        LazyColumn(
-                            modifier =
-                                if (paddingValues != null) {
-                                    Modifier.padding(bottom = paddingValues.calculateBottomPadding())
-                                } else {
-                                    Modifier
-                                }
-                        ) {
-                            items(exams, key = { it.exam.id }) { item ->
-                                Row(
-                                    modifier = Modifier.padding(
-                                        top = 6.dp,
-                                        bottom = 6.dp,
-                                        start = rowPadding,
-                                        end = 12.dp
-                                    ),
-                                    horizontalArrangement = Arrangement.SpaceBetween,
-                                    verticalAlignment = Alignment.CenterVertically
-                                ) {
-                                    AnimatedVisibility(visible = isEditing) {
-                                        Checkbox(
-                                            checked = item.exam.id in checkedIds,
-                                            onCheckedChange = { select(item.exam.id, it) }
-=======
                     SharedTransitionLayout {
                         AnimatedContent(
                             targetState = viewMode,
@@ -430,13 +351,12 @@ fun History(
                                             style = MaterialTheme.typography.titleMedium
                                         )
                                         Text(
-                                            text = stringResource(R.string.time),
+                                            text = stringResource(R.string.mark),
                                             style = MaterialTheme.typography.titleMedium
                                         )
                                         Text(
-                                            text = stringResource(R.string.mark),
+                                            text = stringResource(R.string.score_rate),
                                             style = MaterialTheme.typography.titleMedium
->>>>>>> Stashed changes
                                         )
                                     }
                                 }
@@ -531,47 +451,13 @@ fun History(
                                                     }
                                                 }
                                             }
-<<<<<<< Updated upstream
-                                        )
-                                    ) {
-                                        Row(
-                                            modifier = Modifier
-                                                .fillMaxWidth()
-                                                .height(52.dp),
-                                            horizontalArrangement = Arrangement.SpaceBetween,
-                                            verticalAlignment = Alignment.CenterVertically,
-                                        ) {
-                                            Text(
-                                                text = item.exam.name,
-                                                modifier = Modifier.padding(start = 12.dp),
-                                                style = MaterialTheme.typography.bodyLarge,
-                                                maxLines = 1,
-                                                overflow = TextOverflow.Ellipsis
-                                            )
-                                            Text(
-                                                text = formatScoreInput(item.totalMark.toString()),
-                                                style = MaterialTheme.typography.bodyLarge,
-                                                maxLines = 1,
-                                                modifier = Modifier.padding(horizontal = 8.dp),
-                                            )
-                                            Text(
-                                                text = formatPercent(
-                                                    percentage(
-                                                        item.totalMark,
-                                                        item.totalFullMark
-                                                    )
-                                                ),
-                                                modifier = Modifier.padding(end = 12.dp),
-                                                style = MaterialTheme.typography.bodyLarge
-                                            )
-=======
                                         }
                                     } else {
                                         // The compact and standard densities lay the cards out in an
                                         // adaptive grid, so phones get more columns than tablets
                                         LazyVerticalGrid(
                                             columns = GridCells.Adaptive(
-                                                if (mode == HistoryViewMode.COMPACT) 110.dp else 170.dp
+                                                if (mode == HistoryViewMode.COMPACT) 110.dp else 160.dp
                                             ),
                                             modifier =
                                                 if (paddingValues != null) {
@@ -615,12 +501,10 @@ fun History(
                                                             checkedIds.add(item.exam.id)
                                                         }
                                                     },
-                                                    onSelect = { select(item.exam.id, it) },
                                                     sharedTransitionScope = this@SharedTransitionLayout,
                                                     animatedVisibilityScope = this@AnimatedContent
                                                 )
                                             }
->>>>>>> Stashed changes
                                         }
                                     }
                                 }
@@ -635,8 +519,8 @@ fun History(
 
 /**
  * The grid card behind the compact and standard densities: a small dashboard tile that shares its
- * bounds with the other cards and the list row during a mode transition. Editing overlays a corner
- * checkbox and highlights the selected cards with a stroke
+ * bounds with the other cards and the list row during a mode transition. Selection is shown with a
+ * stroke around the card, so no checkbox competes with the content
  */
 @Composable
 private fun GridExamCard(
@@ -646,16 +530,10 @@ private fun GridExamCard(
     selected: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
-    onSelect: (Boolean) -> Unit,
     sharedTransitionScope: SharedTransitionScope,
     animatedVisibilityScope: AnimatedVisibilityScope
 ) {
     with(sharedTransitionScope) {
-        // Content shifts right while editing so the corner checkbox never sits on the name
-        val contentSpacing by animateDpAsState(
-            targetValue = if (isEditing) 36.dp else 12.dp,
-            label = "Grid card content spacing for the selection badge"
-        )
         val highlight by animateColorAsState(
             targetValue = if (isEditing && selected) {
                 MaterialTheme.colorScheme.primary
@@ -665,105 +543,94 @@ private fun GridExamCard(
             label = "Grid card selection highlight"
         )
 
-        Box {
-            Card(
+        Card(
+            modifier = Modifier
+                .fillMaxWidth()
+                .sharedBounds(
+                    sharedContentState = rememberSharedContentState(
+                        key = "exam-card-${item.exam.id}"
+                    ),
+                    animatedVisibilityScope = animatedVisibilityScope
+                )
+                .combinedClickable(onClick = onClick, onLongClick = onLongClick)
+                .border(width = 2.dp, color = highlight, shape = CardDefaults.shape)
+        ) {
+            Column(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .sharedBounds(
-                        sharedContentState = rememberSharedContentState(
-                            key = "exam-card-${item.exam.id}"
-                        ),
-                        animatedVisibilityScope = animatedVisibilityScope
-                    )
-                    .combinedClickable(onClick = onClick, onLongClick = onLongClick)
-                    .border(width = 2.dp, color = highlight, shape = CardDefaults.shape)
+                    .padding(12.dp),
+                verticalArrangement = Arrangement.spacedBy(6.dp)
             ) {
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(start = contentSpacing, end = 12.dp, top = 12.dp, bottom = 12.dp),
-                    verticalArrangement = Arrangement.spacedBy(6.dp)
-                ) {
-                    if (mode == HistoryViewMode.COMPACT) {
+                if (mode == HistoryViewMode.COMPACT) {
+                    Text(
+                        text = item.exam.name,
+                        modifier = Modifier.sharedBounds(
+                            sharedContentState = rememberSharedContentState(
+                                key = "exam-name-${item.exam.id}"
+                            ),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        ),
+                        style = MaterialTheme.typography.bodyMedium,
+                        maxLines = 2,
+                        overflow = TextOverflow.Ellipsis
+                    )
+                    Text(
+                        text = formatScoreInput(item.totalMark.toString()),
+                        modifier = Modifier.sharedBounds(
+                            sharedContentState = rememberSharedContentState(
+                                key = "exam-score-${item.exam.id}"
+                            ),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        ),
+                        style = MaterialTheme.typography.titleMedium
+                    )
+                } else {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
                         Text(
                             text = item.exam.name,
-                            modifier = Modifier.sharedBounds(
-                                sharedContentState = rememberSharedContentState(
-                                    key = "exam-name-${item.exam.id}"
+                            modifier = Modifier
+                                .weight(1f)
+                                .sharedBounds(
+                                    sharedContentState = rememberSharedContentState(
+                                        key = "exam-name-${item.exam.id}"
+                                    ),
+                                    animatedVisibilityScope = animatedVisibilityScope
                                 ),
-                                animatedVisibilityScope = animatedVisibilityScope
-                            ),
-                            style = MaterialTheme.typography.bodyMedium,
+                            style = MaterialTheme.typography.titleMedium,
                             maxLines = 2,
                             overflow = TextOverflow.Ellipsis
                         )
-                        Text(
-                            text = formatScoreInput(item.totalMark.toString()),
-                            modifier = Modifier.sharedBounds(
-                                sharedContentState = rememberSharedContentState(
-                                    key = "exam-score-${item.exam.id}"
-                                ),
-                                animatedVisibilityScope = animatedVisibilityScope
-                            ),
-                            style = MaterialTheme.typography.titleMedium
-                        )
-                    } else {
-                        Row(verticalAlignment = Alignment.CenterVertically) {
-                            Text(
-                                text = item.exam.name,
-                                modifier = Modifier
-                                    .weight(1f)
-                                    .sharedBounds(
-                                        sharedContentState = rememberSharedContentState(
-                                            key = "exam-name-${item.exam.id}"
-                                        ),
-                                        animatedVisibilityScope = animatedVisibilityScope
-                                    ),
-                                style = MaterialTheme.typography.titleMedium,
-                                maxLines = 2,
-                                overflow = TextOverflow.Ellipsis
+                        if (item.exam.isFavorite) {
+                            Icon(
+                                imageVector = Icons.Rounded.Favorite,
+                                contentDescription = null,
+                                tint = MaterialTheme.colorScheme.primary,
+                                modifier = Modifier.padding(start = 6.dp)
                             )
-                            if (item.exam.isFavorite) {
-                                Icon(
-                                    imageVector = Icons.Rounded.Favorite,
-                                    contentDescription = null,
-                                    tint = MaterialTheme.colorScheme.primary,
-                                    modifier = Modifier.padding(start = 6.dp)
-                                )
-                            }
                         }
-                        Text(
-                            text = formatDateRange(item.exam.startDate, item.exam.endDate),
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                        Text(
-                            text = examScoreSummary(item),
-                            modifier = Modifier.sharedBounds(
-                                sharedContentState = rememberSharedContentState(
-                                    key = "exam-score-${item.exam.id}"
-                                ),
-                                animatedVisibilityScope = animatedVisibilityScope
-                            ),
-                            style = MaterialTheme.typography.titleMedium
-                        )
                     }
+                    Text(
+                        text = formatDateRange(item.exam.startDate, item.exam.endDate),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                    Text(
+                        text = examScoreSummary(item),
+                        modifier = Modifier.sharedBounds(
+                            sharedContentState = rememberSharedContentState(
+                                key = "exam-score-${item.exam.id}"
+                            ),
+                            animatedVisibilityScope = animatedVisibilityScope
+                        ),
+                        style = MaterialTheme.typography.titleMedium
+                    )
                 }
-            }
-            if (isEditing) {
-                Checkbox(
-                    checked = selected,
-                    onCheckedChange = onSelect,
-                    modifier = Modifier
-                        .align(Alignment.TopStart)
-                        .padding(start = 4.dp, top = 4.dp)
-                )
             }
         }
     }
 }
 
-/** The plain list row: name, date and mark across one 50dp line */
+/** The plain list row: name, mark and percentage across one 52dp line */
 @Composable
 private fun ListExamRow(
     item: ExamWithTotal,
@@ -774,14 +641,13 @@ private fun ListExamRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(50.dp),
+                .height(52.dp),
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
                 text = item.exam.name,
                 modifier = Modifier
-                    .weight(1f)
                     .padding(start = 12.dp)
                     .sharedBounds(
                         sharedContentState = rememberSharedContentState(
@@ -794,20 +660,26 @@ private fun ListExamRow(
                 overflow = TextOverflow.Ellipsis
             )
             Text(
-                text = formatDateRange(item.exam.startDate, item.exam.endDate),
-                style = MaterialTheme.typography.bodyLarge,
-                maxLines = 1
-            )
-            Text(
                 text = formatScoreInput(item.totalMark.toString()),
                 modifier = Modifier
-                    .padding(end = 12.dp)
+                    .padding(horizontal = 8.dp)
                     .sharedBounds(
                         sharedContentState = rememberSharedContentState(
                             key = "exam-score-${item.exam.id}"
                         ),
                         animatedVisibilityScope = animatedVisibilityScope
                     ),
+                style = MaterialTheme.typography.bodyLarge,
+                maxLines = 1
+            )
+            Text(
+                text = formatPercent(
+                    percentage(
+                        item.totalMark,
+                        item.totalFullMark
+                    )
+                ),
+                modifier = Modifier.padding(end = 12.dp),
                 style = MaterialTheme.typography.bodyLarge
             )
         }
@@ -822,9 +694,9 @@ private fun examScoreSummary(item: ExamWithTotal): String {
     val mark = formatScoreInput(item.totalMark.toString())
     if (item.totalFullMark <= 0f) return mark
 
-    val percentage = (item.totalMark / item.totalFullMark * 100f).roundToInt()
     val fullMark = formatScoreInput(item.totalFullMark.toString())
-    return if (percentage > 0) "$mark / $fullMark · $percentage%" else "$mark / $fullMark"
+    val percent = percentage(item.totalMark, item.totalFullMark).roundToInt()
+    return "$mark / $fullMark · $percent%"
 }
 
 private fun HistoryViewMode.labelRes(): Int = when (this) {
@@ -899,5 +771,21 @@ fun DeleteExamsDialog(
                 Text(text = stringResource(R.string.cancel))
             }
         }
+    )
+}
+
+@Preview(device = "id:pixel_10_pro")
+@Composable
+fun History_Preview() {
+    val navigationState = remember {
+        NavigationState(
+            startRoute = Screens.Main,
+            topLevelRoute = mutableStateOf(Screens.Main),
+            backStacks = emptyMap()
+        )
+    }
+    History(
+        navigator = Navigator(navigationState),
+        checkedIds = remember { mutableStateListOf() }
     )
 }
