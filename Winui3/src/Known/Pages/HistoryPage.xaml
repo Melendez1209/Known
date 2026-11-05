@@ -34,15 +34,15 @@
         <ItemsPanelTemplate x:Key="CompactGridPanel">
             <ItemsWrapGrid
                 Orientation="Horizontal"
-                ItemWidth="190"
-                ItemHeight="120" />
+                ItemWidth="230"
+                ItemHeight="140" />
         </ItemsPanelTemplate>
 
         <ItemsPanelTemplate x:Key="StandardGridPanel">
             <ItemsWrapGrid
                 Orientation="Horizontal"
-                ItemWidth="260"
-                ItemHeight="170" />
+                ItemWidth="320"
+                ItemHeight="210" />
         </ItemsPanelTemplate>
 
         <ItemsPanelTemplate x:Key="ListPanel">
