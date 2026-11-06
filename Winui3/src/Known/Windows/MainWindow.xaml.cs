@@ -1,3 +1,4 @@
+using Known.Core.Data;
 using Known.Core.Localization;
 using Known.Pages;
 using Known.Services;
@@ -34,6 +35,7 @@ public sealed partial class MainWindow
         _themeService.ThemeChanged += OnThemeChanged;
 
         AppTitleBar.Title = _strings.Get("app_name");
+        TitleSearchBox.PlaceholderText = _strings.Get("search_hint");
 
         // Both of these only take effect from code. Setting ExtendsContentIntoTitleBar from XAML is
         // an error, and doing it late would flash the system title bar before replacing it
@@ -73,12 +75,75 @@ public sealed partial class MainWindow
     {
         HomeItem.Content = _strings.Get("home");
         HistoryItem.Content = _strings.Get("history");
-
         // The pane's settings item is built by NavigationView itself and comes with the framework's
         // own caption, which would keep answering in the shell language after the student switches.
         // SettingsItem is typed object here, as opposed to the NavigationViewItem it really is
         if (Navigation.SettingsItem is NavigationViewItem settingsItem)
             settingsItem.Content = _strings.Get("settings");
+    }
+
+    /// <summary>
+    ///     Stores the exam search query typed into the title bar and refreshes the suggestion
+    ///     list. The history page listens for the change, so the box can live in the shell and
+    ///     still drive the list.
+    /// </summary>
+    private void OnTitleSearchChanged(AutoSuggestBox sender, AutoSuggestBoxTextChangedEventArgs args)
+    {
+        if (args.Reason != AutoSuggestionBoxTextChangeReason.UserInput) return;
+
+        AppServices.Search.SetQuery(sender.Text);
+        UpdateSearchSuggestions(sender);
+    }
+
+    /// <summary>
+    ///     Fills the suggestion list with the exams whose name matches the typed text, the ones
+    ///     starting with it first. A blank query offers nothing, so the list stays shut until the
+    ///     student types.
+    /// </summary>
+    private void UpdateSearchSuggestions(AutoSuggestBox sender)
+    {
+        var query = sender.Text.Trim();
+
+        if (string.IsNullOrWhiteSpace(query))
+        {
+            sender.ItemsSource = null;
+            return;
+        }
+
+        sender.ItemsSource = AppServices.Exams.Exams
+            .Where(exam => exam.Exam.Name.Contains(query, StringComparison.CurrentCultureIgnoreCase))
+            .OrderByDescending(exam => exam.Exam.Name.StartsWith(query, StringComparison.CurrentCultureIgnoreCase))
+            .ThenBy(exam => exam.Exam.Name, StringComparer.CurrentCultureIgnoreCase)
+            .Take(8)
+            .ToList();
+    }
+
+    private void OnSearchSuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
+    {
+        if (args.SelectedItem is not ExamWithTotal exam) return;
+
+        OpenExam(exam);
+    }
+
+    private void OnSearchQuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+    {
+        // Enter opens an exam the student actually highlighted in the list; a plain Enter on
+        // typed text leaves the history filter alone
+        if (args.ChosenSuggestion is not ExamWithTotal exam) return;
+
+        OpenExam(exam);
+    }
+
+    /// <summary>
+    ///     Opens the chosen exam and leaves the box showing its name, so the query and the list
+    ///     behind the detail page agree.
+    /// </summary>
+    private void OpenExam(ExamWithTotal exam)
+    {
+        AppServices.Search.SetQuery(exam.Exam.Name);
+        TitleSearchBox.Text = exam.Exam.Name;
+
+        MainFrame.Navigate(typeof(DetailPage), exam.Exam.Id);
     }
 
     private void OnThemeChanged(object? sender, EventArgs e)

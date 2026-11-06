@@ -37,6 +37,15 @@
     <data name="list" xml:space="preserve">
     <value>清單</value>
   </data>
+    <data name="list_view" xml:space="preserve">
+    <value>清單檢視</value>
+  </data>
+    <data name="grid_view" xml:space="preserve">
+    <value>格線檢視</value>
+  </data>
+    <data name="tile_view" xml:space="preserve">
+    <value>磚檢視</value>
+  </data>
     <data name="add" xml:space="preserve">
     <value>添加</value>
   </data>
@@ -147,6 +156,12 @@
   </data>
     <data name="share" xml:space="preserve">
     <value>分享</value>
+  </data>
+    <data name="share_details" xml:space="preserve">
+    <value>分享完整成績</value>
+  </data>
+    <data name="share_summary" xml:space="preserve">
+    <value>分享摘要</value>
   </data>
     <data name="print" xml:space="preserve">
     <value>列印</value>

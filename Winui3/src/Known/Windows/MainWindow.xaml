@@ -4,6 +4,7 @@
     x:Class="Known.Windows.MainWindow"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:Known.Converters"
     xmlns:d="http://schemas.expression.blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
@@ -14,6 +15,10 @@
     </Window.SystemBackdrop>
 
     <Grid>
+        <Grid.Resources>
+            <converters:ExamDateRangeConverter x:Key="DateRangeText" />
+        </Grid.Resources>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -38,6 +43,35 @@
             <TitleBar.IconSource>
                 <ImageIconSource ImageSource="ms-appx:///Assets/StoreLogo.png" />
             </TitleBar.IconSource>
+            <!--
+                The exam search box lives in the title bar so it is reachable from every page,
+                the way the Windows settings app keeps its own search there.
+            -->
+            <TitleBar.Content>
+                <AutoSuggestBox
+                    MaxWidth="580"
+                    HorizontalAlignment="Stretch"
+                    VerticalAlignment="Center"
+                    x:Name="TitleSearchBox"
+                    QueryIcon="Find"
+                    PlaceholderText="Search exams"
+                    TextMemberPath="Exam.Name"
+                    TextChanged="OnTitleSearchChanged"
+                    SuggestionChosen="OnSearchSuggestionChosen"
+                    QuerySubmitted="OnSearchQuerySubmitted">
+                    <AutoSuggestBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Spacing="2">
+                                <TextBlock Text="{Binding Exam.Name}" />
+                                <TextBlock
+                                    Style="{StaticResource CaptionTextBlockStyle}"
+                                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                    Text="{Binding Converter={StaticResource DateRangeText}}" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </AutoSuggestBox.ItemTemplate>
+                </AutoSuggestBox>
+            </TitleBar.Content>
         </TitleBar>
 
         <!--

@@ -46,6 +46,9 @@ public static class AppServices
     /// </summary>
     public static LocationService Location { get; } = new();
 
+    /// <summary>The exam search query typed into the shell search box.</summary>
+    public static SearchService Search { get; } = new();
+
     /// <summary>Microsoft account sign in.</summary>
     public static MsalAuthService Auth { get; } = new();
 

@@ -24,6 +24,14 @@
             </ResourceDictionary.ThemeDictionaries>
 
             <!--
+                The title bar centres its content by default, which sizes the presenter to the
+                search box's own desired width; the box's own Stretch alignment can only fill
+                that narrow rectangle. Stretching the presenter lets the box fill the middle
+                of the bar instead (its MaxWidth still caps it).
+            -->
+            <HorizontalAlignment x:Key="TitleBarContentHorizontalAlignment">Stretch</HorizontalAlignment>
+
+            <!--
                 Charts are drawn by SkiaSharp, which cannot see XAML theme resources. These brushes
                 resolve to concrete colours the chart code can copy into an SKColor, and because they
                 are declared against theme resources they follow the light and dark variants on
