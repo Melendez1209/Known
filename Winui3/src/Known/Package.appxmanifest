@@ -9,15 +9,15 @@
         IgnorableNamespaces="uap rescap uap18">
 
     <Identity
-            Name="68e49fb4-767d-49a9-80e3-77803bf4cff3"
-            Publisher="CN=Melendez"
+            Name="YimingGeng.2724160419C55"
+            Publisher="CN=AD94850F-501E-4904-963C-53CF9C680E8F"
             Version="1.0.2.0"/>
 
-    <mp:PhoneIdentity PhoneProductId="68e49fb4-767d-49a9-80e3-77803bf4cff3"
+    <mp:PhoneIdentity PhoneProductId="acc12a8b-d325-4b66-b09c-68a3c0ba476a"
                       PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 
     <Properties>
-        <DisplayName>Known</DisplayName>
+        <DisplayName>知学情</DisplayName>
         <PublisherDisplayName>Yiming Geng</PublisherDisplayName>
         <Logo>Assets\StoreLogo.png</Logo>
     </Properties>
@@ -36,7 +36,7 @@
                      Executable="$targetnametoken$.exe"
                      EntryPoint="$targetentrypoint$">
             <uap:VisualElements
-                    DisplayName="Known"
+                    DisplayName="知学情"
                     Description="Known"
                     BackgroundColor="transparent"
                     Square150x150Logo="Assets\Square150x150Logo.png"

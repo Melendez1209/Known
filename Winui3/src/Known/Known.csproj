@@ -63,8 +63,8 @@
         <ProjectCapability Include="Msix" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.29648.1000-preview" />
-        <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.6.6-experimental" />
+        <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2957" />
+        <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.6.5" />
         <PackageReference Include="Microsoft.Identity.Client" Version="4.92.0" />
         <PackageReference Include="LiveChartsCore.SkiaSharpView.WinUI" Version="2.1.0-dev-798" />
         <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.251219" />
@@ -92,6 +92,15 @@
           published app is not size constrained enough to justify the runtime risk.
         -->
         <PublishTrimmed>False</PublishTrimmed>
+        <GenerateAppInstallerFile>False</GenerateAppInstallerFile>
+        <AppxPackageSigningEnabled>False</AppxPackageSigningEnabled>
+        <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
+        <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
+        <GenerateTestArtifacts>True</GenerateTestArtifacts>
+        <AppxBundle>Always</AppxBundle>
+        <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
+        <GenerateTemporaryStoreCertificate>True</GenerateTemporaryStoreCertificate>
+        <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     </PropertyGroup>
 </Project>
 
