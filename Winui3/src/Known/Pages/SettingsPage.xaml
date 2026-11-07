@@ -1,16 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 
 <Page
     x:Class="Known.Pages.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
 
-    <ScrollViewer VerticalScrollMode="Auto" VerticalScrollBarVisibility="Auto">
-        <StackPanel Padding="24" Spacing="24">
+    <!--
+        The settings are laid out as a single centred column of section headers and
+        settings cards, the same arrangement Auto Dark Mode uses. A card carries its
+        label on the left and its control on the right; cards whose control needs the
+        full width opt into the vertical alignment instead.
+    -->
+    <ScrollViewer>
+        <StackPanel Style="{StaticResource PageBaseStackPanelStyle}">
 
             <TextBlock
                 x:Name="TitleText"
@@ -18,230 +25,224 @@
                 Text="Settings" />
 
             <!-- Account -->
-            <Border
-                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                CornerRadius="8"
-                Padding="16">
-                <StackPanel Spacing="12">
-                    <TextBlock
-                        x:Name="AccountCaption"
-                        Style="{StaticResource BodyStrongTextBlockStyle}"
-                        Text="Account" />
-                    <Grid ColumnSpacing="16">
+            <TextBlock
+                x:Name="AccountCaption"
+                Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" />
+
+            <controls:SettingsCard>
+                <controls:SettingsCard.Header>
+                    <Grid ColumnSpacing="12">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="Auto" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+
+                        <PersonPicture
+                            x:Name="Avatar"
+                            Width="40"
+                            Height="40" />
+
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center" Spacing="2">
+                            <TextBlock
+                                x:Name="AccountName"
+                                Style="{StaticResource BodyStrongTextBlockStyle}"
+                                TextTrimming="CharacterEllipsis" />
+                            <TextBlock
+                                x:Name="AccountEmail"
+                                Style="{StaticResource CaptionTextBlockStyle}"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
+                    </Grid>
+                </controls:SettingsCard.Header>
+
+                <StackPanel Orientation="Horizontal" Spacing="8" VerticalAlignment="Center">
+                    <Button
+                        x:Name="AuthButton"
+                        Content="Sign in"
+                        Click="OnAuthTapped" />
+
+                    <!--
+                        Shown instead of the sign-in button while no Entra application has been
+                        registered for this build, so the account card never offers a control
+                        that cannot work.
+                    -->
+                    <TextBlock
+                        x:Name="AuthComingSoon"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        VerticalAlignment="Center"
+                        TextWrapping="Wrap"
+                        Visibility="Collapsed" />
+                </StackPanel>
+            </controls:SettingsCard>
+
+            <!-- General -->
+            <TextBlock
+                x:Name="GeneralCaption"
+                Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" />
+
+            <controls:SettingsCard>
+                <controls:SettingsCard.Header>
+                    <TextBlock x:Name="IdentityCaption" Style="{StaticResource SettingsCardHeaderTextBlockStyle}" />
+                </controls:SettingsCard.Header>
+                <ComboBox x:Name="IdentityOptions" MinWidth="200" SelectionChanged="OnIdentityChanged" />
+            </controls:SettingsCard>
+
+            <controls:SettingsCard
+                ContentAlignment="Vertical"
+                HorizontalContentAlignment="Stretch">
+                <controls:SettingsCard.Header>
+                    <TextBlock x:Name="RegionCaption" Style="{StaticResource SettingsCardHeaderTextBlockStyle}" />
+                </controls:SettingsCard.Header>
+
+                <StackPanel Spacing="8" HorizontalAlignment="Stretch">
+                    <Grid ColumnSpacing="8" HorizontalAlignment="Stretch">
+                        <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="Auto" />
                         </Grid.ColumnDefinitions>
 
-                        <PersonPicture
-                            Grid.Column="0"
-                            x:Name="Avatar"
-                            Width="48"
-                            Height="48" />
-
-                        <StackPanel
-                            Grid.Column="1"
-                            VerticalAlignment="Center">
-                            <TextBlock
-                                x:Name="AccountName"
-                                Style="{StaticResource BodyStrongTextBlockStyle}" />
-                            <TextBlock
-                                x:Name="AccountEmail"
-                                Style="{StaticResource CaptionTextBlockStyle}"
-                                Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
-                        </StackPanel>
-
-                        <Button
-                            Grid.Column="2"
-                            x:Name="AuthButton"
-                            VerticalAlignment="Center"
-                            Content="Sign in"
-                            Click="OnAuthTapped" />
-
-                        <!--
-                            Shown instead of the sign in button while no Entra application has been
-                            registered for this build, so the account card never offers a control
-                            that cannot work.
-                        -->
-                        <TextBlock
-                            Grid.Column="2"
-                            x:Name="AuthComingSoon"
-                            VerticalAlignment="Center"
-                            Style="{StaticResource CaptionTextBlockStyle}"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            TextWrapping="Wrap"
-                            Visibility="Collapsed" />
-                    </Grid>
-                </StackPanel>
-            </Border>
-
-            <!-- General -->
-            <Border
-                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                CornerRadius="8"
-                Padding="16">
-                <StackPanel Spacing="12">
-                    <TextBlock
-                        x:Name="GeneralCaption"
-                        Style="{StaticResource BodyStrongTextBlockStyle}"
-                        Text="General" />
-
-                    <StackPanel Spacing="8">
-                        <TextBlock
-                            x:Name="IdentityCaption"
-                            Style="{StaticResource CaptionTextBlockStyle}"
-                            Text="Identity" />
-                        <RadioButtons
-                            x:Name="IdentityOptions"
-                            SelectionChanged="OnIdentityChanged" />
-                    </StackPanel>
-
-                    <StackPanel Spacing="8">
-                        <TextBlock
-                            x:Name="RegionCaption"
-                            Style="{StaticResource CaptionTextBlockStyle}"
-                            Text="Region" />
                         <TextBox
                             x:Name="RegionBox"
+                            HorizontalAlignment="Stretch"
                             AcceptsReturn="False"
                             LostFocus="OnRegionLostFocus" />
 
-                        <StackPanel Orientation="Horizontal" Spacing="12">
-                            <Button
-                                x:Name="LocateButton"
-                                Click="OnLocate">
-                                <StackPanel Orientation="Horizontal" Spacing="8">
-                                    <FontIcon
-                                        FontFamily="Segoe Fluent Icons"
-                                        FontSize="14"
-                                        Glyph="&#xE707;" />
-                                    <TextBlock
-                                        x:Name="LocateCaption" />
-                                </StackPanel>
-                            </Button>
-
-                            <ProgressRing
-                                x:Name="LocateProgress"
-                                Width="20"
-                                Height="20"
-                                IsActive="False"
-                                Visibility="Collapsed" />
-                        </StackPanel>
-
-                        <TextBlock
-                            x:Name="LocateMessage"
-                            Style="{StaticResource CaptionTextBlockStyle}"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            TextWrapping="Wrap"
-                            Visibility="Collapsed" />
-                    </StackPanel>
-
-                    <StackPanel Spacing="8">
-                        <TextBlock
-                            x:Name="SubjectsCaption"
-                            Style="{StaticResource CaptionTextBlockStyle}"
-                            Text="Subjects" />
-                        <ItemsControl x:Name="SubjectGrid">
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <ItemsWrapGrid Orientation="Horizontal" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                        </ItemsControl>
-                    </StackPanel>
-                </StackPanel>
-            </Border>
-
-            <!-- Appearance -->
-            <Border
-                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                CornerRadius="8"
-                Padding="16">
-                <StackPanel Spacing="12">
-                    <TextBlock
-                        x:Name="AppearanceCaption"
-                        Style="{StaticResource BodyStrongTextBlockStyle}"
-                        Text="Appearance" />
-
-                    <StackPanel Spacing="8">
-                        <TextBlock
-                            x:Name="DarkCaption"
-                            Style="{StaticResource CaptionTextBlockStyle}"
-                            Text="Dark theme" />
-                        <RadioButtons
-                            x:Name="ThemeOptions"
-                            SelectionChanged="OnThemeChanged" />
-                    </StackPanel>
-
-                    <StackPanel Spacing="8">
-                        <TextBlock
-                            x:Name="LanguageCaption"
-                            Style="{StaticResource CaptionTextBlockStyle}"
-                            Text="Display language" />
-                        <ComboBox
-                            x:Name="LanguageBox"
-                            HorizontalAlignment="Stretch"
-                            SelectionChanged="OnLanguageChanged" />
-                        <TextBlock
-                            x:Name="LanguageHint"
-                            Style="{StaticResource CaptionTextBlockStyle}"
-                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                            TextWrapping="Wrap" />
-                    </StackPanel>
-
-                    <StackPanel Spacing="8">
                         <Button
-                            x:Name="RestartButton"
-                            Click="OnRestartClicked"
-                            Visibility="Collapsed" />
-                    </StackPanel>
-                </StackPanel>
-            </Border>
+                            x:Name="LocateButton"
+                            Grid.Column="1"
+                            Click="OnLocate">
+                            <StackPanel Orientation="Horizontal" Spacing="8">
+                                <FontIcon
+                                    FontFamily="Segoe Fluent Icons"
+                                    FontSize="14"
+                                    Glyph="&#xE707;" />
+                                <TextBlock x:Name="LocateCaption" />
+                            </StackPanel>
+                        </Button>
+                    </Grid>
 
-            <!-- About -->
-            <Border
-                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
-                CornerRadius="8"
-                Padding="16">
-                <StackPanel Spacing="8">
-                    <TextBlock
-                        x:Name="AboutCaption"
-                        Style="{StaticResource BodyStrongTextBlockStyle}" />
-                    <TextBlock
-                        x:Name="VersionText"
-                        Style="{StaticResource CaptionTextBlockStyle}"
-                        Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+                    <ProgressRing
+                        x:Name="LocateProgress"
+                        Width="20"
+                        Height="20"
+                        IsActive="False"
+                        Visibility="Collapsed" />
 
-                    <!--
-                        The location lookup is the only feature that leaves the device, and the
-                        audience is schoolchildren, so the data handling is stated here rather
-                        than left to a separate policy.
-                    -->
                     <TextBlock
-                        x:Name="PrivacyText"
+                        x:Name="LocateMessage"
                         Style="{StaticResource CaptionTextBlockStyle}"
                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                        TextWrapping="Wrap" />
-
-                    <HyperlinkButton
-                        x:Name="ReadmeLink"
-                        Padding="0"
-                        NavigateUri="https://github.com/Melendez1209/Known" />
-                    <HyperlinkButton
-                        x:Name="ReleaseLink"
-                        Padding="0"
-                        NavigateUri="https://github.com/Melendez1209/Known/releases" />
-                    <HyperlinkButton
-                        x:Name="IssueLink"
-                        Padding="0"
-                        NavigateUri="https://github.com/Melendez1209/Known/issues" />
-                    <HyperlinkButton
-                        x:Name="PrivacyLink"
-                        Padding="0"
-                        NavigateUri="https://melendez1209.github.io/Known/privacy.html" />
+                        TextWrapping="Wrap"
+                        Visibility="Collapsed" />
                 </StackPanel>
-            </Border>
+            </controls:SettingsCard>
+
+            <controls:SettingsCard
+                ContentAlignment="Vertical"
+                HorizontalContentAlignment="Stretch">
+                <controls:SettingsCard.Header>
+                    <TextBlock x:Name="SubjectsCaption" Style="{StaticResource SettingsCardHeaderTextBlockStyle}" />
+                </controls:SettingsCard.Header>
+                <ItemsControl x:Name="SubjectGrid">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                </ItemsControl>
+            </controls:SettingsCard>
+
+            <!-- Appearance -->
+            <TextBlock
+                x:Name="AppearanceCaption"
+                Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" />
+
+            <controls:SettingsCard>
+                <controls:SettingsCard.Header>
+                    <TextBlock x:Name="DarkCaption" Style="{StaticResource SettingsCardHeaderTextBlockStyle}" />
+                </controls:SettingsCard.Header>
+                <ComboBox x:Name="ThemeOptions" MinWidth="200" SelectionChanged="OnThemeChanged" />
+            </controls:SettingsCard>
+
+            <controls:SettingsCard>
+                <controls:SettingsCard.Header>
+                    <TextBlock x:Name="LanguageCaption" Style="{StaticResource SettingsCardHeaderTextBlockStyle}" />
+                </controls:SettingsCard.Header>
+                <ComboBox
+                    x:Name="LanguageBox"
+                    MinWidth="240"
+                    SelectionChanged="OnLanguageChanged" />
+            </controls:SettingsCard>
+
+            <!--
+                The restart hint and the button sit below the card rather than inside it,
+                because they only make sense together when the language actually changed.
+            -->
+            <StackPanel Spacing="8" Margin="0,4,0,0">
+                <TextBlock
+                    x:Name="LanguageHint"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    TextWrapping="Wrap"
+                    Visibility="Collapsed" />
+
+                <Button
+                    x:Name="RestartButton"
+                    Click="OnRestartClicked"
+                    Visibility="Collapsed" />
+            </StackPanel>
+
+            <!-- About -->
+            <TextBlock
+                x:Name="AboutCaption"
+                Style="{StaticResource SettingsSectionHeaderTextBlockStyle}" />
+
+            <controls:SettingsCard>
+                <controls:SettingsCard.Header>
+                    <TextBlock
+                        x:Name="VersionText"
+                        Style="{StaticResource SettingsCardHeaderTextBlockStyle}"
+                        TextWrapping="Wrap" />
+                </controls:SettingsCard.Header>
+            </controls:SettingsCard>
+
+            <controls:SettingsCard
+                x:Name="ReadmeLink"
+                IsClickEnabled="True"
+                Click="OnReadmeClick">
+                <controls:SettingsCard.ActionIcon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE774;" />
+                </controls:SettingsCard.ActionIcon>
+            </controls:SettingsCard>
+
+            <controls:SettingsCard
+                x:Name="ReleaseLink"
+                IsClickEnabled="True"
+                Click="OnReleaseClick">
+                <controls:SettingsCard.ActionIcon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE774;" />
+                </controls:SettingsCard.ActionIcon>
+            </controls:SettingsCard>
+
+            <controls:SettingsCard
+                x:Name="IssueLink"
+                IsClickEnabled="True"
+                Click="OnIssueClick">
+                <controls:SettingsCard.ActionIcon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE774;" />
+                </controls:SettingsCard.ActionIcon>
+            </controls:SettingsCard>
+
+            <controls:SettingsCard
+                x:Name="PrivacyLink"
+                IsClickEnabled="True"
+                Click="OnPrivacyClick">
+                <controls:SettingsCard.ActionIcon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE774;" />
+                </controls:SettingsCard.ActionIcon>
+            </controls:SettingsCard>
 
         </StackPanel>
     </ScrollViewer>

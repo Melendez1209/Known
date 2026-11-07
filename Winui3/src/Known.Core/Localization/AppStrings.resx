@@ -310,9 +310,6 @@
     <data name="privacy_policy" xml:space="preserve">
     <value>Privacy policy</value>
   </data>
-    <data name="privacy_note" xml:space="preserve">
-    <value>Your exam data is stored only on this device. If you use the location lookup, your approximate coordinates are sent to a third-party geocoding service to be resolved into a city name, and are never stored.</value>
-  </data>
     <data name="save_failed" xml:space="preserve">
     <value>Couldn't save the exam. Please try again.</value>
   </data>

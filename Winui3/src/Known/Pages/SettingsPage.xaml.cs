@@ -8,6 +8,7 @@ using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
 using Windows.ApplicationModel;
+using Windows.System;
 
 namespace Known.Pages;
 
@@ -48,11 +49,10 @@ public sealed partial class SettingsPage
 
         AboutCaption.Text = _strings.Get("about");
         VersionText.Text = _strings.Get("app_name") + " " + ReadAppVersion();
-        ReadmeLink.Content = _strings.Get("readme");
-        ReleaseLink.Content = _strings.Get("release");
-        IssueLink.Content = _strings.Get("github_issue");
-        PrivacyLink.Content = _strings.Get("privacy_policy");
-        PrivacyText.Text = _strings.Get("privacy_note");
+        ReadmeLink.Header = _strings.Get("readme");
+        ReleaseLink.Header = _strings.Get("release");
+        IssueLink.Header = _strings.Get("github_issue");
+        PrivacyLink.Header = _strings.Get("privacy_policy");
 
         AuthComingSoon.Text = _strings.Get("account_coming_soon");
 
@@ -383,6 +383,18 @@ public sealed partial class SettingsPage
     // About
     // ------------------------------------------------------------------
 
+    private void OnReadmeClick(object sender, RoutedEventArgs e) =>
+        OpenUrlAsync("https://github.com/Melendez1209/Known");
+
+    private void OnReleaseClick(object sender, RoutedEventArgs e) =>
+        OpenUrlAsync("https://github.com/Melendez1209/Known/releases");
+
+    private void OnIssueClick(object sender, RoutedEventArgs e) =>
+        OpenUrlAsync("https://github.com/Melendez1209/Known/issues");
+
+    private void OnPrivacyClick(object sender, RoutedEventArgs e) =>
+        OpenUrlAsync("https://melendez1209.github.io/Known/privacy.html");
+
     /// <summary>
     ///     Reads the version from the package identity, which is what the release carries. Runs
     ///     without a package identity have none, so the assembly version stands in for them.
@@ -404,6 +416,22 @@ public sealed partial class SettingsPage
     // ------------------------------------------------------------------
     // Helpers
     // ------------------------------------------------------------------
+
+    /// <summary>
+    ///     Opens an external link in the browser. A link is a convenience, so a failure to
+    ///     launch it must never take the settings page down.
+    /// </summary>
+    private static async void OpenUrlAsync(string url)
+    {
+        try
+        {
+            await Launcher.LaunchUriAsync(new Uri(url));
+        }
+        catch (Exception)
+        {
+            // Nothing left to fall back to
+        }
+    }
 
     private async Task ShowMessageAsync(string message)
     {

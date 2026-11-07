@@ -307,9 +307,6 @@
     <data name="privacy_policy" xml:space="preserve">
     <value>隐私政策</value>
   </data>
-    <data name="privacy_note" xml:space="preserve">
-    <value>你的考试数据仅保存在本设备上。如果使用定位查找，你的大致坐标会被发送给第三方地理编码服务以解析为城市名称，且不会被保存。</value>
-  </data>
     <data name="save_failed" xml:space="preserve">
     <value>保存考试失败，请重试。</value>
   </data>
