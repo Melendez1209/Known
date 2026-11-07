@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Caelum (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "Caelum (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}

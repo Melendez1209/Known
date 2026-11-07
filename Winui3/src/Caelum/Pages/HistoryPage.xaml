@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<Page
+    x:Class="Caelum.Pages.HistoryPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:converters="using:Caelum.Converters"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+
+    <!--
+        The derived cells go through converters rather than x:Bind function mode. A function binding
+        is resolved against the template's x:DataType, not the page, so a page method is out of reach
+        from inside an ItemsControl template; ElementName, the usual escape hatch, belongs to the
+        classic Binding and not to x:Bind.
+
+        The three row templates are the view densities the switcher picks from: compact and standard
+        are cards laid out on a wrapping grid, list is the plain table like row. The code behind
+        assigns one template and one layout panel to the ListView.
+    -->
+    <Page.Resources>
+        <converters:ExamDateRangeConverter x:Key="DateRangeText" />
+        <converters:ExamPercentageConverter x:Key="PercentageText" />
+        <converters:ExamMarkConverter x:Key="MarkText" />
+        <converters:ExamScoreDetailConverter x:Key="ScoreDetailText" />
+        <converters:PinnedToVisibilityConverter x:Key="PinnedVisibility" />
+
+        <!--
+            The grid panels behind the compact and standard densities: a wrapping layout that puts
+            as many cards on a row as the window allows. The list density keeps the plain stack.
+        -->
+        <ItemsPanelTemplate x:Key="CompactGridPanel">
+            <ItemsWrapGrid
+                Orientation="Horizontal"
+                ItemWidth="230"
+                ItemHeight="140" />
+        </ItemsPanelTemplate>
+
+        <ItemsPanelTemplate x:Key="StandardGridPanel">
+            <ItemsWrapGrid
+                Orientation="Horizontal"
+                ItemWidth="320"
+                ItemHeight="210" />
+        </ItemsPanelTemplate>
+
+        <ItemsPanelTemplate x:Key="ListPanel">
+            <ItemsStackPanel Orientation="Vertical" />
+        </ItemsPanelTemplate>
+
+        <!--
+            The card densities keep the card at its original size: the cell is wider than the
+            card and the difference sits in the item margin, so the card and the clickable
+            area end up being the same rectangle. The default padding would instead leave the
+            cell edges clickable without showing anything.
+        -->
+        <Style
+            x:Key="CardItemStyle"
+            TargetType="ListViewItem"
+            BasedOn="{StaticResource DefaultListViewItemStyle}">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="16,0,12,0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        </Style>
+
+        <DataTemplate x:Key="CompactRowTemplate">
+            <!--
+                The compact card: the exam name over the total mark, nothing else. The card chrome
+                matches the Border style the settings page uses.
+            -->
+            <Border
+                Padding="16"
+                CornerRadius="8"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1">
+                <Grid ColumnSpacing="8">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock
+                        Grid.Column="0"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource BodyTextBlockStyle}"
+                        MaxLines="2"
+                        TextWrapping="Wrap"
+                        TextTrimming="CharacterEllipsis"
+                        Text="{Binding Path=Exam.Name}" />
+
+                    <TextBlock
+                        Grid.Column="1"
+                        VerticalAlignment="Center"
+                        Style="{StaticResource SubtitleTextBlockStyle}"
+                        Text="{Binding Converter={StaticResource MarkText}}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="StandardRowTemplate">
+            <!--
+                The standard card: name and favourite state on top, then the date and the mark
+                against the full mark with the percentage.
+            -->
+            <Border
+                Padding="16"
+                CornerRadius="8"
+                Background="{ThemeResource CardBackgroundFillColorDefaultBrush}"
+                BorderBrush="{ThemeResource CardStrokeColorDefaultBrush}"
+                BorderThickness="1">
+                <Grid RowSpacing="6">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Grid Grid.Row="0" ColumnSpacing="8">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock
+                            Grid.Column="0"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource BodyStrongTextBlockStyle}"
+                            MaxLines="2"
+                            TextWrapping="Wrap"
+                            TextTrimming="CharacterEllipsis"
+                            Text="{Binding Path=Exam.Name}" />
+
+                        <FontIcon
+                            Grid.Column="1"
+                            VerticalAlignment="Center"
+                            FontFamily="Segoe Fluent Icons"
+                            Glyph="&#xE735;"
+                            FontSize="16">
+                            <FontIcon.Visibility>
+                                <Binding Path="Exam.IsFavorite" Converter="{StaticResource PinnedVisibility}" />
+                            </FontIcon.Visibility>
+                        </FontIcon>
+                    </Grid>
+
+                    <TextBlock
+                        Grid.Row="1"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{Binding Converter={StaticResource DateRangeText}}" />
+
+                    <TextBlock
+                        Grid.Row="2"
+                        Style="{StaticResource BodyStrongTextBlockStyle}"
+                        Text="{Binding Converter={StaticResource ScoreDetailText}}" />
+                </Grid>
+            </Border>
+        </DataTemplate>
+
+        <DataTemplate x:Key="ListRowTemplate">
+            <!--
+                Bound straight onto the database projection. There is no wrapper type mirroring the
+                entity: an empty Path hands the whole row to the converters, which pick out the
+                fields they need.
+            -->
+            <Grid Padding="4,10" ColumnSpacing="16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <TextBlock Style="{StaticResource BodyStrongTextBlockStyle}">
+                        <TextBlock.Text>
+                            <Binding Path="Exam.Name" />
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <TextBlock
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="{Binding Converter={StaticResource DateRangeText}}" />
+                </StackPanel>
+
+                <TextBlock
+                    Grid.Column="1"
+                    VerticalAlignment="Center"
+                    Style="{StaticResource BodyStrongTextBlockStyle}"
+                    Text="{Binding Converter={StaticResource PercentageText}}" />
+
+                <FontIcon
+                    Grid.Column="2"
+                    VerticalAlignment="Center"
+                    FontFamily="Segoe Fluent Icons"
+                    Glyph="&#xE735;"
+                    FontSize="16">
+                    <FontIcon.Visibility>
+                        <Binding Path="Exam.IsFavorite" Converter="{StaticResource PinnedVisibility}" />
+                    </FontIcon.Visibility>
+                </FontIcon>
+            </Grid>
+        </DataTemplate>
+    </Page.Resources>
+
+    <Grid Padding="24" RowSpacing="12">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0" ColumnSpacing="12">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+
+            <!--
+                The view switcher, styled after the Windows settings app: one icon per view, the
+                selected one marked with the accent pill. The names live in the tooltips.
+            -->
+            <SelectorBar
+                Grid.Column="0"
+                x:Name="ViewModeSelector"
+                SelectionChanged="OnViewModeChanged">
+                <SelectorBarItem x:Name="ListViewModeItem">
+                    <SelectorBarItem.Icon>
+                        <FontIcon
+                            FontFamily="Segoe Fluent Icons"
+                            FontSize="16"
+                            Glyph="&#xEA37;" />
+                    </SelectorBarItem.Icon>
+                </SelectorBarItem>
+                <SelectorBarItem x:Name="GridViewModeItem">
+                    <SelectorBarItem.Icon>
+                        <FontIcon
+                            FontFamily="Segoe Fluent Icons"
+                            FontSize="16"
+                            Glyph="&#xF0E2;" />
+                    </SelectorBarItem.Icon>
+                </SelectorBarItem>
+                <SelectorBarItem x:Name="TileViewModeItem">
+                    <SelectorBarItem.Icon>
+                        <FontIcon
+                            FontFamily="Segoe Fluent Icons"
+                            FontSize="16"
+                            Glyph="&#xF232;" />
+                    </SelectorBarItem.Icon>
+                </SelectorBarItem>
+            </SelectorBar>
+
+            <!--
+                The favourite filter as a two state toggle: unchecked shows every exam, checked only
+                the favourited ones.
+            -->
+            <ToggleButton
+                Grid.Column="1"
+                x:Name="FavouriteFilter"
+                Click="OnFavouriteFilterChanged">
+                <StackPanel Orientation="Horizontal" Spacing="8">
+                    <FontIcon
+                        FontFamily="Segoe Fluent Icons"
+                        Glyph="&#xE734;"
+                        FontSize="16" />
+                    <TextBlock x:Name="FavouriteFilterText" Text="Favourites" />
+                </StackPanel>
+            </ToggleButton>
+
+            <Button
+                Grid.Column="2"
+                HorizontalAlignment="Right"
+                x:Name="AddButton"
+                Style="{StaticResource AccentButtonStyle}"
+                Content="Add new"
+                Click="OnAddExam" />
+        </Grid>
+
+        <TextBlock
+            Grid.Row="1"
+            x:Name="EmptyText"
+            Style="{StaticResource BodyTextBlockStyle}"
+            TextWrapping="Wrap"
+            Text="No history"
+            Visibility="Collapsed" />
+
+        <!--
+            The marquee rectangle overlays the list: the list reports the pointer, the rectangle
+            follows the drag and whatever rows it touches end up selected. The canvas never takes
+            pointer input, so the list underneath keeps every gesture it already has.
+        -->
+        <Grid Grid.Row="2">
+            <ListView
+                x:Name="ExamList"
+                Background="Transparent"
+                SelectionMode="Multiple"
+                IsMultiSelectCheckBoxEnabled="False"
+                IsItemClickEnabled="True"
+                ItemClick="OnItemClick"
+                SelectionChanged="OnSelectionChanged"
+                PointerPressed="OnListPointerPressed"
+                PointerMoved="OnListPointerMoved"
+                PointerReleased="OnListPointerReleased"
+                PointerCanceled="OnListPointerCanceled" />
+
+            <Canvas
+                x:Name="MarqueeCanvas"
+                IsHitTestVisible="False"
+                Visibility="Collapsed">
+                <Rectangle
+                    x:Name="MarqueeRect"
+                    RadiusX="2"
+                    RadiusY="2"
+                    Stroke="{ThemeResource AccentFillColorDefaultBrush}"
+                    StrokeThickness="1"
+                    Fill="{ThemeResource AccentFillColorSecondaryBrush}"
+                    Opacity="0.35" />
+            </Canvas>
+        </Grid>
+
+        <!--
+            The selection bar replaces the page padding while at least one row is ticked, matching
+            the way the Android build swapped its navigation bar for an action bar.
+        -->
+        <CommandBar
+            Grid.Row="3"
+            x:Name="SelectionBar"
+            HorizontalAlignment="Stretch"
+            Visibility="Collapsed">
+            <AppBarButton x:Name="DeleteSelectionButton" Icon="Delete" Label="Delete" Click="OnDeleteSelected" />
+            <!--
+                The star reflects the selected exam: filled once it is pinned. The code behind swaps
+                the glyph and the label whenever the selection changes.
+            -->
+            <AppBarButton x:Name="FavouriteSelectionButton" Label="Add to favorite" Click="OnFavouriteSelected">
+                <AppBarButton.Icon>
+                    <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE734;" />
+                </AppBarButton.Icon>
+            </AppBarButton>
+            <!--
+                Sharing offers the light summary the cards already show, or the full detail sheet
+                carrying every recorded subject.
+            -->
+            <AppBarButton x:Name="ShareSelectionButton" Icon="Share" Label="Share">
+                <AppBarButton.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem x:Name="ShareSummaryItem" Text="Summary" Click="OnShareSummary" />
+                        <MenuFlyoutItem x:Name="ShareDetailsItem" Text="Full details" Click="OnShareDetails" />
+                    </MenuFlyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
+            <AppBarSeparator />
+            <AppBarButton Icon="Cancel" Label="Cancel" Click="OnClearSelection" />
+        </CommandBar>
+    </Grid>
+
+</Page>
