@@ -2,7 +2,7 @@
 
 最後更新：2026 年 10 月 28 日
 
-　　本隱私權政策適用於 **Known 及其各平台版本**（Android、HarmonyOS、Windows 桌面版等，以下簡稱「本應用程式」），由專案貢獻者維護開發。本政策向您說明本應用程式的資料處理行為、資料儲存方式、資訊共享，以及您所享有的相關權利。
+　　本隱私權政策適用於 **Caelum 及其各平台版本**（Android、HarmonyOS、Windows 桌面版等，以下簡稱「本應用程式」），由專案貢獻者維護開發。本政策向您說明本應用程式的資料處理行為、資料儲存方式、資訊共享，以及您所享有的相關權利。
 
 ## 1. 資料收集
 
@@ -71,5 +71,5 @@
 
 　　如您對本隱私權政策有任何疑問、建議或請求，歡迎透過以下渠道與我們聯繫：
 
-- [GitHub 儲存庫](https://github.com/Melendez1209/Known)
-- [提交 Issue](https://github.com/Melendez1209/Known/issues)
+- [GitHub 儲存庫](https://github.com/Melendez1209/Caelum)
+- [提交 Issue](https://github.com/Melendez1209/Caelum/issues)

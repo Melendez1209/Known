@@ -450,7 +450,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // ===== Changelog: Fetch from GitHub =====
-  const GITHUB_REPO = 'Melendez1209/Known';
+  const GITHUB_REPO = 'Melendez1209/Caelum';
   const GITHUB_API = `https://api.github.com/repos/${GITHUB_REPO}`;
   const MAX_ITEMS = 6;
 
