@@ -1,0 +1,90 @@
+package com.melendez.caelum.ui.viewmodel
+
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
+import com.melendez.caelum.data.AppDatabase
+import com.melendez.caelum.data.entity.Exam
+import com.melendez.caelum.data.entity.ExamScore
+import com.melendez.caelum.data.entity.ExamWithScores
+import com.melendez.caelum.data.entity.ExamWithTotal
+import com.melendez.caelum.data.entity.SubjectStat
+import com.melendez.caelum.data.repository.ExamRepository
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.map
+
+/**
+ * Exposes the exam queries and writes to the history, detail and input screens.
+ *
+ * The query methods return cold [Flow]s rather than sharing one subscription, so a screen can ask
+ * for the exam it cares about (`examId` may differ between two instances of the same route) and
+ * collect only that. Writes are `suspend` functions so the calling screen decides what happens
+ * after the transaction commits.
+ */
+class ExamViewModel(application: Application) : AndroidViewModel(application) {
+
+    private val repository = ExamRepository(AppDatabase.getDatabase(application))
+
+    /** Every exam with its summed marks, newest first. Backs the history list. */
+    val exams: Flow<List<ExamWithTotal>> = repository.exams
+
+    /** Exams whose name contains [query]. */
+    fun search(query: String): Flow<List<ExamWithTotal>> = repository.searchExams(query)
+
+    /** One exam together with its subject scores, or `null` while it does not exist yet. */
+    fun examWithScores(examId: Long): Flow<ExamWithScores?> = repository.getExamWithScores(examId)
+
+    /** Multiple exams with their subject scores, for batch operations. */
+    fun examsWithScoresByIds(examIds: List<Long>): Flow<List<ExamWithScores>> =
+        repository.getExamsWithScoresByIds(examIds)
+
+    /** Flow of the exams with scores for the given IDs, as a map keyed by exam ID. */
+    fun examsWithScoresMapByIds(examIds: List<Long>): Flow<Map<Long, ExamWithScores>> =
+        repository.getExamsWithScoresByIds(examIds)
+            .map { list -> list.associateBy { it.exam.id } }
+
+    /**
+     * Per-subject averages across every exam except [examId], used by the detail screen to compare
+     * the current exam against the student's own history.
+     */
+    fun subjectStats(examId: Long): Flow<List<SubjectStat>> = repository.getSubjectStats(examId)
+
+    /** Inserts a new exam and its scores, returning the generated exam id. */
+    suspend fun insertExam(exam: Exam, scores: List<ExamScore>): Long =
+        repository.insertExam(exam, scores)
+
+    /** Overwrites an existing exam and replaces all of its scores. */
+    suspend fun updateExam(exam: Exam, scores: List<ExamScore>) =
+        repository.updateExam(exam, scores)
+
+    /** Deletes one exam. Its scores go with it. */
+    suspend fun deleteExam(examId: Long) = repository.deleteExam(examId)
+
+    /** Deletes several exams at once, used by the history list's multi-select mode. */
+    suspend fun deleteExams(examIds: List<Long>) = repository.deleteExams(examIds)
+
+    /** Whether a single exam is favourited, so the detail screen can reflect the saved state. */
+    fun isFavorite(examId: Long): Flow<Boolean> = repository.getExam(examId)
+        .map { it?.isFavorite ?: false }
+
+    /** Toggles the favourite state of a single exam. */
+    suspend fun toggleFavorite(examId: Long) {
+        val exam = repository.getExam(examId).first()
+        if (exam != null) {
+            repository.setFavorite(examId, !exam.isFavorite)
+        }
+    }
+
+    /** Toggles the favourite state of multiple exams at once. */
+    suspend fun toggleFavorites(examIds: List<Long>, favourite: Boolean) {
+        repository.toggleFavorites(examIds, favourite)
+    }
+
+    /** Whether any exam in the given list is not favourited. */
+    fun hasUnfavourite(examIds: List<Long>): Flow<Boolean> =
+        repository.getExamsByIds(examIds).map { exams -> exams.any { !it.isFavorite } }
+
+    /** All favourited exams, for a future favourites list. */
+    val favoriteExams: Flow<List<Exam>> =
+        repository.getFavoriteExams()
+}

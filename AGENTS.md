@@ -14,12 +14,12 @@ messages, Markdown files and similar content in British English.
   `origin/dev_android`).
 - Pushes to `main` containing changes under `Web/` trigger the GitHub Pages deploy workflow
   (`.github/workflows/static.yml`). Treat pushes to `main` with extra care.
-- Prior to the official release of the [GitHub repository](https://github.com/Melendez1209/Known), the database version
+- Prior to the official release of the [GitHub repository](https://github.com/Melendez1209/Caelum), the database version
   will be standardised as v1; no migration is required.
 
 ## Repository layout (monorepo, single git repo at root)
 
-- `Android/` - the main workspace: Gradle project with two modules, `mobile` (phone app, package `com.melendez.known`).
+- `Android/` - the main workspace: Gradle project with two modules, `mobile` (phone app, package `com.melendez.caelum`).
   Active branch `dev_Android`.
 - `HarmonyOS/` - HarmonyOS app (hvigor build); `Web/` - static Vite site. Usually out of scope for Android work.
 - `Winui3/` - Windows desktop app (WinUI 3 / Windows App SDK). Active branch `dev_win`.
@@ -29,7 +29,7 @@ messages, Markdown files and similar content in British English.
 - Build with the Gradle wrapper on Windows: `.\gradlew.bat`. Useful tasks: `:mobile:assembleDebug`,
   `:mobile:testDebugUnitTest`, `:wear:assembleDebug`.
 - Run one unit test with `--tests`, e.g.
-  `.\gradlew.bat :mobile:testDebugUnitTest --tests "com.melendez.known.util.SettingsCoreKtTest"`.
+  `.\gradlew.bat :mobile:testDebugUnitTest --tests "com.melendez.caelum.util.SettingsCoreKtTest"`.
 - Dependency versions live only in `gradle/libs.versions.toml` - add/update there, never inline.
 - Toolchain: AGP `9.4.0-alpha08`, Kotlin `2.4.0`, Gradle `9.6.1`, JDK 17 toolchain, compileSdk 37 / targetSdk 36, minSdk
   29 (mobile) / 30 (wear). "Stable" version suggestions will usually be wrong here; match existing versions.
@@ -48,14 +48,14 @@ messages, Markdown files and similar content in British English.
 
 ## Windows specifics (`Winui3/`)
 
-- Three projects under `Winui3/`: `src/Known` (WinUI 3 app), `src/Known.Core` (net8.0 class library, no WinUI
-  dependency) and `tests/Known.Core.Tests` (xUnit). `Known.Core` holds the domain rules, the EF Core layer and the
+- Three projects under `Winui3/`: `src/Caelum` (WinUI 3 app), `src/Caelum.Core` (net8.0 class library, no WinUI
+  dependency) and `tests/Caelum.Core.Tests` (xUnit). `Caelum.Core` holds the domain rules, the EF Core layer and the
   localisation, so it can be tested without a window.
 - Build with `dotnet`. The app project **requires an explicit platform**, because MSIX packaging cannot target AnyCPU:
-  `dotnet build Winui3\Known.slnx -c Debug -p:Platform=x64`.
+  `dotnet build Winui3\Caelum.slnx -c Debug -p:Platform=x64`.
 - `dotnet` is not on `PATH` on this machine; the SDK lives at `C:\Program Files\dotnet\dotnet.exe`. The .NET 11 SDK is
   installed, and it builds and runs the `net8.0` targets because the .NET 8 runtime is present.
-- Run the tests with `dotnet test Winui3\tests\Known.Core.Tests\Known.Core.Tests.csproj`. The 35 cases in
+- Run the tests with `dotnet test Winui3\tests\Caelum.Core.Tests\Caelum.Core.Tests.csproj`. The 35 cases in
   `ExamScoringTests` are a deliberate port of the Android `ExamCoreKtTest` (the desktop side adds a few dashboard
   average cases), so keep them in step when either side changes.
 - Package versions: `Microsoft.WindowsAppSDK` 2.5.1, `LiveChartsCore.SkiaSharpView.WinUI` 2.0.5, `CommunityToolkit.Mvvm`
@@ -65,7 +65,7 @@ messages, Markdown files and similar content in British English.
 - Cloud services were dropped except Microsoft account sign in: no Firebase, AdMob, Gemini or ML Kit. The desktop app is
   local first. `MsalAuthService.ClientId` is empty until an Entra app is registered; until then the account card shows a
   "Coming soon" caption instead of a sign in button.
-- Localisation is maintained by hand in `Known.Core/Localization`. The old generator
+- Localisation is maintained by hand in `Caelum.Core/Localization`. The old generator
   (`tools\New-LocalizationResources.ps1` and `tools\winui-strings.xml`) was removed, so the `.resx` files must be kept in
   step with the Android `res/values*` manually. Note that Android's `values-zh` holds **Traditional** and
   `values-zh-rCN` holds **Simplified**, which is the opposite of what the folder names suggest.
@@ -76,7 +76,7 @@ messages, Markdown files and similar content in British English.
   `ThemeService.ThemeChanged`. `ChartPalette.Refresh` takes the theme from `ThemeService.CurrentTheme` and looks the
   text and grid brushes up in the matching theme dictionary, because code-side resource lookup does not walk
   `ThemeDictionaries`.
-- Pages are plain `Page` subclasses with code-behind; the earlier shared `KnownPage` base class was removed. Navigation
+- Pages are plain `Page` subclasses with code-behind; the earlier shared `CaelumPage` base class was removed. Navigation
   arguments are passed straight to `Frame.Navigate` and read from `NavigationEventArgs.Parameter` in `OnNavigatedTo`.
 - The shell uses the WinUI `TitleBar` control (not `AppWindow.TitleBar`), with `ExtendsContentIntoTitleBar` and
   `SetTitleBar` called from the window constructor. The pane toggle lives on the title bar, so the `NavigationView`
@@ -90,7 +90,7 @@ messages, Markdown files and similar content in British English.
 - Compose calls with multi-line arguments place the trailing lambda on its own line after `) {` (see CONTRIBUTING.md
   examples).
 - Comments: standard English, `//` with a space after the symbol, no trailing period.
-  Monorepo for **Known** (知学情), an exam-score analysis app for students. Three independent platform apps that share
+  Monorepo for **Caelum** (澄迹), an exam-score analysis app for students. Three independent platform apps that share
   no
   code:
 
@@ -124,7 +124,7 @@ Gotchas:
   which also prevents its `DOMContentLoaded` handler from registering. Don't build on it.
 - All UI strings are in `assets/values/translations.json` (locales `zh`, `zh-tw`, `en`, `en-GB`), applied via
   `data-i18n` attributes. Theme/lang dropdown state persists in `localStorage`.
-- The changelog section is fetched live from the GitHub API (`Melendez1209/Known`: releases, then commits fallback) — it
+- The changelog section is fetched live from the GitHub API (`Melendez1209/Caelum`: releases, then commits fallback) — it
   is not stored in the repo.
 - `404.html` also loads `src/i18n.js` and shares the same translations file.
 

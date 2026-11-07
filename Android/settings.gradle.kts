@@ -17,5 +17,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Known"
+rootProject.name = "Caelum"
 include(":mobile")

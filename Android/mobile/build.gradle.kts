@@ -6,15 +6,15 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "2.4.0"
 }
 android {
-    namespace = "com.melendez.known"
+    namespace = "com.melendez.caelum"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "com.melendez.known"
+        applicationId = "com.melendez.caelum"
         minSdk = 29
         targetSdk = 36
         versionCode = 1
-        versionName = "1.0.13"
+        versionName = "1.0.14"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {

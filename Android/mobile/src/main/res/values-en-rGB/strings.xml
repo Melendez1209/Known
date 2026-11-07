@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Known</string>
+    <string name="slogan">Trace toward clarity.</string>
+    <string name="app_name">Caelum</string>
     <string name="home">Home</string>
     <string name="me">Me</string>
     <string name="history">History</string>
@@ -18,7 +19,7 @@
     <string name="score_rate">Score rate</string>
     <string name="full_mark">Total marks</string>
     <string name="next">Next</string>
-    <string name="sign_to">Sign in to your Known Account</string>
+    <string name="sign_to">Sign in to your Caelum Account</string>
     <string name="avatar">Avatar</string>
     <string name="dynamic_color">Dynamic Color</string>
     <string name="exam_dates">Exam Dates</string>
@@ -56,7 +57,7 @@
     <string name="prophets">Prophets</string>
     <string name="confirm">Confirm</string>
     <string name="attention">Attention</string>
-    <string name="disclaimer">Your sponsorship is not a Marketing Effort of the Software Publisher (Known Team)! It is only a way for you to support the development of the software (Known)! Our software is completely free of charge!</string>
+    <string name="disclaimer">Your sponsorship is not a Marketing Effort of the Software Publisher (Caelum Team)! It is only a way for you to support the development of the software (Caelum)! Our software is completely free of charge!</string>
     <string name="pe">PE</string>
     <string name="follow_system">System</string>
     <string name="on">On</string>
@@ -99,7 +100,7 @@
     <string name="general_settings">General</string>
     <string name="general_settings_desc">Student status, Education model</string>
     <string name="display_settings">Dark theme, dynamic color, languages</string>
-    <string name="onboarding_welcome">Welcome to Known</string>
+    <string name="onboarding_welcome">Welcome to Caelum</string>
     <string name="onboarding_description">Tell us a little about yourself for a better experience</string>
     <string name="onboarding_identity">What describes you best?</string>
     <string name="student">Student</string>

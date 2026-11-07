@@ -2,7 +2,7 @@
 
 Last updated: 28 October 2026
 
-This privacy policy applies to **Known and its platform editions** (Android, HarmonyOS, Windows desktop, hereinafter referred to as "the app"), developed and maintained by the project contributors. It explains how the app handles data, where data is stored, what may be shared, and the rights you have.
+This privacy policy applies to **Caelum and its platform editions** (Android, HarmonyOS, Windows desktop, hereinafter referred to as "the app"), developed and maintained by the project contributors. It explains how the app handles data, where data is stored, what may be shared, and the rights you have.
 
 ## 1. Information We Collect
 
@@ -71,5 +71,5 @@ This privacy policy may be updated as the open-source project evolves. Updated v
 
 If you have any questions, suggestions, or requests regarding this privacy policy, you are welcome to reach us through the following channels:
 
-- [GitHub Repository](https://github.com/Melendez1209/Known)
-- [Open an Issue](https://github.com/Melendez1209/Known/issues)
+- [GitHub Repository](https://github.com/Melendez1209/Caelum)
+- [Open an Issue](https://github.com/Melendez1209/Caelum/issues)

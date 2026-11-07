@@ -22,8 +22,8 @@ jobs:
         issue-message: |
           ## Congratulations! The Issue you created has been closed.
 
-          The issue you created has been closed. Thank you for your valuable feedback to the Known team!
+          The issue you created has been closed. Thank you for your valuable feedback to the Caelum team!
         pr-message: |
           ## Congratulations! The Pull Request you created has been merged.
           
-          After rigorous review and testing by the Known team, we have determined that your Pull Request aligns with Known's consistent development and design philosophy since its establishment. It holds the potential to bring technical, universal, localised, or improved benefits to the future development of this open-source project and demonstrates excellent stability. Therefore, we have merged this PR. On behalf of all users, the Known team would like to express our sincere gratitude and regards to you for your selfless contributions to the Known project and the education industry!
+          After rigorous review and testing by the Caelum team, we have determined that your Pull Request aligns with Caelum's consistent development and design philosophy since its establishment. It holds the potential to bring technical, universal, localised, or improved benefits to the future development of this open-source project and demonstrates excellent stability. Therefore, we have merged this PR. On behalf of all users, the Caelum team would like to express our sincere gratitude and regards to you for your selfless contributions to the Caelum project and the education industry!

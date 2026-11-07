@@ -1,0 +1,2 @@
+MainPackage=E:\Codes\Known\Winui3\src\Caelum\bin\x86\Release\net8.0-windows10.0.19041.0\win-x86\Upload\Caelum_1.0.3.0_x86.msix
+SymbolPackage=E:\Codes\Known\Winui3\src\Caelum\bin\x86\Release\net8.0-windows10.0.19041.0\win-x86\Upload\Caelum_1.0.3.0\Caelum_1.0.3.0_x86.appxsym

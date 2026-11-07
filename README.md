@@ -1,10 +1,11 @@
-# Known
+# Caelum
 
-![Known logo](Logo.png)
+![Caelum logo](Logo.png)
 
-**知学情 (Known)** is a free exam-score analysis app for students. It helps you record exams,
-visualise your progress across subjects and stay motivated. The app is local first: your data
-never leaves your device.
+**澄迹 (Caelum)** — *迹明，学自澄 · Trace toward clarity.*
+
+A free exam-score analysis app for students. It helps you record exams, visualise your progress
+across subjects and stay motivated. The app is local first: your data never leaves your device.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 
@@ -28,7 +29,7 @@ never leaves your device.
 
 ## Platforms
 
-Known is a monorepo of independent apps that share no code. Each platform follows its own
+Caelum is a monorepo of independent apps that share no code. Each platform follows its own
 official design language.
 
 | Platform | Directory | Tech stack | Status |
@@ -40,18 +41,18 @@ official design language.
 
 ## Download
 
-Grab the latest release from the [releases page](https://github.com/Melendez1209/Known/releases),
-or visit the [project website](https://melendez1209.github.io/Known/) for the download links and
+Grab the latest release from the [releases page](https://github.com/Melendez1209/Caelum/releases),
+or visit the [project website](https://melendez1209.github.io/Caelum/) for the download links and
 the changelog.
 
 ## Privacy
 
-Known stores your exams in a local database on your device. There is no server, no analytics and
+Caelum stores your exams in a local database on your device. There is no server, no analytics and
 no third-party SDK that reads your data. The only feature that sends anything off the device is
 the optional city lookup: when you ask the app to fill in your region, your approximate
 coordinates are sent to a third-party geocoding service to be resolved into a city name, and are
 never stored. The full policy is published at
-<https://melendez1209.github.io/Known/privacy.html>.
+<https://melendez1209.github.io/Caelum/privacy.html>.
 
 ## Build from source
 
@@ -63,8 +64,8 @@ Every platform has its own toolchain. The repository root contains the shared do
 Requirements: Windows 10 version 1809 or later, the .NET SDK, and the Windows App SDK.
 
 ```powershell
-dotnet build Winui3\Known.slnx -c Debug -p:Platform=x64
-dotnet test Winui3\tests\Known.Core.Tests\Known.Core.Tests.csproj
+dotnet build Winui3\Caelum.slnx -c Debug -p:Platform=x64
+dotnet test Winui3\tests\Caelum.Core.Tests\Caelum.Core.Tests.csproj
 ```
 
 The app project requires an explicit platform because MSIX packaging cannot target `AnyCPU`.
@@ -96,7 +97,7 @@ npm run build    # produce the static output
 ## Project structure
 
 ```
-Known/
+Caelum/
 ├── Android/      Kotlin + Jetpack Compose app (mobile and wear modules)
 ├── HarmonyOS/    ArkTS app for DevEco Studio
 ├── Winui3/       WinUI 3 desktop app, its Core library and the xUnit tests
@@ -115,5 +116,5 @@ space after `//`).
 
 ## License
 
-Known is released under the [MIT License](LICENSE).
+Caelum is released under the [MIT License](LICENSE).
 
