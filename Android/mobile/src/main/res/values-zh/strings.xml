@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">知學情</string>
+    <string name="slogan">跡明，學自澄</string>
+    <string name="app_name">澄跡</string>
     <string name="home">首頁</string>
     <string name="me">我</string>
     <string name="history">歷史</string>
@@ -18,7 +19,7 @@
     <string name="score_rate">得分率</string>
     <string name="full_mark">滿分</string>
     <string name="next">繼續</string>
-    <string name="sign_to">登錄您的 知學情 帳號</string>
+    <string name="sign_to">登錄您的 澄跡 帳號</string>
     <string name="avatar">頭像</string>
     <string name="dynamic_color">動態顏色</string>
     <string name="exam_dates">考試期</string>
@@ -56,7 +57,7 @@
     <string name="prophets">先知</string>
     <string name="confirm">確認</string>
     <string name="attention">注意</string>
-    <string name="disclaimer">您的贊助行為唔屬於軟件發行方（ 知學情 團隊）嘅經營性行為！ 僅作您對於本項目（ 知學情 ）發展支持！ 我哋嘅軟件功能完全免費！</string>
+    <string name="disclaimer">您的贊助行為唔屬於軟件發行方（ 澄跡 團隊）嘅經營性行為！ 僅作您對於本項目（ 澄跡 ）發展支持！ 我哋嘅軟件功能完全免費！</string>
     <string name="pe">體育</string>
     <string name="follow_system">跟隨系統</string>
     <string name="on">開</string>
@@ -99,7 +100,7 @@
     <string name="general_settings">一般</string>
     <string name="general_settings_desc">学生状况与教育模式</string>
     <string name="display_settings">深色主题、动态色彩、语言</string>
-    <string name="onboarding_welcome">歡迎使用 Known</string>
+    <string name="onboarding_welcome">歡迎使用 Caelum</string>
     <string name="onboarding_description">請告訴我們一些基本資訊，以獲得更好的體驗</string>
     <string name="onboarding_identity">您的身份是？</string>
     <string name="onboarding_region">您所在的地區</string>

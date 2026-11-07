@@ -8,7 +8,7 @@
             <InsightsFilterSettings>
               <option name="connection">
                 <ConnectionSetting>
-                  <option name="appId" value="com.melendez.known" />
+                  <option name="appId" value="com.melendez.caelum" />
                   <option name="mobileSdkAppId" value="1:884248348428:android:3744606cae2b8632e1eb29" />
                   <option name="projectId" value="known-mm2008" />
                   <option name="projectNumber" value="884248348428" />
