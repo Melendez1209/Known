@@ -50,7 +50,7 @@ public sealed class StringLocalizer
     /// <summary>The languages offered on the appearance page, the first one following the system.</summary>
     public static IReadOnlyList<LanguageOption> AvailableLanguages { get; } =
     [
-        new(string.Empty, "Follow system"),
+        new(string.Empty, "Use system settings"),
         new("en-US", "English (United States)"),
         new("en-GB", "English (United Kingdom)"),
         new("zh-Hans", "中文（简体）"),

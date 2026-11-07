@@ -30,6 +30,11 @@ public static class KnownDatabase
     ///     Opens a context against the on-disk database, creating the folder when needed. Callers own
     ///     the returned context and should dispose it.
     /// </summary>
+    /// <remarks>
+    ///     No migration step exists yet: the schema is still at v1 and the app has not shipped, so a
+    ///     fresh file is all a new installation needs. Existing databases are the developer's own,
+    ///     and are deleted by hand rather than upgraded.
+    /// </remarks>
     public static KnownDbContext CreateContext()
     {
         var directory = ResolveDataDirectory();
@@ -53,22 +58,5 @@ public static class KnownDatabase
             .Options;
 
         return new KnownDbContext(options);
-    }
-
-    /// <summary>
-    ///     Creates the schema when needed and makes sure the settings row exists, so the rest
-    ///     of the app never has to special case a first run.
-    /// </summary>
-    public static async Task InitialiseAsync(CancellationToken cancellationToken = default)
-    {
-        await using var context = CreateContext();
-
-        // No migration step yet: the schema is still at v1 and the app has not shipped, so a fresh
-        // file is all a new installation needs. Existing databases are the developer's own, and are
-        // deleted by hand rather than upgraded.
-        await context.Database.EnsureCreatedAsync(cancellationToken).ConfigureAwait(false);
-
-        var settingsRepository = new SettingsRepository(context);
-        await settingsRepository.InitialiseAsync(cancellationToken).ConfigureAwait(false);
     }
 }

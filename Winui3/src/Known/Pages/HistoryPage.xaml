@@ -34,20 +34,36 @@
         <ItemsPanelTemplate x:Key="CompactGridPanel">
             <ItemsWrapGrid
                 Orientation="Horizontal"
-                ItemWidth="190"
-                ItemHeight="120" />
+                ItemWidth="230"
+                ItemHeight="140" />
         </ItemsPanelTemplate>
 
         <ItemsPanelTemplate x:Key="StandardGridPanel">
             <ItemsWrapGrid
                 Orientation="Horizontal"
-                ItemWidth="260"
-                ItemHeight="170" />
+                ItemWidth="320"
+                ItemHeight="210" />
         </ItemsPanelTemplate>
 
         <ItemsPanelTemplate x:Key="ListPanel">
             <ItemsStackPanel Orientation="Vertical" />
         </ItemsPanelTemplate>
+
+        <!--
+            The card densities keep the card at its original size: the cell is wider than the
+            card and the difference sits in the item margin, so the card and the clickable
+            area end up being the same rectangle. The default padding would instead leave the
+            cell edges clickable without showing anything.
+        -->
+        <Style
+            x:Key="CardItemStyle"
+            TargetType="ListViewItem"
+            BasedOn="{StaticResource DefaultListViewItemStyle}">
+            <Setter Property="Padding" Value="0" />
+            <Setter Property="Margin" Value="16,0,12,0" />
+            <Setter Property="HorizontalContentAlignment" Value="Stretch" />
+            <Setter Property="VerticalContentAlignment" Value="Stretch" />
+        </Style>
 
         <DataTemplate x:Key="CompactRowTemplate">
             <!--
@@ -198,35 +214,51 @@
 
         <Grid Grid.Row="0" ColumnSpacing="12">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition />
             </Grid.ColumnDefinitions>
 
-            <AutoSuggestBox
-                Grid.Column="0"
-                x:Name="SearchBox"
-                QueryIcon="Find"
-                PlaceholderText="Search exams"
-                TextChanged="OnSearchChanged" />
-
             <!--
-                The view density switcher: compact, standard or list. The options are filled from
-                the localisation in the code behind, which also assigns the matching template.
+                The view switcher, styled after the Windows settings app: one icon per view, the
+                selected one marked with the accent pill. The names live in the tooltips.
             -->
-            <ComboBox
-                Grid.Column="1"
-                x:Name="ViewModeFilter"
-                MinWidth="120"
-                SelectionChanged="OnViewModeChanged" />
+            <SelectorBar
+                Grid.Column="0"
+                x:Name="ViewModeSelector"
+                SelectionChanged="OnViewModeChanged">
+                <SelectorBarItem x:Name="ListViewModeItem">
+                    <SelectorBarItem.Icon>
+                        <FontIcon
+                            FontFamily="Segoe Fluent Icons"
+                            FontSize="16"
+                            Glyph="&#xEA37;" />
+                    </SelectorBarItem.Icon>
+                </SelectorBarItem>
+                <SelectorBarItem x:Name="GridViewModeItem">
+                    <SelectorBarItem.Icon>
+                        <FontIcon
+                            FontFamily="Segoe Fluent Icons"
+                            FontSize="16"
+                            Glyph="&#xF0E2;" />
+                    </SelectorBarItem.Icon>
+                </SelectorBarItem>
+                <SelectorBarItem x:Name="TileViewModeItem">
+                    <SelectorBarItem.Icon>
+                        <FontIcon
+                            FontFamily="Segoe Fluent Icons"
+                            FontSize="16"
+                            Glyph="&#xF232;" />
+                    </SelectorBarItem.Icon>
+                </SelectorBarItem>
+            </SelectorBar>
 
             <!--
                 The favourite filter as a two state toggle: unchecked shows every exam, checked only
                 the favourited ones.
             -->
             <ToggleButton
-                Grid.Column="2"
+                Grid.Column="1"
                 x:Name="FavouriteFilter"
                 Click="OnFavouriteFilterChanged">
                 <StackPanel Orientation="Horizontal" Spacing="8">
@@ -239,7 +271,8 @@
             </ToggleButton>
 
             <Button
-                Grid.Column="3"
+                Grid.Column="2"
+                HorizontalAlignment="Right"
                 x:Name="AddButton"
                 Style="{StaticResource AccentButtonStyle}"
                 Content="Add new"
@@ -254,14 +287,39 @@
             Text="No history"
             Visibility="Collapsed" />
 
-        <ListView
-            Grid.Row="2"
-            x:Name="ExamList"
-            SelectionMode="Multiple"
-            IsMultiSelectCheckBoxEnabled="True"
-            IsItemClickEnabled="True"
-            ItemClick="OnItemClick"
-            SelectionChanged="OnSelectionChanged" />
+        <!--
+            The marquee rectangle overlays the list: the list reports the pointer, the rectangle
+            follows the drag and whatever rows it touches end up selected. The canvas never takes
+            pointer input, so the list underneath keeps every gesture it already has.
+        -->
+        <Grid Grid.Row="2">
+            <ListView
+                x:Name="ExamList"
+                Background="Transparent"
+                SelectionMode="Multiple"
+                IsMultiSelectCheckBoxEnabled="False"
+                IsItemClickEnabled="True"
+                ItemClick="OnItemClick"
+                SelectionChanged="OnSelectionChanged"
+                PointerPressed="OnListPointerPressed"
+                PointerMoved="OnListPointerMoved"
+                PointerReleased="OnListPointerReleased"
+                PointerCanceled="OnListPointerCanceled" />
+
+            <Canvas
+                x:Name="MarqueeCanvas"
+                IsHitTestVisible="False"
+                Visibility="Collapsed">
+                <Rectangle
+                    x:Name="MarqueeRect"
+                    RadiusX="2"
+                    RadiusY="2"
+                    Stroke="{ThemeResource AccentFillColorDefaultBrush}"
+                    StrokeThickness="1"
+                    Fill="{ThemeResource AccentFillColorSecondaryBrush}"
+                    Opacity="0.35" />
+            </Canvas>
+        </Grid>
 
         <!--
             The selection bar replaces the page padding while at least one row is ticked, matching
@@ -281,6 +339,18 @@
                 <AppBarButton.Icon>
                     <FontIcon FontFamily="Segoe Fluent Icons" Glyph="&#xE734;" />
                 </AppBarButton.Icon>
+            </AppBarButton>
+            <!--
+                Sharing offers the light summary the cards already show, or the full detail sheet
+                carrying every recorded subject.
+            -->
+            <AppBarButton x:Name="ShareSelectionButton" Icon="Share" Label="Share">
+                <AppBarButton.Flyout>
+                    <MenuFlyout>
+                        <MenuFlyoutItem x:Name="ShareSummaryItem" Text="Summary" Click="OnShareSummary" />
+                        <MenuFlyoutItem x:Name="ShareDetailsItem" Text="Full details" Click="OnShareDetails" />
+                    </MenuFlyout>
+                </AppBarButton.Flyout>
             </AppBarButton>
             <AppBarSeparator />
             <AppBarButton Icon="Cancel" Label="Cancel" Click="OnClearSelection" />

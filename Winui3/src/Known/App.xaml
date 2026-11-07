@@ -8,6 +8,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <XamlControlsResources xmlns="using:Microsoft.UI.Xaml.Controls" />
+                <ResourceDictionary Source="ms-appx:///Styles/CustomStyles.xaml" />
             </ResourceDictionary.MergedDictionaries>
 
             <ResourceDictionary.ThemeDictionaries>
@@ -22,6 +23,14 @@
                     <SolidColorBrush x:Key="ChartGridLineBrush" Color="White" Opacity="0.4" />
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
+
+            <!--
+                The title bar centres its content by default, which sizes the presenter to the
+                search box's own desired width; the box's own Stretch alignment can only fill
+                that narrow rectangle. Stretching the presenter lets the box fill the middle
+                of the bar instead (its MaxWidth still caps it).
+            -->
+            <HorizontalAlignment x:Key="TitleBarContentHorizontalAlignment">Stretch</HorizontalAlignment>
 
             <!--
                 Charts are drawn by SkiaSharp, which cannot see XAML theme resources. These brushes

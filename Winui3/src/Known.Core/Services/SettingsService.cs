@@ -38,12 +38,6 @@ public sealed class SettingsService(ISettingsRepository repository)
         return UpdateAsync(settings => settings.AppThemeValue = appThemeValue, cancellationToken);
     }
 
-    /// <summary>Turns the high contrast request on or off.</summary>
-    public Task SetHighContrastAsync(bool enabled, CancellationToken cancellationToken = default)
-    {
-        return UpdateAsync(settings => settings.IsHighContrastMode = enabled, cancellationToken);
-    }
-
     /// <summary>Picks the UI language, passing an empty tag to follow the system.</summary>
     public Task SetLanguageAsync(string? languageTag, CancellationToken cancellationToken = default)
     {
@@ -94,13 +88,6 @@ public sealed class SettingsService(ISettingsRepository repository)
     public Task CompleteOnboardingAsync(CancellationToken cancellationToken = default)
     {
         return UpdateAsync(settings => settings.IsFirstLogin = false, cancellationToken);
-    }
-
-    /// <summary>Re-reads the row from the database without going through a mutation.</summary>
-    public async Task ReloadAsync(CancellationToken cancellationToken = default)
-    {
-        Current = await repository.InitialiseAsync(cancellationToken).ConfigureAwait(false);
-        Changed?.Invoke(this, Current);
     }
 
     private async Task UpdateAsync(Action<Settings> mutate, CancellationToken cancellationToken)

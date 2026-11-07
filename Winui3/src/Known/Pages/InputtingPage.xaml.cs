@@ -1,10 +1,9 @@
-﻿using Known.Core.Data;
+using Known.Core.Data;
 using Known.Core.Domain;
 using Known.Core.Localization;
 using Microsoft.UI.Xaml;
 using Microsoft.UI.Xaml.Controls;
 using Microsoft.UI.Xaml.Navigation;
-using Windows.System;
 using Known.Services;
 using Known.Views;
 
@@ -30,6 +29,7 @@ public sealed partial class InputtingPage
 
         SaveButton.Content = _strings.Get("confirm");
         DiscardButton.Content = _strings.Get("discard");
+        NameBox.PlaceholderText = _strings.Get("name_this");
         DatesCaption.Text = _strings.Get("exam_dates");
         HintText.Text = string.Empty;
 
@@ -107,7 +107,8 @@ public sealed partial class InputtingPage
             }
         }
 
-        NameButton.Content = string.IsNullOrWhiteSpace(name) ? _strings.Get("name_this") : name;
+        // An empty box leaves the placeholder visible, which stands in for the missing name
+        NameBox.Text = name;
 
         _rows.Clear();
 
@@ -128,59 +129,6 @@ public sealed partial class InputtingPage
 
         SubjectList.ItemsSource = _rows;
         UpdateValidation();
-    }
-
-    private async void OnRenameExam(object sender, RoutedEventArgs e)
-    {
-        var current = NameButton.Content as string ?? string.Empty;
-
-        var box = new TextBox
-        {
-            Text = current,
-            PlaceholderText = _strings.Get("exam_name"),
-            AcceptsReturn = false,
-            SelectionStart = 0,
-            SelectionLength = current.Length
-        };
-
-        var dialog = new ContentDialog
-        {
-            Title = _strings.Get("name_this"),
-            Content = box,
-            PrimaryButtonText = _strings.Get("done"),
-            CloseButtonText = _strings.Get("cancel"),
-            // Gives Done the accent treatment and makes it the button the dialogue focuses
-            DefaultButton = ContentDialogButton.Primary,
-            XamlRoot = XamlRoot
-        };
-
-        // Hide takes no result, so the typed text is carried out of the dialogue separately
-        string? confirmedByEnter = null;
-
-        // Enter has to behave as the same gesture as pressing Done. The documented behaviour of
-        // DefaultButton is that it stops responding to ENTER once focus sits on a control that
-        // handles it, which is exactly this text box.
-        box.KeyDown += (_, args) =>
-        {
-            if (confirmedByEnter is not null || args.Key != VirtualKey.Enter || box.AcceptsReturn)
-            {
-                return;
-            }
-
-            confirmedByEnter = box.Text;
-            args.Handled = true;
-
-            dialog.Hide();
-        };
-
-        var result = await dialog.ShowAsync();
-
-        var name = confirmedByEnter ?? (result == ContentDialogResult.Primary ? box.Text : null);
-
-        if (!string.IsNullOrWhiteSpace(name))
-        {
-            NameButton.Content = name.Trim();
-        }
     }
 
     /// <summary>
@@ -251,10 +199,14 @@ public sealed partial class InputtingPage
         var navigation = _navigation;
 
         var inputs = _rows.Select(row => row.ToScoreInput()).ToList();
-        var name = (NameButton.Content as string ?? "").Trim();
+        var name = NameBox.Text.Trim();
 
         var startDate = ToEpochMilliseconds(StartPicker.Date);
         var endDate = ToEpochMilliseconds(EndPicker.Date);
+
+        // The box may be left empty, so the default name for the chosen dates stands in rather
+        // than storing a blank
+        if (string.IsNullOrWhiteSpace(name)) name = ExamDates.DefaultExamName(startDate);
 
         _saving = true;
         SaveButton.IsEnabled = false;
@@ -299,9 +251,12 @@ public sealed partial class InputtingPage
 
             this.Frame.GoBack();
         }
-        catch (Exception)
+        catch (Exception exception)
         {
-            ValidationText.Text = _strings.Get("attention");
+            // A failed save is recoverable, but the reason is worth keeping for support
+            CrashLog.Log(exception);
+
+            ValidationText.Text = _strings.Get("save_failed");
             ValidationText.Visibility = Visibility.Visible;
         }
         finally
@@ -322,5 +277,4 @@ public sealed partial class InputtingPage
 /// <param name="EndDate">Last day of the exam, as epoch milliseconds.</param>
 /// <param name="ExamId">The exam being edited, or zero when a new one is being created.</param>
 public sealed record InputtingNavigation(long StartDate, long EndDate, long ExamId = 0);
-
 

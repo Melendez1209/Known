@@ -24,11 +24,11 @@
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Button
+            <TextBox
                 Grid.Column="0"
-                x:Name="NameButton"
-                HorizontalAlignment="Left"
-                Click="OnRenameExam" />
+                x:Name="NameBox"
+                VerticalAlignment="Center"
+                PlaceholderText="Name this exam" />
 
             <StackPanel
                 Grid.Column="1"

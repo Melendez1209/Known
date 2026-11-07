@@ -351,8 +351,14 @@ public sealed partial class GuideWindow
     {
         if (Dots.ItemsSource is not IEnumerable<Ellipse> dots) return;
 
-        var accent = (Brush)Application.Current.Resources["ChartAccentBrush"];
-        var muted = (Brush)Application.Current.Resources["ChartGridLineBrush"];
+        // The accent brush lives in the main dictionary, but the muted one is a theme dictionary
+        // entry, so the active theme dictionary is consulted explicitly.
+        var resources = Application.Current.Resources;
+        var themeDictionary =
+            resources.ThemeDictionaries[AppServices.Theme.CurrentTheme.ToString()] as ResourceDictionary;
+
+        var accent = resources["ChartAccentBrush"] as Brush;
+        var muted = themeDictionary?["ChartGridLineBrush"] as Brush;
 
         var index = 0;
 

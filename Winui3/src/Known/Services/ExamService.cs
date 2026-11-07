@@ -28,9 +28,6 @@ public sealed class ExamService
     /// <summary>Every exam with its totals, newest first.</summary>
     public ObservableCollection<ExamWithTotal> Exams { get; } = [];
 
-    /// <summary>The exams the student pinned to their favourites.</summary>
-    private ObservableCollection<Exam> Favourites { get; } = [];
-
     /// <summary>
     ///     Mean score per subject across every exam. The dashboard shows all exams at once, so unlike
     ///     the detail screen nothing needs excluding.
@@ -59,7 +56,7 @@ public sealed class ExamService
         }
     }
 
-    /// <summary>Raised on the UI thread after <see cref="Exams" /> and <see cref="Favourites" /> reload.</summary>
+    /// <summary>Raised on the UI thread after <see cref="Exams" /> and <see cref="SubjectStats" /> reload.</summary>
     public event EventHandler? Reloaded;
 
     /// <summary>Reloads both collections from the database.</summary>
@@ -70,13 +67,11 @@ public sealed class ExamService
         try
         {
             var exams = await Repository.GetExamsWithTotalAsync(cancellationToken).ConfigureAwait(true);
-            var favourites = await Repository.GetFavoriteExamsAsync(cancellationToken).ConfigureAwait(true);
 
             // Zero is never a real exam id, so nothing is excluded from the dashboard averages
             var stats = await Repository.GetSubjectStatsAsync(0, cancellationToken).ConfigureAwait(true);
 
             Replace(Exams, exams);
-            Replace(Favourites, favourites);
             Replace(SubjectStats, OrderStats(stats));
 
             Reloaded?.Invoke(this, EventArgs.Empty);

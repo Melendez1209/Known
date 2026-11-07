@@ -87,7 +87,14 @@ public sealed partial class DetailPage
 
         _examId = e.Parameter is long id ? id : 0;
 
-        if (_examId != 0) LoadAsync();
+        if (_examId == 0)
+        {
+            // An unknown id cannot be loaded, so stop the ring instead of leaving it spinning
+            BusyRing.IsActive = false;
+            return;
+        }
+
+        LoadAsync();
     }
 
     private async void LoadAsync()
@@ -102,7 +109,7 @@ public sealed partial class DetailPage
 
         _exam = loaded.Exam;
 
-        ChartPalette.Refresh();
+        ChartPalette.Refresh(AppServices.Theme.CurrentTheme);
 
         var scores = loaded.Scores;
         var totalMark = ExamScoring.TotalMark(scores);
@@ -365,4 +372,3 @@ public sealed partial class DetailPage
             : string.Empty;
     }
 }
-

@@ -3,6 +3,7 @@ using Windows.UI.ViewManagement;
 using Known.Core.Data;
 using Known.Core.Domain;
 using Known.Core.Services;
+using Microsoft.UI.Xaml;
 
 namespace Known.Services;
 
@@ -18,17 +19,17 @@ public sealed class ThemeService
     /// <summary>Whether Windows is currently offering the dark variant of the system theme.</summary>
     private bool IsSystemInDarkTheme { get; set; }
 
-    /// <summary>Whether Windows itself is forcing a high contrast theme.</summary>
-    private bool IsSystemHighContrast { get; set; }
-
     /// <summary>The preference currently in effect.</summary>
     private AppThemePreference Preference { get; set; } = new();
 
     /// <summary>Whether the window should render dark.</summary>
     public bool ShouldUseAppTheme => Preference.IsAppTheme(IsSystemInDarkTheme);
 
-    /// <summary>Whether the high contrast variants should be requested right now.</summary>
-    public bool HighContrastActive => Preference.IsHighContrastModeEnabled || IsSystemHighContrast;
+    /// <summary>
+    ///     The concrete theme the window is rendering with. Code that needs to copy a theme brush
+    ///     into another format, such as the Skia based charts, uses this to pick the right entry.
+    /// </summary>
+    public ElementTheme CurrentTheme => ShouldUseAppTheme ? ElementTheme.Dark : ElementTheme.Light;
 
     /// <summary>Raised whenever the effective values change, on the UI thread.</summary>
     public event EventHandler? ThemeChanged;
@@ -48,7 +49,6 @@ public sealed class ThemeService
     public void Refresh()
     {
         IsSystemInDarkTheme = QueryIsSystemInDarkTheme();
-        IsSystemHighContrast = QueryIsSystemHighContrast();
         Preference = new AppThemePreference(
             _settingsService.Current.AppThemeValue,
             _settingsService.Current.IsHighContrastMode);
@@ -68,21 +68,6 @@ public sealed class ThemeService
         var background = settings.GetColorValue(UIColorType.Background);
 
         return IsDark(background);
-    }
-
-    /// <summary>Whether Windows is forcing a high contrast theme.</summary>
-    private static bool QueryIsSystemHighContrast()
-    {
-        try
-        {
-            return new AccessibilitySettings().HighContrast;
-        }
-        catch (Exception)
-        {
-            // The accessibility settings can be unavailable while a session is switching users, and
-            // an unknown state must never stop the window from rendering
-            return false;
-        }
     }
 
     private static bool IsDark(Color colour)

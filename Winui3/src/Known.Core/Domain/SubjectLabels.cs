@@ -35,16 +35,4 @@ public static class SubjectLabels
     {
         return strings.Get(ResourceKeyFor(subjectKey));
     }
-
-    /// <summary>Display name of the identity the student picked during onboarding.</summary>
-    public static string IdentityName(StringLocalizer strings, int identity)
-    {
-        return identity switch
-        {
-            StudentIdentity.Student => strings.Get("student"),
-            StudentIdentity.Teacher => strings.Get("teacher"),
-            StudentIdentity.Parent => strings.Get("parent"),
-            _ => strings.Get("follow_system")
-        };
-    }
 }

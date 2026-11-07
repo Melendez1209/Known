@@ -4,14 +4,13 @@
         xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest"
         xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10"
         xmlns:rescap="http://schemas.microsoft.com/appx/manifest/foundation/windows10/restrictedcapabilities"
-        xmlns:systemai="http://schemas.microsoft.com/appx/manifest/systemai/windows10"
         xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10"
         xmlns:uap18="http://schemas.microsoft.com/appx/manifest/uap/windows10/18"
-        IgnorableNamespaces="uap rescap systemai uap18">
+        IgnorableNamespaces="uap rescap uap18">
 
     <Identity
             Name="68e49fb4-767d-49a9-80e3-77803bf4cff3"
-            Publisher="CN=beyon"
+            Publisher="CN=Melendez"
             Version="1.0.2.0"/>
 
     <mp:PhoneIdentity PhoneProductId="68e49fb4-767d-49a9-80e3-77803bf4cff3"
@@ -62,7 +61,6 @@
     <Capabilities>
         <Capability Name="internetClient"/>
         <rescap:Capability Name="runFullTrust"/>
-        <systemai:Capability Name="systemAIModels"/>
         <DeviceCapability Name="location"/>
     </Capabilities>
 </Package>
