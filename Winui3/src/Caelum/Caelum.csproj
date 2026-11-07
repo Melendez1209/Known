@@ -63,8 +63,9 @@
         <ProjectCapability Include="Msix" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.29648.1000-preview" />
-        <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.6.6-experimental" />
+        <PackageReference Include="CommunityToolkit.Common" Version="8.4.2" />
+        <PackageReference Include="Microsoft.Windows.SDK.BuildTools" Version="10.0.28000.2957" />
+        <PackageReference Include="Microsoft.WindowsAppSDK" Version="2.6.5" />
         <PackageReference Include="Microsoft.Identity.Client" Version="4.92.0" />
         <PackageReference Include="LiveChartsCore.SkiaSharpView.WinUI" Version="2.1.0-dev-798" />
         <PackageReference Include="CommunityToolkit.WinUI.Controls.SettingsControls" Version="8.2.251219" />
