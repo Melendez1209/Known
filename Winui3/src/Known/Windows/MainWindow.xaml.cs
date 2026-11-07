@@ -55,6 +55,10 @@ public sealed partial class MainWindow
         // taps the back button and the frame unwinds to a previous page.
         MainFrame.Navigated += OnMainFrameNavigated;
 
+        // The first navigation happened before the handler above was attached, so the title bar's
+        // back button needs its initial state set by hand.
+        ApplyBackButton();
+
         Closed += OnClosed;
         Activated += OnWindowActivated;
         ApplyTheme();
@@ -238,6 +242,17 @@ public sealed partial class MainWindow
             SettingsPage when Navigation.SettingsItem is NavigationViewItem settingsItem => settingsItem,
             _ => Navigation.SelectedItem
         };
+
+        ApplyBackButton();
+    }
+
+    /// <summary>
+    ///     Keeps the title bar's back button in step with the frame. Called on every navigation,
+    ///     because <see cref="Frame.CanGoBack" /> raises no change notification a binding could use.
+    /// </summary>
+    private void ApplyBackButton()
+    {
+        AppTitleBar.IsBackButtonVisible = MainFrame.CanGoBack;
     }
 
     private void OnClosed(object sender, WindowEventArgs args)

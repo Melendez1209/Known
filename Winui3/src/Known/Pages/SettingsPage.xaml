@@ -58,6 +58,20 @@
                             VerticalAlignment="Center"
                             Content="Sign in"
                             Click="OnAuthTapped" />
+
+                        <!--
+                            Shown instead of the sign in button while no Entra application has been
+                            registered for this build, so the account card never offers a control
+                            that cannot work.
+                        -->
+                        <TextBlock
+                            Grid.Column="2"
+                            x:Name="AuthComingSoon"
+                            VerticalAlignment="Center"
+                            Style="{StaticResource CaptionTextBlockStyle}"
+                            Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                            TextWrapping="Wrap"
+                            Visibility="Collapsed" />
                     </Grid>
                 </StackPanel>
             </Border>
@@ -198,6 +212,18 @@
                         x:Name="VersionText"
                         Style="{StaticResource CaptionTextBlockStyle}"
                         Foreground="{ThemeResource TextFillColorSecondaryBrush}" />
+
+                    <!--
+                        The location lookup is the only feature that leaves the device, and the
+                        audience is schoolchildren, so the data handling is stated here rather
+                        than left to a separate policy.
+                    -->
+                    <TextBlock
+                        x:Name="PrivacyText"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        TextWrapping="Wrap" />
+
                     <HyperlinkButton
                         x:Name="ReadmeLink"
                         Padding="0"
@@ -210,6 +236,10 @@
                         x:Name="IssueLink"
                         Padding="0"
                         NavigateUri="https://github.com/Melendez1209/Known/issues" />
+                    <HyperlinkButton
+                        x:Name="PrivacyLink"
+                        Padding="0"
+                        NavigateUri="https://melendez1209.github.io/Known/privacy.html" />
                 </StackPanel>
             </Border>
 

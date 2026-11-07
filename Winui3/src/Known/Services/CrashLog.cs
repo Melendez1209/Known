@@ -35,6 +35,17 @@ public static class CrashLog
         AppDomain.CurrentDomain.UnhandledException += OnDomainUnhandled;
     }
 
+    /// <summary>
+    ///     Writes a handled exception to the same log as an unhandled one, so a failure the user
+    ///     reported can be diagnosed without reproducing it.
+    /// </summary>
+    public static void Log(Exception exception)
+    {
+        ArgumentNullException.ThrowIfNull(exception);
+
+        Write(exception);
+    }
+
     private static void OnDomainUnhandled(object sender, UnhandledExceptionEventArgs e)
     {
         if (e.ExceptionObject is Exception exception) Write(exception);

@@ -6,15 +6,13 @@ namespace Known.Services;
 /// <param name="IsSignedIn">Whether an account is held.</param>
 /// <param name="DisplayName">Name shown next to the avatar.</param>
 /// <param name="Email">Sign in address.</param>
-/// <param name="AvatarUri">Profile picture, when the account published one.</param>
 public sealed record AccountState(
     bool IsSignedIn,
     string? DisplayName,
-    string? Email,
-    string? AvatarUri)
+    string? Email)
 {
     /// <summary>The state before anybody has signed in.</summary>
-    public static AccountState SignedOut { get; } = new(false, null, null, null);
+    public static AccountState SignedOut { get; } = new(false, null, null);
 }
 
 /// <summary>
@@ -30,7 +28,7 @@ public sealed class MsalAuthService
 {
     /// <summary>
     ///     Application id of the Entra registration. Empty until the app is registered, in which case
-    ///     <see cref="IsConfigured" /> stays false and the sign-in button explains why.
+    ///     <see cref="IsConfigured" /> stays false and the account card shows a coming soon caption.
     /// </summary>
     private const string ClientId = "";
 
@@ -81,8 +79,7 @@ public sealed class MsalAuthService
         return State = new AccountState(
             true,
             result.Account?.Username,
-            result.Account?.Username,
-            null);
+            result.Account?.Username);
     }
 
     /// <summary>

@@ -31,13 +31,13 @@
             surface.
 
             The back button is provided by the TitleBar itself, following the Fluent Design guideline
-            that the back button sits in the top-left corner of the window. IsBackButtonEnabled is
-            bound to MainFrame.CanGoBack so the button is only usable when there is somewhere to go.
+            that the back button sits in the top-left corner of the window. IsBackButtonVisible is
+            driven from code in ApplyBackButton, because Frame.CanGoBack is a plain property that
+            raises no change notification, so a binding would never update after the first frame.
         -->
         <TitleBar
             x:Name="AppTitleBar"
             IsPaneToggleButtonVisible="True"
-            IsBackButtonVisible="{x:Bind MainFrame.CanGoBack, Mode=OneWay}"
             BackRequested="OnBackRequested"
             PaneToggleRequested="OnPaneToggleRequested">
             <TitleBar.IconSource>

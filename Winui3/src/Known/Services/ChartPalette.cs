@@ -79,22 +79,47 @@ public static class ChartPalette
         return CategoricalColours[position < 0 ? position + count : position];
     }
 
-    /// <summary>Re-reads every brush from the application resources.</summary>
-    public static void Refresh()
+    /// <summary>Re-reads every brush from the application resources for the given theme.</summary>
+    public static void Refresh(ElementTheme theme)
     {
-        Accent = Read("ChartAccentBrush", SKColors.DodgerBlue);
-        AccentSecondary = Read("ChartAccentSecondaryBrush", SKColors.OrangeRed);
-        AccentTertiary = Read("ChartAccentTertiaryBrush", SKColors.MediumSeaGreen);
-        Text = Read("ChartTextBrush", SKColors.Black);
-        GridLine = Read("ChartGridLineBrush", SKColors.LightGray);
-        Surface = Read("ChartSurfaceBrush", SKColors.White);
+        Accent = Read("ChartAccentBrush", SKColors.DodgerBlue, theme);
+        AccentSecondary = Read("ChartAccentSecondaryBrush", SKColors.OrangeRed, theme);
+        AccentTertiary = Read("ChartAccentTertiaryBrush", SKColors.MediumSeaGreen, theme);
+        Text = Read("ChartTextBrush", SKColors.Black, theme);
+        GridLine = Read("ChartGridLineBrush", SKColors.LightGray, theme);
+        Surface = Read("ChartSurfaceBrush", SKColors.White, theme);
     }
 
-    private static SKColor Read(string key, SKColor fallback)
+    /// <summary>
+    ///     Looks a brush up in the main dictionary first, then in the active theme dictionary. The
+    ///     text and grid brushes live in the theme dictionaries, and code-side lookup only walks
+    ///     merged dictionaries, so the active theme dictionary has to be consulted explicitly.
+    /// </summary>
+    private static SKColor Read(string key, SKColor fallback, ElementTheme theme)
     {
-        return Application.Current?.Resources.TryGetValue(key, out var value) == true
-               && value is SolidColorBrush brush
-            ? new SKColor(brush.Color.R, brush.Color.G, brush.Color.B, (byte)Math.Round(brush.Opacity * 255))
-            : fallback;
+        var resources = Application.Current?.Resources;
+
+        if (resources is not null)
+        {
+            if (resources.TryGetValue(key, out var value) && value is SolidColorBrush brush)
+                return ToSkColor(brush);
+
+            if (resources.ThemeDictionaries.TryGetValue(theme.ToString(), out var themeValue)
+                && themeValue is ResourceDictionary themeDictionary
+                && themeDictionary.TryGetValue(key, out value)
+                && value is SolidColorBrush themeBrush)
+                return ToSkColor(themeBrush);
+        }
+
+        return fallback;
+    }
+
+    private static SKColor ToSkColor(SolidColorBrush brush)
+    {
+        return new SKColor(
+            brush.Color.R,
+            brush.Color.G,
+            brush.Color.B,
+            (byte)Math.Round(brush.Opacity * 255));
     }
 }

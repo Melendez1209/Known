@@ -131,7 +131,7 @@ public sealed partial class HomePage
     {
         if (!IsLoaded) return;
 
-        ChartPalette.Refresh();
+        ChartPalette.Refresh(AppServices.Theme.CurrentTheme);
 
         var ordered = AppServices.Exams.Exams.OrderBy(exam => exam.Exam.StartDate).ToList();
 

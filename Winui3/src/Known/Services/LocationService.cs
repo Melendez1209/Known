@@ -50,8 +50,8 @@ public sealed class LocationService
 
         var city = await ReverseGeocodeAsync(point.Latitude, point.Longitude);
 
-        // TODO Explain in the about page that the coordinates leave the machine to be resolved into a
-        //  city name, and are never stored. The audience is schoolchildren, so it has to be said plainly
+        // The coordinates leave the device only for this lookup and are never stored; the settings
+        // page states that in plain language, because the audience is schoolchildren.
         return string.IsNullOrWhiteSpace(city)
             ? LocationResult.NoCity
             : LocationResult.ForCity(city);

@@ -51,6 +51,13 @@ public sealed partial class SettingsPage
         ReadmeLink.Content = _strings.Get("readme");
         ReleaseLink.Content = _strings.Get("release");
         IssueLink.Content = _strings.Get("github_issue");
+        PrivacyLink.Content = _strings.Get("privacy_policy");
+        PrivacyText.Text = _strings.Get("privacy_note");
+
+        AuthComingSoon.Text = _strings.Get("account_coming_soon");
+
+        // The hint is only meaningful when the chosen language actually needs a restart
+        LanguageHint.Visibility = Visibility.Collapsed;
 
         IdentityOptions.ItemsSource = new[]
         {
@@ -93,6 +100,13 @@ public sealed partial class SettingsPage
 
     private void ApplyAccountState(AccountState state)
     {
+        // No Entra registration means the account card has nothing to offer yet, so the button is
+        // replaced by a caption rather than left disabled and unexplained.
+        var comingSoon = !state.IsSignedIn && !AppServices.Auth.IsConfigured;
+
+        AuthButton.Visibility = comingSoon ? Visibility.Collapsed : Visibility.Visible;
+        AuthComingSoon.Visibility = comingSoon ? Visibility.Visible : Visibility.Collapsed;
+
         AccountName.Text = state.IsSignedIn
             ? state.DisplayName ?? _strings.Get("sign_to")
             : _strings.Get("account_not_signed_in");
@@ -119,7 +133,7 @@ public sealed partial class SettingsPage
     {
         if (!AppServices.Auth.IsConfigured)
         {
-            await ShowMessageAsync(_strings.Get("attention"));
+            await ShowMessageAsync(_strings.Get("account_coming_soon"));
             return;
         }
 
@@ -338,7 +352,10 @@ public sealed partial class SettingsPage
 
         StringLocalizer.UseLanguage(option.Tag);
 
+        // Only a genuinely different language needs a restart, so the hint and the button share
+        // the same condition instead of the hint being shown after every language change.
         LanguageHint.Text = _strings.Get("language_restart_hint");
+        LanguageHint.Visibility = needsRestart ? Visibility.Visible : Visibility.Collapsed;
         RestartButton.Visibility = needsRestart ? Visibility.Visible : Visibility.Collapsed;
     }
 

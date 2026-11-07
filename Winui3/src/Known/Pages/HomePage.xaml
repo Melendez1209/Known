@@ -95,7 +95,7 @@
                             Grid.Column="1"
                             x:Name="TrendMetricButton"
                             VerticalAlignment="Center"
-                            Padding="8,4"
+                            Padding="12,8"
                             MinWidth="0"
                             Checked="OnTrendMetricChecked"
                             Unchecked="OnTrendMetricUnchecked">
@@ -138,7 +138,7 @@
                             Grid.Column="1"
                             x:Name="SubjectMetricButton"
                             VerticalAlignment="Center"
-                            Padding="8,4"
+                            Padding="12,8"
                             MinWidth="0"
                             Checked="OnSubjectMetricChecked"
                             Unchecked="OnSubjectMetricUnchecked">

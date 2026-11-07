@@ -22,20 +22,8 @@
     <data name="home" xml:space="preserve">
     <value>Home</value>
   </data>
-    <data name="me" xml:space="preserve">
-    <value>Me</value>
-  </data>
     <data name="history" xml:space="preserve">
     <value>History</value>
-  </data>
-    <data name="compact" xml:space="preserve">
-    <value>Compact</value>
-  </data>
-    <data name="standard" xml:space="preserve">
-    <value>Standard</value>
-  </data>
-    <data name="list" xml:space="preserve">
-    <value>List</value>
   </data>
     <data name="list_view" xml:space="preserve">
     <value>List view</value>
@@ -52,26 +40,11 @@
     <data name="exam" xml:space="preserve">
     <value>Exam</value>
   </data>
-    <data name="time" xml:space="preserve">
-    <value>Time</value>
-  </data>
     <data name="cancel" xml:space="preserve">
     <value>Cancel</value>
   </data>
-    <data name="search" xml:space="preserve">
-    <value>Search</value>
-  </data>
-    <data name="clear" xml:space="preserve">
-    <value>Clear</value>
-  </data>
     <data name="settings" xml:space="preserve">
     <value>Settings</value>
-  </data>
-    <data name="back" xml:space="preserve">
-    <value>Back to previous screen</value>
-  </data>
-    <data name="close_bar" xml:space="preserve">
-    <value>Close the search bar</value>
   </data>
     <data name="about" xml:space="preserve">
     <value>About</value>
@@ -88,26 +61,11 @@
     <data name="sign_to" xml:space="preserve">
     <value>Sign in to your Known Account</value>
   </data>
-    <data name="avatar" xml:space="preserve">
-    <value>Avatar</value>
-  </data>
-    <data name="dynamic_color" xml:space="preserve">
-    <value>Dynamic Color</value>
-  </data>
     <data name="exam_dates" xml:space="preserve">
     <value>Exam Dates</value>
   </data>
-    <data name="discard_sum" xml:space="preserve">
-    <value>Do you want to discard the content you have entered?</value>
-  </data>
-    <data name="reserve" xml:space="preserve">
-    <value>Reserve</value>
-  </data>
     <data name="discard" xml:space="preserve">
     <value>Discard</value>
-  </data>
-    <data name="exam_name" xml:space="preserve">
-    <value>Exam Name</value>
   </data>
     <data name="name_this" xml:space="preserve">
     <value>Name this exam</value>
@@ -115,14 +73,8 @@
     <data name="district" xml:space="preserve">
     <value>District</value>
   </data>
-    <data name="physiotherapy" xml:space="preserve">
-    <value>Physiotherapy</value>
-  </data>
     <data name="biology" xml:space="preserve">
     <value>Biology</value>
-  </data>
-    <data name="chemotherapy" xml:space="preserve">
-    <value>Chemotherapy</value>
   </data>
     <data name="political" xml:space="preserve">
     <value>Political</value>
@@ -142,15 +94,6 @@
     <data name="no_history" xml:space="preserve">
     <value>No history</value>
   </data>
-    <data name="sign_in" xml:space="preserve">
-    <value>Sign in</value>
-  </data>
-    <data name="sign_up" xml:space="preserve">
-    <value>Sign up</value>
-  </data>
-    <data name="password" xml:space="preserve">
-    <value>Password</value>
-  </data>
     <data name="edit" xml:space="preserve">
     <value>Edit</value>
   </data>
@@ -162,9 +105,6 @@
   </data>
     <data name="share_summary" xml:space="preserve">
     <value>Share summary</value>
-  </data>
-    <data name="print" xml:space="preserve">
-    <value>Print</value>
   </data>
     <data name="delete" xml:space="preserve">
     <value>Delete</value>
@@ -178,152 +118,26 @@
     <data name="all" xml:space="preserve">
     <value>All</value>
   </data>
-    <data name="upload_ai" xml:space="preserve">
-    <value>Ask with a image</value>
-  </data>
-    <data name="ask" xml:space="preserve">
-    <value>Ask</value>
-  </data>
-    <data name="ask_something" xml:space="preserve">
-    <value>Ask something</value>
-  </data>
-    <data name="prophets" xml:space="preserve">
-    <value>Prophets</value>
-  </data>
     <data name="confirm" xml:space="preserve">
     <value>Confirm</value>
   </data>
     <data name="attention" xml:space="preserve">
     <value>Attention</value>
   </data>
-    <data name="disclaimer" xml:space="preserve">
-    <value>Your sponsorship is not a Marketing Effort of the Software Publisher (Known Team)! It is only a way for you to support the development of the software (Known)! Our software is completely free of charge!</value>
-  </data>
     <data name="pe" xml:space="preserve">
     <value>PE</value>
-  </data>
-    <data name="follow_system" xml:space="preserve">
-    <value>System</value>
-  </data>
-    <data name="on" xml:space="preserve">
-    <value>On</value>
-  </data>
-    <data name="off" xml:space="preserve">
-    <value>Off</value>
-  </data>
-    <data name="multiselect_mode" xml:space="preserve">
-    <value>Multiselect mode</value>
-  </data>
-    <data name="custom_command_enabled_hint" xml:space="preserve">
-    <value>Some options are unavailable when using custom command</value>
-  </data>
-    <data name="open_settings" xml:space="preserve">
-    <value>Open settings</value>
-  </data>
-    <data name="dynamic_color_desc" xml:space="preserve">
-    <value>Apply colors from wallpapers to the app theme</value>
-  </data>
-    <data name="dark_theme" xml:space="preserve">
-    <value>Dark theme</value>
-  </data>
-    <data name="sample" xml:space="preserve">
-    <value>Sample</value>
   </data>
     <data name="language" xml:space="preserve">
     <value>Display language</value>
   </data>
-    <data name="look_and_feel" xml:space="preserve">
-    <value>Look &amp; feel</value>
-  </data>
-    <data name="additional_settings" xml:space="preserve">
-    <value>Additional settings</value>
-  </data>
-    <data name="high_contrast" xml:space="preserve">
-    <value>High contrast dark theme</value>
-  </data>
-    <data name="translate" xml:space="preserve">
-    <value>Translate</value>
-  </data>
-    <data name="translate_desc" xml:space="preserve">
-    <value>Help translate this app on Hosted Weblate</value>
-  </data>
-    <data name="suggested" xml:space="preserve">
-    <value>Suggested</value>
-  </data>
-    <data name="all_languages" xml:space="preserve">
-    <value>All languages</value>
-  </data>
-    <data name="system_settings" xml:space="preserve">
-    <value>System settings</value>
-  </data>
-    <data name="predictive_back" xml:space="preserve">
-    <value>Predictive Back Gesture</value>
-  </data>
-    <data name="predictive_back_desc" xml:space="preserve">
-    <value>Enable smoother back gesture experience</value>
-  </data>
-    <data name="email" xml:space="preserve">
-    <value>Email</value>
-  </data>
-    <data name="email_hint" xml:space="preserve">
-    <value>Enter your email</value>
-  </data>
-    <data name="password_hint" xml:space="preserve">
-    <value>Enter your password</value>
-  </data>
-    <data name="forgot_password" xml:space="preserve">
-    <value>Forgot password?</value>
-  </data>
-    <data name="no_account" xml:space="preserve">
-    <value>Don't have an account?</value>
-  </data>
-    <data name="has_account" xml:space="preserve">
-    <value>Already have an account?</value>
-  </data>
-    <data name="or_continue_with" xml:space="preserve">
-    <value>Or continue with</value>
-  </data>
-    <data name="google_sign_in" xml:space="preserve">
-    <value>Sign in with Google</value>
-  </data>
-    <data name="github_sign_in" xml:space="preserve">
-    <value>Sign in with GitHub</value>
-  </data>
-    <data name="email_sign_in" xml:space="preserve">
-    <value>Sign in with Email</value>
-  </data>
-    <data name="register_with_email" xml:space="preserve">
-    <value>Register with Email</value>
-  </data>
     <data name="sign_out" xml:space="preserve">
     <value>Sign out</value>
-  </data>
-    <data name="release_desc" xml:space="preserve">
-    <value>Look for changelogs and new versions</value>
   </data>
     <data name="release" xml:space="preserve">
     <value>Latest release</value>
   </data>
     <data name="github_issue" xml:space="preserve">
     <value>GitHub issue</value>
-  </data>
-    <data name="github_issue_desc" xml:space="preserve">
-    <value>Submit an issue for bug report or feature request</value>
-  </data>
-    <data name="credits" xml:space="preserve">
-    <value>Credits</value>
-  </data>
-    <data name="credits_desc" xml:space="preserve">
-    <value>Credits and libre software</value>
-  </data>
-    <data name="general_settings" xml:space="preserve">
-    <value>General</value>
-  </data>
-    <data name="general_settings_desc" xml:space="preserve">
-    <value>Student status, Education model</value>
-  </data>
-    <data name="display_settings" xml:space="preserve">
-    <value>Dark theme, dynamic color, languages</value>
   </data>
     <data name="onboarding_welcome" xml:space="preserve">
     <value>Welcome to Known</value>
@@ -376,12 +190,6 @@
     <data name="get_started" xml:space="preserve">
     <value>Get started</value>
   </data>
-    <data name="expanded" xml:space="preserve">
-    <value>Expanded</value>
-  </data>
-    <data name="collapsed" xml:space="preserve">
-    <value>Collapsed</value>
-  </data>
     <data name="identity" xml:space="preserve">
     <value>Identity</value>
   </data>
@@ -390,15 +198,6 @@
   </data>
     <data name="subjects" xml:space="preserve">
     <value>Subjects</value>
-  </data>
-    <data name="clear_cache" xml:space="preserve">
-    <value>Clear cache</value>
-  </data>
-    <data name="clear_cache_desc" xml:space="preserve">
-    <value>Clear cached data to free up space (%1$s)</value>
-  </data>
-    <data name="cache_freed" xml:space="preserve">
-    <value>Cache cleared. Freed %1$s.</value>
   </data>
     <data name="no_mark_entered" xml:space="preserve">
     <value>Enter at least one mark before saving.</value>
@@ -412,41 +211,17 @@
     <data name="no_search_result" xml:space="preserve">
     <value>No matching exams</value>
   </data>
-    <data name="history_average" xml:space="preserve">
-    <value>Historical average</value>
-  </data>
     <data name="total_score" xml:space="preserve">
     <value>Total score</value>
   </data>
     <data name="rank" xml:space="preserve">
     <value>Rank</value>
   </data>
-    <data name="share_as_image" xml:space="preserve">
-    <value>Share as image</value>
-  </data>
-    <data name="share_as_text" xml:space="preserve">
-    <value>Share as text</value>
-  </data>
-    <data name="share_image_saving" xml:space="preserve">
-    <value>Generating image…</value>
-  </data>
-    <data name="share_image_saved" xml:space="preserve">
-    <value>Image saved successfully</value>
-  </data>
-    <data name="share_image_failed" xml:space="preserve">
-    <value>Failed to generate image</value>
-  </data>
-    <data name="share_via" xml:space="preserve">
-    <value>Share via</value>
-  </data>
     <data name="remove_favourite" xml:space="preserve">
     <value>Remove from favourite</value>
   </data>
     <data name="favourites" xml:space="preserve">
     <value>Favourites</value>
-  </data>
-    <data name="no_favourites" xml:space="preserve">
-    <value>No favourites yet</value>
   </data>
     <data name="score_trend" xml:space="preserve">
     <value>Score Trend</value>
@@ -459,15 +234,6 @@
   </data>
     <data name="comparison" xml:space="preserve">
     <value>Comparison</value>
-  </data>
-    <data name="no_exam_data" xml:space="preserve">
-    <value>No exam data yet. Add your first exam to see trends.</value>
-  </data>
-    <data name="no_subject_data" xml:space="preserve">
-    <value>No subject data available.</value>
-  </data>
-    <data name="no_score_data" xml:space="preserve">
-    <value>No score data available.</value>
   </data>
     <data name="language_restart_hint" xml:space="preserve">
     <value>The language change takes effect after a restart.</value>
@@ -493,14 +259,8 @@
     <data name="search_hint" xml:space="preserve">
     <value>Search exams</value>
   </data>
-    <data name="delete_exams_confirm" xml:space="preserve">
-    <value>Delete the selected exams?</value>
-  </data>
     <data name="average" xml:space="preserve">
     <value>Average</value>
-  </data>
-    <data name="account" xml:space="preserve">
-    <value>Account</value>
   </data>
     <data name="average_rate" xml:space="preserve">
     <value>Average rate</value>
@@ -540,5 +300,17 @@
   </data>
     <data name="restart_app" xml:space="preserve">
     <value>Restart application</value>
+  </data>
+    <data name="account_coming_soon" xml:space="preserve">
+    <value>Coming soon</value>
+  </data>
+    <data name="privacy_policy" xml:space="preserve">
+    <value>Privacy policy</value>
+  </data>
+    <data name="privacy_note" xml:space="preserve">
+    <value>Your exam data is stored only on this device. If you use the location lookup, your approximate coordinates are sent to a third-party geocoding service to be resolved into a city name, and are never stored.</value>
+  </data>
+    <data name="save_failed" xml:space="preserve">
+    <value>Couldn't save the exam. Please try again.</value>
   </data>
 </root>

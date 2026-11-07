@@ -42,7 +42,7 @@
                 Height="24" />
         </Grid>
 
-        <TabView Grid.Row="1" Padding="16,8,16,0" CanDragTabs="True">
+        <TabView Grid.Row="1" Padding="16,8,16,0">
             <TabViewItem x:Name="OverviewTab">
                 <ScrollViewer>
                     <Grid Padding="8,0,8,16" RowSpacing="16">

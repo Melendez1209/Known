@@ -1,4 +1,4 @@
-﻿using Known.Core.Data;
+using Known.Core.Data;
 using Known.Core.Domain;
 using Known.Core.Localization;
 using Microsoft.UI.Xaml;
@@ -251,9 +251,12 @@ public sealed partial class InputtingPage
 
             this.Frame.GoBack();
         }
-        catch (Exception)
+        catch (Exception exception)
         {
-            ValidationText.Text = _strings.Get("attention");
+            // A failed save is recoverable, but the reason is worth keeping for support
+            CrashLog.Log(exception);
+
+            ValidationText.Text = _strings.Get("save_failed");
             ValidationText.Visibility = Visibility.Visible;
         }
         finally
@@ -274,5 +277,4 @@ public sealed partial class InputtingPage
 /// <param name="EndDate">Last day of the exam, as epoch milliseconds.</param>
 /// <param name="ExamId">The exam being edited, or zero when a new one is being created.</param>
 public sealed record InputtingNavigation(long StartDate, long EndDate, long ExamId = 0);
-
 

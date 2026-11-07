@@ -15,9 +15,6 @@ public sealed class Exam
     /// <summary>Last day of the exam, as epoch milliseconds.</summary>
     public long EndDate { get; set; }
 
-    /// <summary>Insertion timestamp in epoch milliseconds, used to break ties on import.</summary>
-    public long CreatedAt { get; init; } = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-
     /// <summary>Whether the student pinned this exam to their favourites.</summary>
     public bool IsFavorite { get; set; }
 
